@@ -1,6 +1,7 @@
 {
-  "name": "scg-fe-siteapp",
+  "name": "website-foundation-scg",
   "version": "1.0.0",
+  "private": true,
   "main": "index.ts",
   "scripts": {
     "start": "expo start -c",

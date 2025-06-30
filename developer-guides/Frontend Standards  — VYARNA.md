@@ -178,7 +178,7 @@ To support hundreds of applications efficiently, we use a structured monorepo la
 
 bash
 
-`/applications/`
+`/apps/`
 
   `...`
 
@@ -190,7 +190,7 @@ bash
 
   `/hooks/`
 
-* Each application lives in its own folder under `/applications`.  
+* Each application lives in its own folder under `/apps`.  
 * Shared logic (e.g., hooks, UI kits, utilities) lives in `/libs`.  
 * Each application is fully isolated, versioned, and independently testable and deployable.
 
@@ -207,15 +207,15 @@ Each major technology layer has been selected based on speed, reliability, scala
 
 ## **Monorepo Tooling and Build Strategy** {#monorepo-tooling-and-build-strategy}
 
-To manage builds efficiently across hundreds of applications, we use a monorepo orchestrator (Nx):
+To manage builds efficiently across hundreds of applications, we use a monorepo orchestrator (Turborepo):
 
 * Detects and builds only changed applications using dependency graphs  
 * Caches builds per application for CI/CD speed  
 * Triggers deploys only for affected applications  
 * Each application has its own `metro.config.js`, local assets, and independent versioning  
-* Builds output to: `/dist/applications/<applicationId>/<version>/`
+* Builds output to: `/dist/apps/<applicationId>/<version>/`
 
-Preview URLs are auto-generated per commit (e.g., `https://staging.domain.com/applications/mines/preview-abc123`).
+Preview URLs are auto-generated per commit (e.g., `https://staging.domain.com/apps/mines/preview-abc123`).
 
 ## **UI Framework** {#ui-framework}
 
@@ -393,7 +393,7 @@ Preview URLs are auto-generated per commit (e.g., `https://staging.domain.com/ap
 
 All applications and shared libraries are housed in a single GitLab monorepo. We use:
 
-* Per-application folders under /applications/  
+* Per-application folders under /apps/  
 * Centralized management of /libs/ for shared code  
 * Code owners for core libraries (e.g., application engine adapters, UI kits)  
 * Branch protection and MR approvals enforced at the monorepo level  
@@ -401,11 +401,11 @@ All applications and shared libraries are housed in a single GitLab monorepo. We
 
 ## **Deploy Management (CI/CD)** {#deploy-management-(ci/cd)}
 
-Deployment is fully automated through GitLab CI using Nx:
+Deployment is fully automated through GitLab CI using Turborepo:
 
 * Detects and builds only changed applications  
 * Deploys application builds to Vercel or Cloudflare Pages  
-* Outputs placed under `/applications/<applicationId>/<version>/`  
+* Outputs placed under `/apps/<applicationId>/<version>/`  
 * Preview environments generated for each feature branch  
 * Production deploys only occur from `main` or `release/*` branches
 
