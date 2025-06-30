@@ -1,0 +1,347 @@
+{
+  "wave_type_genres": [
+    {
+      "name": "WAVETYPEGENRE - Platform Actions",
+      "description": "Description for WAVETYPEGENRE - Platform Actions"
+    },
+    {
+      "name": "WAVETYPEGENRE - Fraud Management",
+      "description": "Description for WAVETYPEGENRE - Fraud Management"
+    },
+    {
+      "name": "WAVETYPEGENRE - Betting Actions",
+      "description": "Description for WAVETYPEGENRE - Betting Actions"
+    }
+  ],
+  "wave_types": [
+    {
+      "name": "WAVETYPE - Login",
+      "description": "Description for WAVETYPE - Login",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [
+        { "name": "username", "type": "Text" },
+        { "name": "password", "type": "Text" },
+        { "name": "rememberMe", "type": "Numeric" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "token", "type": "Text" },
+        { "name": "userId", "type": "Text" },
+        { "name": "expiresAt", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Logout",
+      "description": "Description for WAVETYPE - Logout",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [
+        { "name": "token", "type": "Text" },
+        { "name": "userId", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "message", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Signup",
+      "description": "Description for WAVETYPE - Signup",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [
+        { "name": "username", "type": "Text" },
+        { "name": "email", "type": "Text" },
+        { "name": "password", "type": "Text" },
+        { "name": "referralCode", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "userId", "type": "Text" },
+        { "name": "verificationRequired", "type": "Numeric" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Create Operator",
+      "description": "Description for WAVETYPE - Create Operator",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [
+        { "name": "businessUnitId", "type": "Text" },
+        { "name": "username", "type": "Text" },
+        { "name": "nameFirst", "type": "Text" },
+        { "name": "nameMiddle", "type": "Text" },
+        { "name": "nameLast", "type": "Text" },
+        { "name": "email", "type": "Text" },
+        { "name": "password", "type": "Text" },
+        { "name": "_updatedBy", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "operatorId", "type": "Text" },
+        { "name": "createdAt", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Create Business Unit",
+      "description": "Description for WAVETYPE - Create Business Unit",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [
+        { "name": "name", "type": "Text" },
+        { "name": "code", "type": "Text" },
+        { "name": "parentUnitId", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "businessUnitId", "type": "Text" },
+        { "name": "createdAt", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Edit Permits",
+      "description": "Description for WAVETYPE - Edit Permits",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [
+        { "name": "userId", "type": "Text" },
+        { "name": "permissions", "type": "List" },
+        { "name": "action", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "updatedPermissions", "type": "List" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - TEST",
+      "description": "Description for WAVETYPE - TEST",
+      "waveTypeGenreName": "WAVETYPEGENRE - Platform Actions",
+      "input": [{ "name": "testPayload", "type": "Text" }],
+      "output": [
+        { "name": "passed", "type": "Numeric" },
+        { "name": "details", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - KYC Document Request",
+      "description": "Description for WAVETYPE - KYC Document Request",
+      "waveTypeGenreName": "WAVETYPEGENRE - Fraud Management",
+      "input": [
+        { "name": "userId", "type": "Text" },
+        { "name": "documentType", "type": "Text" },
+        { "name": "priority", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "requestId", "type": "Text" },
+        { "name": "status", "type": "Text" },
+        { "name": "expiresAt", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - User Data Update",
+      "description": "Description for WAVETYPE - User Data Update",
+      "waveTypeGenreName": "WAVETYPEGENRE - Fraud Management",
+      "input": [
+        { "name": "userId", "type": "Text" },
+        { "name": "updates", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "updatedUser", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Give Bonus",
+      "description": "Description for WAVETYPE - Give Bonus",
+      "waveTypeGenreName": "WAVETYPEGENRE - Betting Actions",
+      "input": [
+        { "name": "userId", "type": "Text" },
+        { "name": "amount", "type": "Numeric" },
+        { "name": "currency", "type": "Text" },
+        { "name": "reason", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "transactionId", "type": "Text" },
+        { "name": "newBalance", "type": "Numeric" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - Promotion",
+      "description": "Description for WAVETYPE - Promotion",
+      "waveTypeGenreName": "WAVETYPEGENRE - Betting Actions",
+      "input": [
+        { "name": "userId", "type": "Text" },
+        { "name": "promotionId", "type": "Text" },
+        { "name": "applyDate", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "promotionApplied", "type": "Numeric" },
+        { "name": "details", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    },
+    {
+      "name": "WAVETYPE - VIP",
+      "description": "Description for WAVETYPE - VIP",
+      "waveTypeGenreName": "WAVETYPEGENRE - Betting Actions",
+      "input": [
+        { "name": "userId", "type": "Text" },
+        { "name": "vipLevel", "type": "Text" },
+        { "name": "effectiveDate", "type": "Text" }
+      ],
+      "output": [
+        { "name": "success", "type": "Numeric" },
+        { "name": "vipStatus", "type": "Text" },
+        { "name": "expiryDate", "type": "Text" },
+        { "name": "errorMessage", "type": "Text" }
+      ]
+    }
+  ],
+  "node_types": [
+    { "name": "START", "description": "Description for Start" },
+    { "name": "ACTION", "description": "Description for Action" },
+    { "name": "MANIFOLD", "description": "Description for Manifold" },
+    { "name": "FLOW", "description": "Description for Flow" },
+    { "name": "FLOW RETURN", "description": "Description for Flow Return" },
+    { "name": "STOP", "description": "Description for Stop" }
+  ],
+  "node_exit_types": [
+    { "name": "EXECUTED", "description": "Description for EXECUTED" },
+    { "name": "ERROR", "description": "Description for ERROR" },
+    { "name": "STOP", "description": "Description for STOP" }
+  ],
+  "task_statuses": [
+    {
+      "name": "CREATED",
+      "description": "Task has been created and is pending execution"
+    },
+    {
+      "name": "IN_PROGRESS",
+      "description": "Task is currently being executed"
+    },
+    {
+      "name": "COMPLETED",
+      "description": "Task has been completed successfully"
+    },
+    { "name": "ABANDONED", "description": "Task has been abandoned" }
+  ],
+  "evaluation_variable_data_types": [
+    { "name": "Numeric", "description": "Data type for numeric values" },
+    { "name": "Text", "description": "Data type for text values" },
+    { "name": "List", "description": "Data type for lists of items" },
+    {
+      "name": "Coordinates",
+      "description": "Data type for latitude/longitude or similar coordinate pairs"
+    }
+  ],
+  "evaluation_operators": [
+    {
+      "name": "lessThan",
+      "symbol": "<",
+      "description": "Less than for numeric comparison",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Numeric"
+    },
+    {
+      "name": "greaterThan",
+      "symbol": ">",
+      "description": "Greater than for numeric comparison",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Numeric"
+    },
+    {
+      "name": "lessOrEqualThan",
+      "symbol": "<=",
+      "description": "Less or equal to numeric comparison",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Numeric"
+    },
+    {
+      "name": "greaterOrEqualThan",
+      "symbol": ">=",
+      "description": "Greater or equal to numeric comparison",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Numeric"
+    },
+
+    {
+      "name": "contains",
+      "symbol": "CONTAINS",
+      "description": "Text contains substring",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Text"
+    },
+    {
+      "name": "startWith",
+      "symbol": "START_WITH",
+      "description": "Text starts with substring",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Text"
+    },
+    {
+      "name": "endWith",
+      "symbol": "END_WITH",
+      "description": "Text ends with substring",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Text"
+    },
+    {
+      "name": "doesntContain",
+      "symbol": "NOT_CONTAINS",
+      "description": "Text does not contain substring",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Text"
+    },
+    {
+      "name": "doesntStartWith",
+      "symbol": "NOT_START",
+      "description": "Text does not start with substring",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Text"
+    },
+    {
+      "name": "doesntEndWith",
+      "symbol": "NOT_END",
+      "description": "Text does not end with substring",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Text"
+    },
+
+    {
+      "name": "contains",
+      "symbol": "CONTAINS",
+      "description": "List contains item",
+      "choiceType": "MULTIPLE CHOICE",
+      "dataType": "List"
+    },
+    {
+      "name": "doesntContain",
+      "symbol": "NOT_CONTAINS",
+      "description": "List does not contain item",
+      "choiceType": "MULTIPLE CHOICE",
+      "dataType": "List"
+    },
+
+    {
+      "name": "distanceGreaterThan",
+      "symbol": "DISTANCE_GREATER",
+      "description": "Distance is greater than X",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Coordinates"
+    },
+    {
+      "name": "distanceCloserThan",
+      "symbol": "DISTANCE_LESS",
+      "description": "Distance is less than or equal to X",
+      "choiceType": "SINGLE CHOICE",
+      "dataType": "Coordinates"
+    }
+  ]
+}
