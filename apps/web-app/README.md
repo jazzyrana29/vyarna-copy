@@ -1,36 +1,179 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Baby Tracker App
 
-## Getting Started
+A simple Expo-powered React Native app for logging your baby’s feedings, sleep sessions, and diaper changes.
 
-First, run the development server:
+---
+
+## 📋 Prerequisites
+
+1. **Node.js & npm**
+   Install from [https://nodejs.org/](https://nodejs.org/) (LTS version recommended).
+
+2. **Expo CLI**
+   Install globally (or use `npx`):
+
+   ```bash
+   npm install --global expo-cli
+   ```
+
+3. **Expo Go** (on your device)
+
+   - **iOS** (App
+     Store): [https://apps.apple.com/app/expo-go/id982107779](https://apps.apple.com/app/expo-go/id982107779)
+   - **Android** (Play
+     Store): [https://play.google.com/store/apps/details?id=host.exp.exponent](https://play.google.com/store/apps/details?id=host.exp.exponent)
+
+4. **Expo Account**
+   You’ll need a free Expo account to publish projects or collaborate.
+
+5. **EmailJS Account**
+   Sign up at [https://www.emailjs.com/](https://www.emailjs.com/) to send emails from your app.
+
+6. **Deepchk**
+   A tool to detect unused dependencies in your project. Install it globally:
+
+   ```bash
+   npm install --save-dev depcheck
+   npm install --global jq
+   ```
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+
+   ```bash
+   git clone git@gitlab.com:vyarna/vy-fe-siteapp.git
+   cd vy-fe-siteapp
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Create and configure environment file**
+
+   ```bash
+   cp .env-example .env
+   ```
+
+   Then open `.env` and fill in your EmailJS service ID, template ID, user ID, etc.
+
+4. **Start the Expo development server**
+
+   ```bash
+   npx expo start
+   ```
+
+   This will open the Expo Dev Tools in your browser and display a QR code.
+
+---
+
+## Build
+
+You can build the project for different platforms using these npm scripts:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Web (export static files)
+npm run build:web
+# runs: npx expo export --platform web
+
+# Android (EAS build)
+npm run build:android
+# runs: eas build --platform android
+
+# iOS (EAS build)
+npm run build:ios # runs: eas build --platform ios
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Common Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Run on Android emulator**
 
-## Learn More
+  ```bash
+  npx expo run:android
+  ```
 
-To learn more about Next.js, take a look at the following resources:
+- **Run on iOS simulator** (macOS + Xcode)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  ```bash
+  npx expo run:ios
+  ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Run in web browser**
 
-## Deploy on Vercel
+  ```bash
+  npx expo run:web
+  ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Clear Metro cache**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  ```bash
+  npx expo start --clear
+  ```
+
+---
+
+## 🕵️ Deepchk Commands
+
+1. **Generate report**
+
+   ```bash
+   npm run depcheck:report
+   ```
+
+   Creates `depcheck-report.json` with unused dependencies.
+
+2. **Prune unused deps**
+
+   ```bash
+   npm run depcheck:prune
+   ```
+
+   Uninstalls all packages listed in `depcheck-report.json`.
+
+3. **Full deepchk**
+
+   ```bash
+   npm run depcheck
+   ```
+
+   Runs report and prune in sequence.
+
+---
+
+## 📂 Project Structure
+
+```
+.
+├── App.tsx                # App entrypoint
+├── babel.config.js        # Babel config (NativeWind plugin)
+├── tailwind.config.js     # TailwindCSS config for NativeWind
+├── package.json
+├── .env-example           # Sample env vars
+└── src/
+    ├── components/        # Reusable UI components (PrimaryButton, EntryItem…)
+    ├── screens/           # Home, AddEntry, Settings screens
+    ├── navigation/        # React Navigation setup
+    ├── state/             # Zustand store (babyStore.ts)
+    ├── types/             # Shared TypeScript types
+    └── utils/             # Helpers, constants, etc.
+```
+
+---
+
+## 🎯 Next Steps
+
+- Build out additional UI components under `src/components/`
+- Add data persistence (SQLite or AsyncStorage)
+- Implement settings (e.g. profile management, backups)
+- Write unit and integration tests
+
+---
+
+Happy coding! If you run into any issues, please open an issue or reach out. 😊
