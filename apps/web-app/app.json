@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Vyarna",
-    "slug": "Vyarna",
+    "name": "vy-fe-siteapp",
+    "slug": "vy-fe-siteapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

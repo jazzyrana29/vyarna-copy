@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { ServerMessagesMode } from "../constants/server-messages-mode";
+import { EXPO_PUBLIC_API_URL } from "@env";
 
 type ServerMessage = {
   message: string;
@@ -14,7 +15,7 @@ const useWebSocket = (): ServerMessage[] => {
   const [messages, setMessages] = useState<ServerMessage[]>([]);
 
   useEffect(() => {
-    const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {
+    const socket = io(`${EXPO_PUBLIC_API_URL}`, {
       transports: ["websocket"],
     });
 

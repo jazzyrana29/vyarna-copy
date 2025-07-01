@@ -2,10 +2,10 @@
   "name": "vyarna-nucleus",
   "version": "1.0.0",
   "workspaces": [
-    "packages/*",                             # shared libs
-    "apps/*",                                 # mobile, web, admin, marketing sites
-    "services/*/*"                            # all domain services (incl. vy-gateway)
-  ],  
+    "packages/*",
+    "apps/*",
+    "services/*/*"
+  ],
   "scripts": {
     "dev": "turbo run dev",
     "prepare": "husky install .husky",
