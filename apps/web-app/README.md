@@ -17,7 +17,6 @@ A simple Expo-powered React Native app for logging your baby’s feedings, sleep
    ```
 
 3. **Expo Go** (on your device)
-
    - **iOS** (App
      Store): [https://apps.apple.com/app/expo-go/id982107779](https://apps.apple.com/app/expo-go/id982107779)
    - **Android** (Play
@@ -44,8 +43,8 @@ A simple Expo-powered React Native app for logging your baby’s feedings, sleep
 1. **Clone the repository**
 
    ```bash
-   git clone git@gitlab.com:vyarna/vy-fe-siteapp.git
-   cd vy-fe-siteapp
+   git clone git@gitlab.com:vyarna/Vyarna.git
+   cd Vyarna
    ```
 
 2. **Install dependencies**

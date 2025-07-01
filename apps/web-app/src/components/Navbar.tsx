@@ -1,12 +1,15 @@
-import React, { JSX, useState } from "react";
+import React, { useState } from "react";
 import {
   FlatList,
   Image,
+  Linking,
   Modal,
+  Platform,
   Pressable,
   Text,
   useWindowDimensions,
   View,
+  ViewProps,
 } from "react-native";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
@@ -53,17 +56,19 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
       .replace(/^\/+/, ""); // ✅ strip leading slashes
   };
 
-  const renderGroup = (group: NavItem): JSX.Element => {
+  const renderGroup = (group: NavItem) => {
     const isActive = currentRoute === group.key;
     const isOpen = hoveredGroup === group.label;
     const hasChildren = !!group.children?.length;
 
     return (
       <View
-        key={group.key}
+        {...({
+          onMouseEnter: () => !isMobile && setHoveredGroup(group.label),
+          onMouseLeave: () => !isMobile && setHoveredGroup(null),
+        } as ViewProps)}
         className="relative"
-        onMouseEnter={() => !isMobile && setHoveredGroup(group.label)}
-        onMouseLeave={() => !isMobile && setHoveredGroup(null)}
+        key={group.key}
       >
         <Pressable
           onPress={() => {
@@ -74,9 +79,20 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
         >
           <View className="px-4 py-2 flex-row items-center space-x-1">
             <Text
-              onPress={() => handleNavigate(group.key)}
+              onPress={async () => {
+                handleNavigate(group.key);
+                if (Platform.OS === "web") {
+                  window.open(
+                    `${baseUrl}/${getPathFromKey(group.key)}`,
+                    "_self", // ← open in the same tab
+                  );
+                } else {
+                  await Linking.openURL(
+                    `${baseUrl}/${getPathFromKey(group.key)}`,
+                  );
+                }
+              }}
               accessibilityRole="link"
-              href={`${baseUrl}/${getPathFromKey(group.key)}`}
               className={isActive ? "font-bold text-primary" : "font-medium"}
             >
               {group.label}
@@ -92,17 +108,30 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
         {!isMobile && hasChildren && isOpen && (
           <View
             className="absolute top-full left-0 bg-white rounded-md shadow-lg border w-56 z-50"
-            onMouseEnter={() => setHoveredGroup(group.label)}
-            onMouseLeave={() => setHoveredGroup(null)}
+            {...({
+              onMouseEnter: () => setHoveredGroup(group.label),
+              onMouseLeave: () => setHoveredGroup(null),
+            } as ViewProps)}
           >
-            {group.children.map((child) => (
+            {group?.children?.map((child) => (
               <Pressable
                 key={child.key}
                 onPress={() => handleNavigate(child.key)}
               >
                 <Text
                   accessibilityRole="link"
-                  href={`${baseUrl}/${getPathFromKey(child.key)}`}
+                  onPress={async () => {
+                    handleNavigate(child.key);
+                    const url = `${baseUrl}/${getPathFromKey(child.key)}`;
+
+                    if (Platform.OS === "web") {
+                      // same-tab
+                      window.location.assign(url);
+                    } else {
+                      // mobile: open in external browser
+                      await Linking.openURL(url);
+                    }
+                  }}
                   className={`px-4 py-2 text-sm ${
                     currentRoute === child.key
                       ? "text-primary font-semibold"

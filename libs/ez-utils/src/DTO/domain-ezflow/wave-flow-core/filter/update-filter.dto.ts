@@ -10,7 +10,7 @@ export class UpdateFilterDto extends PartialType(
     "manifoldId",
     "manifoldOrder",
     "updatedBy",
-  ])
+  ]),
 ) {
   @ApiProperty({
     description: "Unique identifier of the filter",

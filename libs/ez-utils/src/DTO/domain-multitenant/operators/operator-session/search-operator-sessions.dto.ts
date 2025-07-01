@@ -1,10 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsDate } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsOptional, IsString, IsDate } from "class-validator";
+import { Type } from "class-transformer";
 
 export class SearchOperatorSessionsDto {
   @ApiProperty({
-    description: 'Operator ID to search sessions for',
+    description: "Operator ID to search sessions for",
     required: false,
   })
   @IsString()
@@ -12,7 +12,7 @@ export class SearchOperatorSessionsDto {
   operatorId?: string;
 
   @ApiProperty({
-    description: 'Start date for the session search range',
+    description: "Start date for the session search range",
     required: false,
   })
   @IsDate()
@@ -21,7 +21,7 @@ export class SearchOperatorSessionsDto {
   startDate?: Date;
 
   @ApiProperty({
-    description: 'End date for the session search range',
+    description: "End date for the session search range",
     required: false,
   })
   @IsDate()

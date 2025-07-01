@@ -1,5 +1,5 @@
 import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
-import { IsOptional, ValidateNested, IsUUID } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { EvaluationVariableDataTypeDto } from "./evaluation-variable-data-type.dto";
 import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
@@ -11,7 +11,7 @@ export class GetManyEvaluationVariableDataTypesDto extends PartialType(
     "description",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Defines pagination parameters (optional).",

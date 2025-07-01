@@ -1,6 +1,6 @@
 // get-many-wave-type-genres.dto.ts
 import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
-import { IsOptional, ValidateNested, IsUUID } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { WaveTypeGenreDto } from "./wave-type-genre.dto";
 import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
@@ -12,7 +12,7 @@ export class GetManyWaveTypeGenresDto extends PartialType(
     "description",
     "updatedBy",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description:

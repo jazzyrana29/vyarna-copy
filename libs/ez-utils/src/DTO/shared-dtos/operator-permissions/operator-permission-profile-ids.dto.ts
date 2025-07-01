@@ -3,5 +3,5 @@ import { OperatorPermissionProfileDto } from "../../operator-permissions/operato
 
 export class OperatorPermissionProfileIdsDto extends PickType(
   OperatorPermissionProfileDto,
-  ["operatorId"] as const
+  ["operatorId"] as const,
 ) {}

@@ -1,4 +1,1 @@
 # Vyara Person Identity Service
-
-
-

@@ -13,7 +13,7 @@ export class UpdateDeviceSessionDto extends PartialType(
     "deviceId",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the device session",

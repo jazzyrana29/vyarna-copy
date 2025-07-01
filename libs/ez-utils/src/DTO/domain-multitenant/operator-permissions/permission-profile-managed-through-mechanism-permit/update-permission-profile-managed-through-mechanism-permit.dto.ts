@@ -5,7 +5,7 @@ import { PermissionProfileManagedThroughMechanismPermitDto } from "./permission-
 export class UpdatePermissionProfileManagedThroughMechanismPermitDto extends PartialType(
   PickType(PermissionProfileManagedThroughMechanismPermitDto, [
     "isPermitted",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the mechanism permit",

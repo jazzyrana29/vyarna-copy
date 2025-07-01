@@ -3,7 +3,7 @@ import { NodeDto } from "./node.dto";
 import { IsUUID } from "class-validator";
 
 export class GetOneNodeDto extends PartialType(
-  PickType(NodeDto, ["name", "isDeleted"])
+  PickType(NodeDto, ["name", "isDeleted"]),
 ) {
   @ApiProperty({
     description: "The unique identifier of the node",

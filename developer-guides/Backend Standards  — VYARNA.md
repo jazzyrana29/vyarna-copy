@@ -18,19 +18,19 @@
 
 [Core Architectural Components](#core-architectural-components)
 
-[API Layer (ez-waveflow-api)](#api-layer-\(ez-waveflow-api\))
+[API Layer (ez-waveflow-api)](<#api-layer-(ez-waveflow-api)>)
 
-[Flow Manager (WaveFlow)](#flow-manager-\(waveflow\))
+[Flow Manager (WaveFlow)](<#flow-manager-(waveflow)>)
 
-[Domain Services (e.g. ez-operator, ez-business-unit)](#domain-services-\(e.g.-ez-operator,-ez-business-unit\))
+[Domain Services (e.g. ez-operator, ez-business-unit)](<#domain-services-(e.g.-ez-operator,-ez-business-unit)>)
 
 [Kafka Event Bus](#kafka-event-bus)
 
 [ZTracking Layer](#ztracking-layer)
 
-[Logging (ez-logger)](#logging-\(ez-logger\))
+[Logging (ez-logger)](<#logging-(ez-logger)>)
 
-[Permissions Microservice (ez-business-operator-permissions)](#permissions-microservice-\(ez-business-operator-permissions\))
+[Permissions Microservice (ez-business-operator-permissions)](<#permissions-microservice-(ez-business-operator-permissions)>)
 
 [Typical Flow Example](#typical-flow-example)
 
@@ -54,7 +54,7 @@
 
 [ez-business-unit](#ez-business-unit)
 
-[ez-permissions (ez-business-operator-permissions)](#ez-permissions-\(ez-business-operator-permissions\))
+[ez-permissions (ez-business-operator-permissions)](<#ez-permissions-(ez-business-operator-permissions)>)
 
 [ez-session](#ez-session)
 
@@ -110,7 +110,7 @@
 
 [Section 7: Observability and Monitoring](#section-7:-observability-and-monitoring)
 
-[Logging (ez-logger)](#logging-\(ez-logger\)-1)
+[Logging (ez-logger)](<#logging-(ez-logger)-1>)
 
 [Example:](#example:)
 
@@ -120,13 +120,13 @@
 
 [Kafka Monitoring](#kafka-monitoring)
 
-[Dead-Letter Queues (DLQs)](#dead-letter-queues-\(dlqs\))
+[Dead-Letter Queues (DLQs)](<#dead-letter-queues-(dlqs)>)
 
 [ZTracking Audit Logs](#ztracking-audit-logs)
 
-[Sentry (Optional)](#sentry-\(optional\))
+[Sentry (Optional)](<#sentry-(optional)>)
 
-[Basic Admin Debug Console (Dev Mode)](#basic-admin-debug-console-\(dev-mode\))
+[Basic Admin Debug Console (Dev Mode)](<#basic-admin-debug-console-(dev-mode)>)
 
 [Section 8: CI/CD and Deployment Pipeline](#section-8:-ci/cd-and-deployment-pipeline)
 
@@ -142,7 +142,7 @@
 
 [Rollback and Resilience](#rollback-and-resilience)
 
-[Flow Deployment (WaveFlow)](#flow-deployment-\(waveflow\))
+[Flow Deployment (WaveFlow)](<#flow-deployment-(waveflow)>)
 
 [Section 9: Scalability and Entity Partitioning](#section-9:-scalability-and-entity-partitioning)
 
@@ -298,10 +298,10 @@ Each major component is designed to be stateless, observable, and isolated by fu
 
 Receives HTTP(S) requests from external sources. For each incoming request, it:
 
-* Generates a unique `traceId`  
-* Identifies the target flow (via `flowType`)  
-* Emits a Kafka message to trigger the corresponding WaveFlow execution  
-* Waits for a synchronous-style response, handled via internal Kafka listeners
+- Generates a unique `traceId`
+- Identifies the target flow (via `flowType`)
+- Emits a Kafka message to trigger the corresponding WaveFlow execution
+- Waits for a synchronous-style response, handled via internal Kafka listeners
 
 ### **Flow Manager (WaveFlow)** {#flow-manager-(waveflow)}
 
@@ -311,17 +311,17 @@ The core orchestrator. Listens to Kafka events and triggers the appropriate step
 
 Responsible for domain logic such as managing operators, business units, devices, sessions, etc. They:
 
-* Subscribe to clearly defined Kafka topics (e.g. `create-operator-entity`)  
-* Emit response events with results or errors  
-* Do not need to know about WaveFlow—only about the topics they consume
+- Subscribe to clearly defined Kafka topics (e.g. `create-operator-entity`)
+- Emit response events with results or errors
+- Do not need to know about WaveFlow—only about the topics they consume
 
 ### **Kafka Event Bus** {#kafka-event-bus}
 
 All service communication flows through Kafka. Topic names follow a consistent naming strategy defined in `ez-utils`, such as:
 
-* `create-operator-entity`  
-* `get-history-operator-entity`  
-* `Create-permission-profile`
+- `create-operator-entity`
+- `get-history-operator-entity`
+- `Create-permission-profile`
 
 Kafka is also used for return messaging, often using the same `traceId` to pair responses with their originating request.
 
@@ -333,26 +333,26 @@ Each key entity has an associated ZTracking table (e.g., `ztracking-operator`). 
 
 All logs are handled through the shared `ez-logger` service. It supports:
 
-* TraceId injection into all messages  
-* Structured logs compatible with centralized logging and APM tools  
-* Standardized severity levels and formats
+- TraceId injection into all messages
+- Structured logs compatible with centralized logging and APM tools
+- Standardized severity levels and formats
 
 ### **Permissions Microservice (`ez-business-operator-permissions`)** {#permissions-microservice-(ez-business-operator-permissions)}
 
 A dedicated service that controls access to system features using:
 
-* Mechanisms  
-* Permits  
-* Permission Profiles
+- Mechanisms
+- Permits
+- Permission Profiles
 
 Operators inherit permissions through their assigned profiles. Permission lookups are enforced at both API and service levels and are fully ZTracked.
 
 ## **Typical Flow Example** {#typical-flow-example}
 
-1. Client sends `POST /operators`  
-2. API generates `traceId` and emits a Kafka message to `create-operator-entity`  
-3. Flow Manager receives and executes the flow definition for this action  
-4. `ez-operator` creates the new record and emits a response with the same `traceId`  
+1. Client sends `POST /operators`
+2. API generates `traceId` and emits a Kafka message to `create-operator-entity`
+3. Flow Manager receives and executes the flow definition for this action
+4. `ez-operator` creates the new record and emits a response with the same `traceId`
 5. The API layer receives the response and returns the result to the client
 
 # **Section 3: Core Domain and Service Breakdown** {#section-3:-core-domain-and-service-breakdown}
@@ -363,87 +363,86 @@ This section outlines the major services and entities within the backend archite
 
 ### **Responsibilities** {#responsibilities}
 
-* Entry point for all external HTTP requests  
-* Generates a `traceId` for each call  
-* Determines `flowType` and emits message to Kafka  
-* Waits for a synchronous Kafka response using an in-memory listener map
+- Entry point for all external HTTP requests
+- Generates a `traceId` for each call
+- Determines `flowType` and emits message to Kafka
+- Waits for a synchronous Kafka response using an in-memory listener map
 
 ### **Key Notes** {#key-notes}
 
-* Routes are grouped by domain (`/operators`, `/business-units`, etc.)  
-* Controllers delegate to Kafka services and return structured responses  
-* Uses `ez-logger` for consistent, traceable logging
+- Routes are grouped by domain (`/operators`, `/business-units`, etc.)
+- Controllers delegate to Kafka services and return structured responses
+- Uses `ez-logger` for consistent, traceable logging
 
 ## **Flow Manager: WaveFlow** {#flow-manager:-waveflow}
 
 ### **Responsibilities** {#responsibilities-1}
 
-* Executes business logic defined in low-code flows  
-* Each flow step emits or listens to Kafka events  
-* Supports conditional branching, parallel actions, retries, and async completion  
-* Ensures `traceId` persists across all flow nodes
+- Executes business logic defined in low-code flows
+- Each flow step emits or listens to Kafka events
+- Supports conditional branching, parallel actions, retries, and async completion
+- Ensures `traceId` persists across all flow nodes
 
 ### **Flow Trigger Path** {#flow-trigger-path}
 
-1. Receives message from `ez-waveflow-api` (e.g., `create-operator-entity`)  
-2. Identifies correct flow by `flowType`  
-3. Executes node by node, calling services and awaiting their responses  
+1. Receives message from `ez-waveflow-api` (e.g., `create-operator-entity`)
+2. Identifies correct flow by `flowType`
+3. Executes node by node, calling services and awaiting their responses
 4. Emits final result message, which completes the original API request
 
 ## **Domain Services** {#domain-services}
 
 ### **`ez-operator`** {#ez-operator}
 
-* Manages creation, update, and history of Operator entities  
-* Consumes topics like `create-operator-entity`, `update-operator-entity`  
-* Emits result topics keyed by `traceId`  
-* All mutations are ZTracked (`ztracking-operator`)
+- Manages creation, update, and history of Operator entities
+- Consumes topics like `create-operator-entity`, `update-operator-entity`
+- Emits result topics keyed by `traceId`
+- All mutations are ZTracked (`ztracking-operator`)
 
 ### **`ez-business-unit`** {#ez-business-unit}
 
-* Manages hierarchical business unit structures  
-* Supports parent-child nesting  
-* All config and metadata are versioned via `ztracking-business-unit`
+- Manages hierarchical business unit structures
+- Supports parent-child nesting
+- All config and metadata are versioned via `ztracking-business-unit`
 
 ### **`ez-permissions` (`ez-business-operator-permissions`)** {#ez-permissions-(ez-business-operator-permissions)}
 
-* Resolves access by Mechanism → Permit → Profile → Operator  
-* Used during login/session validation and in service authorization checks  
-* All profile mutations and assignments are tracked via `ztracking-permission-profile`
+- Resolves access by Mechanism → Permit → Profile → Operator
+- Used during login/session validation and in service authorization checks
+- All profile mutations and assignments are tracked via `ztracking-permission-profile`
 
 ### **`ez-session`** {#ez-session}
 
-* Tracks device sessions and operator logins  
-* Supports linking operators to devices via `OperatorSession`  
-* Mutations to sessions are stored in `ztracking-device-session` and `ztracking-operator-session`
+- Tracks device sessions and operator logins
+- Supports linking operators to devices via `OperatorSession`
+- Mutations to sessions are stored in `ztracking-device-session` and `ztracking-operator-session`
 
 ### **`ez-logger`** {#ez-logger}
 
-* Central structured logging service  
-* Accepts injected `traceId` and formats logs for external observability tools  
-* Shared across all services
+- Central structured logging service
+- Accepts injected `traceId` and formats logs for external observability tools
+- Shared across all services
 
 ## **ZTracking Model** {#ztracking-model}
 
 Each key entity has a parallel ZTracking table. These tables capture:
 
-* Entity snapshot at each mutation (create/update/delete)  
-* Timestamps and actor session reference  
-* Associated `traceId` for full context  
-* Examples:
-
-  * `ztracking-operator`  
-  * `ztracking-business-unit`  
-  * `ztracking-permission-profile`
+- Entity snapshot at each mutation (create/update/delete)
+- Timestamps and actor session reference
+- Associated `traceId` for full context
+- Examples:
+  - `ztracking-operator`
+  - `ztracking-business-unit`
+  - `ztracking-permission-profile`
 
 This structure enables compliance, auditing, and rollback capabilities.
 
 ## **TraceId Handling** {#traceid-handling}
 
-* All services accept `traceId` as part of the Kafka payload  
-* Each Kafka response includes the original `traceId`  
-* All logs and ZTracking records must contain it  
-* Generated in API layer using `generateTraceId(context)`
+- All services accept `traceId` as part of the Kafka payload
+- Each Kafka response includes the original `traceId`
+- All logs and ZTracking records must contain it
+- Generated in API layer using `generateTraceId(context)`
 
 # **Section 4: Kafka Event Bus** {#section-4:-kafka-event-bus}
 
@@ -463,10 +462,10 @@ CopyEdit
 
 Examples:
 
-* `create-operator-entity`  
-* `update-business-unit-entity`  
-* `get-many-permission-profiles`  
-* `get-history-operator-entity`
+- `create-operator-entity`
+- `update-business-unit-entity`
+- `get-many-permission-profiles`
+- `get-history-operator-entity`
 
 Return topics follow the same pattern and include `traceId` to correlate requests with responses.
 
@@ -474,10 +473,10 @@ Return topics follow the same pattern and include `traceId` to correlate request
 
 Every Kafka message includes:
 
-* `traceId`: Unique identifier for the lifecycle of the business request  
-* `flowType`: Optional, if routed through WaveFlow  
-* `payload`: Main data structure for the operation  
-* `context`: Optional metadata (e.g., user, session, business unit)
+- `traceId`: Unique identifier for the lifecycle of the business request
+- `flowType`: Optional, if routed through WaveFlow
+- `payload`: Main data structure for the operation
+- `context`: Optional metadata (e.g., user, session, business unit)
 
 Standard structure (example):
 
@@ -487,19 +486,19 @@ CopyEdit
 
 `{`
 
-  `traceId: string;`
+`traceId: string;`
 
-  `flowType?: string;`
+`flowType?: string;`
 
-  `payload: Record<string, any>;`
+`payload: Record<string, any>;`
 
-  `context?: {`
+`context?: {`
 
     `operatorId?: string;`
 
     `businessUnitId?: string;`
 
-  `};`
+`};`
 
 `}`
 
@@ -509,9 +508,9 @@ All services must include `traceId` in outgoing Kafka messages and must log it u
 
 For flows initiated via HTTP:
 
-* The `ez-waveflow-api` layer emits a message with `traceId`  
-* A listener (responder service) awaits a matching Kafka response  
-* When the response arrives, it is matched by `traceId` and returned to the original caller
+- The `ez-waveflow-api` layer emits a message with `traceId`
+- A listener (responder service) awaits a matching Kafka response
+- When the response arrives, it is matched by `traceId` and returned to the original caller
 
 Timeouts, orphaned `traceId`s, and memory management for pending responses are handled within the internal `kafka-responder.service.ts`.
 
@@ -519,9 +518,9 @@ Timeouts, orphaned `traceId`s, and memory management for pending responses are h
 
 Topics can be partitioned by logical keys:
 
-* `businessUnitId`  
-* `operatorId`  
-* `deviceId`
+- `businessUnitId`
+- `operatorId`
+- `deviceId`
 
 This allows horizontal scale-out of consumers while preserving order where needed.
 
@@ -529,12 +528,12 @@ This allows horizontal scale-out of consumers while preserving order where neede
 
 Each critical service supports:
 
-* Try/catch wrapping of Kafka handlers  
-* Graceful rejection of invalid payloads  
-* Emission of `*.error` topics or logging to Dead Letter Queues (DLQ) when:  
-  * Invalid data is received  
-  * A downstream dependency fails  
-  * Timeouts occur
+- Try/catch wrapping of Kafka handlers
+- Graceful rejection of invalid payloads
+- Emission of `*.error` topics or logging to Dead Letter Queues (DLQ) when:
+  - Invalid data is received
+  - A downstream dependency fails
+  - Timeouts occur
 
 Optional retry strategies can be implemented by WaveFlow for idempotent steps.
 
@@ -542,9 +541,9 @@ Optional retry strategies can be implemented by WaveFlow for idempotent steps.
 
 All Kafka handlers:
 
-* Log incoming and outgoing messages via `ez-logger`  
-* Include `traceId` in every message  
-* Optionally record to ZTracking (for mutation events)
+- Log incoming and outgoing messages via `ez-logger`
+- Include `traceId` in every message
+- Optionally record to ZTracking (for mutation events)
 
 This ensures complete traceability for every business action, even across multiple services.
 
@@ -556,11 +555,11 @@ Rather than handling business logic directly, this layer converts HTTP requests 
 
 ## **Responsibilities** {#responsibilities-2}
 
-* Parse and validate incoming requests  
-* Generate a unique `traceId` for each transaction  
-* Emit structured Kafka messages to initiate flow execution  
-* Wait for synchronous Kafka response messages and return the result to the caller  
-* Log all actions using `ez-logger` with full trace metadata
+- Parse and validate incoming requests
+- Generate a unique `traceId` for each transaction
+- Emit structured Kafka messages to initiate flow execution
+- Wait for synchronous Kafka response messages and return the result to the caller
+- Log all actions using `ez-logger` with full trace metadata
 
 ## **Endpoint Structure** {#endpoint-structure}
 
@@ -590,10 +589,10 @@ CopyEdit
 
 The `traceId` is passed to:
 
-* The outgoing Kafka message  
-* The logs  
-* The in-memory response resolver (Kafka → HTTP)  
-* ZTracking entries if the action mutates state
+- The outgoing Kafka message
+- The logs
+- The in-memory response resolver (Kafka → HTTP)
+- ZTracking entries if the action mutates state
 
 This enables precise correlation between the originating HTTP request and all downstream effects.
 
@@ -603,17 +602,17 @@ All external requests must include a signed JWT or session token. The API gatewa
 
 Authentication is session-based and supports:
 
-* Operator login  
-* Device identification  
-* Session expiration and forced logout flows
+- Operator login
+- Device identification
+- Session expiration and forced logout flows
 
 ## **Partner Quotas and Abuse Prevention** {#partner-quotas-and-abuse-prevention}
 
 Each business unit can be assigned:
 
-* Rate limits (requests per minute)  
-* Quota enforcement (API usage tracking)  
-* Logging hooks to detect abnormal use patterns
+- Rate limits (requests per minute)
+- Quota enforcement (API usage tracking)
+- Logging hooks to detect abnormal use patterns
 
 These controls are applied at the gateway level and can emit events to Kafka for telemetry and abuse monitoring.
 
@@ -621,9 +620,9 @@ These controls are applied at the gateway level and can emit events to Kafka for
 
 The API layer is intentionally decoupled from core domain logic. New flows can be introduced without changing controller implementations by:
 
-* Adding new routes mapped to existing flow types  
-* Updating flow definitions in WaveFlow  
-* Deploying config changes without service redeploys
+- Adding new routes mapped to existing flow types
+- Updating flow definitions in WaveFlow
+- Deploying config changes without service redeploys
 
 # **Section 6: Security and Compliance** {#section-6:-security-and-compliance}
 
@@ -631,59 +630,59 @@ The backend system is designed to operate in regulated, multi-tenant environment
 
 ## **Authentication and Session Integrity** {#authentication-and-session-integrity}
 
-* All requests must include a signed JWT or session token  
-* Tokens are issued per login and tied to an OperatorSession and DeviceSession  
-* Tokens are validated at the API layer before Kafka message emission  
-* Session IDs are included in context metadata for downstream service awareness
+- All requests must include a signed JWT or session token
+- Tokens are issued per login and tied to an OperatorSession and DeviceSession
+- Tokens are validated at the API layer before Kafka message emission
+- Session IDs are included in context metadata for downstream service awareness
 
 ## **Authorization via Permissions Microservice** {#authorization-via-permissions-microservice}
 
 The service `ez-business-operator-permissions` controls what actions an operator may perform.
 
-* Operators are assigned to Permission Profiles  
-* Profiles are composed of Mechanism Permits  
-* Permits are linked to System Mechanisms (e.g., “can-create-operator”, “can-edit-balance”)  
-* Each request is checked against the current session's permission graph  
-* Permission changes are stored in `ztracking-permission-profile` for audit
+- Operators are assigned to Permission Profiles
+- Profiles are composed of Mechanism Permits
+- Permits are linked to System Mechanisms (e.g., “can-create-operator”, “can-edit-balance”)
+- Each request is checked against the current session's permission graph
+- Permission changes are stored in `ztracking-permission-profile` for audit
 
 ## **Kafka Access Control** {#kafka-access-control}
 
-* All Kafka messages must include a valid `traceId`  
-* Internal consumers must validate message schemas before processing  
-* Kafka topic access is organized by domain; services only consume and produce what they are permitted to  
-* Topic ACLs can be applied at the infrastructure level if needed (e.g., in Confluent or Redpanda)
+- All Kafka messages must include a valid `traceId`
+- Internal consumers must validate message schemas before processing
+- Kafka topic access is organized by domain; services only consume and produce what they are permitted to
+- Topic ACLs can be applied at the infrastructure level if needed (e.g., in Confluent or Redpanda)
 
 ## **ZTracking and Audit Trails** {#ztracking-and-audit-trails}
 
 All entity mutations (create, update, delete) are mirrored into dedicated ZTracking tables. These include:
 
-* `traceId`  
-* timestamp of the action  
-* previous and new values  
-* reference to the triggering OperatorSession  
-* optional flow metadata (if triggered via WaveFlow)
+- `traceId`
+- timestamp of the action
+- previous and new values
+- reference to the triggering OperatorSession
+- optional flow metadata (if triggered via WaveFlow)
 
 This structure provides a tamper-proof audit trail for every business action.
 
 ## **Data Isolation and Multi-Tenancy** {#data-isolation-and-multi-tenancy}
 
-* All entities are scoped to a `businessUnitId`  
-* Services must enforce filtering and permissions based on the active business unit  
-* No cross-business-unit access is permitted at the data layer  
-* Admin tools and superuser roles must still use scoped APIs and sessions
+- All entities are scoped to a `businessUnitId`
+- Services must enforce filtering and permissions based on the active business unit
+- No cross-business-unit access is permitted at the data layer
+- Admin tools and superuser roles must still use scoped APIs and sessions
 
 ## **CSP and Embedded Application Security** {#csp-and-embedded-application-security}
 
-* Applications are loaded in iframes with strict `Content-Security-Policy` headers  
-* `postMessage` communication is sanitized and origin-restricted  
-* JWTs passed to embedded applications are short-lived and context-bound
+- Applications are loaded in iframes with strict `Content-Security-Policy` headers
+- `postMessage` communication is sanitized and origin-restricted
+- JWTs passed to embedded applications are short-lived and context-bound
 
 ## **Logging and Incident Forensics** {#logging-and-incident-forensics}
 
-* All logs are generated through `ez-logger`  
-* Each log line includes the `traceId`, request context, and severity  
-* Logs are structured and can be routed to a SIEM or APM provider  
-* Unexpected behavior (e.g., permission denial, invalid Kafka schema) is logged with high severity and optional alerts
+- All logs are generated through `ez-logger`
+- Each log line includes the `traceId`, request context, and severity
+- Logs are structured and can be routed to a SIEM or APM provider
+- Unexpected behavior (e.g., permission denial, invalid Kafka schema) is logged with high severity and optional alerts
 
 # **Section 7: Observability and Monitoring** {#section-7:-observability-and-monitoring}
 
@@ -691,13 +690,13 @@ Observability is a first-class concern in the platform. Every service is designe
 
 ## **Logging (`ez-logger`)** {#logging-(ez-logger)-1}
 
-* All services use the shared `ez-logger` utility  
-* Each log line includes:  
-  * `traceId`  
-  * log level (debug, info, warn, error)  
-  * service and method  
-  * structured payload (e.g., userId, sessionId)  
-* Logs are output in JSON format and can be consumed by centralized tools (e.g., Datadog, Loki, Elastic)
+- All services use the shared `ez-logger` utility
+- Each log line includes:
+  - `traceId`
+  - log level (debug, info, warn, error)
+  - service and method
+  - structured payload (e.g., userId, sessionId)
+- Logs are output in JSON format and can be consumed by centralized tools (e.g., Datadog, Loki, Elastic)
 
 ### **Example:** {#example:}
 
@@ -707,74 +706,74 @@ CopyEdit
 
 `{`
 
-  `"level": "info",`
+`"level": "info",`
 
-  `"traceId": "operator-create-2d04a7",`
+`"traceId": "operator-create-2d04a7",`
 
-  `"service": "ez-operator",`
+`"service": "ez-operator",`
 
-  `"message": "Operator created successfully",`
+`"message": "Operator created successfully",`
 
-  `"operatorId": "abc123",`
+`"operatorId": "abc123",`
 
-  `"businessUnitId": "bu789"`
+`"businessUnitId": "bu789"`
 
 `}`
 
 ## **Tracing with `traceId`** {#tracing-with-traceid}
 
-* Every HTTP request begins with a `traceId`  
-* The `traceId` is injected into:  
-  * Kafka messages  
-  * Logs  
-  * ZTracking entries  
-  * Flow state (if triggered by WaveFlow)  
-* This allows end-to-end tracing across API → Flow → Service → Result
+- Every HTTP request begins with a `traceId`
+- The `traceId` is injected into:
+  - Kafka messages
+  - Logs
+  - ZTracking entries
+  - Flow state (if triggered by WaveFlow)
+- This allows end-to-end tracing across API → Flow → Service → Result
 
 ## **Service Health Monitoring** {#service-health-monitoring}
 
 Each service exposes:
 
-* `/health` endpoint for Kubernetes or Docker probes  
-* Readiness and liveness checks  
-* Optional `/metrics` endpoint for Prometheus-style export
+- `/health` endpoint for Kubernetes or Docker probes
+- Readiness and liveness checks
+- Optional `/metrics` endpoint for Prometheus-style export
 
 Uptime checks (heartbeat pings) ensure that all critical services are reachable and operational.
 
 ## **Kafka Monitoring** {#kafka-monitoring}
 
-* Consumer lag is tracked for each service/topic combination  
-* Alerts can be configured for high lag, failed deserialization, or DLQ overflow  
-* Topic throughput and error rates are metrics available per domain
+- Consumer lag is tracked for each service/topic combination
+- Alerts can be configured for high lag, failed deserialization, or DLQ overflow
+- Topic throughput and error rates are metrics available per domain
 
 ## **Dead-Letter Queues (DLQs)** {#dead-letter-queues-(dlqs)}
 
-* Malformed or failed messages are optionally routed to a DLQ  
-* DLQs are monitored and inspected regularly  
-* Messages include full context for replay or debugging
+- Malformed or failed messages are optionally routed to a DLQ
+- DLQs are monitored and inspected regularly
+- Messages include full context for replay or debugging
 
 ## **ZTracking Audit Logs** {#ztracking-audit-logs}
 
-* Every mutation to tracked entities is recorded in a corresponding ZTracking table  
-* These tables can be queried for:  
-  * Change history  
-  * User responsibility  
-  * Flow execution tracing
+- Every mutation to tracked entities is recorded in a corresponding ZTracking table
+- These tables can be queried for:
+  - Change history
+  - User responsibility
+  - Flow execution tracing
 
 ZTracking forms the basis of both observability and compliance.
 
 ## **Sentry (Optional)** {#sentry-(optional)}
 
-* Services may be instrumented with Sentry or a similar service to track:  
-  * Uncaught exceptions  
-  * API-level errors  
-  * Kafka handler errors  
-* `traceId` is included in all Sentry events
+- Services may be instrumented with Sentry or a similar service to track:
+  - Uncaught exceptions
+  - API-level errors
+  - Kafka handler errors
+- `traceId` is included in all Sentry events
 
 ## **Basic Admin Debug Console (Dev Mode)** {#basic-admin-debug-console-(dev-mode)}
 
-* Applications and admin interfaces can expose a debug console in development mode  
-* Includes last `traceId`, recent Kafka messages, and simplified logs
+- Applications and admin interfaces can expose a debug console in development mode
+- Includes last `traceId`, recent Kafka messages, and simplified logs
 
 # **Section 8: CI/CD and Deployment Pipeline** {#section-8:-ci/cd-and-deployment-pipeline}
 
@@ -786,21 +785,21 @@ Each domain service lives within a **shared monorepo**, organized as follows:
 
 `/services/`
 
-  `├── operator/`
+`├── operator/`
 
-  `├── business-unit/`
+`├── business-unit/`
 
-  `├── permissions/`
+`├── permissions/`
 
-  `└── session/`
+`└── session/`
 
 `/libs/`
 
-  `├── ez-utils/`
+`├── ez-utils/`
 
-  `├── ez-logger/`
+`├── ez-logger/`
 
-  `└── ez-ztracking/`
+`└── ez-ztracking/`
 
 Each service maintains its own entrypoint, Dockerfile, and CI pipeline logic. Shared utilities and schemas reside under `/libs`.
 
@@ -808,9 +807,9 @@ Each service should include Kubernetes deployment configuration in a consistent 
 
 /services/operator/
 
-  ├── Dockerfile
+├── Dockerfile
 
-  └── k8s/
+└── k8s/
 
       ├── deployment.yaml
 
@@ -822,22 +821,22 @@ CI pipelines reference these paths to deploy independently.
 
 The monorepo includes CI workflows that support **path-based triggers** to only build and deploy affected services:
 
-1. **Lint & Type Check**  
-2. **Unit Tests**  
-3. **Build**  
-4. **Dockerize**  
+1. **Lint & Type Check**
+2. **Unit Tests**
+3. **Build**
+4. **Dockerize**
 5. **Deploy**
 
 You may use Nx, Turborepo, or GitHub Actions filters to detect changed scopes (e.g., only run operator build when `services/operator/**` or `libs/ez-utils/**` changes).
 
 #### **Deployment Strategy** {#deployment-strategy}
 
-* Microservices are deployed independently from the monorepo.  
-* Each service has its own Dockerfile (e.g. `Dockerfile.operator`) and `k8s/` manifests.
+- Microservices are deployed independently from the monorepo.
+- Each service has its own Dockerfile (e.g. `Dockerfile.operator`) and `k8s/` manifests.
 
 /services/operator/
 
-  └── k8s/
+└── k8s/
 
       ├── deployment.yaml
 
@@ -847,32 +846,32 @@ For Example
 
 /k8s/operator/
 
-* WaveFlow logic can be updated without redeploying services.  
-* Rollbacks use Git tags or image digests.  
-* Config and flow overrides are dynamically loaded per Business Unit.
+- WaveFlow logic can be updated without redeploying services.
+- Rollbacks use Git tags or image digests.
+- Config and flow overrides are dynamically loaded per Business Unit.
 
 #### **Environment Configuration** {#environment-configuration}
 
-* Each service loads config from scoped `.env` files or secrets injected at deploy time.  
-* Shared `.env` files and Kubernetes secrets are defined globally but scoped per service.
+- Each service loads config from scoped `.env` files or secrets injected at deploy time.
+- Shared `.env` files and Kubernetes secrets are defined globally but scoped per service.
 
 ## **Versioning and Tags** {#versioning-and-tags}
 
-* Services use **Semantic Versioning** (e.g., `v2.1.0`)  
-* Each deploy is tagged with a Git reference and container image label  
-* Configs and flow definitions are versioned separately to allow rollback without service changes
+- Services use **Semantic Versioning** (e.g., `v2.1.0`)
+- Each deploy is tagged with a Git reference and container image label
+- Configs and flow definitions are versioned separately to allow rollback without service changes
 
 ## **Rollback and Resilience** {#rollback-and-resilience}
 
-* Docker image rollbacks are instant via GitLab UI or CLI  
-* Kafka topic replay is possible via traceId filtering  
-* Flow-level versioning allows soft rollback of business logic without reverting service code
+- Docker image rollbacks are instant via GitLab UI or CLI
+- Kafka topic replay is possible via traceId filtering
+- Flow-level versioning allows soft rollback of business logic without reverting service code
 
 ## **Flow Deployment (WaveFlow)** {#flow-deployment-(waveflow)}
 
-* Flow definitions are managed in WaveFlow via YAML or visual builder  
-* Changes are pushed to the Flow Manager in real time via Kafka or API  
-* Flow versions can be locked per business unit or tagged as “default”
+- Flow definitions are managed in WaveFlow via YAML or visual builder
+- Changes are pushed to the Flow Manager in real time via Kafka or API
+- Flow versions can be locked per business unit or tagged as “default”
 
 # **Section 9: Scalability and Entity Partitioning** {#section-9:-scalability-and-entity-partitioning}
 
@@ -882,10 +881,10 @@ The platform is designed for horizontal scalability at both the service and infr
 
 Each domain service is stateless and independently deployable. This enables:
 
-* Horizontal scaling based on demand  
-* Independent service restarts and rollouts  
-* Resilience to single-service failures  
-* Scale-up of critical services (e.g., `ez-operator`) without affecting others
+- Horizontal scaling based on demand
+- Independent service restarts and rollouts
+- Resilience to single-service failures
+- Scale-up of critical services (e.g., `ez-operator`) without affecting others
 
 All state is stored in external databases or transmitted through Kafka.
 
@@ -893,9 +892,9 @@ All state is stored in external databases or transmitted through Kafka.
 
 Kafka topics can be partitioned to improve performance and concurrency. Key partitioning strategies include:
 
-* **Per Business Unit (`businessUnitId`)** — default partition key for operator, config, permission messages  
-* **Per Session or Device (`deviceId`, `operatorSessionId`)** — for high-volume player sessions  
-* **Per Flow (`traceId`)** — ensures traceable, linear event handling within a given flow
+- **Per Business Unit (`businessUnitId`)** — default partition key for operator, config, permission messages
+- **Per Session or Device (`deviceId`, `operatorSessionId`)** — for high-volume player sessions
+- **Per Flow (`traceId`)** — ensures traceable, linear event handling within a given flow
 
 Services consume partitions in parallel, which allows high throughput even under load.
 
@@ -903,9 +902,9 @@ Services consume partitions in parallel, which allows high throughput even under
 
 WaveFlow is capable of running multiple flow instances concurrently across flows and business units. Each flow:
 
-* Is identified by `flowType`  
-* Can be versioned per business unit  
-* Is isolated by `traceId` and does not share memory between executions
+- Is identified by `flowType`
+- Can be versioned per business unit
+- Is isolated by `traceId` and does not share memory between executions
 
 Concurrency is bounded only by Kafka throughput and node resources.
 
@@ -913,26 +912,26 @@ Concurrency is bounded only by Kafka throughput and node resources.
 
 The entity structure supports future sharding if needed:
 
-* All tables include `businessUnitId` as a foreign key  
-* Table indexes are scoped to businessUnit-aware queries  
-* ZTracking tables are partitionable by `businessUnitId` and time
+- All tables include `businessUnitId` as a foreign key
+- Table indexes are scoped to businessUnit-aware queries
+- ZTracking tables are partitionable by `businessUnitId` and time
 
 ## **Session and Permission Isolation** {#session-and-permission-isolation}
 
 Operator sessions, permission profiles, and business logic flows are scoped per business unit. This prevents:
 
-* Cross-tenant data leakage  
-* Resource starvation between units  
-* Overhead from global joins or filtering
+- Cross-tenant data leakage
+- Resource starvation between units
+- Overhead from global joins or filtering
 
 ## **Load-Based Scaling** {#load-based-scaling}
 
 Services can be scaled based on:
 
-* Kafka lag per topic  
-* API request volume  
-* Flow instance count per business unit  
-* Operator session concurrency
+- Kafka lag per topic
+- API request volume
+- Flow instance count per business unit
+- Operator session concurrency
 
 Auto-scaling policies can be implemented using Kubernetes, Nomad, or ECS, based on infrastructure provider.
 
@@ -940,10 +939,10 @@ Auto-scaling policies can be implemented using Kubernetes, Nomad, or ECS, based 
 
 Business units can override:
 
-* Flow versions (`flowType` remapping)  
-* Permission profiles  
-* Feature flags  
-* Localized content or behavior
+- Flow versions (`flowType` remapping)
+- Permission profiles
+- Feature flags
+- Localized content or behavior
 
 These overrides are loaded dynamically from a Partner Config API or `/config/business-unit-X.json`.
 
@@ -969,15 +968,15 @@ The prefix indicates the action or flow type, making trace logs more readable du
 
 Once created, the `traceId` is:
 
-* Injected into all Kafka messages
+- Injected into all Kafka messages
 
-* Passed to WaveFlow for step-level execution
+- Passed to WaveFlow for step-level execution
 
-* Embedded in logs via `ez-logger`
+- Embedded in logs via `ez-logger`
 
-* Stored in ZTracking tables for entity changes
+- Stored in ZTracking tables for entity changes
 
-* Returned in the final HTTP response for developer visibility
+- Returned in the final HTTP response for developer visibility
 
 ### **Format** {#format}
 
@@ -995,15 +994,15 @@ This enables both human readability and uniqueness.
 
 ### **Required in:** {#required-in:}
 
-* Every Kafka message (payload or headers)
+- Every Kafka message (payload or headers)
 
-* Every service log
+- Every service log
 
-* Every ZTracking record
+- Every ZTracking record
 
-* Every permission mutation
+- Every permission mutation
 
-* All error/exception reports
+- All error/exception reports
 
 ## **ZTracking Policy** {#ztracking-policy}
 
@@ -1011,13 +1010,13 @@ This enables both human readability and uniqueness.
 
 ZTracking tables serve as append-only audit logs for critical entity types. They capture:
 
-* What changed
+- What changed
 
-* When it changed
+- When it changed
 
-* Who triggered the change (via session)
+- Who triggered the change (via session)
 
-* What the data looked like before and after
+- What the data looked like before and after
 
 This provides transparency, rollback support, and legal-grade auditability.
 
@@ -1025,33 +1024,33 @@ This provides transparency, rollback support, and legal-grade auditability.
 
 Each core entity has a matching ZTracking table:
 
-* `Operator` → `ztracking-operator`
+- `Operator` → `ztracking-operator`
 
-* `BusinessUnit` → `ztracking-business-unit`
+- `BusinessUnit` → `ztracking-business-unit`
 
-* `PermissionProfile` → `ztracking-permission-profile`
+- `PermissionProfile` → `ztracking-permission-profile`
 
-* `DeviceSession` → `ztracking-device-session`
+- `DeviceSession` → `ztracking-device-session`
 
-* `OperatorSession` → `ztracking-operator-session`
+- `OperatorSession` → `ztracking-operator-session`
 
 ### **Record Fields** {#record-fields}
 
 Each ZTracking entry contains:
 
-* `id` (PK)
+- `id` (PK)
 
-* `traceId`
+- `traceId`
 
-* `changeType` (create, update, delete)
+- `changeType` (create, update, delete)
 
-* `snapshotBefore`
+- `snapshotBefore`
 
-* `snapshotAfter`
+- `snapshotAfter`
 
-* `createdAt`
+- `createdAt`
 
-* `operatorSessionId` or `deviceSessionId`
+- `operatorSessionId` or `deviceSessionId`
 
 ### **Triggering** {#triggering}
 
@@ -1063,41 +1062,41 @@ CopyEdit
 
 `await this.ztrackingService.recordChange({`
 
-  `traceId,`
+`traceId,`
 
-  `changeType: 'update',`
+`changeType: 'update',`
 
-  `snapshotBefore: previousEntity,`
+`snapshotBefore: previousEntity,`
 
-  `snapshotAfter: updatedEntity,`
+`snapshotAfter: updatedEntity,`
 
-  `operatorSessionId`
+`operatorSessionId`
 
 `});`
 
 ### **Read Access** {#read-access}
 
-* Read-only access is available for internal admin panels and forensics tools
+- Read-only access is available for internal admin panels and forensics tools
 
-* Queries must always be scoped by `businessUnitId`
+- Queries must always be scoped by `businessUnitId`
 
 ## **Policy Enforcement** {#policy-enforcement}
 
-* All service mutations must call the appropriate ZTracking repository
+- All service mutations must call the appropriate ZTracking repository
 
-* No entity should be updated without emitting a traceable audit entry
+- No entity should be updated without emitting a traceable audit entry
 
-* ZTracking errors must not block core flows but must be logged and monitored
+- ZTracking errors must not block core flows but must be logged and monitored
 
-* Records are immutable; updates to ZTracking entries are not permitted
+- Records are immutable; updates to ZTracking entries are not permitted
 
 ## **Retention Strategy** {#retention-strategy}
 
-* ZTracking tables may be periodically archived or moved to cold storage
+- ZTracking tables may be periodically archived or moved to cold storage
 
-* Default retention policy: 12–36 months, depending on regulatory needs
+- Default retention policy: 12–36 months, depending on regulatory needs
 
-* Long-term export (e.g., CSV/Parquet) is supported via batch jobs if needed
+- Long-term export (e.g., CSV/Parquet) is supported via batch jobs if needed
 
 # **Section 11: Open Questions and Design Decisions** {#section-11:-open-questions-and-design-decisions}
 
@@ -1113,9 +1112,9 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Stateless flows are simpler and faster to scale  
-* Persistent flow state would enable manual restarts, long-lived flows, and audit traces for partial execution  
-* A Redis or Postgres-backed state store could be introduced selectively
+- Stateless flows are simpler and faster to scale
+- Persistent flow state would enable manual restarts, long-lived flows, and audit traces for partial execution
+- A Redis or Postgres-backed state store could be introduced selectively
 
 ## **2\. Response Timeout Handling** {#2.-response-timeout-handling}
 
@@ -1127,9 +1126,9 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Long flows may exceed 5–10 seconds  
-* Should we standardize timeouts per flow type?  
-* What should the API return to the caller on timeout (generic error, partial progress, retry token)?
+- Long flows may exceed 5–10 seconds
+- Should we standardize timeouts per flow type?
+- What should the API return to the caller on timeout (generic error, partial progress, retry token)?
 
 ## **3\. ZTracking Mutation Rules** {#3.-ztracking-mutation-rules}
 
@@ -1141,9 +1140,9 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Pros: maximum auditability  
-* Cons: noisy logs, performance cost, ZTracking table bloat  
-* Possible solution: hash-based diffing or version increment checks
+- Pros: maximum auditability
+- Cons: noisy logs, performance cost, ZTracking table bloat
+- Possible solution: hash-based diffing or version increment checks
 
 ## **4\. Flow Versioning and Locking** {#4.-flow-versioning-and-locking}
 
@@ -1155,9 +1154,9 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Locking flow versions allows controlled change per business unit  
-* Could support “flow upgrade” paths with rollback support  
-* WaveFlow must support per-business-unit flow registry
+- Locking flow versions allows controlled change per business unit
+- Could support “flow upgrade” paths with rollback support
+- WaveFlow must support per-business-unit flow registry
 
 ## **5\. Retry and Dead-Letter Strategy** {#5.-retry-and-dead-letter-strategy}
 
@@ -1169,9 +1168,9 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Complex retries may belong to Flow Manager (e.g., wait \+ retry 3 times)  
-* DLQs must log original payload, traceId, and reason  
-* Retry logic should be idempotent and observable
+- Complex retries may belong to Flow Manager (e.g., wait \+ retry 3 times)
+- DLQs must log original payload, traceId, and reason
+- Retry logic should be idempotent and observable
 
 ## **6\. Partner Config Governance** {#6.-partner-config-governance}
 
@@ -1183,26 +1182,26 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Should there be schema validation?  
-* Should Partner Config changes be ZTracked or loggable?  
-* Are breaking changes to config entries allowed at runtime?
+- Should there be schema validation?
+- Should Partner Config changes be ZTracked or loggable?
+- Are breaking changes to config entries allowed at runtime?
 
 ## **7\. Observability Limits** {#7.-observability-limits}
 
 **Question:**  
  What observability strategy should be used when:
 
-* Kafka lag is high  
-* No response is received  
-* A flow partially fails?
+- Kafka lag is high
+- No response is received
+- A flow partially fails?
 
 **Current State:**  
  Sentry and `ez-logger` track errors, but no unified dashboard for flow health exists.
 
 **Considerations:**
 
-* Flow Manager could emit health metrics per flow  
-* Integration with PostHog, Datadog, or Prometheus might be required
+- Flow Manager could emit health metrics per flow
+- Integration with PostHog, Datadog, or Prometheus might be required
 
 ## **8\. Schema Enforcement and Shared Types** {#8.-schema-enforcement-and-shared-types}
 
@@ -1214,9 +1213,9 @@ This section documents known architectural questions, strategic trade-offs, and 
 
 **Considerations:**
 
-* Zod or class-validator could enforce runtime shape  
-* Schema registry (e.g., Avro or JSON Schema) could support producer/consumer guarantees  
-* Might improve integration safety and dev onboarding
+- Zod or class-validator could enforce runtime shape
+- Schema registry (e.g., Avro or JSON Schema) could support producer/consumer guarantees
+- Might improve integration safety and dev onboarding
 
 This section will grow over time as additional design decisions are surfaced. All new services should consider these questions before being finalized.
 
@@ -1225,12 +1224,12 @@ This section will grow over time as additional design decisions are surfaced. Al
  **Current State**: Services are being migrated to a structured monorepo.  
  **Considerations**:
 
-* Use `nx`, `turborepo`, or `changesets` to track dependency graphs.  
-* Path-based CI triggers using GitHub Actions or GitLab.  
-* Scoped Dockerfiles and Kubernetes manifests.  
-* Shared schema and utility governance centralized in `/libs`.
+- Use `nx`, `turborepo`, or `changesets` to track dependency graphs.
+- Path-based CI triggers using GitHub Actions or GitLab.
+- Scoped Dockerfiles and Kubernetes manifests.
+- Shared schema and utility governance centralized in `/libs`.
 
-# 
+#
 
 # **Appendix A: Developer Workflow and Local Tooling** {#appendix-a:-developer-workflow-and-local-tooling}
 
@@ -1248,7 +1247,7 @@ Copy code
 
 `/services/`
 
-  `/operator/`
+`/operator/`
 
     `├── src/`
 
@@ -1262,19 +1261,19 @@ Copy code
 
 `/libs/`
 
-  `/ez-utils/`
+`/ez-utils/`
 
-  `/ez-logger/`
+`/ez-logger/`
 
 #### **`tsconfig.base.json` and Path Aliases** {#tsconfig.base.json-and-path-aliases}
 
 Each service includes a `tsconfig.json` that extends from a shared root `tsconfig.base.json`. This enables:
 
-* Centralized compiler options
+- Centralized compiler options
 
-* Stable and readable imports
+- Stable and readable imports
 
-* IDE navigation across all services
+- IDE navigation across all services
 
 Example `tsconfig.base.json`:
 
@@ -1282,7 +1281,7 @@ jsonc
 
 `{`
 
-  `"compilerOptions": {`
+`"compilerOptions": {`
 
     `"baseUrl": ".",`
 
@@ -1302,7 +1301,7 @@ jsonc
 
     `"moduleResolution": "Node"`
 
-  `}`
+`}`
 
 `}`
 
@@ -1314,16 +1313,16 @@ ts
 
 `import { getLogger } from '@logger';`
 
-* `tsconfig.json` extending from  \`/tsconfig.base.json\`, which defines:  
-  * \- Path aliases (e.g., \`@utils/\*\`)  
-  * \- Shared compiler options  
-  * \- Monorepo-wide build scope
+- `tsconfig.json` extending from \`/tsconfig.base.json\`, which defines:
+  - \- Path aliases (e.g., \`@utils/\*\`)
+  - \- Shared compiler options
+  - \- Monorepo-wide build scope
 
 // tsconfig.base.json
 
 {
 
-  "compilerOptions": {
+"compilerOptions": {
 
     "baseUrl": ".",
 
@@ -1335,13 +1334,13 @@ ts
 
     }
 
-  }
+}
 
 }
 
-* `.env.example`  
-* Dockerfile  
-* Dev script using `ts-node-dev` or similar
+- `.env.example`
+- Dockerfile
+- Dev script using `ts-node-dev` or similar
 
 Start local development via:
 
@@ -1395,9 +1394,9 @@ CopyEdit
 
 Use it in:
 
-* Kafka message headers or payload  
-* All `ez-logger` calls  
-* ZTracking entries
+- Kafka message headers or payload
+- All `ez-logger` calls
+- ZTracking entries
 
 For manual tracing:
 
@@ -1409,13 +1408,13 @@ CopyEdit
 
 ## **4\. Running Full End-to-End Flow Locally** {#4.-running-full-end-to-end-flow-locally}
 
-* Start the system from the monorepo root:  
-  * bash  
-  * Copy code  
-  * `docker-compose up -d kafka postgres`  
-  * `pnpm dev --filter=services/operator`  
-  * `pnpm dev --filter=services/flow-manager`  
-  * `pnpm dev --filter=services/api`
+- Start the system from the monorepo root:
+  - bash
+  - Copy code
+  - `docker-compose up -d kafka postgres`
+  - `pnpm dev --filter=services/operator`
+  - `pnpm dev --filter=services/flow-manager`
+  - `pnpm dev --filter=services/api`
 
 ## **5\. Writing a New Kafka Handler** {#5.-writing-a-new-kafka-handler}
 
@@ -1423,62 +1422,62 @@ Steps to follow:
 
 Define new topic in `ez-utils`:
 
- ts  
+ts  
 CopyEdit  
 `export const KT_DEACTIVATE_OPERATOR = 'deactivate-operator-entity';`
 
-1. 
+1.
 
 Add Kafka consumer handler:
 
- ts  
+ts  
 CopyEdit  
 `this.kafkaService.on(KT_DEACTIVATE_OPERATOR, async ({ traceId, payload }) => {`
 
-  `this.logger.info({ traceId, message: 'Deactivating operator...' });`
+`this.logger.info({ traceId, message: 'Deactivating operator...' });`
 
-  `const result = await this.operatorService.deactivate(payload);`
+`const result = await this.operatorService.deactivate(payload);`
 
-  `return { traceId, result };`
+`return { traceId, result };`
 
 `});`
 
-2.   
-3. Log, ZTrack, and return result:  
-   * Include `operatorSessionId`  
-   * Validate payload  
-   * Return shape that matches schema contract
+2.
+3. Log, ZTrack, and return result:
+   - Include `operatorSessionId`
+   - Validate payload
+   - Return shape that matches schema contract
 
 ## **6\. Local Test Strategy** {#6.-local-test-strategy}
 
-* Use **Vitest** for unit and integration tests  
-* Mock Kafka using `testcontainers` or `kafka-mock` lib  
-* Add `__test__/` folder with:  
-  * Service-level tests  
-  * Kafka round-trip mocks  
-  * Schema validation tests
+- Use **Vitest** for unit and integration tests
+- Mock Kafka using `testcontainers` or `kafka-mock` lib
+- Add `__test__/` folder with:
+  - Service-level tests
+  - Kafka round-trip mocks
+  - Schema validation tests
 
 ## **7\. CI Integration** {#7.-ci-integration}
 
-* CI checks must pass before merge:  
-  * `lint`, `typecheck`, `test`, `build`  
-* Commits must follow semantic versioning labels  
-* Feature branches deploy to isolated preview environments if needed
+- CI checks must pass before merge:
+  - `lint`, `typecheck`, `test`, `build`
+- Commits must follow semantic versioning labels
+- Feature branches deploy to isolated preview environments if needed
 
 ## **8\. Helpful Tools** {#8.-helpful-tools}
 
-| Tool | Use |
-| ----- | ----- |
-| `kcat` | Inspect Kafka messages |
-| `pgAdmin` | DB snapshot comparison |
-| `Postman` or `Insomnia` | API testing |
-| `Zod` or `class-validator` | Schema enforcement |
-| `ez-logger` | Consistent traceable logging |
-| `docker-compose.override.yml` | Dev overrides |
+| Tool                          | Use                          |
+| ----------------------------- | ---------------------------- |
+| `kcat`                        | Inspect Kafka messages       |
+| `pgAdmin`                     | DB snapshot comparison       |
+| `Postman` or `Insomnia`       | API testing                  |
+| `Zod` or `class-validator`    | Schema enforcement           |
+| `ez-logger`                   | Consistent traceable logging |
+| `docker-compose.override.yml` | Dev overrides                |
 
-# 
+#
 
-# 
+#
 
 # **Appendix B: RFC \- Schema Governance for Kafka Payloads and Domain Models** {#appendix-b:-rfc---schema-governance-for-kafka-payloads-and-domain-models}
 
@@ -1494,19 +1493,19 @@ To define a consistent, enforceable strategy for managing the shape and evolutio
 
 ## **Motivation** {#motivation}
 
-* Kafka payloads are currently defined in code but not strictly validated  
-* Inconsistent message shapes can lead to runtime crashes and silent errors  
-* As team size and service count grow, shared contract enforcement becomes essential  
-* We want to enable contract-first development, traceable debugging, and future auto-codegen
+- Kafka payloads are currently defined in code but not strictly validated
+- Inconsistent message shapes can lead to runtime crashes and silent errors
+- As team size and service count grow, shared contract enforcement becomes essential
+- We want to enable contract-first development, traceable debugging, and future auto-codegen
 
 ## **Scope** {#scope}
 
 This RFC applies to:
 
-* All Kafka messages (inbound and outbound)  
-* All Flow Manager payloads and `traceId`\-based responses  
-* ZTracking structures (where applicable)  
-* Partner Config validation (optional future phase)
+- All Kafka messages (inbound and outbound)
+- All Flow Manager payloads and `traceId`\-based responses
+- ZTracking structures (where applicable)
+- Partner Config validation (optional future phase)
 
 ## **Governance Strategy** {#governance-strategy}
 
@@ -1517,16 +1516,16 @@ This RFC applies to:
 `pgsql`  
 `Copy code`  
 `/libs/ez-utils/topics/<domain>/`  
-  `├── create-operator.schema.ts`  
-  `├── update-operator.schema.ts`  
-  `└── index.ts`
+ `├── create-operator.schema.ts`  
+ `├── update-operator.schema.ts`  
+ `└── index.ts`
 
 `They are defined using Zod or class-validator and exported from ez-utils.`
 
 ### **2\. Validation on Emit and Consume** {#2.-validation-on-emit-and-consume}
 
-* All producers must **validate before emitting**  
-* All consumers must **validate before handling**
+- All producers must **validate before emitting**
+- All consumers must **validate before handling**
 
 ts  
 CopyEdit  
@@ -1536,76 +1535,75 @@ CopyEdit
 `// consume`  
 `const validated = CreateOperatorSchema.parse(incoming.payload);`
 
-* Invalid messages should throw and log via `ez-logger`  
-* Optional: route to DLQ with `reason: "schema_validation_failed"`
+- Invalid messages should throw and log via `ez-logger`
+- Optional: route to DLQ with `reason: "schema_validation_failed"`
 
 ### **3\. Naming and File Organization** {#3.-naming-and-file-organization}
 
 Schemas should be colocated with their topic definition:
 
- pgsql  
+pgsql  
 CopyEdit  
 `ez-utils/`  
-  `└── topics/`  
-      `└── operator/`  
-          `├── create-operator.schema.ts`  
-          `├── update-operator.schema.ts`  
-          `└── index.ts`
+ `└── topics/`  
+ `└── operator/`  
+ `├── create-operator.schema.ts`  
+ `├── update-operator.schema.ts`  
+ `└── index.ts`
 
-* 
+-
 
 Expose via index:
 
- ts  
+ts  
 CopyEdit  
 `export * from './create-operator.schema';`
 
-* 
+-
 
 ### **4\. Versioning** {#4.-versioning}
 
-* Breaking schema changes must result in:  
-  * A **new schema version** (e.g., `CreateOperatorV2Schema`)  
-  * A **new topic name** (e.g., `create-operator-v2-entity`)  
-  * Or strict negotiation inside the Flow Manager  
-* Services may support multiple versions in parallel temporarily
+- Breaking schema changes must result in:
+  - A **new schema version** (e.g., `CreateOperatorV2Schema`)
+  - A **new topic name** (e.g., `create-operator-v2-entity`)
+  - Or strict negotiation inside the Flow Manager
+- Services may support multiple versions in parallel temporarily
 
 ### **5\. Type Inference and Sharing** {#5.-type-inference-and-sharing}
 
-* Schemas also generate TypeScript types (via `z.infer`)  
-* These types should be reused in service method signatures
+- Schemas also generate TypeScript types (via `z.infer`)
+- These types should be reused in service method signatures
 
 ts  
 CopyEdit  
 `export async function handleCreateOperator(data: CreateOperatorPayload) {`  
-  `// ...`  
+ `// ...`  
 `}`
 
 ## **Optional Future Enhancements** {#optional-future-enhancements}
 
-* Introduce a **Schema Registry** (e.g., Confluent, Redpanda, or AsyncAPI tooling)  
-* Auto-generate:  
-  * TypeScript types  
-  * OpenAPI endpoints  
-  * Partner integration docs  
-* Real-time schema diff tooling for CI validation
+- Introduce a **Schema Registry** (e.g., Confluent, Redpanda, or AsyncAPI tooling)
+- Auto-generate:
+  - TypeScript types
+  - OpenAPI endpoints
+  - Partner integration docs
+- Real-time schema diff tooling for CI validation
 
 ## **Compliance** {#compliance}
 
 Each team must:
 
-* Define schemas for all new Kafka topics before usage  
-* Validate both emitted and consumed messages  
-* Maintain schema documentation in `ez-utils`  
-* Migrate old unvalidated topics to schema-based flows over time
+- Define schemas for all new Kafka topics before usage
+- Validate both emitted and consumed messages
+- Maintain schema documentation in `ez-utils`
+- Migrate old unvalidated topics to schema-based flows over time
 
 ## **Open Questions** {#open-questions}
 
-* Should schemas be registered at runtime (dynamic loading)?  
-* Should ZTracking enforce snapshot schema versions as well?  
-* Do we enforce schemas in Partner Configs too?
+- Should schemas be registered at runtime (dynamic loading)?
+- Should ZTracking enforce snapshot schema versions as well?
+- Do we enforce schemas in Partner Configs too?
 
 ## **Conclusion** {#conclusion}
 
 Formalizing schema governance ensures cross-team safety, faster onboarding, easier debugging, and future automation. This RFC is a proposal to align all RTPLUX backend services on schema-first development.
-

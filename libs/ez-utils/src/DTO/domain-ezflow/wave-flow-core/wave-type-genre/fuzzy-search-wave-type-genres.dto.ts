@@ -11,7 +11,7 @@ export class FuzzySearchWaveTypeGenresDto extends PartialType(
     "description",
     "updatedBy",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for Wave Type Genre name (optional)",

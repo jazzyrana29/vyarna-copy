@@ -4,7 +4,7 @@ import { FlowIsActiveForWaveTypeAndBusinessUnitDto } from "./flow-is-active-for-
 
 export class GetOneFlowIsActiveForWaveTypeAndBusinessUnitDto extends PickType(
   FlowIsActiveForWaveTypeAndBusinessUnitDto,
-  ["waveTypeId", "businessUnitId"] as const
+  ["waveTypeId", "businessUnitId"] as const,
 ) {
   @ApiProperty({
     description: "Include deleted records",

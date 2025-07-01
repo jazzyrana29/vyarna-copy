@@ -10,7 +10,6 @@ import {
   mockSavedZtrackingEvaluationVariable001,
   mockTraceId,
 } from '../test-values.spec';
-import { GetHistoryOfEvaluationVariablesDto } from 'ez-utils';
 
 describe('ZtrackingEvaluationVariableService', () => {
   let ztrackingEvaluationVariableService: ZtrackingEvaluationVariableService;

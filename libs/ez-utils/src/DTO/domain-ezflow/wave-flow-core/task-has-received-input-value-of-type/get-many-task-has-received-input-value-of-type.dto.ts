@@ -3,5 +3,5 @@ import { TaskHasReceiveInputValueOfTypeDto } from "./task-has-received-input-val
 
 export class GetManyTaskHasReceivedInputValueOfTypeDto extends PickType(
   TaskHasReceiveInputValueOfTypeDto,
-  ["isDeleted"] as const
+  ["isDeleted"] as const,
 ) {}

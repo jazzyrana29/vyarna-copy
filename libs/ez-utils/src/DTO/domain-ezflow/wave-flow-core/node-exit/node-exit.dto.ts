@@ -13,7 +13,7 @@ import { Type } from "class-transformer";
 import { TaskDto } from "../task/task.dto";
 
 export class NodeExitDto extends IntersectionType(
-  PickType(NodeExitTypeDto, ["nodeExitTypeId"] as const)
+  PickType(NodeExitTypeDto, ["nodeExitTypeId"] as const),
 ) {
   @ApiProperty({
     description: "The unique identifier of the node exit",

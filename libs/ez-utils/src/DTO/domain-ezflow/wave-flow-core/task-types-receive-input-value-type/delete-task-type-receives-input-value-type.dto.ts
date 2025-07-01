@@ -3,5 +3,5 @@ import { TaskTypesReceiveInputValueTypeDto } from "./task-types-receive-input-va
 
 export class DeleteTaskTypesReceiveInputValueTypeDto extends PickType(
   TaskTypesReceiveInputValueTypeDto,
-  ["taskTypeId", "inputValueTypeId"] as const
+  ["taskTypeId", "inputValueTypeId"] as const,
 ) {}

@@ -11,7 +11,7 @@ export class FuzzySearchEvaluationVariableDataTypesDto extends PartialType(
     "description",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for the data type's name (optional).",

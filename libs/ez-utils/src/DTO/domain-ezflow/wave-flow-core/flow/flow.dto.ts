@@ -12,7 +12,7 @@ import { FlowIsActiveForWaveTypeAndBusinessUnitDto } from "../flow-is-active-for
 import { WaveTypeDto } from "../wave-type/wave-type.dto";
 
 export class FlowDto extends IntersectionType(
-  PickType(WaveTypeDto, ["waveTypeId"] as const)
+  PickType(WaveTypeDto, ["waveTypeId"] as const),
 ) {
   @ApiProperty({
     description: "The unique identifier of the flow",

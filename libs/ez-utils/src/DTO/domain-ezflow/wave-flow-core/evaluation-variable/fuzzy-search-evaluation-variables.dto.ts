@@ -6,7 +6,11 @@ import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
 import { PaginationDto } from "../../shared-dtos/pagination.dto";
 
 export class FuzzySearchEvaluationVariablesDto extends PartialType(
-  PickType(EvaluationVariableDto, ["name", "description", "isDeleted"] as const)
+  PickType(EvaluationVariableDto, [
+    "name",
+    "description",
+    "isDeleted",
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Unique identifier for the variable data type to filter on",

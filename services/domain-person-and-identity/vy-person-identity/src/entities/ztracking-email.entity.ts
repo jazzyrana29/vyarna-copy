@@ -1,20 +1,26 @@
 // src/entities/ZtrackingEmail.ts
-import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
-@Entity('ztracking_email', { schema: process.env.TIDB_DATABASE })
+@Entity("ztracking_email", { schema: process.env.TIDB_DATABASE })
 export class ZtrackingEmail extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
+  @Column("uuid")
   emailId: string;
 
   @Index()
-  @Column('uuid')
+  @Column("uuid")
   personId: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: "varchar", length: 255 })
   @Index()
   email: string;
 

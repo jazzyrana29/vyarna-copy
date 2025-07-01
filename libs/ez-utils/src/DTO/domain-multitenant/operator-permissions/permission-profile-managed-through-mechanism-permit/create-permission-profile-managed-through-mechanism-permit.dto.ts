@@ -3,5 +3,5 @@ import { PermissionProfileManagedThroughMechanismPermitDto } from "./permission-
 
 export class CreatePermissionProfileManagedThroughMechanismPermitDto extends PickType(
   PermissionProfileManagedThroughMechanismPermitDto,
-  ["mechanismPermitId", "permissionProfileId", "isPermitted"] as const
+  ["mechanismPermitId", "permissionProfileId", "isPermitted"] as const,
 ) {}

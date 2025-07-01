@@ -5,9 +5,10 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import { EXPO_PUBLIC_API_URL } from "@env";
 
 const api: AxiosInstance = axios.create({
-  baseURL: "https://vyarna-backend.com.vyarna.com/",
+  baseURL: EXPO_PUBLIC_API_URL,
   timeout: 60000,
   headers: {
     "Content-Type": "application/json",

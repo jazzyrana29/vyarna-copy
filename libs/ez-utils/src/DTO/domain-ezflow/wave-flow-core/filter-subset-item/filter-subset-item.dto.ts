@@ -13,7 +13,7 @@ import { Type } from "class-transformer";
 
 export class FilterSubsetItemDto extends IntersectionType(
   PickType(EvaluationVariableDto, ["evaluationVariableId"] as const),
-  PickType(EvaluationOperatorDto, ["evaluationOperatorId"] as const)
+  PickType(EvaluationOperatorDto, ["evaluationOperatorId"] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier of the filter subset item",

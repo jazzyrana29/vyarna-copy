@@ -7,5 +7,5 @@ export class GetManyFlowIsActiveForWaveTypeAndBusinessUnitDto extends PartialTyp
     "waveTypeId",
     "businessUnitId",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {}

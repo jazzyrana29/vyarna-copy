@@ -13,7 +13,7 @@ export class FuzzySearchFlowsDto extends PartialType(
     "isDeleted",
     "isPublished",
     "waveTypeId",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for Flow name (optional)",

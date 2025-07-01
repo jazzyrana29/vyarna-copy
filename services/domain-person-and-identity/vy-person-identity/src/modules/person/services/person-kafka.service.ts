@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { PersonService } from './person.service';
+import { Injectable } from "@nestjs/common";
+import { PersonService } from "./person.service";
 
-import { LogStreamLevel } from 'ez-logger';
+import { LogStreamLevel } from "ez-logger";
 
 import {
   CreatePersonDto,
@@ -15,9 +15,9 @@ import {
   KT_GET_PERSON_ENTITY,
   KT_UPDATE_PERSON_ENTITY,
   UpdatePersonDto,
-} from 'ez-utils';
-import { ZtrackingPersonService } from './ztracking-person.service';
-import { getLoggerConfig } from '../../../utils/common';
+} from "ez-utils";
+import { ZtrackingPersonService } from "./ztracking-person.service";
+import { getLoggerConfig } from "../../../utils/common";
 
 @Injectable()
 export class PersonKafkaService {
@@ -31,8 +31,8 @@ export class PersonKafkaService {
   ) {
     this.logger.debug(
       `${PersonKafkaService.name} initialized`,
-      '',
-      'constructor',
+      "",
+      "constructor",
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder = new KafkaMessageResponderService(

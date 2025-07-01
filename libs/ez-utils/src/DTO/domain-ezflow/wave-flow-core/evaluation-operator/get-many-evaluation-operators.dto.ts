@@ -13,7 +13,7 @@ export class GetManyEvaluationOperatorsDto extends PartialType(
     "choiceType",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description:

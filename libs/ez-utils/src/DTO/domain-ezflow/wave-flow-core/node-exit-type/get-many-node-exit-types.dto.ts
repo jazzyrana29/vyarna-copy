@@ -11,7 +11,7 @@ export class GetManyNodeExitTypesDto extends PartialType(
     "description",
     "updatedBy",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description:

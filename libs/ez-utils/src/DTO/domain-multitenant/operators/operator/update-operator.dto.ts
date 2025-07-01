@@ -14,7 +14,7 @@ export class UpdateOperatorDto extends PartialType(
     "password",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the operator",

@@ -3,5 +3,5 @@ import { EvaluationVariableDataTypeDto } from "../../wave-flow-core/evaluation-v
 
 export class EvaluationVariableDataTypeIdDto extends PickType(
   EvaluationVariableDataTypeDto,
-  ["evaluationVariableDataTypeId"] as const
+  ["evaluationVariableDataTypeId"] as const,
 ) {}

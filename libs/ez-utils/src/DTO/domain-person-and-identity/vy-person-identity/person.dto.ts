@@ -27,8 +27,7 @@ export class PersonDto {
   businessUnitId: string;
 
   @ApiProperty({
-    description:
-      "Identifier for the root business unit the person belongs to",
+    description: "Identifier for the root business unit the person belongs to",
     type: String,
     required: false,
   })

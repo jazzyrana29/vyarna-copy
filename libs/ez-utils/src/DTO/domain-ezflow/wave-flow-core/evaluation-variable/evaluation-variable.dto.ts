@@ -88,7 +88,7 @@ export class EvaluationVariableDto {
   @IsOptional()
   @IsArray()
   @Type(
-    () => EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto
+    () => EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto,
   )
   evaluationVariableIsGroupedThroughEvaluationVariableCollections?: EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto[];
 

@@ -13,7 +13,7 @@ export class GetManyFlowsDto extends PartialType(
     "isDeleted",
     "isPublished",
     "waveTypeId",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description:

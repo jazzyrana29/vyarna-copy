@@ -3,5 +3,5 @@ import { EvaluationVariableCollectionsArePresentedThroughPortfoliosDto } from ".
 
 export class GetOneEvaluationVariableCollectionsArePresentedThroughPortfoliosDto extends PickType(
   EvaluationVariableCollectionsArePresentedThroughPortfoliosDto,
-  ["evaluationVariableCollectionsArePresentedThroughPortfoliosId"] as const
+  ["evaluationVariableCollectionsArePresentedThroughPortfoliosId"] as const,
 ) {}

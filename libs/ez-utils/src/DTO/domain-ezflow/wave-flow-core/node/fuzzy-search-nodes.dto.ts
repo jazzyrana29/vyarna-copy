@@ -13,7 +13,7 @@ export class FuzzySearchNodesDto extends PartialType(
     "flowId",
     "nodeTypeId",
     "manifoldId",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for Node name (optional)",

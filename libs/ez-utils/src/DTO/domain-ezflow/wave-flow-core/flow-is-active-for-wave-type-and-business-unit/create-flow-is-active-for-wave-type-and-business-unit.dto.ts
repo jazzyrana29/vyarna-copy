@@ -3,5 +3,5 @@ import { FlowIsActiveForWaveTypeAndBusinessUnitDto } from "./flow-is-active-for-
 
 export class CreateFlowIsActiveForWaveTypeAndBusinessUnitDto extends PickType(
   FlowIsActiveForWaveTypeAndBusinessUnitDto,
-  ["waveTypeId", "businessUnitId", "activeFlowId", "updatedBy"] as const
+  ["waveTypeId", "businessUnitId", "activeFlowId", "updatedBy"] as const,
 ) {}

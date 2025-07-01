@@ -8,7 +8,7 @@ export class UpdateEvaluationVariableDto extends PartialType(
     "description",
     "evaluationVariableDataTypeId",
     "evaluationValueOptions",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique ID for the evaluation variable",

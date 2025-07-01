@@ -3,5 +3,5 @@ import { EvaluationVariablesAreAvailableForWaveTypesDto } from "./evaluation-var
 
 export class DeleteEvaluationVariablesAreAvailableForWaveTypesDto extends PickType(
   EvaluationVariablesAreAvailableForWaveTypesDto,
-  ["waveTypeId", "environmentalVariableId"] as const
+  ["waveTypeId", "environmentalVariableId"] as const,
 ) {}

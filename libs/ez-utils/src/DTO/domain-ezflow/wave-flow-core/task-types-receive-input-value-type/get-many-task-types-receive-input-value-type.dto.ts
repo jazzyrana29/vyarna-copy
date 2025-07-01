@@ -3,5 +3,5 @@ import { TaskTypesReceiveInputValueTypeDto } from "./task-types-receive-input-va
 
 export class GetManyTaskTypesReceiveInputValueTypeDto extends PickType(
   TaskTypesReceiveInputValueTypeDto,
-  ["isDeleted", "isAvailable"] as const
+  ["isDeleted", "isAvailable"] as const,
 ) {}

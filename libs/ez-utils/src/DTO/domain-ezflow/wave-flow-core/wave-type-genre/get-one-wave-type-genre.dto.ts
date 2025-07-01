@@ -3,7 +3,7 @@ import { WaveTypeGenreDto } from "./wave-type-genre.dto";
 import { IsUUID } from "class-validator";
 
 export class GetOneWaveTypeGenreDto extends PartialType(
-  PickType(WaveTypeGenreDto, ["name"])
+  PickType(WaveTypeGenreDto, ["name"]),
 ) {
   @ApiProperty({
     description: "Unique identifier of the wave type genre",

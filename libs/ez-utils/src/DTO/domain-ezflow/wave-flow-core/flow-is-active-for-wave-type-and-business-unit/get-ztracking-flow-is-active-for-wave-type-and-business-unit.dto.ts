@@ -3,5 +3,5 @@ import { FlowIsActiveForWaveTypeAndBusinessUnitDto } from "./flow-is-active-for-
 
 export class GetZtrackingFlowIsActiveForWaveTypeAndBusinessUnitDto extends PickType(
   FlowIsActiveForWaveTypeAndBusinessUnitDto,
-  ["waveTypeId", "businessUnitId"] as const
+  ["waveTypeId", "businessUnitId"] as const,
 ) {}

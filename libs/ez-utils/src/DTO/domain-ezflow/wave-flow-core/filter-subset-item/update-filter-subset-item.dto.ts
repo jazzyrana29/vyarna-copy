@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType, PartialType, PickType } from "@nestjs/swagger";
+import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
 import { FilterSubsetItemDto } from "./filter-subset-item.dto";
 import { IsUUID } from "class-validator";
 
@@ -9,7 +9,7 @@ export class UpdateFilterSubsetItemDto extends PartialType(
     "evaluationValue",
     "filterSubsetId",
     "updatedBy",
-  ])
+  ]),
 ) {
   @ApiProperty({
     description: "Unique identifier of the filter subset item",

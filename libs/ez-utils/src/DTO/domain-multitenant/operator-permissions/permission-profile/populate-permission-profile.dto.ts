@@ -7,5 +7,5 @@ export class PopulatePermissionProfileDto extends PickType(
     "permissionProfileId",
     "operatorPermissionProfiles",
     "permissionProfileManagedThroughMechanismPermits",
-  ] as const
+  ] as const,
 ) {}

@@ -13,7 +13,7 @@ export class FuzzySearchEvaluationOperatorsDto extends PartialType(
     "choiceType",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for operator name (optional)",

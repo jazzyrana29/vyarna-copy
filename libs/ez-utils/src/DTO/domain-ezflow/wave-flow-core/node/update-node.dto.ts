@@ -11,7 +11,7 @@ export class UpdateNodeDto extends PartialType(
     "positionX",
     "positionY",
     "updatedBy",
-  ])
+  ]),
 ) {
   @ApiProperty({
     description: "The unique identifier of the node",

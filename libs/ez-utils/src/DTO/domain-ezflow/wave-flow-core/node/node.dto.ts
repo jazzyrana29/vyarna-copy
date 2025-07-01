@@ -19,7 +19,7 @@ import { TaskDto } from "../task/task.dto";
 
 export class NodeDto extends IntersectionType(
   PickType(FlowDto, ["flowId"] as const),
-  PickType(NodeTypeDto, ["nodeTypeId"] as const)
+  PickType(NodeTypeDto, ["nodeTypeId"] as const),
 ) {
   @ApiProperty({
     description: "The unique identifier of the node",

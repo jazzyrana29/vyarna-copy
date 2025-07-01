@@ -1,5 +1,5 @@
 import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
-import { IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
+import { IsOptional, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { ManifoldDto } from "./manifold.dto";
 import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
@@ -13,7 +13,7 @@ export class FuzzySearchManifoldsDto extends PartialType(
     "nodeId",
     "updatedBy",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for the Manifold name (optional)",

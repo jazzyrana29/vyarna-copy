@@ -9,7 +9,7 @@ export class UpdateOperatorSessionDto extends PartialType(
     "updatedBy",
     "loginTime",
     "logoutTime",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the operator session",

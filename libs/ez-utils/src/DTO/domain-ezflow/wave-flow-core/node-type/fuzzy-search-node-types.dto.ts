@@ -11,7 +11,7 @@ export class FuzzySearchNodeTypesDto extends PartialType(
     "description",
     "updatedBy",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Fuzzy match for Node Type name (optional)",

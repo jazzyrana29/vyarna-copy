@@ -3,7 +3,7 @@ import { NodeExitTypeDto } from "./node-exit-type.dto"; // Adjust the import pat
 import { IsString, IsUUID } from "class-validator";
 
 export class GetNodeExitTypeDto extends PartialType(
-  PickType(NodeExitTypeDto, ["name", "isDeleted"] as const)
+  PickType(NodeExitTypeDto, ["name", "isDeleted"] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the node exit type",

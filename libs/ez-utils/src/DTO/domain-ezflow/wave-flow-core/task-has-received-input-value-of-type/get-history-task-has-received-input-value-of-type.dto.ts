@@ -3,5 +3,5 @@ import { TaskHasReceiveInputValueOfTypeDto } from "./task-has-received-input-val
 
 export class GetHistoryTaskHasReceivedInputValueOfTypeDto extends PickType(
   TaskHasReceiveInputValueOfTypeDto,
-  ["taskId", "inputValueTypeId"] as const
+  ["taskId", "inputValueTypeId"] as const,
 ) {}

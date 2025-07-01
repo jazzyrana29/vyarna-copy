@@ -8,5 +8,5 @@ export class UpdateEvaluationVariableCollectionPortfolioDto extends PickType(
     "name",
     "description",
     "updatedBy",
-  ] as const
+  ] as const,
 ) {}

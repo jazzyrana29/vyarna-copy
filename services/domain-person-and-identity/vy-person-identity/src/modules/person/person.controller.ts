@@ -1,31 +1,31 @@
-import { Controller } from '@nestjs/common';
+import { Controller } from "@nestjs/common";
 import {
   Ctx,
   KafkaContext,
   MessagePattern,
   Payload,
-} from '@nestjs/microservices';
+} from "@nestjs/microservices";
 
-import { PersonKafkaService } from './services/person-kafka.service';
+import { PersonKafkaService } from "./services/person-kafka.service";
 import {
   KT_CREATE_PERSON_ENTITY,
   KT_GET_HISTORY_PERSON_ENTITY,
   KT_GET_MANY_PERSONS,
   KT_GET_PERSON_ENTITY,
   KT_UPDATE_PERSON_ENTITY,
-} from 'ez-utils';
-import { LogStreamLevel } from 'ez-logger';
-import { getLoggerConfig } from '../../utils/common';
+} from "ez-utils";
+import { LogStreamLevel } from "ez-logger";
+import { getLoggerConfig } from "../../utils/common";
 
-@Controller('person')
+@Controller("person")
 export class PersonController {
   private logger = getLoggerConfig(PersonController.name);
 
   constructor(private readonly personKafkaService: PersonKafkaService) {
     this.logger.debug(
       `${PersonController.name} initialized`,
-      '',
-      'constructor',
+      "",
+      "constructor",
       LogStreamLevel.DebugLight,
     );
   }
@@ -38,8 +38,8 @@ export class PersonController {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_PERSON_ENTITY}`,
-      '',
-      'createPersonWithKafka',
+      "",
+      "createPersonWithKafka",
       LogStreamLevel.DebugLight,
     );
     await this.personKafkaService.createPersonViaKafka(message, key);
@@ -53,8 +53,8 @@ export class PersonController {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_PERSON_ENTITY}`,
-      '',
-      'updatePersonWithKafka',
+      "",
+      "updatePersonWithKafka",
       LogStreamLevel.DebugLight,
     );
     await this.personKafkaService.updatePersonViaKafka(message, key);
@@ -68,8 +68,8 @@ export class PersonController {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PERSON_ENTITY}`,
-      '',
-      'getPersonWithKafka',
+      "",
+      "getPersonWithKafka",
       LogStreamLevel.DebugLight,
     );
     await this.personKafkaService.getPersonEntityViaKafka(message, key);
@@ -83,8 +83,8 @@ export class PersonController {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_PERSONS}`,
-      '',
-      'getManyPersonsWithKafka',
+      "",
+      "getManyPersonsWithKafka",
       LogStreamLevel.DebugLight,
     );
     await this.personKafkaService.getManyPersonsViaKafka(message, key);
@@ -98,8 +98,8 @@ export class PersonController {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_PERSON_ENTITY}`,
-      '',
-      'getHistoryOfPersonWithKafka',
+      "",
+      "getHistoryOfPersonWithKafka",
       LogStreamLevel.DebugLight,
     );
     await this.personKafkaService.getHistoryOfPersonEntityViaKafka(

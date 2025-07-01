@@ -9,7 +9,7 @@ export class UpdateBusinessUnitDto extends PartialType(
     "children",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the business unit",

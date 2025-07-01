@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import typeorm from './config/typeorm/typeorm';
-import { CFG_TOKEN_TYPEORM } from './config/config.tokens';
-import { DiceModule } from './modules/dice/dice.module';
-import { getLoggerConfig } from './utils/common';
-import { LogStreamLevel } from 'ez-logger';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import typeorm from "./config/typeorm/typeorm";
+import { CFG_TOKEN_TYPEORM } from "./config/config.tokens";
+import { DiceModule } from "./modules/dice/dice.module";
+import { getLoggerConfig } from "./utils/common";
+import { LogStreamLevel } from "ez-logger";
 
 @Module({
   imports: [
@@ -27,8 +27,8 @@ export class AppModule {
   constructor() {
     this.logger.debug(
       `${AppModule.name} initialized`,
-      '',
-      'constructor',
+      "",
+      "constructor",
       LogStreamLevel.DebugLight,
     );
   }

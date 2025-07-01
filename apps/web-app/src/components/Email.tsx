@@ -60,7 +60,7 @@ const Email: FC<EmailProps> = ({
         formId,
       });
       console.log("Sending email...", formId);
-      showAlert("Success", "Contact created successfully");
+      // showAlert("Success", "Contact created successfully");
       // Reset form
       setFirstName("");
       setFirstTouched(false);

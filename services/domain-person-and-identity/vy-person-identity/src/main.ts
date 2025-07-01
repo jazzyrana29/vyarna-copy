@@ -1,14 +1,14 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import * as Sentry from '@sentry/node';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { getLoggerConfig } from './utils/common';
-import { LogStreamLevel } from 'ez-logger';
-import { Partitioners } from 'kafkajs';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { ValidationPipe } from "@nestjs/common";
+import * as Sentry from "@sentry/node";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
+import { getLoggerConfig } from "./utils/common";
+import { LogStreamLevel } from "ez-logger";
+import { Partitioners } from "kafkajs";
 
 async function bootstrap() {
-  const logger = getLoggerConfig('Main');
+  const logger = getLoggerConfig("Main");
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     logger: logger,
@@ -22,8 +22,8 @@ async function bootstrap() {
 
   Sentry.init({ dsn: process.env.SENTRY_DNS });
 
-  const broker = process.env.KAFKA_BROKER || 'localhost:9092';
-  const groupId = process.env.KAFKA_GROUP || 'vy-person-identity';
+  const broker = process.env.KAFKA_BROKER || "localhost:9092";
+  const groupId = process.env.KAFKA_GROUP || "vy-person-identity";
   const microservice = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
@@ -47,8 +47,8 @@ async function bootstrap() {
   await app.listen(process.env.APP_PORT, () => {
     logger.debug(
       `${process.env.APP} microservice is running on Port: ${process.env.APP_PORT}\nbroker => ${process.env.KAFKA_BROKER}`,
-      '',
-      'bootstrap',
+      "",
+      "bootstrap",
       LogStreamLevel.ProdStandard,
     );
   });

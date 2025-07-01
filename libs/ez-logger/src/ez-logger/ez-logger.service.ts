@@ -1,7 +1,7 @@
 import * as clc from 'cli-color';
-import {LoggerService, Optional} from '@nestjs/common';
-import {isObject} from 'util';
-import {LogLevel, LogStreamLevel} from './ez.logger.enum';
+import { LoggerService, Optional } from '@nestjs/common';
+import { isObject } from 'util';
+import { LogLevel, LogStreamLevel } from './ez.logger.enum';
 
 declare const process: any;
 const yellow = clc.xterm(3);
@@ -239,17 +239,17 @@ export class EzLogger implements LoggerService {
     const func = instance && (instance as typeof EzLogger)[logLevel];
     // tslint:disable-next-line: no-unused-expression
     func &&
-    func.call(
-      instance,
-      message,
-      profile ? `${this.context} -> ${profile}` : this.context,
-      this.isTimestampEnabled,
-      traceId,
-    );
+      func.call(
+        instance,
+        message,
+        profile ? `${this.context} -> ${profile}` : this.context,
+        this.isTimestampEnabled,
+        traceId,
+      );
   }
 
   private getInstance(): typeof EzLogger | LoggerService {
-    const {instance} = EzLogger;
+    const { instance } = EzLogger;
     return instance === this ? EzLogger : instance;
   }
 

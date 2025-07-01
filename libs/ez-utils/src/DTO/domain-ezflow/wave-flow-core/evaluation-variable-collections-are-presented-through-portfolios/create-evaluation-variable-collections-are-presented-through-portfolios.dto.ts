@@ -7,5 +7,5 @@ export class CreateEvaluationVariableCollectionsArePresentedThroughPortfoliosDto
     "evaluationVariableCollectionPortfolio",
     "evaluationVariableCollection",
     "updatedBy",
-  ] as const
+  ] as const,
 ) {}

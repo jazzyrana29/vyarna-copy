@@ -17,22 +17,23 @@ import Navbar, { NavItem } from "../components/Navbar";
 import {
   NAV_ROUTE_ABOUT,
   NAV_ROUTE_BENEFITS,
+  NAV_ROUTE_BIOHACKERS,
   NAV_ROUTE_CONTACT,
   NAV_ROUTE_FAQ,
   NAV_ROUTE_HOME,
   NAV_ROUTE_INVESTORS,
-  NAV_ROUTE_BIOHACKERS,
   NAV_ROUTE_IS_MADE,
   NAV_ROUTE_PARENTS,
+  NAV_ROUTE_PREORDER,
   NAV_ROUTE_PROVIDERS,
   NAV_ROUTE_USE,
   NAV_ROUTE_VALUES,
-  NAV_ROUTE_PREORDER,
 } from "../constants/routes";
 import { RootStackParamList } from "../types";
 import { Text, View } from "react-native";
 import FAQScreen from "../screens/FAQScreen";
 import { getBaseUrl } from "src/utils/env";
+import WebsocketsMessages from "../components/WebsocketsMessages";
 
 const baseUrl = getBaseUrl();
 
@@ -106,10 +107,16 @@ export const AppNavigator: FC = (): JSX.Element => {
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <WebsocketsMessages />
       <View style={{ flex: 1 }}>
-        <Navbar items={navItems} />
         <View style={{ flex: 1 }}>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator
+            // remove your standalone <Navbar /> here
+            screenOptions={({}) => ({
+              header: () => <Navbar items={navItems} />,
+              headerShown: true,
+            })}
+          >
             <Stack.Screen name={NAV_ROUTE_HOME} component={HomeScreen} />
             <Stack.Screen
               name={NAV_ROUTE_BENEFITS}

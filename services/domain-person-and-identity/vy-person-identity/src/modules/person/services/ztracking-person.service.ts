@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { LogStreamLevel } from 'ez-logger';
-import { getLoggerConfig } from '../../../utils/common';
-import { Person } from '../../../entities/person.entity';
-import { ZtrackingPerson } from '../../../entities/ztracking-person.entity';
-import { GetHistoryOfPersonDto } from 'ez-utils';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { LogStreamLevel } from "ez-logger";
+import { getLoggerConfig } from "../../../utils/common";
+import { Person } from "../../../entities/person.entity";
+import { ZtrackingPerson } from "../../../entities/ztracking-person.entity";
+import { GetHistoryOfPersonDto } from "ez-utils";
 
 @Injectable()
 export class ZtrackingPersonService {
@@ -17,8 +17,8 @@ export class ZtrackingPersonService {
   ) {
     this.logger.debug(
       `${ZtrackingPersonService.name} initialized`,
-      '',
-      'constructor',
+      "",
+      "constructor",
       LogStreamLevel.DebugLight,
     );
   }
@@ -36,7 +36,7 @@ export class ZtrackingPersonService {
     this.logger.info(
       `ztracking person entity saved in database`,
       traceId,
-      'createZtrackingPersonEntity',
+      "createZtrackingPersonEntity",
       LogStreamLevel.ProdStandard,
     );
 
@@ -60,7 +60,7 @@ export class ZtrackingPersonService {
     this.logger.info(
       `ztracking persons entities found in database`,
       traceId,
-      'findZtrackingPersonEntity',
+      "findZtrackingPersonEntity",
       LogStreamLevel.ProdStandard,
     );
 

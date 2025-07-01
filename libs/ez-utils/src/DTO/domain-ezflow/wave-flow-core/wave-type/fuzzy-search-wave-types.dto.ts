@@ -11,7 +11,7 @@ export class FuzzySearchWaveTypesDto extends PartialType(
     "description",
     "updatedBy",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description: "Unique identifier for the wave type genre",

@@ -1,11 +1,5 @@
 import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
-import {
-  IsOptional,
-  ValidateNested,
-  IsUUID,
-  IsBoolean,
-  IsString,
-} from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { BusinessUnitDto } from "./business-unit.dto";
 import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
@@ -17,7 +11,7 @@ export class GetManyBusinessUnitsDto extends PartialType(
     "name",
     "isDeleted",
     "updatedBy",
-  ] as const)
+  ] as const),
 ) {
   @ApiPropertyOptional({
     description:

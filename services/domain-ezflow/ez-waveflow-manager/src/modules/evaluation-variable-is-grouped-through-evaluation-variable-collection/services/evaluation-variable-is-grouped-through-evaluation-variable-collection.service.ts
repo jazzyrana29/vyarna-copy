@@ -164,8 +164,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionServi
       );
     }
 
-    evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted =
-      true;
+    evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted = true;
     evaluationVariableIsGroupedThroughEvaluationVariableCollection.updatedBy =
       updatedBy;
     const deletedEvaluationVariableIsGroupedThroughEvaluationVariableCollection =
@@ -296,8 +295,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionServi
       evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted
     ) {
       // Relationship exists but is deleted, update it to mark it as not deleted
-      evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted =
-        false;
+      evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted = false;
       evaluationVariableIsGroupedThroughEvaluationVariableCollection =
         await this.evaluationVariableIsGroupedThroughEvaluationVariableCollectionRepository.save(
           evaluationVariableIsGroupedThroughEvaluationVariableCollection,
@@ -364,8 +362,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionServi
     }
 
     // Mark the relationship as deleted
-    evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted =
-      true;
+    evaluationVariableIsGroupedThroughEvaluationVariableCollection.isDeleted = true;
     const updatedEvaluationVariableIsGroupedThroughEvaluationVariableCollection =
       await this.evaluationVariableIsGroupedThroughEvaluationVariableCollectionRepository.save(
         evaluationVariableIsGroupedThroughEvaluationVariableCollection,

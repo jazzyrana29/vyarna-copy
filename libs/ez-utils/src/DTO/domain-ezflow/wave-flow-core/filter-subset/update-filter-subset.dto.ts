@@ -9,7 +9,7 @@ export class UpdateFilterSubsetDto extends PartialType(
     "filterSubsetInternalLogicalBinding",
     "nextFilterSubsetLogicalBinding",
     "updatedBy",
-  ])
+  ]),
 ) {
   @ApiProperty({
     description: "Unique identifier of the filter subset",

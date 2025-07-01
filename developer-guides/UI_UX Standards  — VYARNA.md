@@ -1,149 +1,138 @@
 ### **🧬 1\. Brand Essence**
 
-* **What is Vyarna in one sentence?**  
-   *“Vyarna is a safe, science-backed space that helps moms share, track, and nourish life through human milk and care-driven tools.”*
+- **What is Vyarna in one sentence?**  
+   _“Vyarna is a safe, science-backed space that helps moms share, track, and nourish life through human milk and care-driven tools.”_
 
-* **Emotional tone:**  
+- **Emotional tone:**  
    Calming, caring, intelligent, soft, empowering.
 
-* **What should Vyarna feel like?**  
+- **What should Vyarna feel like?**  
    ✔️ Supportive, warm, reliable, gently tech-forward  
    ❌ Clinical, sterile, judgmental, overly commercial
 
-* **Core promise to users:**  
-   *“We protect your peace of mind while helping you nourish others—ethically and intelligently.”*
+- **Core promise to users:**  
+   _“We protect your peace of mind while helping you nourish others—ethically and intelligently.”_
 
-* **Primary personas:**
+- **Primary personas:**
+  - Parents
 
-  * Parents
+  - Breast milk providers
 
-  * Breast milk providers
+  - Parents NICU
 
-  * Parents NICU
+  - Postpartum moms needing emotional support
 
-  * Postpartum moms needing emotional support
+  - Family caregivers
 
-  * Family caregivers
-
-  * Health-curious mothers
+  - Health-curious mothers
 
 ---
 
 ### **🎨 2\. Design Aesthetics**
 
-* **Color Palette:**
+- **Color Palette:**
+  - Blue: `#7ecaf8` (Trust, calm)
 
-  * Blue: `#7ecaf8` (Trust, calm)
+  - Pink: `#f87ea5` (Warmth, care)
 
-  * Pink: `#f87ea5` (Warmth, care)
+  - Yellow: `#f8e67e` (Joy, hope)
 
-  * Yellow: `#f8e67e` (Joy, hope)
+  - Black: `#1a1a1a`
 
-  * Black: `#1a1a1a`
+  - White: `#ffffff`
 
-  * White: `#ffffff`
+- **Typography:**
+  - **Headings:** Raleway Bold
 
-* **Typography:**
+  - **Body Text:** Raleway Regular
 
-  * **Headings:** Raleway Bold
+  - **Captions/Hints:** Raleway Light
 
-  * **Body Text:** Raleway Regular
+  - (Avoid overly playful or harsh fonts)
 
-  * **Captions/Hints:** Raleway Light
+- **Spacing & Layout:**
+  - Mobile-first grid
 
-  * (Avoid overly playful or harsh fonts)
+  - Ample whitespace around all UI elements
 
-* **Spacing & Layout:**
+  - Padding: 16–24px internal spacing in cards and forms
 
-  * Mobile-first grid
+  - Touch targets: minimum 44x44px for all buttons
 
-  * Ample whitespace around all UI elements
+- **Visual style:**
+  - Soft shadows
 
-  * Padding: 16–24px internal spacing in cards and forms
+  - Rounded corners (8–12px radius)
 
-  * Touch targets: minimum 44x44px for all buttons
+  - Gentle gradients or flat pastels
 
-* **Visual style:**
-
-  * Soft shadows
-
-  * Rounded corners (8–12px radius)
-
-  * Gentle gradients or flat pastels
-
-  * Minimal iconography with soft edges
+  - Minimal iconography with soft edges
 
 ---
 
 ### **🧩 3\. Component Philosophy**
 
-* **Buttons:**
+- **Buttons:**
+  - Pill or soft-rounded buttons (8–12px radius)
 
-  * Pill or soft-rounded buttons (8–12px radius)
+  - Primary: filled with pastel brand colors
 
-  * Primary: filled with pastel brand colors
+  - Secondary: outlined or ghost
 
-  * Secondary: outlined or ghost
+  - Microinteractions: soft fade or expand on tap
 
-  * Microinteractions: soft fade or expand on tap
+  - Example CTA: “Start Now”, “Save & Continue”, “Add Feeding”
 
-  * Example CTA: “Start Now”, “Save & Continue”, “Add Feeding”
+- **Inputs & Forms:**
+  - Rounded fields
 
-* **Inputs & Forms:**
+  - Placeholder text \+ clear labels
 
-  * Rounded fields
+  - Hint text in light Raleway
 
-  * Placeholder text \+ clear labels
+  - Error state: red border \+ friendly error message
 
-  * Hint text in light Raleway
+  - Toggle switches and sliders for quick actions (e.g. feeding type)
 
-  * Error state: red border \+ friendly error message
+- **Navigation:**
+  - Bottom nav on mobile: 4 icons
 
-  * Toggle switches and sliders for quick actions (e.g. feeding type)
+  - Persistent tabs within the whole app (Baby Tracker, Community, Shop, Providers)
 
-* **Navigation:**
+- **Sensitive flows (like KYC):**
+  - Always include trust language
 
-  * Bottom nav on mobile: 4 icons
+  - Use progress indicators
 
-  * Persistent tabs within the whole app (Baby Tracker, Community, Shop, Providers)
+  - Offer “Save & Resume Later”
 
-* **Sensitive flows (like KYC):**
-
-  * Always include trust language
-
-  * Use progress indicators
-
-  * Offer “Save & Resume Later”
-
-  * Display icons or illustrations to reduce anxiety
+  - Display icons or illustrations to reduce anxiety
 
 ---
 
 ### **✍️ 4\. Tone & Language**
 
-* **Tone:**  
+- **Tone:**  
    Friendly, reassuring, clear  
    Like talking to a supportive friend who knows what they’re doing
 
-* **Style:**
+- **Style:**
+  - Use contractions (you’re, it’s, we’ve)
 
-  * Use contractions (you’re, it’s, we’ve)
+  - Avoid jargon or medical terms without explanations
 
-  * Avoid jargon or medical terms without explanations
+  - Talk _with_ the user, not _at_ them
 
-  * Talk *with* the user, not *at* them
+- **When speaking to overwhelmed moms:**
+  - Keep sentences short
 
-* **When speaking to overwhelmed moms:**
+  - Offer clear actions
 
-  * Keep sentences short
+  - Use “you” often to create connection
 
-  * Offer clear actions
+  - Use affirmation tone: _“You’re doing great.”_
 
-  * Use “you” often to create connection
-
-  * Use affirmation tone: *“You’re doing great.”*
-
-* **Words to avoid:**  
+- **Words to avoid:**  
    “Mommy”, “perfect”, “fail”, “lazy”, “normal vs. abnormal”  
    Use “typical” or “most babies experience…”
 
@@ -151,70 +140,63 @@
 
 ### **♿ 5\. Accessibility & Inclusivity**
 
-* **Contrast:**  
+- **Contrast:**  
    All text passes WCAG AA minimum (4.5:1 for small, 3:1 for large)
 
-* **Text size:**
+- **Text size:**
+  - Minimum 16px body text
 
-  * Minimum 16px body text
+  - 14px only for footnotes or captions
 
-  * 14px only for footnotes or captions
+  - Headings scaled by importance
 
-  * Headings scaled by importance
+- **Inclusivity:**
+  - Avoid gendered language: use “parent” or “caregiver” where possible
 
-* **Inclusivity:**
+  - Represent diverse skin tones and family types in imagery
 
-  * Avoid gendered language: use “parent” or “caregiver” where possible
+  - Let users define their identity/role in profile (e.g., mother, co-parent, NICU caregiver,... )
 
-  * Represent diverse skin tones and family types in imagery
+- **Screen Reader Support:**
+  - All actionable items must have aria-labels
 
-  * Let users define their identity/role in profile (e.g., mother, co-parent, NICU caregiver,... )
-
-* **Screen Reader Support:**
-
-  * All actionable items must have aria-labels
-
-  * Support swiping gestures on mobile
+  - Support swiping gestures on mobile
 
 ---
 
 ### **⚙️ 6\. Animation & Interactions**
 
-* **Motion Philosophy:**
+- **Motion Philosophy:**
+  - Smooth transitions for screen changes (fade or slide)
 
-  * Smooth transitions for screen changes (fade or slide)
+  - Loading animations \= soft, looping, friendly (e.g., bouncing droplet or smile)
 
-  * Loading animations \= soft, looping, friendly (e.g., bouncing droplet or smile)
+- **Feedback:**
+  - Subtle pulse on button press
 
-* **Feedback:**
+  - Checkbox or form validation with soft green “check” animation
 
-  * Subtle pulse on button press
+  - Haptics: light feedback only, avoid buzzing for errors
 
-  * Checkbox or form validation with soft green “check” animation
+- **Avoid:**
+  - Shaking error boxes
 
-  * Haptics: light feedback only, avoid buzzing for errors
+  - Overwhelming micro-animations
 
-* **Avoid:**
-
-  * Shaking error boxes
-
-  * Overwhelming micro-animations
-
-  * Long spinners (instead use progress indicators)
+  - Long spinners (instead use progress indicators)
 
 ---
 
 ### **📣 7\. Brand Voice Examples**
 
-* **Welcome Message:**  
-   *“Welcome to Vyarna. Let’s make nourishment simple, together.”*
+- **Welcome Message:**  
+   _“Welcome to Vyarna. Let’s make nourishment simple, together.”_
 
-* **Empty State Message (e.g. no sleep data):**  
-   *“No naps logged yet. Every little Z counts—start tracking whenever you’re ready.”*
+- **Empty State Message (e.g. no sleep data):**  
+   _“No naps logged yet. Every little Z counts—start tracking whenever you’re ready.”_
 
-* **Success Message (e.g. added feeding):**  
-   *“Feeding logged\! You’re doing amazing.”*
+- **Success Message (e.g. added feeding):**  
+   _“Feeding logged\! You’re doing amazing.”_
 
-* **Error Message:**  
-   *“Hmm, something went off-track. Let’s try that again.”*
-
+- **Error Message:**  
+   _“Hmm, something went off-track. Let’s try that again.”_

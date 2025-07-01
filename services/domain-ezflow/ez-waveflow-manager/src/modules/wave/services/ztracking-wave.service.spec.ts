@@ -10,7 +10,6 @@ import {
   mockTraceId,
 } from '../test-values.spec';
 import { MockType, repositoryMockFactory } from 'ez-utils';
-import { GetHistoryWaveDto } from 'ez-utils';
 
 describe('ZtrackingWaveService', () => {
   let service: ZtrackingWaveService;

@@ -8,5 +8,5 @@ export class CreateEvaluationVariableDto extends PickType(
     "description",
     "evaluationVariableDataTypeId",
     "evaluationValueOptions",
-  ] as const
+  ] as const,
 ) {}

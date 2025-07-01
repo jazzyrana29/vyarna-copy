@@ -3,5 +3,5 @@ import { WaveTypeIsAllowedToAccessBusinessUnitDto } from "./wave-type-is-allowed
 
 export class GetZtrackingWaveTypeIsAllowedToAccessBusinessUnitDto extends PickType(
   WaveTypeIsAllowedToAccessBusinessUnitDto,
-  ["waveTypeId", "businessUnitId"]
+  ["waveTypeId", "businessUnitId"],
 ) {}

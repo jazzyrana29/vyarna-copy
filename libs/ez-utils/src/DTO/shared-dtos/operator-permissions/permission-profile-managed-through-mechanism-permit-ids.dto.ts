@@ -3,5 +3,5 @@ import { PermissionProfileManagedThroughMechanismPermitDto } from "../../operato
 
 export class PermissionProfileManagedThroughMechanismPermitIdsDto extends PickType(
   PermissionProfileManagedThroughMechanismPermitDto,
-  ["mechanismPermitId"] as const
+  ["mechanismPermitId"] as const,
 ) {}

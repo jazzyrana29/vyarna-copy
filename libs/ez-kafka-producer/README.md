@@ -24,11 +24,11 @@ Here's an example of how to use the `ez-kafka-producer` library in a NestJS appl
 First, import the library and set up a Kafka producer service:
 
 ```typescript
-import { EzKafkaProducerService } from 'ez-kafka-producer';
-import { Logger } from '@nestjs/common';
+import { EzKafkaProducerService } from "ez-kafka-producer";
+import { Logger } from "@nestjs/common";
 
-const topic = 'my-topic';
-const broker = 'localhost:9092';
+const topic = "my-topic";
+const broker = "localhost:9092";
 
 const producerService = new EzKafkaProducerService(topic, broker);
 
@@ -38,8 +38,8 @@ async function run() {
 
   // Create a message to send
   const message = {
-    key: 'key1',
-    value: Buffer.from('Hello Kafka'),
+    key: "key1",
+    value: Buffer.from("Hello Kafka"),
   };
 
   // Send the message to the specified topic
@@ -50,8 +50,8 @@ async function run() {
 }
 
 run().catch((err) => {
-  const logger = new Logger('Main');
-  logger.error('Error running producer:', err);
+  const logger = new Logger("Main");
+  logger.error("Error running producer:", err);
 });
 ```
 

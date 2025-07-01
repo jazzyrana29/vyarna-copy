@@ -6,5 +6,5 @@ export class GetEvaluationVariableDataTypeDto extends PartialType(
     "evaluationVariableDataTypeId",
     "name",
     "isDeleted",
-  ] as const)
+  ] as const),
 ) {}

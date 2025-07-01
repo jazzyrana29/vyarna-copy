@@ -14,7 +14,7 @@ export class EzKafkaConsumer implements OnApplicationShutdown {
       `${EzKafkaConsumer.name} initialized`,
       "",
       "constructor",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
   }
 
@@ -29,7 +29,7 @@ export class EzKafkaConsumer implements OnApplicationShutdown {
       topic,
       config,
       broker,
-      correlationId
+      correlationId,
     );
     await consumerService.connect();
 

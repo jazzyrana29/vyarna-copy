@@ -16,11 +16,11 @@ const config = {
   ssl:
     process.env.TIDB_ENABLE_SSL === 'true'
       ? {
-        minVersion: 'TLSv1.2',
-        ca: process.env.TIDB_CA_PATH
-          ? fs.readFileSync(process.env.TIDB_CA_PATH)
-          : undefined,
-      }
+          minVersion: 'TLSv1.2',
+          ca: process.env.TIDB_CA_PATH
+            ? fs.readFileSync(process.env.TIDB_CA_PATH)
+            : undefined,
+        }
       : null,
   synchronize: process.env.NODE_ENV === 'development',
   logging: false,

@@ -3,5 +3,5 @@ import { EvaluationVariableCollectionPortfolioDto } from "./evaluation-variable-
 
 export class GetManyEvaluationVariableCollectionPortfoliosDto extends PickType(
   EvaluationVariableCollectionPortfolioDto,
-  ["businessUnitId", "isDeleted"] as const
+  ["businessUnitId", "isDeleted"] as const,
 ) {}

@@ -1,4 +1,10 @@
-import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('ztracking_operators', { schema: process.env.TIDB_DATABASE })
 export class ZtrackingOperator extends BaseEntity {

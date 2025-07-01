@@ -3,7 +3,7 @@ import { IsUUID } from "class-validator";
 import { DeviceSessionDto } from "./device-session.dto";
 
 export class GetDeviceSessionDto extends PartialType(
-  PickType(DeviceSessionDto, ["name", "isDeleted"] as const)
+  PickType(DeviceSessionDto, ["name", "isDeleted"] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the device session",

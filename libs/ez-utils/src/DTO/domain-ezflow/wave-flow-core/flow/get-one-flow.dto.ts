@@ -3,7 +3,7 @@ import { FlowDto } from "./flow.dto";
 import { IsUUID, IsBoolean, IsOptional } from "class-validator";
 
 export class GetOneFlowDto extends PartialType(
-  PickType(FlowDto, ["name", "isDeleted"])
+  PickType(FlowDto, ["name", "isDeleted"]),
 ) {
   @ApiProperty({
     description: "The unique identifier of the flow",

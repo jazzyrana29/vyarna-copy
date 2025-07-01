@@ -9,10 +9,7 @@ import { EvaluationVariableCollectionsArePresentedThroughPortfoliosService } fro
 import { ZtrackingEvaluationVariableCollectionsArePresentedThroughPortfoliosService } from './ztracking-evaluation-variable-collections-are-presented-through-portfolios.service';
 
 // Mocks
-import {
-  mockSavedEvaluationVariableCollectionsArePresentedThroughPortfolios001,
-  mockZtrackingHistoryForCollectionsThroughPortfolios,
-} from '../test-values.spec';
+import { mockSavedEvaluationVariableCollectionsArePresentedThroughPortfolios001 } from '../test-values.spec';
 
 describe('EvaluationVariableCollectionsArePresentedThroughPortfoliosService', () => {
   let service: EvaluationVariableCollectionsArePresentedThroughPortfoliosService;

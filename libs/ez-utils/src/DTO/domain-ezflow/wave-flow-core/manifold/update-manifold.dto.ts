@@ -1,9 +1,9 @@
-import { ApiProperty, OmitType, PartialType, PickType } from "@nestjs/swagger";
+import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
 import { ManifoldDto } from "./manifold.dto";
 import { IsUUID } from "class-validator";
 
 export class UpdateManifoldDto extends PartialType(
-  PickType(ManifoldDto, ["name", "description", "executionStyle", "nodeId"])
+  PickType(ManifoldDto, ["name", "description", "executionStyle", "nodeId"]),
 ) {
   @ApiProperty({
     description: "Unique identifier of the manifold",

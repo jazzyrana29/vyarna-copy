@@ -11,7 +11,7 @@ export class UpdatePermissionProfileDto extends PartialType(
     "updatedBy",
     "permissionProfileManagedThroughMechanismPermits",
     "operatorPermissionProfiles",
-  ] as const)
+  ] as const),
 ) {
   @ApiProperty({
     description: "Unique identifier for the permission profile",
