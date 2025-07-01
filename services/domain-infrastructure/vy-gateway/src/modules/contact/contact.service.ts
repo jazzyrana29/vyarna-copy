@@ -3,9 +3,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { ActiveCampaignService } from '../../services/static/active-campaign/active-campaign.service';
 import { ListsEnum } from '../../enum/lists.enum';
+import { WebsocketGateway } from '../../gateway/websocket.gateway';
+import { ClientMessagesMode } from '../../constants/ClientMessagesMode';
 
 @Injectable()
 export class ContactService {
+  constructor(private readonly websocketGateway: WebsocketGateway) {}
+
   async createContact(createBusinessUnitDto: CreateContactDto): Promise<any> {
     const { firstName, lastName, email, formId } = createBusinessUnitDto;
     console.log(`Creating contact ${firstName} ${lastName}...`);
@@ -51,5 +55,11 @@ export class ContactService {
     console.log(
       `${tag?.tag} (tag) added to ${contact?.firstName} ${contact?.lastName} (contact) successfully`,
     );
+
+    this.websocketGateway.sendMessageToClient({
+      mode: ClientMessagesMode.NEW_CONTACT_CREATED,
+      message: 'A new contact has been added.',
+      dateTime: new Date(),
+    });
   }
 }

@@ -13,6 +13,7 @@ import { AppLoggerMiddleware } from './middlewares/app.log.middleware';
 import { AppController } from './app.controller';
 import { ContactModule } from './modules/contact/contact.module';
 import { ActiveCampaignService } from './services/static/active-campaign/active-campaign.service';
+import { WebsocketGateway } from './gateway/websocket.gateway';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    WebsocketGateway,
     AppService,
     ActiveCampaignService,
   ],

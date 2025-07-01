@@ -10,6 +10,7 @@ import * as express from 'express';
 import * as process from 'process';
 
 import { AppModule } from './app.module';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   const allowedOrigins = process.env.ALLOWED_ORIGINS!;
@@ -25,7 +26,10 @@ async function bootstrap() {
       },
     },
     bufferLogs: true,
+    logger: ['error', 'warn', 'log', 'debug', 'verbose'], // enable all levels if you want
   });
+  // attach the Socket.io adapter
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   app.useGlobalPipes(
     new ValidationPipe({
