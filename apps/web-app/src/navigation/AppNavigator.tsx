@@ -33,6 +33,7 @@ import { RootStackParamList } from "../types";
 import { Text, View } from "react-native";
 import FAQScreen from "../screens/FAQScreen";
 import { getBaseUrl } from "src/utils/env";
+import WebsocketsMessages from "../components/WebsocketsMessages";
 
 const baseUrl = getBaseUrl();
 
@@ -106,6 +107,7 @@ export const AppNavigator: FC = (): JSX.Element => {
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <WebsocketsMessages />
       <View style={{ flex: 1 }}>
         <Navbar items={navItems} />
         <View style={{ flex: 1 }}>
