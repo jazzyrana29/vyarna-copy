@@ -6,8 +6,8 @@ import {
   NAV_ROUTE_BENEFITS,
   NAV_ROUTE_IS_MADE,
   NAV_ROUTE_PARENTS,
-  NAV_ROUTE_VALUES,
   NAV_ROUTE_PREORDER,
+  NAV_ROUTE_VALUES,
 } from "../constants/routes";
 import { BenefitsNavProp } from "../types";
 import Email from "../components/Email";
@@ -16,6 +16,7 @@ import { JSX } from "react/jsx-runtime";
 import Section from "../components/Section";
 import { Helmet } from "react-helmet-async";
 import { TagsEnum } from "../enums/tags.enum";
+import { EXPO_PUBLIC_BASE_URL } from "@env";
 
 const steps = [
   {
@@ -32,104 +33,12 @@ const steps = [
   },
 ];
 
-const baseUrl = process.env.EXPO_PUBLIC_BASE_URL;
+const baseUrl = EXPO_PUBLIC_BASE_URL;
 
 const HomeScreen: FC = (): JSX.Element => {
   const navigation = useNavigation<BenefitsNavProp>();
 
-  const structuredData = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: "Vyarna Booster",
-      description:
-        "Vyarna is a freeze-dried breast milk booster that fits modern parenting. Ethically sourced, lab-tested, and shelf-stable for safe, flexible feeding.",
-      image: `${baseUrl}/assets/images/home/boosterBox.jpg`,
-      url: `${baseUrl}`,
-      brand: {
-        "@type": "Brand",
-        name: "Vyarna",
-      },
-      offers: {
-        "@type": "Offer",
-        priceCurrency: "USD",
-        price: "TBD",
-        availability: "https://schema.org/PreOrder",
-        url: `${baseUrl}`,
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "Vyarna",
-      url: `${baseUrl}`,
-      logo: `${baseUrl}/assets/images/logo.png`,
-      sameAs: [
-        "https://instagram.com/vyarna",
-        "https://linkedin.com/company/vyarna",
-      ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "What is Vyarna?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Vyarna is a freeze-dried booster made from real, ethically-sourced breast milk. It's shelf-stable, additive-free, and ready to use.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "How do I use Vyarna?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Just add water and formula powder, shake in a Vyarna Booster packet, and feed your baby.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Who is Vyarna for?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Vyarna is for parents and caregivers using formula, supplementing breastfeeding, or seeking added diversity in nutrition.",
-          },
-        },
-      ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      name: "How to use Vyarna Booster",
-      description:
-        "Step-by-step instructions to use Vyarna Booster for feeding your baby.",
-      image: `${baseUrl}/assets/images/steps/step_1.jpg`,
-      totalTime: "PT2M",
-      tool: "Vyarna Booster Pack",
-      step: [
-        {
-          "@type": "HowToStep",
-          text: "Add water and formula powder to bottle.",
-          image: `${baseUrl}/assets/images/steps/step_1.jpg`,
-          name: "Add ingredients",
-        },
-        {
-          "@type": "HowToStep",
-          text: "Shake well with Vyarna Booster envelope.",
-          image: `${baseUrl}/assets/images/steps/step_2.png`,
-          name: "Mix Booster",
-        },
-        {
-          "@type": "HowToStep",
-          text: "Feed your baby.",
-          image: `${baseUrl}/assets/images/steps/step_3.jpg`,
-          name: "Feed",
-        },
-      ],
-    },
-  ];
+  const structuredData: any = [];
 
   return (
     <>
@@ -193,7 +102,9 @@ const HomeScreen: FC = (): JSX.Element => {
                   REAL BREAST MILK.{"\n"}REINVENTED FOR MODERN LIFE.
                 </Text>
                 <Text className="text-white text-base md:text-lg mt-4 max-w-2xl drop-shadow-md">
-                  Vyarna is freeze-dried breast milk—lab-tested, shelf-stable, and ready to add to formula, food, or nursing. Now accepting waitlist preorders.
+                  Vyarna is freeze-dried breast milk—lab-tested, shelf-stable,
+                  and ready to add to formula, food, or nursing. Now accepting
+                  waitlist preorders.
                 </Text>
                 <View className="mt-6 w-full max-w-md">
                   <Email
