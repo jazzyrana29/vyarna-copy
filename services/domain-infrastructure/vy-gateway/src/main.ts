@@ -1,59 +1,66 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { Partitioners } from 'kafkajs';
-import { getLoggerConfig } from './utils/common';
-import { LogStreamLevel } from 'ez-logger';
+import {
+  DocumentBuilder,
+  SwaggerDocumentOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
+
+import * as express from 'express';
+import * as process from 'process';
+
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  // Configure custom logger
-  const logger = getLoggerConfig('GamesWSMain');
+  const allowedOrigins = process.env.ALLOWED_ORIGINS!;
 
-  // Create Nest app with CORS, buffered logs, and custom logger
   const app = await NestFactory.create(AppModule, {
-    cors: { origin: '*' },
-    bufferLogs: true,
-    logger,
-  });
-
-  // Global validation + transformation for incoming DTOs
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-
-  // Configure Kafka microservice
-  const broker = process.env.KAFKA_BROKER || 'localhost:9092';
-  const groupId = process.env.KAFKA_GROUP || 'vyarna-gateway';
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        brokers: [broker],
-        retry: { retries: 10, initialRetryTime: 300 },
-        connectionTimeout: 5000,
-        requestTimeout: 12000,
-      },
-      consumer: {
-        groupId,
-        sessionTimeout: 90000,
-        heartbeatInterval: 30000,
-      },
-      producer: {
-        createPartitioner: Partitioners.LegacyPartitioner,
+    cors: {
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error(`Not allowed by CORS ${origin}`));
+        }
       },
     },
+    bufferLogs: true,
   });
 
-  // Start Kafka microservice listener
-  await app.startAllMicroservices();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
-  // Start HTTP/WebSocket server (fallback to port 4000)
-  const port = parseInt(process.env.APP_PORT || '', 10) || 4000;
-  await app.listen(port, () => {
-    logger.debug(
-      `${process.env.APP_NAME || 'vyarna-gateway'} listening on port ${port}`,
-      '',
-      'bootstrap',
-      LogStreamLevel.ProdStandard,
+  app.use(express.urlencoded({ extended: true }));
+
+  const swaggerConfigs = new DocumentBuilder()
+    .setTitle(`${process.env.APP} Swagger`)
+    .setDescription('All APIs descriptions')
+    .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'Bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+        description: 'Enter bearer token',
+      },
+      'bearerAuth',
+    )
+    .build();
+
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const document = SwaggerModule.createDocument(app, swaggerConfigs, options);
+  SwaggerModule.setup('/api', app, document);
+
+  await app.listen(process.env.APP_PORT!, () => {
+    console.log(
+      `${process.env.APP} is running on PORT: ${process.env.APP_PORT}\nSwagger => ${process.env.SWAGGER_URL}`,
     );
   });
 }

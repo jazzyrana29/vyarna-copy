@@ -12,3 +12,7 @@ export const NAV_ROUTE_FAQ = "Vyarna - Frequently Asked Questions" as const;
 export const NAV_ROUTE_INVESTORS = "Vyarna - For Investors" as const;
 export const NAV_ROUTE_ABOUT = "Vyarna - About Us" as const;
 export const NAV_ROUTE_CONTACT = "Vyarna - Contact" as const;
+export const NAV_ROUTE_AUDIENCE = "audience" as const;
+export const NAV_ROUTE_COMPANY = "company" as const;
+export const NAV_ROUTE_SUPPORT = "support" as const;
+export const NAV_ROUTE_PRODUCT = "product" as const;

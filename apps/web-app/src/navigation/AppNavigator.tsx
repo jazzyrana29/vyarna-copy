@@ -17,17 +17,17 @@ import Navbar, { NavItem } from "../components/Navbar";
 import {
   NAV_ROUTE_ABOUT,
   NAV_ROUTE_BENEFITS,
+  NAV_ROUTE_BIOHACKERS,
   NAV_ROUTE_CONTACT,
   NAV_ROUTE_FAQ,
   NAV_ROUTE_HOME,
   NAV_ROUTE_INVESTORS,
-  NAV_ROUTE_BIOHACKERS,
   NAV_ROUTE_IS_MADE,
   NAV_ROUTE_PARENTS,
+  NAV_ROUTE_PREORDER,
   NAV_ROUTE_PROVIDERS,
   NAV_ROUTE_USE,
   NAV_ROUTE_VALUES,
-  NAV_ROUTE_PREORDER,
 } from "../constants/routes";
 import { RootStackParamList } from "../types";
 import { Text, View } from "react-native";

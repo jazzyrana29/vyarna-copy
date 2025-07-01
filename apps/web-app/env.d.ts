@@ -7,5 +7,6 @@ declare module "@env" {
   export const LINKEDIN_LINK: string;
   export const BASE_URL: string;
   export const API_URL: string;
+  export const EXPO_PUBLIC_BASE_URL: string;
   // add any other keys you’re pulling in from .env
 }
