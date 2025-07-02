@@ -1,13 +1,14 @@
-import { PickType } from "@nestjs/swagger";
-import { OperatorDto } from "./operator.dto";
+import { PickType } from '@nestjs/swagger';
+import { PersonDto } from './person.dto';
 
-export class CreateOperatorDto extends PickType(OperatorDto, [
-  "businessUnitId",
-  "username",
-  "nameFirst",
-  "nameMiddle",
-  "nameLast",
-  "email",
-  "password",
-  "updatedBy",
-] as const) {}
+export class CreatePersonDto extends PickType(PersonDto, [
+  'businessUnitId',
+  'username',
+  'nameFirst',
+  'nameMiddle',
+  'nameLast',
+  'email',
+  'password',
+  'updatedBy',
+] as const) {
+}
