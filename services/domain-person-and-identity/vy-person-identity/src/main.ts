@@ -7,7 +7,7 @@ import { getLoggerConfig } from "./utils/common";
 import { LogStreamLevel } from "ez-logger";
 import { Partitioners } from "kafkajs";
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const logger = getLoggerConfig("Main");
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,

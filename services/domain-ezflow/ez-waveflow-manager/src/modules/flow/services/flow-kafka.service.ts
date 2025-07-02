@@ -48,7 +48,7 @@ export class FlowKafkaService {
     );
   }
 
-  async createFlow(message: any, key: string) {
+  async createFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_FLOW,
@@ -59,7 +59,7 @@ export class FlowKafkaService {
     );
   }
 
-  async updateFlow(message: any, key: string) {
+  async updateFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_FLOW,
@@ -70,7 +70,7 @@ export class FlowKafkaService {
     );
   }
 
-  async updatePublishStatusFlow(message: any, key: string) {
+  async updatePublishStatusFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_PUBLISH_STATUS_FLOW,
@@ -81,7 +81,7 @@ export class FlowKafkaService {
     );
   }
 
-  async deleteFlow(message: any, key: string) {
+  async deleteFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_FLOW,
@@ -92,7 +92,7 @@ export class FlowKafkaService {
     );
   }
 
-  async getOneFlow(message: any, key: string) {
+  async getOneFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_FLOW,
@@ -103,7 +103,7 @@ export class FlowKafkaService {
     );
   }
 
-  async getManyFlows(message: any, key: string) {
+  async getManyFlows(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_FLOWS,
@@ -114,7 +114,7 @@ export class FlowKafkaService {
     );
   }
 
-  async getZtrackingFlow(message: any, key: string) {
+  async getZtrackingFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_FLOW,
@@ -125,7 +125,7 @@ export class FlowKafkaService {
     );
   }
 
-  async cloneFlow(message: any, key: string) {
+  async cloneFlow(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CLONE_FLOW,
@@ -136,7 +136,7 @@ export class FlowKafkaService {
     );
   }
 
-  async fuzzySearchFlows(message: any, key: string) {
+  async fuzzySearchFlows(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_FLOWS,

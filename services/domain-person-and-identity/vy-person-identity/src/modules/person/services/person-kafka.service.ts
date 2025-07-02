@@ -40,7 +40,7 @@ export class PersonKafkaService {
     );
   }
 
-  async createPersonViaKafka(message: any, key: string) {
+  async createPersonViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_PERSON_ENTITY,
@@ -51,7 +51,7 @@ export class PersonKafkaService {
     );
   }
 
-  async updatePersonViaKafka(message: any, key: string) {
+  async updatePersonViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_PERSON_ENTITY,
@@ -62,7 +62,7 @@ export class PersonKafkaService {
     );
   }
 
-  async getPersonEntityViaKafka(message: any, key: string) {
+  async getPersonEntityViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_PERSON_ENTITY,
@@ -73,7 +73,7 @@ export class PersonKafkaService {
     );
   }
 
-  async getManyPersonsViaKafka(message: any, key: string) {
+  async getManyPersonsViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_PERSONS,
@@ -84,7 +84,10 @@ export class PersonKafkaService {
     );
   }
 
-  async getHistoryOfPersonEntityViaKafka(message: any, key: string) {
+  async getHistoryOfPersonEntityViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_PERSON_ENTITY,

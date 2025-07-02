@@ -34,7 +34,7 @@ export class PersonController {
   async createPersonWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_PERSON_ENTITY}`,
@@ -49,7 +49,7 @@ export class PersonController {
   async updatePersonWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_PERSON_ENTITY}`,
@@ -64,7 +64,7 @@ export class PersonController {
   async getPersonWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PERSON_ENTITY}`,
@@ -79,7 +79,7 @@ export class PersonController {
   async getManyPersonsWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_PERSONS}`,
@@ -94,7 +94,7 @@ export class PersonController {
   async getHistoryOfPersonWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_PERSON_ENTITY}`,

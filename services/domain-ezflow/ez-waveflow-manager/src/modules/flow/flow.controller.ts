@@ -36,7 +36,10 @@ export class FlowController {
   }
 
   @MessagePattern(KT_CREATE_FLOW)
-  async createFlow(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async createFlow(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_FLOW}`,
@@ -48,7 +51,10 @@ export class FlowController {
   }
 
   @MessagePattern(KT_UPDATE_FLOW)
-  async updateFlow(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async updateFlow(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_FLOW}`,
@@ -63,7 +69,7 @@ export class FlowController {
   async updatePublishStatusFlow(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_PUBLISH_STATUS_FLOW}`,
@@ -75,7 +81,10 @@ export class FlowController {
   }
 
   @MessagePattern(KT_DELETE_FLOW)
-  async deleteFlow(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async deleteFlow(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_FLOW}`,
@@ -87,7 +96,10 @@ export class FlowController {
   }
 
   @MessagePattern(KT_GET_ONE_FLOW)
-  async getFlow(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getFlow(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_FLOW}`,
@@ -99,7 +111,10 @@ export class FlowController {
   }
 
   @MessagePattern(KT_GET_MANY_FLOWS)
-  async getManyFlows(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getManyFlows(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_FLOWS}`,
@@ -114,7 +129,7 @@ export class FlowController {
   async getZtrackingFlow(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_FLOW}`,
@@ -126,7 +141,10 @@ export class FlowController {
   }
 
   @MessagePattern(KT_CLONE_FLOW)
-  async cloneFlow(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async cloneFlow(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for Kafka topic: ${KT_CLONE_FLOW}`,
@@ -141,7 +159,7 @@ export class FlowController {
   async fuzzySearchFlows(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_FLOWS}`,

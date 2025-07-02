@@ -36,7 +36,7 @@ export class BusinessUnitController {
   async createBusinessUnitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_BUSINESS_UNIT_ENTITY}`,
@@ -51,7 +51,7 @@ export class BusinessUnitController {
   async updateBusinessUnitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_BUSINESS_UNIT_ENTITY}`,
@@ -66,7 +66,7 @@ export class BusinessUnitController {
   async getBusinessUnitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_BUSINESS_UNIT_ENTITY}`,
@@ -81,7 +81,7 @@ export class BusinessUnitController {
   async getManyBusinessUnitsWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_BUSINESS_UNITS}`,
@@ -96,7 +96,7 @@ export class BusinessUnitController {
   async getHistoryOfBusinessUnitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_BUSINESS_UNIT_ENTITY}`,

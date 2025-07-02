@@ -40,7 +40,7 @@ export class OperatorKafkaService {
     );
   }
 
-  async createOperatorViaKafka(message: any, key: string) {
+  async createOperatorViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_OPERATOR_ENTITY,
@@ -51,7 +51,7 @@ export class OperatorKafkaService {
     );
   }
 
-  async updateOperatorViaKafka(message: any, key: string) {
+  async updateOperatorViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_OPERATOR_ENTITY,
@@ -62,7 +62,7 @@ export class OperatorKafkaService {
     );
   }
 
-  async getOperatorEntityViaKafka(message: any, key: string) {
+  async getOperatorEntityViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_OPERATOR_ENTITY,
@@ -73,7 +73,7 @@ export class OperatorKafkaService {
     );
   }
 
-  async getManyOperatorsViaKafka(message: any, key: string) {
+  async getManyOperatorsViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_OPERATORS,
@@ -84,7 +84,10 @@ export class OperatorKafkaService {
     );
   }
 
-  async getHistoryOfOperatorEntityViaKafka(message: any, key: string) {
+  async getHistoryOfOperatorEntityViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_OPERATOR_ENTITY,
