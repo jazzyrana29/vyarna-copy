@@ -5,37 +5,30 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import { Partitioners } from 'kafkajs';
 import * as express from 'express';
-import * as process from 'process';
 
 import { AppModule } from './app.module';
-import { IoAdapter } from '@nestjs/platform-socket.io';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { Partitioners } from 'kafkajs';
-import { getLoggerConfig } from './utils/common';
+import { getLoggerConfig, CORS_ALLOW } from './utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 async function bootstrap(): Promise<void> {
+  // Configure custom logger
   const logger = getLoggerConfig('VyGatewayMain');
-  const allowedOrigins = process.env.ALLOWED_ORIGINS!;
 
+  // Create Nest app with CORS, buffered logs, and custom logger
   const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(new Error(`Not allowed by CORS ${origin}`));
-        }
-      },
-    },
+    cors: CORS_ALLOW,
     bufferLogs: true,
     logger,
   });
-  // attach the Socket.io adapter
+
+  // Attach the Socket.io adapter
   app.useWebSocketAdapter(new IoAdapter(app));
 
+  // Global validation + transformation for incoming DTOs
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -62,6 +55,7 @@ async function bootstrap(): Promise<void> {
     },
   });
 
+  // Enable URL-encoded requests
   app.use(express.urlencoded({ extended: true }));
 
   const swaggerConfigs = new DocumentBuilder()
@@ -87,12 +81,14 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, swaggerConfigs, options);
   SwaggerModule.setup('/api', app, document);
 
+  // Start Kafka microservice listener
   await app.startAllMicroservices();
 
-  const port = parseInt(process.env.APP_PORT || '0', 10) || 4040;
+  // Start HTTP/WebSocket server (fallback to port 4040)
+  const port = parseInt(process.env.APP_PORT || '', 10) || 4040;
   await app.listen(port, () => {
     logger.debug(
-      `${process.env.APP} is running on PORT: ${port}\nSwagger => ${process.env.SWAGGER_URL}`,
+      `${process.env.APP || 'vy-gateway'} is running on PORT: ${port}\nSwagger => ${process.env.SWAGGER_URL}`,
       '',
       'bootstrap',
       LogStreamLevel.ProdStandard,
