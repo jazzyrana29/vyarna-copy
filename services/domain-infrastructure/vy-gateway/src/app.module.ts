@@ -12,6 +12,8 @@ import { AppLoggerMiddleware } from './middlewares/app.log.middleware';
 
 import { AppController } from './app.controller';
 import { ContactModule } from './modules/contact/contact.module';
+import { PersonIdentityModule } from './modules/domain-person-and-identity/vy-person-identity/vy-person-identity.module';
+import { KafkaModule } from './utils/kafka/kafka.module';
 import { ActiveCampaignService } from './services/static/active-campaign/active-campaign.service';
 import { WebsocketGateway } from './gateway/websocket.gateway';
 
@@ -43,7 +45,9 @@ import { WebsocketGateway } from './gateway/websocket.gateway';
     //   },
     // ]),
 
+    KafkaModule,
     ContactModule,
+    PersonIdentityModule,
   ],
   controllers: [AppController],
   providers: [

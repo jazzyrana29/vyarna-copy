@@ -50,6 +50,12 @@ Ensure redis is installed and running on your machine.You can start redis by run
 redis-server
 ```
 
+### Kafka Configuration
+
+The service communicates with other microservices using Kafka. Ensure the
+`KAFKA_BROKER` and `KAFKA_GROUP` variables in your `.env` file point to a running
+Kafka broker. Sample values are provided in `env-example`.
+
 ## Running the Application
 
 After setting up the environment and dependencies, you can start the NestJS application using:
