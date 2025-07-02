@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import {
   FlatList,
   Image,
@@ -56,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
       .replace(/^\/+/, ""); // ✅ strip leading slashes
   };
 
-  const renderGroup = (group: NavItem) => {
+  const renderGroup = (group: NavItem): JSX.Element => {
     const isActive = currentRoute === group.key;
     const isOpen = hoveredGroup === group.label;
     const hasChildren = !!group.children?.length;

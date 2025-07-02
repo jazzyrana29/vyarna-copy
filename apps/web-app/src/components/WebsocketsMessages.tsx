@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { JSX, useEffect } from "react";
 
 import useWebSocket from "../hooks/useWebSocket";
 import { ServerMessagesMode } from "../constants/server-messages-mode";
 
-const WebsocketsMessages = () => {
+const WebsocketsMessages = (): JSX.Element => {
   const messages = useWebSocket();
 
   useEffect(() => {
