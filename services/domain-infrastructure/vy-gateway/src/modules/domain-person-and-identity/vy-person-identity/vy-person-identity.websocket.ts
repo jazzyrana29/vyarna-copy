@@ -16,7 +16,7 @@ import {
   StartPersonIdentityGameDto,
   generateTraceId,
 } from 'ez-utils';
-import { CORS_ALLOW, getLoggerConfig } from '../../utils/common';
+import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @WebSocketGateway({ namespace: 'dice', cors: CORS_ALLOW })

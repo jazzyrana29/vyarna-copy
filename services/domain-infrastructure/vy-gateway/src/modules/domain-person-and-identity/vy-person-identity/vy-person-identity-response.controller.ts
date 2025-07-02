@@ -5,7 +5,7 @@ import {
   Ctx,
   KafkaContext,
 } from '@nestjs/microservices';
-import { KafkaResponderService } from '../../utils/kafka/kafka-responder.service';
+import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
 import {
   KT_START_DICE_GAME_ENTITY,
   KT_ROLL_DICE_TILE_ENTITY,
@@ -14,7 +14,7 @@ import {
   KT_GET_PROVABLY_FAIR_DICE_GAME,
   KT_AUTO_BET_DICE_GAME,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../utils/common';
+import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Controller()

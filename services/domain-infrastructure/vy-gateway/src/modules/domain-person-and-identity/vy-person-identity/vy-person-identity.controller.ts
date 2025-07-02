@@ -5,6 +5,7 @@ import { ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
 import { ResponseDTO } from '../../dto/response.dto';
 import { CreateContactDto } from '../../contact/dto/create-contact.dto';
 import { ValidateCreateContactDtoPipe } from '../../contact/pipes/validate-create-contact-dto.pipe';
+import { PersonIdentityKafkaService } from './vy-person-identity-kafka.service';
 
 @Controller('vy-person-identity')
 export class PersonIdentityController {
