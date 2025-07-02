@@ -40,7 +40,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitController {
   async createFlowIsActiveForWaveTypeAndBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT}`,
@@ -58,7 +58,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitController {
   async updateFlowIsActiveForWaveTypeAndBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT}`,
@@ -76,7 +76,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitController {
   async deleteFlowIsActiveForWaveTypeAndBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT}`,
@@ -94,7 +94,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitController {
   async getFlowIsActiveForWaveTypeAndBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT}`,
@@ -112,7 +112,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitController {
   async getManyFlowIsActiveForWaveTypeAndBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT}`,
@@ -132,7 +132,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitController {
   async getZtrackingFlowIsActiveForWaveTypeAndBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT}`,

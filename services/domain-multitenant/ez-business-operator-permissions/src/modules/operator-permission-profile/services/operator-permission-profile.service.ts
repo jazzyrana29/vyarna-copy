@@ -120,7 +120,7 @@ export class OperatorPermissionProfileService {
   async addOperatorPermissionProfile(
     createPermissionProfileForAnOperatorDto: CreatePermissionProfileForAnOperatorDto,
     traceId: string, // Assuming you have a traceId for logging
-  ) {
+  ): Promise<OperatorPermissionProfileDto> {
     const { operatorId = '', permissionProfileId = '' } =
       createPermissionProfileForAnOperatorDto;
 
@@ -223,7 +223,7 @@ export class OperatorPermissionProfileService {
   async removeOperatorPermissionProfile(
     removePermissionProfileForAnOperatorDto: RemovePermissionProfileForAnOperatorDto,
     traceId: string, // Assuming you have a traceId for logging
-  ) {
+  ): Promise<OperatorPermissionProfile> {
     const { operatorId = '', permissionProfileId = '' } =
       removePermissionProfileForAnOperatorDto;
 

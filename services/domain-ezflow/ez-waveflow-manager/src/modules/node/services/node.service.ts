@@ -162,7 +162,7 @@ export class NodeService {
     node: Node,
     nodeType: NodeType,
     traceId: string,
-  ) {
+  ): Promise<void> {
     const executedType = await this.nodeExitTypeRepository.findOne({
       where: { name: 'EXECUTED' },
     });

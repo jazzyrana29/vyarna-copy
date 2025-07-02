@@ -23,7 +23,7 @@ export class InputValueTypeKafkaService {
     );
   }
 
-  async getInputValueType(message: any, key: string) {
+  async getInputValueType(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_INPUT_VALUE_TYPE,
@@ -37,7 +37,7 @@ export class InputValueTypeKafkaService {
     );
   }
 
-  async getManyInputValueTypes(message: any, key: string) {
+  async getManyInputValueTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_INPUT_VALUE_TYPES,

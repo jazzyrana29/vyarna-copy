@@ -42,7 +42,7 @@ export class NodeKafkaService {
     );
   }
 
-  async createNode(message: any, key: string) {
+  async createNode(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_NODE,
@@ -53,7 +53,7 @@ export class NodeKafkaService {
     );
   }
 
-  async updateNode(message: any, key: string) {
+  async updateNode(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_NODE,
@@ -64,7 +64,7 @@ export class NodeKafkaService {
     );
   }
 
-  async deleteNode(message: any, key: string) {
+  async deleteNode(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_NODE,
@@ -75,7 +75,7 @@ export class NodeKafkaService {
     );
   }
 
-  async getOneNode(message: any, key: string) {
+  async getOneNode(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_NODE,
@@ -86,7 +86,7 @@ export class NodeKafkaService {
     );
   }
 
-  async getZtrackingNode(message: any, key: string) {
+  async getZtrackingNode(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_NODE,
@@ -97,7 +97,7 @@ export class NodeKafkaService {
     );
   }
 
-  async fuzzySearchNodes(message: any, key: string) {
+  async fuzzySearchNodes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_NODES,

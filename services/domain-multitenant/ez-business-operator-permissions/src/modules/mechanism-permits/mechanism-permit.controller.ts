@@ -34,7 +34,7 @@ export class MechanismPermitsController {
   async getMechanismPermitEntity(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MECHANISM_PERMIT_ENTITY}`,
@@ -52,7 +52,7 @@ export class MechanismPermitsController {
   async getHistoryOfMechanismPermitEntity(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_MECHANISM_PERMIT_ENTITY}`,
@@ -70,7 +70,7 @@ export class MechanismPermitsController {
   async getMechanismPermitsForSystemMechanism(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MECHANISM_PERMITS_FOR_SYSTEM_MECHANISM}`,

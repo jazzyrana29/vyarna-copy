@@ -39,7 +39,7 @@ export class WaveTypeGenreCanUtilizeBusinessUnitController {
   async createWaveTypeGenreCanUtilizeBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_WAVE_TYPE_GENRE_CAN_UTILIZE_BUSINESS_UNIT}`,
@@ -57,7 +57,7 @@ export class WaveTypeGenreCanUtilizeBusinessUnitController {
   async updateWaveTypeGenreCanUtilizeBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_WAVE_TYPE_GENRE_CAN_UTILIZE_BUSINESS_UNIT}`,
@@ -75,7 +75,7 @@ export class WaveTypeGenreCanUtilizeBusinessUnitController {
   async deleteWaveTypeGenreCanUtilizeBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_WAVE_TYPE_GENRE_CAN_UTILIZE_BUSINESS_UNIT}`,
@@ -93,7 +93,7 @@ export class WaveTypeGenreCanUtilizeBusinessUnitController {
   async getWaveTypeGenreCanUtilizeBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_WAVE_TYPE_GENRE_CAN_UTILIZE_BUSINESS_UNIT}`,
@@ -111,7 +111,7 @@ export class WaveTypeGenreCanUtilizeBusinessUnitController {
   async getZtrackingWaveTypeGenreCanUtilizeBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_WAVE_TYPE_GENRE_CAN_UTILIZE_BUSINESS_UNIT}`,

@@ -37,7 +37,7 @@ export class WaveController {
   async createWaveWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_CREATE_WAVE_ENTITY}`,
@@ -52,7 +52,7 @@ export class WaveController {
   async updateWaveWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_UPDATE_WAVE_ENTITY}`,
@@ -67,7 +67,7 @@ export class WaveController {
   async deleteWaveWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_DELETE_WAVE_ENTITY}`,
@@ -82,7 +82,7 @@ export class WaveController {
   async getWaveWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_WAVE_ENTITY}`,
@@ -97,7 +97,7 @@ export class WaveController {
   async getManyWavesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_MANY_WAVES}`,
@@ -112,7 +112,7 @@ export class WaveController {
   async getHistoryOfWaveWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_HISTORY_WAVE_ENTITY}`,
@@ -127,7 +127,7 @@ export class WaveController {
   async executeWaveWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_EXECUTE_WAVE_ENTITY}`,

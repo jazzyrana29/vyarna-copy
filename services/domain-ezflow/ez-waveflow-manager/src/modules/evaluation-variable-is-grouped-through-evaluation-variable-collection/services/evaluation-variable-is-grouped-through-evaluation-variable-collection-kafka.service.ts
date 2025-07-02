@@ -48,7 +48,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
   async createEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION,
@@ -68,7 +68,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
   async updateEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION,
@@ -88,7 +88,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
   async deleteEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION,
@@ -108,7 +108,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
   async getOneEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION,
@@ -128,7 +128,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
   async getZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION,
@@ -145,7 +145,10 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
     );
   }
 
-  async addEvaluationVariableToCollection(message: any, key: string) {
+  async addEvaluationVariableToCollection(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_ADD_EVALUATION_VARIABLE_TO_COLLECTION,
@@ -159,7 +162,10 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionKafka
     );
   }
 
-  async removeEvaluationVariableToCollection(message: any, key: string) {
+  async removeEvaluationVariableToCollection(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_REMOVE_EVALUATION_VARIABLE_TO_COLLECTION,

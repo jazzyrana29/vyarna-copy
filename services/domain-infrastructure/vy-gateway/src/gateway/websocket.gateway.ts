@@ -27,15 +27,15 @@ export class WebsocketGateway
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: Socket) {
+  handleConnection(client: Socket): void {
     console.warn(`Client Connected => ${client.id}`, 'handleConnection');
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect(client: Socket): void {
     console.error(`Client Disconnected => ${client.id}`, 'handleDisconnect');
   }
 
-  sendMessageToClient(message: ClientMessage) {
+  sendMessageToClient(message: ClientMessage): void {
     console.info(
       `Message Processed => ${message.message}`,
       'sendMessageToClient',

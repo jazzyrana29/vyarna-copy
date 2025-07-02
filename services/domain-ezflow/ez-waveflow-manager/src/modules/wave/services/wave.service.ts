@@ -358,7 +358,7 @@ export class WaveService {
       waveTypeId: string,
       flowId: string,
       traceId: string,
-    ) => {
+    ): Promise<WaveDto | null> => {
       const waveToCreate = {
         waveTypeId,
         executionFlowId: flowId,

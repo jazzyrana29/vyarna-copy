@@ -39,7 +39,7 @@ export class TaskTypeHaveAccessToBusinessUnitController {
   async createTaskTypeHaveAccessToBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_TASK_TYPE_HAVE_ACCESS_TO_BUSINESS_UNIT}`,
@@ -57,7 +57,7 @@ export class TaskTypeHaveAccessToBusinessUnitController {
   async updateTaskTypeHaveAccessToBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_TASK_TYPE_HAVE_ACCESS_TO_BUSINESS_UNIT}`,
@@ -75,7 +75,7 @@ export class TaskTypeHaveAccessToBusinessUnitController {
   async deleteTaskTypeHaveAccessToBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_TASK_TYPE_HAVE_ACCESS_TO_BUSINESS_UNIT}`,
@@ -93,7 +93,7 @@ export class TaskTypeHaveAccessToBusinessUnitController {
   async getTaskTypeHaveAccessToBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_TASK_TYPE_HAVE_ACCESS_TO_BUSINESS_UNIT}`,
@@ -111,7 +111,7 @@ export class TaskTypeHaveAccessToBusinessUnitController {
   async getZtrackingTaskTypeHaveAccessToBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_TASK_TYPE_HAVE_ACCESS_TO_BUSINESS_UNIT}`,

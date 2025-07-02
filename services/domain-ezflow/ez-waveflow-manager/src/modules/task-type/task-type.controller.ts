@@ -26,7 +26,10 @@ export class TaskTypeController {
   }
 
   @MessagePattern(KT_GET_ONE_TASK_TYPE)
-  async getOneTaskType(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getOneTaskType(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_TASK_TYPE}`,
@@ -41,7 +44,7 @@ export class TaskTypeController {
   async getManyTaskTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_TASK_TYPES}`,

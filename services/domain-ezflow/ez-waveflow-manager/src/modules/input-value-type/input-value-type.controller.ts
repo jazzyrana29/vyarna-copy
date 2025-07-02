@@ -34,7 +34,7 @@ export class InputValueTypeController {
   async getInputValueTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_INPUT_VALUE_TYPE}`,
@@ -49,7 +49,7 @@ export class InputValueTypeController {
   async getManyInputValueTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_INPUT_VALUE_TYPES}`,

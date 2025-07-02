@@ -46,7 +46,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesKafkaService {
   async createEvaluationVariablesAreAvailableForWaveTypesEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY,
@@ -66,7 +66,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesKafkaService {
   async updateEvaluationVariablesAreAvailableForWaveTypesEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY,
@@ -86,7 +86,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesKafkaService {
   async deleteEvaluationVariablesAreAvailableForWaveTypesEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY,
@@ -106,7 +106,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesKafkaService {
   async getEvaluationVariablesAreAvailableForWaveTypesEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY,
@@ -126,7 +126,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesKafkaService {
   async getManyEvaluationVariablesAreAvailableForWaveTypes(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES,
@@ -146,7 +146,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesKafkaService {
   async getHistoryOfEvaluationVariablesAreAvailableForWaveTypesEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY,

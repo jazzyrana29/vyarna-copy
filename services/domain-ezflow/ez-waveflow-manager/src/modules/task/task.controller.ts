@@ -36,7 +36,7 @@ export class TaskController {
   async createTaskWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_CREATE_TASK_ENTITY}`,
@@ -51,7 +51,7 @@ export class TaskController {
   async updateTaskWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_UPDATE_TASK_ENTITY}`,
@@ -66,7 +66,7 @@ export class TaskController {
   async deleteTaskWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_DELETE_TASK_ENTITY}`,
@@ -81,7 +81,7 @@ export class TaskController {
   async getTaskWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_TASK_ENTITY}`,
@@ -96,7 +96,7 @@ export class TaskController {
   async getManyTasksWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_MANY_TASKS}`,
@@ -111,7 +111,7 @@ export class TaskController {
   async getHistoryOfTaskWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_HISTORY_TASK_ENTITY}`,

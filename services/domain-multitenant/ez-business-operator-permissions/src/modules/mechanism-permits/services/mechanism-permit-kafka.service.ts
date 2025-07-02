@@ -35,7 +35,7 @@ export class MechanismPermitKafkaService {
     );
   }
 
-  async getMechanismPermitEntity(message: any, key: string) {
+  async getMechanismPermitEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MECHANISM_PERMIT_ENTITY,
@@ -49,7 +49,10 @@ export class MechanismPermitKafkaService {
     );
   }
 
-  async getHistoryOfMechanismPermitEntity(message: any, key: string) {
+  async getHistoryOfMechanismPermitEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_MECHANISM_PERMIT_ENTITY,
@@ -60,7 +63,10 @@ export class MechanismPermitKafkaService {
     );
   }
 
-  async getMechanismPermitForSystemMechanism(message: any, key: string) {
+  async getMechanismPermitForSystemMechanism(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MECHANISM_PERMITS_FOR_SYSTEM_MECHANISM,

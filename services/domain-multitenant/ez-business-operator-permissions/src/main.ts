@@ -8,7 +8,7 @@ import { getLoggerConfig } from './utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { Partitioners } from 'kafkajs';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const logger = getLoggerConfig('Main');
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
@@ -28,7 +28,7 @@ async function bootstrap() {
   const broker = process.env.KAFKA_BROKER || 'localhost:9092';
   const groupId =
     process.env.KAFKA_GROUP || 'ez-business-operators-permissions';
-  const microservice = app.connectMicroservice<MicroserviceOptions>({
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
@@ -63,4 +63,6 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Failed to bootstrap application:', error);
+});

@@ -34,7 +34,7 @@ export class OperatorController {
   async createOperatorWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_OPERATOR_ENTITY}`,
@@ -49,7 +49,7 @@ export class OperatorController {
   async updateOperatorWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_OPERATOR_ENTITY}`,
@@ -64,7 +64,7 @@ export class OperatorController {
   async getOperatorWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_OPERATOR_ENTITY}`,
@@ -79,7 +79,7 @@ export class OperatorController {
   async getManyOperatorsWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_OPERATORS}`,
@@ -94,7 +94,7 @@ export class OperatorController {
   async getHistoryOfOperatorWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_OPERATOR_ENTITY}`,

@@ -27,7 +27,10 @@ export class EvaluationVariableDataTypeKafkaService {
     );
   }
 
-  async getEvaluationVariableDataType(message: any, key: string) {
+  async getEvaluationVariableDataType(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_EVALUATION_VARIABLE_DATA_TYPE,
@@ -41,7 +44,10 @@ export class EvaluationVariableDataTypeKafkaService {
     );
   }
 
-  async getManyEvaluationVariableDataTypes(message: any, key: string) {
+  async getManyEvaluationVariableDataTypes(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_EVALUATION_VARIABLE_DATA_TYPES,
@@ -55,7 +61,10 @@ export class EvaluationVariableDataTypeKafkaService {
     );
   }
 
-  async fuzzySearchEvaluationVariableDataTypes(message: any, key: string) {
+  async fuzzySearchEvaluationVariableDataTypes(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_EVALUATION_VARIABLE_DATA_TYPES,

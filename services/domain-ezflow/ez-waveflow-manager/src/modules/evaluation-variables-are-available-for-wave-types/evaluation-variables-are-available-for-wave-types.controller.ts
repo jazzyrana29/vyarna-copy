@@ -42,7 +42,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesController {
   async createEvaluationVariablesAreAvailableForWaveTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_CREATE_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY}`,
@@ -62,7 +62,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesController {
   async updateEvaluationVariablesAreAvailableForWaveTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_UPDATE_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY}`,
@@ -82,7 +82,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesController {
   async deleteEvaluationVariablesAreAvailableForWaveTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_DELETE_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY}`,
@@ -102,7 +102,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesController {
   async getEvaluationVariablesAreAvailableForWaveTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY}`,
@@ -120,7 +120,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesController {
   async getManyEntitiesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_MANY_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES}`,
@@ -140,7 +140,7 @@ export class EvaluationVariablesAreAvailableForWaveTypesController {
   async getHistoryWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_HISTORY_EVALUATION_VARIABLES_ARE_AVAILABLE_FOR_WAVE_TYPES_ENTITY}`,

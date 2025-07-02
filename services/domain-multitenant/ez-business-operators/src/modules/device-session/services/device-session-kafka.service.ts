@@ -42,7 +42,7 @@ export class DeviceSessionKafkaService {
     );
   }
 
-  async createDeviceSession(message: any, key: string) {
+  async createDeviceSession(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_DEVICE_SESSION_ENTITY,
@@ -53,7 +53,7 @@ export class DeviceSessionKafkaService {
     );
   }
 
-  async updateDeviceSession(message: any, key: string) {
+  async updateDeviceSession(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_DEVICE_SESSION_ENTITY,
@@ -64,7 +64,7 @@ export class DeviceSessionKafkaService {
     );
   }
 
-  async getDeviceSession(message: any, key: string) {
+  async getDeviceSession(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_DEVICE_SESSION_ENTITY,
@@ -75,7 +75,7 @@ export class DeviceSessionKafkaService {
     );
   }
 
-  async getHistoryDeviceSession(message: any, key: string) {
+  async getHistoryDeviceSession(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_DEVICE_SESSION_ENTITY,
@@ -89,7 +89,7 @@ export class DeviceSessionKafkaService {
     );
   }
 
-  async startDeviceSession(message: any, key: string) {
+  async startDeviceSession(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_START_DEVICE_SESSION_ENTITY,
@@ -100,7 +100,7 @@ export class DeviceSessionKafkaService {
     );
   }
 
-  async closeDeviceSession(message: any, key: string) {
+  async closeDeviceSession(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CLOSE_DEVICE_SESSION_ENTITY,

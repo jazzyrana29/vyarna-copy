@@ -32,7 +32,7 @@ export class WaveTypeGenreKafkaService {
     );
   }
 
-  async getOneWaveTypeGenre(message: any, key: string) {
+  async getOneWaveTypeGenre(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_WAVE_TYPE_GENRE,
@@ -43,7 +43,7 @@ export class WaveTypeGenreKafkaService {
     );
   }
 
-  async getManyWaveTypeGenres(message: any, key: string) {
+  async getManyWaveTypeGenres(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_WAVE_TYPE_GENRES,
@@ -54,7 +54,7 @@ export class WaveTypeGenreKafkaService {
     );
   }
 
-  async fuzzySearchWaveTypeGenres(message: any, key: string) {
+  async fuzzySearchWaveTypeGenres(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_WAVE_TYPE_GENRES,

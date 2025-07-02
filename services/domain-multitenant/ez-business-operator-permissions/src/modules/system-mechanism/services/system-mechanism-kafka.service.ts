@@ -32,7 +32,10 @@ export class SystemMechanismKafkaService {
     );
   }
 
-  async getSystemMechanismEntityViaKafka(message: any, key: string) {
+  async getSystemMechanismEntityViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_SYSTEM_MECHANISM_ENTITY,
@@ -43,7 +46,10 @@ export class SystemMechanismKafkaService {
     );
   }
 
-  async getHistoryOfSystemMechanismEntityViaKafka(message: any, key: string) {
+  async getHistoryOfSystemMechanismEntityViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_SYSTEM_MECHANISM_ENTITY,
@@ -54,7 +60,10 @@ export class SystemMechanismKafkaService {
     );
   }
 
-  async getManySystemMechanismsViaKafka(message: any, key: string) {
+  async getManySystemMechanismsViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_SYSTEM_MECHANISMS_ENTITY,

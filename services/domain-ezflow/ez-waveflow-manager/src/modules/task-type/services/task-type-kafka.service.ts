@@ -30,7 +30,7 @@ export class TaskTypeKafkaService {
     );
   }
 
-  async getOneTaskType(message: any, key: string) {
+  async getOneTaskType(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_TASK_TYPE,
@@ -41,7 +41,7 @@ export class TaskTypeKafkaService {
     );
   }
 
-  async getManyTaskTypes(message: any, key: string) {
+  async getManyTaskTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_TASK_TYPES,

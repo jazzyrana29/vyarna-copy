@@ -35,7 +35,7 @@ export class OperatorPermissionProfileController {
   async getOperatorsForAPermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_OPERATORS_FOR_PERMISSION_PROFILE}`,
@@ -53,7 +53,7 @@ export class OperatorPermissionProfileController {
   async getPermissionProfileForAnOperator(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PERMISSION_PROFILE_FOR_OPERATOR}`,
@@ -71,7 +71,7 @@ export class OperatorPermissionProfileController {
   async isOperatorAllowedTo(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_IS_OPERATOR_ALLOWED_TO}`,
@@ -89,7 +89,7 @@ export class OperatorPermissionProfileController {
   async createOperatorPermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_OPERATOR_PERMISSION_PROFILE_ENTITY}`,
@@ -107,7 +107,7 @@ export class OperatorPermissionProfileController {
   async removeOperatorPermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_REMOVE_OPERATOR_PERMISSION_PROFILE_ENTITY}`,

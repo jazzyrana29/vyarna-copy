@@ -40,7 +40,10 @@ export class WaveTypeIsAllowedToAccessBusinessUnitKafkaService {
     );
   }
 
-  async createWaveTypeIsAllowedToAccessBusinessUnit(message: any, key: string) {
+  async createWaveTypeIsAllowedToAccessBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_MANIFOLD,
@@ -57,7 +60,10 @@ export class WaveTypeIsAllowedToAccessBusinessUnitKafkaService {
     );
   }
 
-  async updateWaveTypeIsAllowedToAccessBusinessUnit(message: any, key: string) {
+  async updateWaveTypeIsAllowedToAccessBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_MANIFOLD,
@@ -74,7 +80,10 @@ export class WaveTypeIsAllowedToAccessBusinessUnitKafkaService {
     );
   }
 
-  async deleteWaveTypeIsAllowedToAccessBusinessUnit(message: any, key: string) {
+  async deleteWaveTypeIsAllowedToAccessBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_MANIFOLD,
@@ -91,7 +100,10 @@ export class WaveTypeIsAllowedToAccessBusinessUnitKafkaService {
     );
   }
 
-  async getOneWaveTypeIsAllowedToAccessBusinessUnit(message: any, key: string) {
+  async getOneWaveTypeIsAllowedToAccessBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_MANIFOLD,
@@ -111,7 +123,7 @@ export class WaveTypeIsAllowedToAccessBusinessUnitKafkaService {
   async getZtrackingWaveTypeIsAllowedToAccessBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_MANIFOLD,

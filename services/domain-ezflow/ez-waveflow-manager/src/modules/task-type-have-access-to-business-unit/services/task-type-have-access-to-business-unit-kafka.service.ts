@@ -40,7 +40,10 @@ export class TaskTypeHaveAccessToBusinessUnitKafkaService {
     );
   }
 
-  async createTaskTypeHaveAccessToBusinessUnit(message: any, key: string) {
+  async createTaskTypeHaveAccessToBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_MANIFOLD,
@@ -57,7 +60,10 @@ export class TaskTypeHaveAccessToBusinessUnitKafkaService {
     );
   }
 
-  async updateTaskTypeHaveAccessToBusinessUnit(message: any, key: string) {
+  async updateTaskTypeHaveAccessToBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_MANIFOLD,
@@ -74,7 +80,10 @@ export class TaskTypeHaveAccessToBusinessUnitKafkaService {
     );
   }
 
-  async deleteTaskTypeHaveAccessToBusinessUnit(message: any, key: string) {
+  async deleteTaskTypeHaveAccessToBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_MANIFOLD,
@@ -91,7 +100,10 @@ export class TaskTypeHaveAccessToBusinessUnitKafkaService {
     );
   }
 
-  async getOneTaskTypeHaveAccessToBusinessUnit(message: any, key: string) {
+  async getOneTaskTypeHaveAccessToBusinessUnit(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_MANIFOLD,
@@ -111,7 +123,7 @@ export class TaskTypeHaveAccessToBusinessUnitKafkaService {
   async getZtrackingTaskTypeHaveAccessToBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_MANIFOLD,

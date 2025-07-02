@@ -38,7 +38,7 @@ export class PermissionProfileController {
   async createPermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_PERMISSION_PROFILE_ENTITY}`,
@@ -56,7 +56,7 @@ export class PermissionProfileController {
   async updatePermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_PERMISSION_PROFILE_ENTITY}`,
@@ -74,7 +74,7 @@ export class PermissionProfileController {
   async getPermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PERMISSION_PROFILE_ENTITY}`,
@@ -92,7 +92,7 @@ export class PermissionProfileController {
   async getHistoryOfPermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_PERMISSION_PROFILE_ENTITY}`,
@@ -110,7 +110,7 @@ export class PermissionProfileController {
   async deletePermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_PERMISSION_PROFILE_ENTITY}`,
@@ -128,7 +128,7 @@ export class PermissionProfileController {
   async getListOfPermissionProfileViaKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_LIST_OF_PERMISSION_PROFILE}`,
@@ -146,7 +146,7 @@ export class PermissionProfileController {
   async getPermitsForPermissionProfileViaKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PERMITS_FOR_PERMISSION_PROFILE}`,
@@ -164,7 +164,7 @@ export class PermissionProfileController {
   async populatePermissionProfile(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_POPULATE_PERMISSION_PROFILE_ENTITY}`,

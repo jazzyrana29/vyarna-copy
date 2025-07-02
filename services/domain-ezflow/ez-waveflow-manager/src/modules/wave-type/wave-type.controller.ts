@@ -30,7 +30,10 @@ export class WaveTypeController {
   }
 
   @MessagePattern(KT_GET_ONE_WAVE_TYPE)
-  async getOneWaveType(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getOneWaveType(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_WAVE_TYPE}`,
@@ -45,7 +48,7 @@ export class WaveTypeController {
   async getManyWaveTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_WAVE_TYPES}`,
@@ -60,7 +63,7 @@ export class WaveTypeController {
   async fuzzySearchWaveTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_WAVE_TYPES}`,

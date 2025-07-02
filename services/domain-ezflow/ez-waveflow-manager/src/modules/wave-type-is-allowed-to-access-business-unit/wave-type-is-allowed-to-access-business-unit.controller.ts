@@ -39,7 +39,7 @@ export class WaveTypeIsAllowedToAccessBusinessUnitController {
   async createWaveTypeIsAllowedToAccessBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_WAVE_TYPE_IS_ALLOWED_TO_ACCESS_BUSINESS_UNIT}`,
@@ -57,7 +57,7 @@ export class WaveTypeIsAllowedToAccessBusinessUnitController {
   async updateWaveTypeIsAllowedToAccessBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_WAVE_TYPE_IS_ALLOWED_TO_ACCESS_BUSINESS_UNIT}`,
@@ -75,7 +75,7 @@ export class WaveTypeIsAllowedToAccessBusinessUnitController {
   async deleteWaveTypeIsAllowedToAccessBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_WAVE_TYPE_IS_ALLOWED_TO_ACCESS_BUSINESS_UNIT}`,
@@ -93,7 +93,7 @@ export class WaveTypeIsAllowedToAccessBusinessUnitController {
   async getWaveTypeIsAllowedToAccessBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_WAVE_TYPE_IS_ALLOWED_TO_ACCESS_BUSINESS_UNIT}`,
@@ -111,7 +111,7 @@ export class WaveTypeIsAllowedToAccessBusinessUnitController {
   async getZtrackingWaveTypeIsAllowedToAccessBusinessUnit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_WAVE_TYPE_IS_ALLOWED_TO_ACCESS_BUSINESS_UNIT}`,

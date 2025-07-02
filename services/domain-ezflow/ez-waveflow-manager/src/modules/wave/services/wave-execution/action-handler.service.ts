@@ -50,7 +50,7 @@ export class ActionHandlerService {
   ): Promise<ActionResult<AllOutputs>> {
     if (!action) {
       this.logger.error(
-        'No action provided to performActionExecution.',
+        'No action provided to performActionExecution og ActionType',
         traceId,
         'performActionExecution',
         LogStreamLevel.DebugHeavy,

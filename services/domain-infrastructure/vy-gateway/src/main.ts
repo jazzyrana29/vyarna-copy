@@ -12,7 +12,7 @@ import * as process from 'process';
 import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const allowedOrigins = process.env.ALLOWED_ORIGINS!;
 
   const app = await NestFactory.create(AppModule, {

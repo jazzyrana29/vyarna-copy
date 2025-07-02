@@ -38,7 +38,7 @@ export class PermissionProfileManagedThroughMechanismPermitController {
   async createPermissionProfileManagedThroughMechanismPermitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY}`,
@@ -58,7 +58,7 @@ export class PermissionProfileManagedThroughMechanismPermitController {
   async updatePermissionProfileManagedThroughMechanismPermitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY}`,
@@ -78,7 +78,7 @@ export class PermissionProfileManagedThroughMechanismPermitController {
   async getPermissionProfileManagedThroughMechanismPermitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY}`,
@@ -98,7 +98,7 @@ export class PermissionProfileManagedThroughMechanismPermitController {
   async getHistoryOfPermissionProfileManagedThroughMechanismPermitWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY}`,

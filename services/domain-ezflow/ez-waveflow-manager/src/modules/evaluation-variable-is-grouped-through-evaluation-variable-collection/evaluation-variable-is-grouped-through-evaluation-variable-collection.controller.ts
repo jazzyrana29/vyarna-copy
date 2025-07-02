@@ -43,7 +43,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async createEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION}`,
@@ -63,7 +63,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async updateEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION}`,
@@ -83,7 +83,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async deleteEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION}`,
@@ -103,7 +103,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async getEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION}`,
@@ -123,7 +123,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async getZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_EVALUATION_VARIABLE_IS_GROUPED_THROUGH_EVALUATION_VARIABLE_COLLECTION}`,
@@ -141,7 +141,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async addEvaluationVariableToCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_ADD_EVALUATION_VARIABLE_TO_COLLECTION}`,
@@ -159,7 +159,7 @@ export class EvaluationVariableIsGroupedThroughEvaluationVariableCollectionContr
   async removeEvaluationVariableToCollection(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_REMOVE_EVALUATION_VARIABLE_TO_COLLECTION}`,
