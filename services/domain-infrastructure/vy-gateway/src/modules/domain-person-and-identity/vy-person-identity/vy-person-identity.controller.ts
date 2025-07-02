@@ -21,11 +21,13 @@ export class PersonIdentityController {
   @Post('create-person')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreatePersonDto })
-  async createPerson(@Body() dto: CreatePersonDto): Promise<ResponseDTO<any>> {
+  async createPerson(
+    @Body() createPersonDto: CreatePersonDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('create-person');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personIdentityKafkaService.createPerson(dto, traceId),
+      await this.personIdentityKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
     );
   }
@@ -33,11 +35,13 @@ export class PersonIdentityController {
   @Post('update-person')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: UpdatePersonDto })
-  async updatePerson(@Body() dto: UpdatePersonDto): Promise<ResponseDTO<any>> {
+  async updatePerson(
+    @Body() updatePersonDto: UpdatePersonDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('update-person');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personIdentityKafkaService.updatePerson(dto, traceId),
+      await this.personIdentityKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
     );
   }
@@ -45,11 +49,11 @@ export class PersonIdentityController {
   @Post('get-person')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetPersonDto })
-  async getPerson(@Body() dto: GetPersonDto): Promise<ResponseDTO<any>> {
+  async getPerson(@Body() getPersonDto: GetPersonDto): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('get-person');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personIdentityKafkaService.getPerson(dto, traceId),
+      await this.personIdentityKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
     );
   }
@@ -58,12 +62,15 @@ export class PersonIdentityController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetHistoryOfPersonDto })
   async getHistory(
-    @Body() dto: GetHistoryOfPersonDto,
+    @Body() getHistoryOfPersonDto: GetHistoryOfPersonDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('get-history-person');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personIdentityKafkaService.getHistory(dto, traceId),
+      await this.personIdentityKafkaService.getHistory(
+        getHistoryOfPersonDto,
+        traceId,
+      ),
       'Person history retrieved',
     );
   }
@@ -72,12 +79,12 @@ export class PersonIdentityController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetManyPersonsDto })
   async getManyPersons(
-    @Body() dto: GetManyPersonsDto,
+    @Body() getManyPersonsDto: GetManyPersonsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('get-many-persons');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personIdentityKafkaService.getManyPersons(dto, traceId),
+      await this.personIdentityKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
     );
   }

@@ -56,11 +56,14 @@ export class PersonIdentityWebsocket implements OnGatewayInit {
   @SubscribeMessage('person-identity-create')
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    dto: CreatePersonDto,
+    createPersonDto: CreatePersonDto,
   ) {
     const traceId = generateTraceId('person-identity-create');
     try {
-      const result = await this.personIdentityKafka.createPerson(dto, traceId);
+      const result = await this.personIdentityKafka.createPerson(
+        createPersonDto,
+        traceId,
+      );
       socket.emit('person-identity-create-result', result);
     } catch (e: any) {
       socket.emit('person-identity-create-error', e.message || 'Unknown error');
@@ -70,11 +73,14 @@ export class PersonIdentityWebsocket implements OnGatewayInit {
   @SubscribeMessage('person-identity-update')
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
-    dto: UpdatePersonDto,
+    updatePersonDto: UpdatePersonDto,
   ) {
     const traceId = generateTraceId('person-identity-update');
     try {
-      const result = await this.personIdentityKafka.updatePerson(dto, traceId);
+      const result = await this.personIdentityKafka.updatePerson(
+        updatePersonDto,
+        traceId,
+      );
       socket.emit('person-identity-update-result', result);
     } catch (e: any) {
       socket.emit('person-identity-update-error', e.message || 'Unknown error');
@@ -84,11 +90,11 @@ export class PersonIdentityWebsocket implements OnGatewayInit {
   @SubscribeMessage('person-identity-get')
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    dto: GetPersonDto,
+    getPersonDto: GetPersonDto,
   ) {
     const traceId = generateTraceId('person-identity-get');
     try {
-      const result = await this.personIdentityKafka.getPerson(dto, traceId);
+      const result = await this.personIdentityKafka.getPerson(getPersonDto, traceId);
       socket.emit('person-identity-get-result', result);
     } catch (e: any) {
       socket.emit('person-identity-get-error', e.message || 'Unknown error');
@@ -98,11 +104,14 @@ export class PersonIdentityWebsocket implements OnGatewayInit {
   @SubscribeMessage('person-identity-get-history')
   async handleHistory(
     @ConnectedSocket() socket: Socket,
-    dto: GetHistoryOfPersonDto,
+    getHistoryOfPersonDto: GetHistoryOfPersonDto,
   ) {
     const traceId = generateTraceId('person-identity-get-history');
     try {
-      const result = await this.personIdentityKafka.getHistory(dto, traceId);
+      const result = await this.personIdentityKafka.getHistory(
+        getHistoryOfPersonDto,
+        traceId,
+      );
       socket.emit('person-identity-get-history-result', result);
     } catch (e: any) {
       socket.emit(
@@ -115,11 +124,14 @@ export class PersonIdentityWebsocket implements OnGatewayInit {
   @SubscribeMessage('person-identity-get-many')
   async handleGetMany(
     @ConnectedSocket() socket: Socket,
-    dto: GetManyPersonsDto,
+    getManyPersonsDto: GetManyPersonsDto,
   ) {
     const traceId = generateTraceId('person-identity-get-many');
     try {
-      const result = await this.personIdentityKafka.getManyPersons(dto, traceId);
+      const result = await this.personIdentityKafka.getManyPersons(
+        getManyPersonsDto,
+        traceId,
+      );
       socket.emit('person-identity-get-many-result', result);
     } catch (e: any) {
       socket.emit(
