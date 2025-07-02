@@ -51,7 +51,6 @@ import { SalesStoreModule } from './modules/domain-sales-and-commerce/vy-sales-s
 import { SalesSubscriptionsModule } from './modules/domain-sales-and-commerce/vy-sales-subscriptions/vy-sales-subscriptions.module';
 
 import { KafkaModule } from './utils/kafka/kafka.module';
-import { WebsocketGateway } from './gateway/websocket.gateway';
 import { ActiveCampaignService } from './services/static/active-campaign/active-campaign.service';
 
 @Module({
@@ -114,7 +113,6 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    WebsocketGateway,
     AppService,
     ActiveCampaignService,
     SentryInterceptor,
