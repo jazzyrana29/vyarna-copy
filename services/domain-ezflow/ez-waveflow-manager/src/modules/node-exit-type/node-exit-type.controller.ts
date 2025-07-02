@@ -35,7 +35,7 @@ export class NodeExitTypeController {
   async getNodeExitTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_NODE_EXIT_TYPE}`,
@@ -50,7 +50,7 @@ export class NodeExitTypeController {
   async getManyNodeExitTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_NODE_EXIT_TYPES}`,
@@ -65,7 +65,7 @@ export class NodeExitTypeController {
   async fuzzySearchNodeExitTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_NODE_EXIT_TYPES}`,

@@ -32,7 +32,10 @@ export class FilterController {
   }
 
   @MessagePattern(KT_CREATE_FILTER)
-  async createFilter(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async createFilter(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_FILTER}`,
@@ -44,7 +47,10 @@ export class FilterController {
   }
 
   @MessagePattern(KT_UPDATE_FILTER)
-  async updateFilter(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async updateFilter(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_FILTER}`,
@@ -56,7 +62,10 @@ export class FilterController {
   }
 
   @MessagePattern(KT_DELETE_FILTER)
-  async deleteFilter(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async deleteFilter(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_FILTER}`,
@@ -68,7 +77,10 @@ export class FilterController {
   }
 
   @MessagePattern(KT_GET_ONE_FILTER)
-  async getFilter(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getFilter(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_FILTER}`,
@@ -83,7 +95,7 @@ export class FilterController {
   async getZtrackingFilter(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_FILTER}`,

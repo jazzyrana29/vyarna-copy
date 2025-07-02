@@ -44,7 +44,7 @@ export class WaveKafkaService {
     );
   }
 
-  async createWaveEntity(message: any, key: string) {
+  async createWaveEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_WAVE_ENTITY,
@@ -55,7 +55,7 @@ export class WaveKafkaService {
     );
   }
 
-  async updateWaveEntity(message: any, key: string) {
+  async updateWaveEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_WAVE_ENTITY,
@@ -66,7 +66,7 @@ export class WaveKafkaService {
     );
   }
 
-  async deleteWaveEntity(message: any, key: string) {
+  async deleteWaveEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_WAVE_ENTITY,
@@ -77,7 +77,7 @@ export class WaveKafkaService {
     );
   }
 
-  async getWaveEntity(message: any, key: string) {
+  async getWaveEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_WAVE_ENTITY,
@@ -88,7 +88,7 @@ export class WaveKafkaService {
     );
   }
 
-  async getManyWaves(message: any, key: string) {
+  async getManyWaves(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_WAVES,
@@ -99,7 +99,7 @@ export class WaveKafkaService {
     );
   }
 
-  async getHistoryOfWave(message: any, key: string) {
+  async getHistoryOfWave(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_WAVE_ENTITY,
@@ -110,7 +110,7 @@ export class WaveKafkaService {
     );
   }
 
-  async executeWaveEntity(message: any, key: string) {
+  async executeWaveEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_EXECUTE_WAVE_ENTITY,

@@ -40,7 +40,7 @@ export class FilterSubsetKafkaService {
     );
   }
 
-  async createFilterSubset(message: any, key: string) {
+  async createFilterSubset(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_FILTER_SUBSET,
@@ -51,7 +51,7 @@ export class FilterSubsetKafkaService {
     );
   }
 
-  async updateFilterSubset(message: any, key: string) {
+  async updateFilterSubset(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_FILTER_SUBSET,
@@ -62,7 +62,7 @@ export class FilterSubsetKafkaService {
     );
   }
 
-  async deleteFilterSubset(message: any, key: string) {
+  async deleteFilterSubset(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_FILTER_SUBSET,
@@ -73,7 +73,7 @@ export class FilterSubsetKafkaService {
     );
   }
 
-  async getOneFilterSubset(message: any, key: string) {
+  async getOneFilterSubset(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_FILTER_SUBSET,
@@ -84,7 +84,7 @@ export class FilterSubsetKafkaService {
     );
   }
 
-  async getZtrackingFilterSubset(message: any, key: string) {
+  async getZtrackingFilterSubset(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_FILTER_SUBSET,

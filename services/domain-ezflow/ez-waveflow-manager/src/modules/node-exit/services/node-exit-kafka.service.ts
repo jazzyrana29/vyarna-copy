@@ -40,7 +40,7 @@ export class NodeExitKafkaService {
     );
   }
 
-  async createNodeExit(message: any, key: string) {
+  async createNodeExit(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_NODE_EXIT,
@@ -51,7 +51,7 @@ export class NodeExitKafkaService {
     );
   }
 
-  async updateNodeExit(message: any, key: string) {
+  async updateNodeExit(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_NODE_EXIT,
@@ -62,7 +62,7 @@ export class NodeExitKafkaService {
     );
   }
 
-  async deleteNodeExit(message: any, key: string) {
+  async deleteNodeExit(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_NODE_EXIT,
@@ -73,7 +73,7 @@ export class NodeExitKafkaService {
     );
   }
 
-  async getOneNodeExit(message: any, key: string) {
+  async getOneNodeExit(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_NODE_EXIT,
@@ -84,7 +84,7 @@ export class NodeExitKafkaService {
     );
   }
 
-  async getZtrackingNodeExit(message: any, key: string) {
+  async getZtrackingNodeExit(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_NODE_EXIT,

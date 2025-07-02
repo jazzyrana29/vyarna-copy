@@ -31,7 +31,7 @@ export class BusinessUnitKafkaService {
     );
   }
 
-  async createBusinessEntity(message: any, key: string) {
+  async createBusinessEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_BUSINESS_UNIT_ENTITY,
@@ -42,7 +42,7 @@ export class BusinessUnitKafkaService {
     );
   }
 
-  async updateBusinessEntity(message: any, key: string) {
+  async updateBusinessEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_BUSINESS_UNIT_ENTITY,
@@ -53,7 +53,7 @@ export class BusinessUnitKafkaService {
     );
   }
 
-  async getBusinessEntity(message: any, key: string) {
+  async getBusinessEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_BUSINESS_UNIT_ENTITY,
@@ -64,7 +64,7 @@ export class BusinessUnitKafkaService {
     );
   }
 
-  async getManyBusinessUnit(message: any, key: string) {
+  async getManyBusinessUnit(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_BUSINESS_UNITS,
@@ -75,7 +75,7 @@ export class BusinessUnitKafkaService {
     );
   }
 
-  async getHistoryOfBusinessEntity(message: any, key: string) {
+  async getHistoryOfBusinessEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_BUSINESS_UNIT_ENTITY,

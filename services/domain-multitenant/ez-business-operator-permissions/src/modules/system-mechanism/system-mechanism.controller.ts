@@ -34,7 +34,7 @@ export class SystemMechanismController {
   async getSystemMechanismWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_SYSTEM_MECHANISM_ENTITY}`,
@@ -52,7 +52,7 @@ export class SystemMechanismController {
   async getHistoryOfSystemMechanismWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_SYSTEM_MECHANISM_ENTITY}`,
@@ -70,7 +70,7 @@ export class SystemMechanismController {
   async getManySystemMechanismsWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_MANY_SYSTEM_MECHANISMS_ENTITY}`,

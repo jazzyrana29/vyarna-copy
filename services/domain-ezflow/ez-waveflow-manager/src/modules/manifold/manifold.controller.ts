@@ -33,7 +33,10 @@ export class ManifoldController {
   }
 
   @MessagePattern(KT_CREATE_MANIFOLD)
-  async createManifold(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async createManifold(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_MANIFOLD}`,
@@ -45,7 +48,10 @@ export class ManifoldController {
   }
 
   @MessagePattern(KT_UPDATE_MANIFOLD)
-  async updateManifold(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async updateManifold(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_MANIFOLD}`,
@@ -57,7 +63,10 @@ export class ManifoldController {
   }
 
   @MessagePattern(KT_DELETE_MANIFOLD)
-  async deleteManifold(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async deleteManifold(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_MANIFOLD}`,
@@ -69,7 +78,10 @@ export class ManifoldController {
   }
 
   @MessagePattern(KT_GET_ONE_MANIFOLD)
-  async getManifold(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getManifold(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_MANIFOLD}`,
@@ -84,7 +96,7 @@ export class ManifoldController {
   async getZtrackingManifold(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_MANIFOLD}`,
@@ -99,7 +111,7 @@ export class ManifoldController {
   async fuzzySearchManifolds(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for Kafka topic: ${KT_FUZZY_SEARCH_MANIFOLDS}`,

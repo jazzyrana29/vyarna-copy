@@ -44,7 +44,10 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async createPermissionProfileEntity(message: any, key: string) {
+  async createPermissionProfileEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_PERMISSION_PROFILE_ENTITY,
@@ -58,7 +61,10 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async updatePermissionProfileEntity(message: any, key: string) {
+  async updatePermissionProfileEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_PERMISSION_PROFILE_ENTITY,
@@ -72,7 +78,7 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async getPermissionProfileEntity(message: any, key: string) {
+  async getPermissionProfileEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_PERMISSION_PROFILE_ENTITY,
@@ -86,7 +92,7 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async deletePermissionProfile(message: any, key: string) {
+  async deletePermissionProfile(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_PERMISSION_PROFILE_ENTITY,
@@ -100,7 +106,10 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async getHistoryOfPermissionProfileEntity(message: any, key: string) {
+  async getHistoryOfPermissionProfileEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_PERMISSION_PROFILE_ENTITY,
@@ -114,7 +123,7 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async getListOfPermissionProfile(message: any, key: string) {
+  async getListOfPermissionProfile(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_LIST_OF_PERMISSION_PROFILE,
@@ -128,7 +137,10 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async getPermitsForPermissionProfile(message: any, key: string) {
+  async getPermitsForPermissionProfile(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_PERMITS_FOR_PERMISSION_PROFILE,
@@ -142,7 +154,7 @@ export class PermissionProfileKafkaService {
     );
   }
 
-  async populatePermissionProfile(message: any, key: string) {
+  async populatePermissionProfile(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_POPULATE_PERMISSION_PROFILE_ENTITY,

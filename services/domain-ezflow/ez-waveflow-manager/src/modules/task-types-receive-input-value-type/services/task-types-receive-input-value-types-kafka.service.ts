@@ -45,7 +45,7 @@ export class TaskTypesReceiveInputValueTypeKafkaService {
   async createTaskTypesReceiveInputValueTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE,
@@ -62,7 +62,7 @@ export class TaskTypesReceiveInputValueTypeKafkaService {
   async updateTaskTypesReceiveInputValueTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE,
@@ -79,7 +79,7 @@ export class TaskTypesReceiveInputValueTypeKafkaService {
   async deleteTaskTypesReceiveInputValueTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE,
@@ -93,7 +93,10 @@ export class TaskTypesReceiveInputValueTypeKafkaService {
     );
   }
 
-  async getTaskTypesReceiveInputValueTypeWithKafka(message: any, key: string) {
+  async getTaskTypesReceiveInputValueTypeWithKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE,
@@ -110,7 +113,7 @@ export class TaskTypesReceiveInputValueTypeKafkaService {
   async getManyTaskTypesReceiveInputValueTypesWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPES,
@@ -130,7 +133,7 @@ export class TaskTypesReceiveInputValueTypeKafkaService {
   async getHistoryOfTaskTypesReceiveInputValueTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE,

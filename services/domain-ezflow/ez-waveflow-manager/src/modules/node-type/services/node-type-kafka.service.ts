@@ -32,7 +32,7 @@ export class NodeTypeKafkaService {
     );
   }
 
-  async getOneNodeType(message: any, key: string) {
+  async getOneNodeType(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_NODE_TYPE,
@@ -43,7 +43,7 @@ export class NodeTypeKafkaService {
     );
   }
 
-  async getManyNodeTypes(message: any, key: string) {
+  async getManyNodeTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_NODE_TYPES,
@@ -54,7 +54,7 @@ export class NodeTypeKafkaService {
     );
   }
 
-  async fuzzySearchNodeTypes(message: any, key: string) {
+  async fuzzySearchNodeTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_NODE_TYPES,

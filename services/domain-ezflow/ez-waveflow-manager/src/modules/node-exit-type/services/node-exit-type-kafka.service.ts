@@ -25,7 +25,7 @@ export class NodeExitTypeKafkaService {
     );
   }
 
-  async getNodeExitType(message: any, key: string) {
+  async getNodeExitType(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_NODE_EXIT_TYPE,
@@ -36,7 +36,7 @@ export class NodeExitTypeKafkaService {
     );
   }
 
-  async getManyNodeExitTypes(message: any, key: string) {
+  async getManyNodeExitTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_NODE_EXIT_TYPES,
@@ -47,7 +47,7 @@ export class NodeExitTypeKafkaService {
     );
   }
 
-  async fuzzySearchNodeExitTypes(message: any, key: string) {
+  async fuzzySearchNodeExitTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_NODE_EXIT_TYPES,

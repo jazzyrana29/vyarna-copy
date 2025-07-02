@@ -40,7 +40,7 @@ export class FilterKafkaService {
     );
   }
 
-  async createFilter(message: any, key: string) {
+  async createFilter(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_FILTER,
@@ -51,7 +51,7 @@ export class FilterKafkaService {
     );
   }
 
-  async updateFilter(message: any, key: string) {
+  async updateFilter(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_FILTER,
@@ -62,7 +62,7 @@ export class FilterKafkaService {
     );
   }
 
-  async deleteFilter(message: any, key: string) {
+  async deleteFilter(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_FILTER,
@@ -73,7 +73,7 @@ export class FilterKafkaService {
     );
   }
 
-  async getOneFilter(message: any, key: string) {
+  async getOneFilter(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_FILTER,
@@ -84,7 +84,7 @@ export class FilterKafkaService {
     );
   }
 
-  async getZtrackingFilter(message: any, key: string) {
+  async getZtrackingFilter(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_FILTER,

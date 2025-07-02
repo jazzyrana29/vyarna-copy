@@ -45,7 +45,7 @@ export class TaskHasReceiveInputValueOfTypeKafkaService {
   async createTaskHasReceiveInputValueOfTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_TASK_HAS_RECEIVE_INPUT_VALUE_OF_TYPE,
@@ -65,7 +65,7 @@ export class TaskHasReceiveInputValueOfTypeKafkaService {
   async updateTaskHasReceiveInputValueOfTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_TASK_HAS_RECEIVE_INPUT_VALUE_OF_TYPE,
@@ -85,7 +85,7 @@ export class TaskHasReceiveInputValueOfTypeKafkaService {
   async deleteTaskHasReceiveInputValueOfTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_TASK_HAS_RECEIVE_INPUT_VALUE_OF_TYPE,
@@ -102,7 +102,10 @@ export class TaskHasReceiveInputValueOfTypeKafkaService {
     );
   }
 
-  async getTaskHasReceiveInputValueOfTypeWithKafka(message: any, key: string) {
+  async getTaskHasReceiveInputValueOfTypeWithKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_TASK_HAS_RECEIVE_INPUT_VALUE_OF_TYPE,
@@ -122,7 +125,7 @@ export class TaskHasReceiveInputValueOfTypeKafkaService {
   async getManyTaskHasReceiveInputValueOfTypeEntitiesWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_TASK_HAS_RECEIVE_INPUT_VALUE_OF_TYPES,
@@ -142,7 +145,7 @@ export class TaskHasReceiveInputValueOfTypeKafkaService {
   async getHistoryOfTaskHasReceiveInputValueOfTypeWithKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_TASK_HAS_RECEIVE_INPUT_VALUE_OF_TYPE,

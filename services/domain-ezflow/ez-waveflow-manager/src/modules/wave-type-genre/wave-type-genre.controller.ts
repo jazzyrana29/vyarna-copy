@@ -35,7 +35,7 @@ export class WaveTypeGenreController {
   async getOneWaveTypeGenre(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_WAVE_TYPE_GENRE}`,
@@ -50,7 +50,7 @@ export class WaveTypeGenreController {
   async getManyWaveTypeGenres(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_WAVE_TYPE_GENRES}`,
@@ -65,7 +65,7 @@ export class WaveTypeGenreController {
   async fuzzySearchWaveTypeGenres(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_WAVE_TYPE_GENRES}`,

@@ -39,7 +39,10 @@ export class OperatorPermissionProfileKafkaService {
     );
   }
 
-  async getOperatorsForPermissionProfileViaKafka(message: any, key: string) {
+  async getOperatorsForPermissionProfileViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_OPERATORS_FOR_PERMISSION_PROFILE,
@@ -53,7 +56,10 @@ export class OperatorPermissionProfileKafkaService {
     );
   }
 
-  async getPermissionProfileForAnOperator(message: any, key: string) {
+  async getPermissionProfileForAnOperator(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_PERMISSION_PROFILE_FOR_OPERATOR,
@@ -67,7 +73,7 @@ export class OperatorPermissionProfileKafkaService {
     );
   }
 
-  async isOperatorAllowedTo(message: any, key: string) {
+  async isOperatorAllowedTo(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_IS_OPERATOR_ALLOWED_TO,
@@ -81,7 +87,10 @@ export class OperatorPermissionProfileKafkaService {
     );
   }
 
-  async createOperatorPermissionProfile(message: any, key: string) {
+  async createOperatorPermissionProfile(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_OPERATOR_PERMISSION_PROFILE_ENTITY,
@@ -95,7 +104,10 @@ export class OperatorPermissionProfileKafkaService {
     );
   }
 
-  async removeOperatorPermissionProfile(message: any, key: string) {
+  async removeOperatorPermissionProfile(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_REMOVE_OPERATOR_PERMISSION_PROFILE_ENTITY,

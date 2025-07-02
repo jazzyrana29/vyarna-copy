@@ -44,7 +44,10 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async createOperatorSessionViaKafka(message: any, key: string) {
+  async createOperatorSessionViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_OPERATOR_SESSION_ENTITY,
@@ -55,7 +58,10 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async updateOperatorSessionViaKafka(message: any, key: string) {
+  async updateOperatorSessionViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_OPERATOR_SESSION_ENTITY,
@@ -66,7 +72,7 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async getOperatorSessionViaKafka(message: any, key: string) {
+  async getOperatorSessionViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_OPERATOR_SESSION_ENTITY,
@@ -77,7 +83,10 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async getHistoryOfOperatorSessionViaKafka(message: any, key: string) {
+  async getHistoryOfOperatorSessionViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_OPERATOR_SESSION_ENTITY,
@@ -91,7 +100,7 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async loginOperatorSessionViaKafka(message: any, key: string) {
+  async loginOperatorSessionViaKafka(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_LOGIN_OPERATOR_SESSION_ENTITY,
@@ -102,7 +111,10 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async logoutOperatorSessionViaKafka(message: any, key: string) {
+  async logoutOperatorSessionViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_LOGOUT_OPERATOR_SESSION_ENTITY,
@@ -113,7 +125,10 @@ export class OperatorSessionKafkaService {
     );
   }
 
-  async searchOperatorSessionsViaKafka(message: any, key: string) {
+  async searchOperatorSessionsViaKafka(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_SEARCH_OPERATOR_SESSIONS,

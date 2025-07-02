@@ -39,7 +39,7 @@ export class EvaluationVariableController {
   async createEvaluationVariableWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_EVALUATION_VARIABLE_ENTITY}`,
@@ -57,7 +57,7 @@ export class EvaluationVariableController {
   async updateEvaluationVariableWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_EVALUATION_VARIABLE_ENTITY}`,
@@ -75,7 +75,7 @@ export class EvaluationVariableController {
   async deleteEvaluationVariableWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_EVALUATION_VARIABLE_ENTITY}`,
@@ -93,7 +93,7 @@ export class EvaluationVariableController {
   async getEvaluationVariableWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_EVALUATION_VARIABLE_ENTITY}`,
@@ -111,7 +111,7 @@ export class EvaluationVariableController {
   async getManyEvaluationVariablesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_EVALUATION_VARIABLES}`,
@@ -129,7 +129,7 @@ export class EvaluationVariableController {
   async getHistoryOfEvaluationVariableWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_EVALUATION_VARIABLE_ENTITY}`,
@@ -147,7 +147,7 @@ export class EvaluationVariableController {
   async fuzzySearchEvaluationVariablesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_EVALUATION_VARIABLES}`,

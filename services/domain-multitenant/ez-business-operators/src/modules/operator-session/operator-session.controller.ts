@@ -39,7 +39,7 @@ export class OperatorSessionController {
   async createOperatorSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_OPERATOR_SESSION_ENTITY}`,
@@ -57,7 +57,7 @@ export class OperatorSessionController {
   async updateOperatorSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_OPERATOR_SESSION_ENTITY}`,
@@ -75,7 +75,7 @@ export class OperatorSessionController {
   async getOperatorSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_OPERATOR_SESSION_ENTITY}`,
@@ -93,7 +93,7 @@ export class OperatorSessionController {
   async getHistoryOfOperatorSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_OPERATOR_SESSION_ENTITY}`,
@@ -111,7 +111,7 @@ export class OperatorSessionController {
   async loginOperatorSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_LOGIN_OPERATOR_SESSION_ENTITY}`,
@@ -129,7 +129,7 @@ export class OperatorSessionController {
   async logoutOperatorSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_LOGOUT_OPERATOR_SESSION_ENTITY}`,
@@ -147,7 +147,7 @@ export class OperatorSessionController {
   async searchOperatorSessionsWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_SEARCH_OPERATOR_SESSIONS}`,

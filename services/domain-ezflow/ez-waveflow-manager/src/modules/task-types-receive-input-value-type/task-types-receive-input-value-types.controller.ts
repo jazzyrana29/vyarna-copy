@@ -40,7 +40,7 @@ export class TaskTypesReceiveInputValueTypeController {
   async createTaskTypesReceiveInputValueTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_CREATE_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE}`,
@@ -58,7 +58,7 @@ export class TaskTypesReceiveInputValueTypeController {
   async updateTaskTypesReceiveInputValueTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_UPDATE_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE}`,
@@ -76,7 +76,7 @@ export class TaskTypesReceiveInputValueTypeController {
   async deleteTaskTypesReceiveInputValueTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_DELETE_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE}`,
@@ -94,7 +94,7 @@ export class TaskTypesReceiveInputValueTypeController {
   async getTaskTypesReceiveInputValueTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE}`,
@@ -112,7 +112,7 @@ export class TaskTypesReceiveInputValueTypeController {
   async getManyTaskTypesReceiveInputValueTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_MANY_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPES}`,
@@ -130,7 +130,7 @@ export class TaskTypesReceiveInputValueTypeController {
   async getHistoryOfTaskTypesReceiveInputValueTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_GET_HISTORY_TASK_TYPES_RECEIVE_INPUT_VALUE_TYPE}`,

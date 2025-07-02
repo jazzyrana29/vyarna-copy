@@ -30,7 +30,10 @@ export class NodeTypeController {
   }
 
   @MessagePattern(KT_GET_ONE_NODE_TYPE)
-  async getOneNodeType(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getOneNodeType(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_NODE_TYPE}`,
@@ -45,7 +48,7 @@ export class NodeTypeController {
   async getManyNodeTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_NODE_TYPES}`,
@@ -60,7 +63,7 @@ export class NodeTypeController {
   async fuzzySearchNodeTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_NODE_TYPES}`,

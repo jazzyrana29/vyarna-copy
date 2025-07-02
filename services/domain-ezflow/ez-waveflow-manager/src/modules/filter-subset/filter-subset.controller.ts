@@ -38,7 +38,7 @@ export class FilterSubsetController {
   async createFilterSubset(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_FILTER_SUBSET}`,
@@ -53,7 +53,7 @@ export class FilterSubsetController {
   async updateFilterSubset(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_FILTER_SUBSET}`,
@@ -68,7 +68,7 @@ export class FilterSubsetController {
   async deleteFilterSubset(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_FILTER_SUBSET}`,
@@ -80,7 +80,10 @@ export class FilterSubsetController {
   }
 
   @MessagePattern(KT_GET_ONE_FILTER_SUBSET)
-  async getFilterSubset(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getFilterSubset(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_FILTER_SUBSET}`,
@@ -95,7 +98,7 @@ export class FilterSubsetController {
   async getZtrackingFilterSubset(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_FILTER_SUBSET}`,

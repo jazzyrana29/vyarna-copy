@@ -41,7 +41,7 @@ export class PermissionProfileManagedThroughMechanismPermitKafkaService {
   async createPermissionProfileManagedThroughMechanismPermitEntityViaKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY,
@@ -61,7 +61,7 @@ export class PermissionProfileManagedThroughMechanismPermitKafkaService {
   async updatePermissionProfileManagedThroughMechanismPermitEntityViaKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY,
@@ -81,7 +81,7 @@ export class PermissionProfileManagedThroughMechanismPermitKafkaService {
   async getPermissionProfileManagedThroughMechanismPermitEntityViaKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY,
@@ -101,7 +101,7 @@ export class PermissionProfileManagedThroughMechanismPermitKafkaService {
   async getHistoryOfPermissionProfileManagedThroughMechanismPermitEntityViaKafka(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_PERMISSION_PROFILE_MANAGED_THROUGH_MECHANISM_PERMIT_ENTITY,

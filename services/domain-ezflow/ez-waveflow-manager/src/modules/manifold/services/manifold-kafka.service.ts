@@ -42,7 +42,7 @@ export class ManifoldKafkaService {
     );
   }
 
-  async createManifold(message: any, key: string) {
+  async createManifold(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_MANIFOLD,
@@ -53,7 +53,7 @@ export class ManifoldKafkaService {
     );
   }
 
-  async updateManifold(message: any, key: string) {
+  async updateManifold(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_MANIFOLD,
@@ -64,7 +64,7 @@ export class ManifoldKafkaService {
     );
   }
 
-  async deleteManifold(message: any, key: string) {
+  async deleteManifold(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_MANIFOLD,
@@ -75,7 +75,7 @@ export class ManifoldKafkaService {
     );
   }
 
-  async getOneManifold(message: any, key: string) {
+  async getOneManifold(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_MANIFOLD,
@@ -86,7 +86,7 @@ export class ManifoldKafkaService {
     );
   }
 
-  async getZtrackingManifold(message: any, key: string) {
+  async getZtrackingManifold(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_MANIFOLD,
@@ -100,7 +100,7 @@ export class ManifoldKafkaService {
     );
   }
 
-  async fuzzySearchManifolds(message: any, key: string) {
+  async fuzzySearchManifolds(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_MANIFOLDS,

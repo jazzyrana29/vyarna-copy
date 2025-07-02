@@ -36,7 +36,7 @@ export class EvaluationVariableDataTypeController {
   async getEvaluationVariableDataTypeWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_EVALUATION_VARIABLE_DATA_TYPE}`,
@@ -54,7 +54,7 @@ export class EvaluationVariableDataTypeController {
   async getManyEvaluationVariableDataTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_EVALUATION_VARIABLE_DATA_TYPES}`,
@@ -72,7 +72,7 @@ export class EvaluationVariableDataTypeController {
   async fuzzySearchEvaluationVariableDataTypesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_EVALUATION_VARIABLE_DATA_TYPES}`,

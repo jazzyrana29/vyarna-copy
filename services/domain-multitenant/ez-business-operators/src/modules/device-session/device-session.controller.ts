@@ -37,7 +37,7 @@ export class DeviceSessionController {
   async createDeviceSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_DEVICE_SESSION_ENTITY}`,
@@ -52,7 +52,7 @@ export class DeviceSessionController {
   async updateDeviceSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_DEVICE_SESSION_ENTITY}`,
@@ -67,7 +67,7 @@ export class DeviceSessionController {
   async getDeviceSessionWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_DEVICE_SESSION_ENTITY}`,

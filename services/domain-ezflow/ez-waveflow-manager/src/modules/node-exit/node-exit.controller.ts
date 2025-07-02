@@ -32,7 +32,10 @@ export class NodeExitController {
   }
 
   @MessagePattern(KT_CREATE_NODE_EXIT)
-  async createNodeExit(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async createNodeExit(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_NODE_EXIT}`,
@@ -44,7 +47,10 @@ export class NodeExitController {
   }
 
   @MessagePattern(KT_UPDATE_NODE_EXIT)
-  async updateNodeExit(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async updateNodeExit(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_NODE_EXIT}`,
@@ -56,7 +62,10 @@ export class NodeExitController {
   }
 
   @MessagePattern(KT_DELETE_NODE_EXIT)
-  async deleteNodeExit(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async deleteNodeExit(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_NODE_EXIT}`,
@@ -68,7 +77,10 @@ export class NodeExitController {
   }
 
   @MessagePattern(KT_GET_ONE_NODE_EXIT)
-  async getNodeExit(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getNodeExit(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_NODE_EXIT}`,
@@ -83,7 +95,7 @@ export class NodeExitController {
   async getZtrackingNodeExit(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_NODE_EXIT}`,

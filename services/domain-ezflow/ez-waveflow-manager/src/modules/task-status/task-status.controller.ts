@@ -29,7 +29,7 @@ export class TaskStatusController {
   async getTaskStatusWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_TASK_STATUS}`,
@@ -44,7 +44,7 @@ export class TaskStatusController {
   async getManyTaskStatusesWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_TASK_STATUSES}`,

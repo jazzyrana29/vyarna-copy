@@ -12,13 +12,13 @@ export class SeedService implements OnApplicationBootstrap {
 
   constructor(private readonly dataSource: DataSource) {}
 
-  async onApplicationBootstrap() {
+  async onApplicationBootstrap(): Promise<void> {
     if (process.env.AUTO_SEED === 'true') {
       await this.seedFromJson(process.env.SEED_JSON_PATH);
     }
   }
 
-  public async seedFromJson(customPath?: string) {
+  public async seedFromJson(customPath?: string): Promise<void> {
     const filePath = customPath
       ? path.resolve(customPath)
       : path.resolve(process.cwd(), 'src/seeds/base-data.json');

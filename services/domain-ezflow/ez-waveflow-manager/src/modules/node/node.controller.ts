@@ -33,7 +33,10 @@ export class NodeController {
   }
 
   @MessagePattern(KT_CREATE_NODE)
-  async createNode(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async createNode(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_NODE}`,
@@ -45,7 +48,10 @@ export class NodeController {
   }
 
   @MessagePattern(KT_UPDATE_NODE)
-  async updateNode(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async updateNode(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_NODE}`,
@@ -57,7 +63,10 @@ export class NodeController {
   }
 
   @MessagePattern(KT_DELETE_NODE)
-  async deleteNode(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async deleteNode(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_NODE}`,
@@ -69,7 +78,10 @@ export class NodeController {
   }
 
   @MessagePattern(KT_GET_ONE_NODE)
-  async getNode(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getNode(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_NODE}`,
@@ -84,7 +96,7 @@ export class NodeController {
   async getZtrackingNode(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_NODE}`,
@@ -99,7 +111,7 @@ export class NodeController {
   async fuzzySearchNodes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_NODES}`,

@@ -23,7 +23,7 @@ export class TaskStatusKafkaService {
     );
   }
 
-  async getTaskStatus(message: any, key: string) {
+  async getTaskStatus(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_TASK_STATUS,
@@ -34,7 +34,7 @@ export class TaskStatusKafkaService {
     );
   }
 
-  async getManyTaskStatuses(message: any, key: string) {
+  async getManyTaskStatuses(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_TASK_STATUSES,

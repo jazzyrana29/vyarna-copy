@@ -42,7 +42,7 @@ export class TaskKafkaService {
     );
   }
 
-  async createTaskEntity(message: any, key: string) {
+  async createTaskEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_TASK_ENTITY,
@@ -53,7 +53,7 @@ export class TaskKafkaService {
     );
   }
 
-  async updateTaskEntity(message: any, key: string) {
+  async updateTaskEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_TASK_ENTITY,
@@ -64,7 +64,7 @@ export class TaskKafkaService {
     );
   }
 
-  async deleteTaskEntity(message: any, key: string) {
+  async deleteTaskEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_TASK_ENTITY,
@@ -75,7 +75,7 @@ export class TaskKafkaService {
     );
   }
 
-  async getTaskEntity(message: any, key: string) {
+  async getTaskEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_TASK_ENTITY,
@@ -86,7 +86,7 @@ export class TaskKafkaService {
     );
   }
 
-  async getManyTasks(message: any, key: string) {
+  async getManyTasks(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_TASKS,
@@ -97,7 +97,7 @@ export class TaskKafkaService {
     );
   }
 
-  async getHistoryOfTaskEntity(message: any, key: string) {
+  async getHistoryOfTaskEntity(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_TASK_ENTITY,
