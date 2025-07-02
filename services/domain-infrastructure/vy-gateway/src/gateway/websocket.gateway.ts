@@ -2,11 +2,14 @@
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { LogStreamLevel } from 'ez-logger';
 import { ClientMessagesMode } from '../constants/ClientMessagesMode';
+import { CORS_ALLOW, getLoggerConfig } from '../utils/common';
 
 type ClientMessage = {
   message: string;
@@ -15,30 +18,48 @@ type ClientMessage = {
   [key: string]: string | number | boolean | object; // Adjust types as needed
 };
 
-@WebSocketGateway({
-  cors: {
-    origin: process.env.APP_URL,
-    methods: ['GET', 'POST'],
-  },
-})
+@WebSocketGateway({ cors: CORS_ALLOW })
 export class WebsocketGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
+  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
   @WebSocketServer()
   server: Server;
 
+  private readonly logger = getLoggerConfig(WebsocketGateway.name);
+
+  afterInit() {
+    this.logger.debug(
+      `${WebsocketGateway.name} initialized`,
+      '',
+      'afterInit',
+      LogStreamLevel.DebugLight,
+    );
+  }
+
   handleConnection(client: Socket): void {
-    console.warn(`Client Connected => ${client.id}`, 'handleConnection');
+    this.logger.debug(
+      `Client connected: ${client.id}`,
+      '',
+      'handleConnection',
+      LogStreamLevel.DebugLight,
+    );
   }
 
   handleDisconnect(client: Socket): void {
-    console.error(`Client Disconnected => ${client.id}`, 'handleDisconnect');
+    this.logger.debug(
+      `Client disconnected: ${client.id}`,
+      '',
+      'handleDisconnect',
+      LogStreamLevel.DebugLight,
+    );
   }
 
   sendMessageToClient(message: ClientMessage): void {
-    console.info(
-      `Message Processed => ${message.message}`,
+    this.logger.debug(
+      `Message processed => ${message.message}`,
+      '',
       'sendMessageToClient',
+      LogStreamLevel.DebugLight,
     );
     this.server.emit('message', message);
   }
