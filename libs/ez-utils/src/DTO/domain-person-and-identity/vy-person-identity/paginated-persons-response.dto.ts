@@ -1,23 +1,23 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { OperatorDto } from "./operator.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { PersonDto } from './person.dto';
 
-export class PaginatedOperatorsResponseDto {
+export class PaginatedPersonsResponseDto {
   @ApiProperty({
-    type: [OperatorDto],
-    description: "List of operator results",
+    type: [PersonDto],
+    description: 'List of operator results',
   })
-  data: OperatorDto[];
+  data: PersonDto[];
 
   @ApiProperty({
     description:
-      "Maximum number of pages with the given pageSize; null if not paginated",
+      'Maximum number of pages with the given pageSize; null if not paginated',
     example: 10,
     nullable: true,
   })
   maxPages: number | null;
 
   @ApiProperty({
-    description: "Current page number; null if pagination is not used",
+    description: 'Current page number; null if pagination is not used',
     example: 1,
     nullable: true,
   })
@@ -25,14 +25,14 @@ export class PaginatedOperatorsResponseDto {
 
   @ApiProperty({
     description:
-      "The size of the page used in the query; null if pagination is not used",
+      'The size of the page used in the query; null if pagination is not used',
     example: 25,
     nullable: true,
   })
   pageSize: number | null;
 
   @ApiProperty({
-    description: "Indicates if the result was paginated or not",
+    description: 'Indicates if the result was paginated or not',
     example: true,
   })
   isPaginated: boolean;

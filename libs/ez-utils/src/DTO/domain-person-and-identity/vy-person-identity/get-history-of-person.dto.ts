@@ -1,6 +1,7 @@
-import { PickType } from "@nestjs/swagger";
-import { OperatorDto } from "./operator.dto";
+import { PickType } from '@nestjs/swagger';
+import { PersonDto } from './person.dto';
 
-export class GetHistoryOfOperatorDto extends PickType(OperatorDto, [
-  "operatorId",
-]) {}
+export class GetHistoryOfPersonDto extends PickType(PersonDto, [
+  'personId',
+]) {
+}

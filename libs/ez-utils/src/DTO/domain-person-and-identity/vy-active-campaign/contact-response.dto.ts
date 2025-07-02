@@ -1,5 +1,3 @@
-// src/vy-active-campaign/dto/contact-response.dto.ts
-
 export class ContactLinksDto {
   bounceLogs: string;
   contactAutomations: string;
