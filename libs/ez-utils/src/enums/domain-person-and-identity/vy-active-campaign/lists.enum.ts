@@ -1,3 +1,3 @@
 export enum ListsEnum {
-  VyarnaSubscribedFromWebsite = 'VyarnaSubscribedFromWebsite',
+  VyarnaSubscribedFromWebsite = "VyarnaSubscribedFromWebsite",
 }
