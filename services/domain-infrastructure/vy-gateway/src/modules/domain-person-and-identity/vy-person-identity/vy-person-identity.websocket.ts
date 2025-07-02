@@ -7,7 +7,7 @@ import {
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { PersonIdentityKafkaService } from './dice-kafka.service';
+import { PersonIdentityKafkaService } from './vy-person-identity-kafka.service';
 import {
   CashoutPersonIdentityGameDto,
   PersonIdentityConfigRequestDto,
