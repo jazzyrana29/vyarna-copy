@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsUUID, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
-import { MechanismPermitIdDto } from "../../shared-dtos/operator-permissions/mechanism-permit-id.dto";
-import { PermissionProfileIdDto } from "../../shared-dtos/operator-permissions/permission-profile-id.dto";
+import { MechanismPermitIdDto } from "../../../shared-dtos/operator-permissions/mechanism-permit-id.dto";
+import { PermissionProfileIdDto } from "../../../shared-dtos/operator-permissions/permission-profile-id.dto";
 
 export class PermissionProfileManagedThroughMechanismPermitDto {
   @ApiProperty({

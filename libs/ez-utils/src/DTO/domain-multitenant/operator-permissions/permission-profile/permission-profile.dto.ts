@@ -9,8 +9,8 @@ import {
 import { Type } from "class-transformer";
 import { OperatorPermissionProfileDto } from "../operator-permission-profile/operator-permission-profile.dto";
 import { PermissionProfileManagedThroughMechanismPermitDto } from "../permission-profile-managed-through-mechanism-permit/permission-profile-managed-through-mechanism-permit.dto";
-import { PermissionProfileManagedThroughMechanismPermitIdsDto } from "../../shared-dtos/operator-permissions/permission-profile-managed-through-mechanism-permit-ids.dto";
-import { OperatorPermissionProfileIdsDto } from "../../shared-dtos/operator-permissions/operator-permission-profile-ids.dto";
+import { PermissionProfileManagedThroughMechanismPermitIdsDto } from "../../../shared-dtos/operator-permissions/permission-profile-managed-through-mechanism-permit-ids.dto";
+import { OperatorPermissionProfileIdsDto } from "../../../shared-dtos/operator-permissions/operator-permission-profile-ids.dto";
 
 export class PermissionProfileDto {
   @ApiProperty({

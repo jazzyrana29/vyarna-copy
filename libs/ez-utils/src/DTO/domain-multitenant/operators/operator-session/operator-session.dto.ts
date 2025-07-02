@@ -3,8 +3,8 @@ import { IsDate, IsOptional, IsUUID, IsDateString } from "class-validator";
 import { Type } from "class-transformer";
 import { DeviceSessionDto } from "../device-session/device-session.dto";
 import { OperatorDto } from "../operator/operator.dto";
-import { DeviceSessionIdDto } from "../../shared-dtos/operators/device-session-id.dto";
-import { OperatorIdDto } from "../../shared-dtos/operators/operator-id.dto";
+import { DeviceSessionIdDto } from "../../../shared-dtos/operators/device-session-id.dto";
+import { OperatorIdDto } from "../../../shared-dtos/operators/operator-id.dto";
 
 export class OperatorSessionDto {
   @ApiProperty({
