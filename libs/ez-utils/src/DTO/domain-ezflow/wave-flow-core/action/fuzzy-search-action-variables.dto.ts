@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
 import { IsOptional, IsString } from "class-validator";
 
 export class FuzzySearchActionVariablesDto {

@@ -7,8 +7,8 @@ import {
   IsUUID,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { EvaluationVariableCollectionPortfolioIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-collection-portfolio-id.dto";
-import { EvaluationVariableCollectionIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-collection-id.dto";
+import { EvaluationVariableCollectionPortfolioIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-collection-portfolio-id.dto";
+import { EvaluationVariableCollectionIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-collection-id.dto";
 
 export class EvaluationVariableCollectionsArePresentedThroughPortfoliosDto {
   @ApiProperty({

@@ -8,8 +8,8 @@ import {
   IsUUID,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { EvaluationVariableCollectionsArePresentedThroughPortfoliosIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-collections-are-presented-through-portfolios-id.dto";
-import { EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-is-grouped-through-evaluation-variable-collection-id.dto";
+import { EvaluationVariableCollectionsArePresentedThroughPortfoliosIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-collections-are-presented-through-portfolios-id.dto";
+import { EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-is-grouped-through-evaluation-variable-collection-id.dto";
 
 export class EvaluationVariableCollectionDto {
   @ApiProperty({

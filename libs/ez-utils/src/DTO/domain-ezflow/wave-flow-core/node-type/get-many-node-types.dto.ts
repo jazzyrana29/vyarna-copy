@@ -1,8 +1,8 @@
 import { PickType, PartialType, ApiPropertyOptional } from "@nestjs/swagger";
 import { NodeTypeDto } from "./node-type.dto";
 import { IsOptional, ValidateNested } from "class-validator";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
 import { Type } from "class-transformer";
 
 export class GetManyNodeTypesDto extends PartialType(

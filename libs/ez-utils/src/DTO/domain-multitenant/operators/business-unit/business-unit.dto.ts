@@ -8,7 +8,7 @@ import {
   IsUUID,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { BusinessUnitIdDto } from "../../shared-dtos/operators/business-unit-id.dto";
+import { BusinessUnitIdDto } from "../../../shared-dtos/operators/business-unit-id.dto";
 
 export class BusinessUnitDto {
   @ApiProperty({

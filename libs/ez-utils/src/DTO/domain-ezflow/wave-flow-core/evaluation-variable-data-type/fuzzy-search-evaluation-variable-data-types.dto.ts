@@ -2,8 +2,8 @@ import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
 import { IsOptional, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { EvaluationVariableDataTypeDto } from "./evaluation-variable-data-type.dto";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
 
 export class FuzzySearchEvaluationVariableDataTypesDto extends PartialType(
   PickType(EvaluationVariableDataTypeDto, [
