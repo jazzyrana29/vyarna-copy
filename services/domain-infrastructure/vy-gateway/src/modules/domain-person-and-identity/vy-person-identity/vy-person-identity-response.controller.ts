@@ -7,12 +7,11 @@ import {
 } from '@nestjs/microservices';
 import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
 import {
-  KT_START_DICE_GAME_ENTITY,
-  KT_ROLL_DICE_TILE_ENTITY,
-  KT_CASHOUT_DICE_GAME_ENTITY,
-  KT_GET_DICE_CONFIG_ENTITY,
-  KT_GET_PROVABLY_FAIR_DICE_GAME,
-  KT_AUTO_BET_DICE_GAME,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -30,73 +29,61 @@ export class PersonIdentityResponseController {
     );
   }
 
-  @MessagePattern(KT_START_DICE_GAME_ENTITY + '-response')
-  handleStart(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_CREATE_PERSON_ENTITY + '-response')
+  handleCreate(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_START_DICE_GAME_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_CREATE_PERSON_ENTITY} | key: ${key}`,
       '',
-      'handleStart',
+      'handleCreate',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_ROLL_DICE_TILE_ENTITY + '-response')
-  handleRoll(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_UPDATE_PERSON_ENTITY + '-response')
+  handleUpdate(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_ROLL_DICE_TILE_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_UPDATE_PERSON_ENTITY} | key: ${key}`,
       '',
-      'handleRoll',
+      'handleUpdate',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_CASHOUT_DICE_GAME_ENTITY + '-response')
-  handleCashout(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_GET_PERSON_ENTITY + '-response')
+  handleGet(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_CASHOUT_DICE_GAME_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_GET_PERSON_ENTITY} | key: ${key}`,
       '',
-      'handleCashout',
+      'handleGet',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_DICE_CONFIG_ENTITY + '-response')
-  handleConfig(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_GET_HISTORY_PERSON_ENTITY + '-response')
+  handleHistory(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_DICE_CONFIG_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_GET_HISTORY_PERSON_ENTITY} | key: ${key}`,
       '',
-      'handleConfig',
+      'handleHistory',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_PROVABLY_FAIR_DICE_GAME + '-response')
-  handleProvablyFair(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_GET_MANY_PERSONS + '-response')
+  handleGetMany(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_PROVABLY_FAIR_DICE_GAME} | key: ${key}`,
+      `Kafka response for ${KT_GET_MANY_PERSONS} | key: ${key}`,
       '',
-      'handleProvablyFair',
-      LogStreamLevel.DebugLight,
-    );
-    this.kafkaResponder.handleIncomingMessage(message);
-  }
-
-  @MessagePattern(KT_AUTO_BET_DICE_GAME + '-response')
-  handleAutoBet(@Payload() message: any, @Ctx() context: KafkaContext) {
-    const key = context.getMessage().key.toString();
-    this.logger.debug(
-      `Kafka response for ${KT_AUTO_BET_DICE_GAME} | key: ${key}`,
-      '',
-      'handleAutoBet',
+      'handleGetMany',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);

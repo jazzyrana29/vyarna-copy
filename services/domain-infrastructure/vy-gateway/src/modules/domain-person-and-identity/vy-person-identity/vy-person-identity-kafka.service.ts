@@ -3,17 +3,16 @@ import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.serv
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import {
-  KT_START_DICE_GAME_ENTITY,
-  KT_ROLL_DICE_TILE_ENTITY,
-  KT_CASHOUT_DICE_GAME_ENTITY,
-  KT_GET_DICE_CONFIG_ENTITY,
-  KT_GET_PROVABLY_FAIR_DICE_GAME,
-  KT_AUTO_BET_DICE_GAME,
-  StartPersonIdentityGameDto,
-  RollPersonIdentityDto,
-  CashoutPersonIdentityGameDto,
-  PersonIdentityConfigRequestDto,
-  AutoBetSettingsDto,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
+  CreatePersonDto,
+  UpdatePersonDto,
+  GetPersonDto,
+  GetHistoryOfPersonDto,
+  GetManyPersonsDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -30,14 +29,53 @@ export class PersonIdentityKafkaService {
     );
   }
 
-  async startGame(
-    startPersonIdentityGameDto: StartPersonIdentityGameDto,
+  async createPerson(createPersonDto: CreatePersonDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CREATE_PERSON_ENTITY,
+      createPersonDto,
+      traceId,
+    );
+  }
+
+  async updatePerson(updatePersonDto: UpdatePersonDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_UPDATE_PERSON_ENTITY,
+      updatePersonDto,
+      traceId,
+    );
+  }
+
+  async getPerson(getPersonDto: GetPersonDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_GET_PERSON_ENTITY,
+      getPersonDto,
+      traceId,
+    );
+  }
+
+  async getHistory(
+    getHistoryOfPersonDto: GetHistoryOfPersonDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_START_DICE_GAME_ENTITY,
-      startPersonIdentityGameDto,
+      KT_GET_HISTORY_PERSON_ENTITY,
+      getHistoryOfPersonDto,
+      traceId,
+    );
+  }
+
+  async getManyPersons(
+    getManyPersonsDto: GetManyPersonsDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_GET_MANY_PERSONS,
+      getManyPersonsDto,
       traceId,
     );
   }
