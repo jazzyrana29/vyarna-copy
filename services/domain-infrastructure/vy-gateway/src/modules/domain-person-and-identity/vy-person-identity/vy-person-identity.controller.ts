@@ -1,8 +1,16 @@
 // src/contact/contact.controller.ts
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
+import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from '../../dto/response.dto';
+import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
+import { LogStreamLevel } from 'ez-logger';
+import { getLoggerConfig } from '../../../utils/common';
 import { PersonIdentityKafkaService } from './microservices/vy-person-identity-kafka.service';
+import { ValidateCreatePersonDtoPipe } from './pipes/validate-create-person-dto.pipe';
+import { ValidateUpdatePersonDtoPipe } from './pipes/validate-update-person-dto.pipe';
+import { ValidateGetPersonDtoPipe } from './pipes/validate-get-person-dto.pipe';
+import { ValidateGetHistoryPersonDtoPipe } from './pipes/validate-get-history-person-dto.pipe';
+import { ValidateGetManyPersonsDtoPipe } from './pipes/validate-get-many-persons-dto.pipe';
 import {
   generateTraceId,
   CreatePersonDto,
@@ -10,61 +18,107 @@ import {
   GetPersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
 } from 'ez-utils';
 
+@UseInterceptors(SentryInterceptor)
+@ApiTags('vy-person-identity')
 @Controller('vy-person-identity')
 export class PersonIdentityController {
+  private logger = getLoggerConfig(PersonIdentityController.name);
+
   constructor(
     private readonly personIdentityKafkaService: PersonIdentityKafkaService,
-  ) {}
+  ) {
+    this.logger.debug(
+      `${PersonIdentityController.name} initialized`,
+      '',
+      'constructor',
+      LogStreamLevel.DebugLight,
+    );
+  }
 
-  @Post('create-person')
+  @Post(KT_CREATE_PERSON_ENTITY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreatePersonDto })
   async createPerson(
-    @Body() createPersonDto: CreatePersonDto,
+    @Body(new ValidateCreatePersonDtoPipe()) createPersonDto: CreatePersonDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('create-person');
+    const traceId = generateTraceId('createPerson');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'createPerson',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.personIdentityKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
+      traceId,
     );
   }
 
-  @Post('update-person')
+  @Post(KT_UPDATE_PERSON_ENTITY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: UpdatePersonDto })
   async updatePerson(
-    @Body() updatePersonDto: UpdatePersonDto,
+    @Body(new ValidateUpdatePersonDtoPipe()) updatePersonDto: UpdatePersonDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('update-person');
+    const traceId = generateTraceId('updatePerson');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'updatePerson',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.personIdentityKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
+      traceId,
     );
   }
 
-  @Post('get-person')
+  @Post(KT_GET_PERSON_ENTITY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetPersonDto })
-  async getPerson(@Body() getPersonDto: GetPersonDto): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('get-person');
+  async getPerson(
+    @Body(new ValidateGetPersonDtoPipe()) getPersonDto: GetPersonDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('getPerson');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getPerson',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.personIdentityKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
+      traceId,
     );
   }
 
-  @Post('get-history-person')
+  @Post(KT_GET_HISTORY_PERSON_ENTITY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetHistoryOfPersonDto })
   async getHistory(
-    @Body() getHistoryOfPersonDto: GetHistoryOfPersonDto,
+    @Body(new ValidateGetHistoryPersonDtoPipe())
+    getHistoryOfPersonDto: GetHistoryOfPersonDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('get-history-person');
+    const traceId = generateTraceId('getHistoryPerson');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getHistoryPerson',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.personIdentityKafkaService.getHistory(
@@ -72,20 +126,28 @@ export class PersonIdentityController {
         traceId,
       ),
       'Person history retrieved',
+      traceId,
     );
   }
 
-  @Post('get-many-persons')
+  @Post(KT_GET_MANY_PERSONS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetManyPersonsDto })
   async getManyPersons(
-    @Body() getManyPersonsDto: GetManyPersonsDto,
+    @Body(new ValidateGetManyPersonsDtoPipe()) getManyPersonsDto: GetManyPersonsDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('get-many-persons');
+    const traceId = generateTraceId('getManyPersons');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getManyPersons',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.personIdentityKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
+      traceId,
     );
   }
 }
