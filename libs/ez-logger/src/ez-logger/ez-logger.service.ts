@@ -26,7 +26,7 @@ export class EzLogger implements LoggerService {
     context = '',
     isTimeDiffEnabled = true,
     traceId: string,
-  ) {
+  ): void {
     this.printMessage(
       LogLevel.Info,
       message,
@@ -42,7 +42,7 @@ export class EzLogger implements LoggerService {
     context = '',
     isTimeDiffEnabled = true,
     traceId: string,
-  ) {
+  ): void {
     this.printMessage(
       LogLevel.Error,
       message,
@@ -58,7 +58,7 @@ export class EzLogger implements LoggerService {
     context = '',
     isTimeDiffEnabled = true,
     traceId: string,
-  ) {
+  ): void {
     this.printMessage(
       LogLevel.Warn,
       message,
@@ -74,7 +74,7 @@ export class EzLogger implements LoggerService {
     context = '',
     isTimeDiffEnabled = true,
     traceId: string,
-  ) {
+  ): void {
     this.printMessage(
       LogLevel.Debug,
       message,
@@ -90,7 +90,7 @@ export class EzLogger implements LoggerService {
     context = '',
     isTimeDiffEnabled = true,
     traceId: string,
-  ) {
+  ): void {
     this.printMessage(
       LogLevel.Fatal,
       message,
@@ -106,7 +106,7 @@ export class EzLogger implements LoggerService {
     context = '',
     isTimeDiffEnabled = true,
     traceId: string,
-  ) {
+  ): void {
     this.printMessage(
       LogLevel.Fatal,
       message,
@@ -124,7 +124,7 @@ export class EzLogger implements LoggerService {
     context: string = '',
     isTimeDiffEnabled: boolean,
     traceId: string,
-  ) {
+  ): void {
     const output = isObject(message)
       ? `${color('Object:')}\n${JSON.stringify(message, null, 2)}\n`
       : color(message);
@@ -161,7 +161,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ) {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Error, message, profile, traceId);
   }
@@ -171,7 +171,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ) {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Info, message, profile, traceId);
   }
@@ -181,7 +181,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ) {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Warn, message, profile, traceId);
   }
@@ -191,7 +191,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ) {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Debug, message, profile, traceId);
   }
@@ -201,7 +201,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ) {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Fatal, message, profile, traceId);
   }
@@ -211,7 +211,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ) {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Emergency, message, profile, traceId);
   }
@@ -221,7 +221,7 @@ export class EzLogger implements LoggerService {
     traceId: string,
     profile: string,
     logStreamLevel: LogStreamLevel,
-  ): any {
+  ): void {
     if (this.validStreamLevel(logStreamLevel))
       this.callFunction(LogLevel.Info, message, profile, traceId);
   }
@@ -231,7 +231,7 @@ export class EzLogger implements LoggerService {
     message: any,
     profile: string,
     traceId: string,
-  ) {
+  ): void {
     if (!this.isLogLevelEnabled(logLevel)) {
       return;
     }

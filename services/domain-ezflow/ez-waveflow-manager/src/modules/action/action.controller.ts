@@ -34,7 +34,10 @@ export class ActionController {
   }
 
   @MessagePattern(KT_CREATE_ACTION)
-  async createAction(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async createAction(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_ACTION}`,
@@ -46,7 +49,10 @@ export class ActionController {
   }
 
   @MessagePattern(KT_UPDATE_ACTION)
-  async updateAction(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async updateAction(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_ACTION}`,
@@ -58,7 +64,10 @@ export class ActionController {
   }
 
   @MessagePattern(KT_DELETE_ACTION)
-  async deleteAction(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async deleteAction(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_ACTION}`,
@@ -70,7 +79,10 @@ export class ActionController {
   }
 
   @MessagePattern(KT_GET_ONE_ACTION)
-  async getAction(@Payload() message: any, @Ctx() context: KafkaContext) {
+  async getAction(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ONE_ACTION}`,
@@ -85,7 +97,7 @@ export class ActionController {
   async getZtrackingAction(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_ACTION}`,
@@ -100,7 +112,7 @@ export class ActionController {
   async fuzzySearchActionTypes(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_ACTION_TYPES}`,
@@ -115,7 +127,7 @@ export class ActionController {
   async fuzzySearchActionVariables(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_FUZZY_SEARCH_ACTION_VARIABLES}`,

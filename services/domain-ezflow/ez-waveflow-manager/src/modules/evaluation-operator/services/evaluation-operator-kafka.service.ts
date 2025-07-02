@@ -34,7 +34,7 @@ export class EvaluationOperatorKafkaService {
     );
   }
 
-  async getOneEvaluationOperator(message: any, key: string) {
+  async getOneEvaluationOperator(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_EVALUATION_OPERATOR,
@@ -48,7 +48,7 @@ export class EvaluationOperatorKafkaService {
     );
   }
 
-  async getManyEvaluationOperators(message: any, key: string) {
+  async getManyEvaluationOperators(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_EVALUATION_OPERATORS,
@@ -62,7 +62,10 @@ export class EvaluationOperatorKafkaService {
     );
   }
 
-  async fuzzySearchEvaluationOperators(message: any, key: string) {
+  async fuzzySearchEvaluationOperators(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_EVALUATION_OPERATORS,

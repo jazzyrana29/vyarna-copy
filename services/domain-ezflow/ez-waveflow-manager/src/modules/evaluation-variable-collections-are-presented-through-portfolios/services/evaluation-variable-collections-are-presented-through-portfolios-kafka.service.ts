@@ -50,7 +50,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async createEvaluationVariableCollectionsPresentedThroughPortfoliosEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,
@@ -70,7 +70,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async updateEvaluationVariableCollectionsPresentedThroughPortfoliosEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,
@@ -90,7 +90,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async deleteEvaluationVariableCollectionsPresentedThroughPortfoliosEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,
@@ -110,7 +110,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async getEvaluationVariableCollectionsPresentedThroughPortfoliosEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,
@@ -130,7 +130,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async getManyEvaluationVariableCollectionsArePresentedThroughPortfolios(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS,
@@ -150,7 +150,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async getHistoryOfEvaluationVariableCollectionsArePresentedThroughPortfoliosEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,
@@ -170,7 +170,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async addEvaluationVariableCollectionFromPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_ADD_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,
@@ -190,7 +190,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosKafkaServ
   async removeEvaluationVariableCollectionFromPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_REMOVE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY,

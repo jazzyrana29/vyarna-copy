@@ -22,7 +22,7 @@ export class KafkaProducerService implements IKafkaProducer {
     this.producer = this.kafka.producer();
   }
 
-  async produce(message: Message) {
+  async produce(message: Message): Promise<void> {
     this.logger.log(
       `Producing Message:${JSON.stringify(message)}`,
       "",
@@ -32,7 +32,7 @@ export class KafkaProducerService implements IKafkaProducer {
     await this.producer.send({ topic: this.topic, messages: [message] });
   }
 
-  async connect() {
+  async connect(): Promise<void> {
     try {
       this.logger.log(
         `Producer connected for topic: ${this.topic}`,
@@ -53,7 +53,7 @@ export class KafkaProducerService implements IKafkaProducer {
     }
   }
 
-  async disconnect() {
+  async disconnect(): Promise<void> {
     this.logger.log(
       `Disconnected kafka producer`,
       "",

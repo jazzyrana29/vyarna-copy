@@ -244,7 +244,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
    * Handle incoming messages from the MAIN consumer logic.
    */
   private async handleMainMessage(
-    { message, partition: _partition }: EachMessagePayload,
+    { message, partition }: EachMessagePayload,
     onMessage: (message: KafkaMessage) => Promise<void>,
     handleResolve: (value: unknown) => void,
     handleReject: (reason?: any) => void,
@@ -253,7 +253,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
     const key = message.key?.toString() || "";
 
     this.logger.info(
-      `Received message on MAIN topic [${this.topic.topic}] with key: ${key}`,
+      `Received message on MAIN topic [${this.topic.topic}] with key: ${key} for partition ${partition}`,
       traceId,
       "handleMainMessage",
       LogStreamLevel.ProdStandard,
@@ -319,7 +319,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
    * Handle incoming messages from the RETRY consumer logic.
    */
   private async handleRetryMessage(
-    { message, partition: _partition }: EachMessagePayload,
+    { message, partition }: EachMessagePayload,
     onRetryMessage: (message: KafkaMessage) => Promise<void>,
     handleResolve: (value: unknown) => void,
     handleReject: (reason?: any) => void,
@@ -328,7 +328,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
     const key = message.key?.toString() || "";
 
     this.logger.info(
-      `Received message on RETRY topic [${this.retryTopic}] with key: ${key}`,
+      `Received message on RETRY topic [${this.retryTopic}] with key: ${key} for partition ${partition}`,
       traceId,
       "handleRetryMessage",
       LogStreamLevel.ProdStandard,

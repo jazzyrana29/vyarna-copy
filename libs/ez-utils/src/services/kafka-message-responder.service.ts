@@ -39,7 +39,7 @@ export class KafkaMessageResponderService {
     message: KafkaMessage,
     key: string,
     processFn: (value: any, traceId: string) => Promise<any>,
-  ) {
+  ): Promise<void> {
     const responseTopic = topic + "-response";
     let traceId = "";
     let kafkaResponseKey = "";
