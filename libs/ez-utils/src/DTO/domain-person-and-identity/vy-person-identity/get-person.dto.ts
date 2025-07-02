@@ -1,14 +1,14 @@
-import { ApiProperty, PickType, PartialType } from "@nestjs/swagger";
-import { OperatorDto } from "./operator.dto";
-import { IsUUID } from "class-validator";
+import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
+import { IsUUID } from 'class-validator';
+import { PersonDto } from './person.dto';
 
-export class GetOperatorDto extends PartialType(
-  PickType(OperatorDto, ["nameFirst", "isDeleted"] as const),
+export class GetPersonDto extends PartialType(
+  PickType(PersonDto, ['nameFirst', 'isDeleted'] as const),
 ) {
   @ApiProperty({
-    description: "The unique identifier for the operator",
+    description: 'The unique identifier for the operator',
     type: String,
-    format: "uuid",
+    format: 'uuid',
   })
   @IsUUID()
   operatorId: string;
