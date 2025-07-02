@@ -1,6 +1,6 @@
 // src/vy-active-campaign/dto/tags-response.dto.ts
 
-import { TagsEnum } from '../../../../../enum/tags.enum';
+import { TagsEnum } from "../../../../../enum/tags.enum";
 
 /**
  * Links related to a tag

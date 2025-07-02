@@ -1,4 +1,4 @@
-import { ListsEnum } from '../../../enums/domain-person-and-identity/vy-active-campaign/lists.enum';
+import { ListsEnum } from "../../../enums/domain-person-and-identity/vy-active-campaign/lists.enum";
 
 /**
  * DTO for the nested links object inside each list

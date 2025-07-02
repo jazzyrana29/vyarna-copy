@@ -1,9 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsBoolean,
+  IsDate,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from "class-validator";
 
 export class ZtrackingPersonDto {
   @ApiProperty({
-    description: 'Unique identifier for the ztracking version',
+    description: "Unique identifier for the ztracking version",
     type: String,
     required: true,
   })
@@ -11,7 +17,7 @@ export class ZtrackingPersonDto {
   ztrackingVersion: string;
 
   @ApiProperty({
-    description: 'Unique identifier for the operator',
+    description: "Unique identifier for the operator",
     type: String,
     required: true,
   })
@@ -19,7 +25,7 @@ export class ZtrackingPersonDto {
   operatorId: string;
 
   @ApiProperty({
-    description: 'Login identifier for the operator',
+    description: "Login identifier for the operator",
     type: String,
     required: false,
   })
@@ -28,7 +34,7 @@ export class ZtrackingPersonDto {
   login: string;
 
   @ApiProperty({
-    description: 'First name of the operator',
+    description: "First name of the operator",
     type: String,
     required: false,
   })
@@ -37,7 +43,7 @@ export class ZtrackingPersonDto {
   nameFirst: string;
 
   @ApiProperty({
-    description: 'Middle name of the operator',
+    description: "Middle name of the operator",
     type: String,
     required: false,
   })
@@ -46,7 +52,7 @@ export class ZtrackingPersonDto {
   nameMiddle: string;
 
   @ApiProperty({
-    description: 'Last name of the operator',
+    description: "Last name of the operator",
     type: String,
     required: false,
   })
@@ -55,7 +61,7 @@ export class ZtrackingPersonDto {
   nameLast: string;
 
   @ApiProperty({
-    description: 'Email address of the operator',
+    description: "Email address of the operator",
     type: String,
     required: false,
   })
@@ -64,7 +70,7 @@ export class ZtrackingPersonDto {
   email: string;
 
   @ApiProperty({
-    description: 'Business unit identifier associated with the operator',
+    description: "Business unit identifier associated with the operator",
     type: String,
     required: false,
   })
@@ -73,7 +79,7 @@ export class ZtrackingPersonDto {
   businessUnitId: string;
 
   @ApiProperty({
-    description: 'Indicates if the operator is marked as deleted',
+    description: "Indicates if the operator is marked as deleted",
     default: false,
   })
   @IsBoolean()
@@ -81,7 +87,7 @@ export class ZtrackingPersonDto {
   isDeleted: boolean;
 
   @ApiProperty({
-    description: 'The date when the record was created',
+    description: "The date when the record was created",
     type: Date,
     required: false,
   })
@@ -90,7 +96,7 @@ export class ZtrackingPersonDto {
   createdAt?: Date;
 
   @ApiProperty({
-    description: 'User who last updated the record',
+    description: "User who last updated the record",
     type: String,
     required: false,
   })
@@ -99,7 +105,7 @@ export class ZtrackingPersonDto {
   updatedBy?: string;
 
   @ApiProperty({
-    description: 'Version date of the ztracking operator',
+    description: "Version date of the ztracking operator",
     type: Date,
     required: true,
   })
