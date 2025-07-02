@@ -2,7 +2,7 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
-import { ResponseDTO } from '../../dto/response.dto';
+import { ResponseDTO } from '../../../dto/response.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { ValidateCreateContactDtoPipe } from './pipes/validate-create-contact-dto.pipe';
 

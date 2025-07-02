@@ -2,10 +2,10 @@
 import { Module } from '@nestjs/common';
 import { ContactController } from './contact.controller';
 import { ContactService } from './contact.service';
-import { WebsocketGateway } from '../../gateway/websocket.gateway';
+import { PersonContactGateway } from './vy-person-contact.gateway';
 
 @Module({
   controllers: [ContactController],
-  providers: [ContactService, WebsocketGateway],
+  providers: [ContactService, PersonContactGateway],
 })
-export class ContactModule {}
+export class PersonContactModule {}
