@@ -117,7 +117,7 @@ export class FlowService {
     );
 
     this.logger.info(
-      `Start and Stop nodes created for Flow ID: ${createdFlow.flowId}`,
+      `Start ${startNode.nodeId} and Stop ${stopNode.nodeId} nodes created for Flow ID: ${createdFlow.flowId}`,
       traceId,
       'createFlow',
       LogStreamLevel.ProdStandard,

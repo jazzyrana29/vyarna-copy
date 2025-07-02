@@ -288,6 +288,13 @@ export class ActionService {
     fuzzySearchActionTypesDto: FuzzySearchActionTypesDto,
     traceId: string,
   ): Promise<PaginatedActionTypesResponseDto> {
+    this.logger.debug(
+      `Invoking fuzzySearchActionTypes with DTO: ${JSON.stringify(fuzzySearchActionTypesDto)}`,
+      traceId,
+      'fuzzySearchActionTypes',
+      LogStreamLevel.DebugLight,
+    );
+
     const {
       actionType,
       fuzzyActionType,
@@ -383,6 +390,14 @@ export class ActionService {
     }
 
     // Return the structured paginated response
+
+    // Log exit
+    this.logger.info(
+      `fuzzySearchActionTypes matched ${childrenProperties.length} total items; returning ${paginatedData.length}`,
+      traceId,
+      'fuzzySearchActionTypes',
+      LogStreamLevel.ProdStandard,
+    );
     return {
       data: paginatedData,
       maxPages,
@@ -396,6 +411,13 @@ export class ActionService {
     fuzzySearchActionVariablesDto: FuzzySearchActionVariablesDto,
     traceId: string,
   ): Promise<PaginatedActionVariablesResponseDto> {
+    this.logger.debug(
+      `Invoking fuzzySearchActionVariables with DTO: ${JSON.stringify(fuzzySearchActionVariablesDto)}`,
+      traceId,
+      'fuzzySearchActionVariables',
+      LogStreamLevel.DebugLight,
+    );
+
     const {
       // Fuzzy search parameters (higher priority)
       fuzzyActionId,
@@ -530,6 +552,13 @@ export class ActionService {
 
     // Execute query and count total matching rows.
     const [data, total] = await qb.getManyAndCount();
+
+    this.logger.info(
+      `fuzzySearchActionVariables matched ${data.length} total items; returning ${data.length}`,
+      traceId,
+      'fuzzySearchActionVariables',
+      LogStreamLevel.ProdStandard,
+    );
 
     if (pagination) {
       const { page = 1, pageSize = 25 } = pagination;

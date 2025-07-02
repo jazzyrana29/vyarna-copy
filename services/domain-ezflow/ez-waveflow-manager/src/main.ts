@@ -54,7 +54,7 @@ async function bootstrap(): Promise<void> {
 
   await app.listen(process.env.APP_PORT, () => {
     logger.debug(
-      `${process.env.APP} microservice is running on Port: ${process.env.APP_PORT}\nbroker => ${process.env.KAFKA_BROKER}`,
+      `${process.env.APP} microservice is running on Port: ${process.env.APP_PORT}\nbroker => ${process.env.KAFKA_BROKER} with microservice-> ${microservice}`,
       '',
       'bootstrap',
       LogStreamLevel.ProdStandard,
