@@ -47,8 +47,8 @@
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.1",
     "kafkajs": "^2.2.4",
-    "ez-logger": "file:../../libs/ez-logger",
-    "ez-utils": "file:../../libs/ez-utils",
+    "ez-logger": "file:../../../../../libs/ez-logger",
+    "ez-utils": "file:../../../../../libs/ez-utils",
     "stringify": "^2.2.0",
     "uuid": "^9.0.1"
   },

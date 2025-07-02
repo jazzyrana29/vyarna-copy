@@ -2,7 +2,7 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
 import { ResponseDTO } from '../../dto/response.dto';
-import { PersonIdentityKafkaService } from './vy-person-identity-kafka.service';
+import { PersonIdentityKafkaService } from './microservices/vy-person-identity-kafka.service';
 import {
   generateTraceId,
   CreatePersonDto,

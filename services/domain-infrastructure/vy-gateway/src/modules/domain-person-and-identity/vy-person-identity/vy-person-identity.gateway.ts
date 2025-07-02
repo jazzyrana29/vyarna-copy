@@ -6,7 +6,7 @@ import {
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { PersonIdentityKafkaService } from './vy-person-identity-kafka.service';
+import { PersonIdentityKafkaService } from './microservices/vy-person-identity-kafka.service';
 import {
   generateTraceId,
   CreatePersonDto,
