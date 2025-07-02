@@ -17,13 +17,13 @@ export class PersonIdentityController {
   @Post('create-contact')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateContactDto })
-  async createBusinessUnitEntity(
+  async createContact(
     @Body(new ValidateCreateContactDtoPipe())
-    createBusinessUnitDto: CreateContactDto,
+    createContactDto: CreateContactDto,
   ): Promise<ResponseDTO<any>> {
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.contactService.createContact(createBusinessUnitDto),
+      await this.contactService.createContact(createContactDto),
       'A contact has been successfully created',
     );
   }

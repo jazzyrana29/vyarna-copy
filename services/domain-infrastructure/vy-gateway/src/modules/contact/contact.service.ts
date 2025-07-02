@@ -10,8 +10,8 @@ import { ClientMessagesMode } from '../../constants/ClientMessagesMode';
 export class ContactService {
   constructor(private readonly websocketGateway: WebsocketGateway) {}
 
-  async createContact(createBusinessUnitDto: CreateContactDto): Promise<any> {
-    const { firstName, lastName, email, formId } = createBusinessUnitDto;
+  async createContact(createContactDto: CreateContactDto): Promise<any> {
+    const { firstName, lastName, email, formId } = createContactDto;
     console.log(`Creating contact ${firstName} ${lastName}...`);
     const { contact } = await ActiveCampaignService.createContact({
       firstName,
