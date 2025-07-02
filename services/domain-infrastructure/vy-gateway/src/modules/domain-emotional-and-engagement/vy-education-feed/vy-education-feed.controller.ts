@@ -1,7 +1,7 @@
 // src/contact/contact.controller.ts
 import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { ResponseDTO } from '../../dto/response.dto';
+import { ResponseDTO } from '../../../dto/response.dto';
 import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
 import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';

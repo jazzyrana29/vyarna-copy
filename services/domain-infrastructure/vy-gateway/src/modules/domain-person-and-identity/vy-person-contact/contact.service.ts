@@ -1,14 +1,14 @@
 // src/contact/contact.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
-import { ActiveCampaignService } from '../../services/static/active-campaign/active-campaign.service';
-import { ListsEnum } from '../../enum/lists.enum';
-import { WebsocketGateway } from '../../gateway/websocket.gateway';
-import { ClientMessagesMode } from '../../constants/ClientMessagesMode';
+import { ActiveCampaignService } from '../../../services/static/active-campaign/active-campaign.service';
+import { ListsEnum } from '../../../enum/lists.enum';
+import { PersonContactGateway } from './vy-person-contact.gateway';
+import { ClientMessagesMode } from '../../../constants/ClientMessagesMode';
 
 @Injectable()
 export class ContactService {
-  constructor(private readonly websocketGateway: WebsocketGateway) {}
+  constructor(private readonly websocketGateway: PersonContactGateway) {}
 
   async createContact(createContactDto: CreateContactDto): Promise<any> {
     const { firstName, lastName, email, formId } = createContactDto;
