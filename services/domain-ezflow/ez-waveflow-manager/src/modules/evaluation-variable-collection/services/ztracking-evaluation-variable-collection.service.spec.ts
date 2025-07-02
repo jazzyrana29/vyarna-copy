@@ -10,7 +10,6 @@ import {
   mockTraceId,
 } from '../test-values.spec';
 import { MockType, repositoryMockFactory } from 'ez-utils';
-import { GetHistoryOfEvaluationVariableCollectionsDto } from 'ez-utils';
 
 describe('ZtrackingEvaluationVariableCollectionService', () => {
   let service: ZtrackingEvaluationVariableCollectionService;

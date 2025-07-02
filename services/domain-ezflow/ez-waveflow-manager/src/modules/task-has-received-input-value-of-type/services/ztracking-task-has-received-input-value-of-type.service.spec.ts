@@ -10,7 +10,6 @@ import {
   mockTraceId,
 } from '../test-values.spec';
 import { MockType, repositoryMockFactory } from 'ez-utils';
-import { GetHistoryTaskHasReceivedInputValueOfTypeDto } from 'ez-utils';
 
 describe('ZtrackingTaskHasReceiveInputValueOfTypeService', () => {
   let service: ZtrackingTaskHasReceiveInputValueOfTypeService;

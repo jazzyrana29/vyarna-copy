@@ -45,7 +45,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitKafkaService {
   async createFlowIsActiveForWaveTypeAndBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT,
@@ -65,7 +65,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitKafkaService {
   async updateFlowIsActiveForWaveTypeAndBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT,
@@ -85,7 +85,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitKafkaService {
   async deleteFlowIsActiveForWaveTypeAndBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT,
@@ -105,7 +105,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitKafkaService {
   async getOneFlowIsActiveForWaveTypeAndBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT,
@@ -125,7 +125,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitKafkaService {
   async getManyFlowIsActiveForWaveTypeAndBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT,
@@ -145,7 +145,7 @@ export class FlowIsActiveForWaveTypeAndBusinessUnitKafkaService {
   async getZtrackingFlowIsActiveForWaveTypeAndBusinessUnit(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_FLOW_IS_ACTIVE_FOR_WAVE_TYPE_AND_BUSINESS_UNIT,

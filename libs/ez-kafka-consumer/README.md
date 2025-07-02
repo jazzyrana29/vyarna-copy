@@ -29,8 +29,8 @@ Here's an example of how to use the `ez-kafka-consumer` library in a NestJS appl
 First, import the library and set up a Kafka consumer service:
 
 ```typescript
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { KafkaConsumer } from 'ez-kafka-consumer';
+import { Injectable, OnModuleInit } from "@nestjs/common";
+import { KafkaConsumer } from "ez-kafka-consumer";
 
 @Injectable()
 export class KafkaService implements OnModuleInit {
@@ -38,10 +38,10 @@ export class KafkaService implements OnModuleInit {
 
   constructor() {
     this.consumer = new KafkaConsumer({
-      bootstrapServers: 'localhost:9092',
-      groupId: 'my-group',
-      topics: ['my-topic'],
-      autoOffsetReset: 'earliest',
+      bootstrapServers: "localhost:9092",
+      groupId: "my-group",
+      topics: ["my-topic"],
+      autoOffsetReset: "earliest",
       enableAutoCommit: true,
       batchSize: 1,
     });
@@ -67,8 +67,8 @@ export class KafkaService implements OnModuleInit {
 In your NestJS application module, inject the `KafkaService` to manage your Kafka consumer:
 
 ```typescript
-import { Module } from '@nestjs/common';
-import { KafkaService } from './kafka.service';
+import { Module } from "@nestjs/common";
+import { KafkaService } from "./kafka.service";
 
 @Module({
   providers: [KafkaService],

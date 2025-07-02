@@ -1,13 +1,11 @@
 import { WaveType } from '../../entities/wave-type.entity';
 import { EvaluationVariablesAreAvailableForWaveTypes } from '../../entities/evaluation-variables-are-available-for-wave-types.entity';
-import { ZtrackingEvaluationVariablesAreAvailableForWaveTypes } from '../../entities/ztracking-evaluation-variables-are-available-for-wave-types.entity';
 import {
   CreateEvaluationVariablesAreAvailableForWaveTypesDto,
   UpdateEvaluationVariablesAreAvailableForWaveTypesDto,
   DeleteEvaluationVariablesAreAvailableForWaveTypesDto,
   GetOneEvaluationVariablesAreAvailableForWaveTypesDto,
   GetManyEvaluationVariablesAreAvailableForWaveTypesDto,
-  GetHistoryEvaluationVariablesAreAvailableForWaveTypesDto,
   ZtrackingEvaluationVariablesAreAvailableForWaveTypesDto,
 } from 'ez-utils';
 import { RemoveOptions, SaveOptions } from 'typeorm';

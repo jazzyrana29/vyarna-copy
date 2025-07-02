@@ -59,7 +59,7 @@ export const mockFlowCase001: Flow = {
     return Promise.resolve(undefined);
   },
   businessUnitId: '',
-  isPublished: false
+  isPublished: false,
 };
 
 export const mockFlowName002: string = 'mockFlowName002';
@@ -100,7 +100,7 @@ export const mockFlowCase002: Flow = {
     return Promise.resolve(undefined);
   },
   businessUnitId: '',
-  isPublished: false
+  isPublished: false,
 };
 
 // Mock for ztracking flow
@@ -134,21 +134,21 @@ export const mockZtrackingFlowCase001: ZtrackingFlow = {
     return Promise.resolve(undefined);
   },
   businessUnitId: '',
-  isPublished: false
+  isPublished: false,
 };
 
 export const mockCreateFlowDto: CreateFlowDto = {
   name: mockFlowName001,
   description: mockFlowDescription001,
   waveTypeId: mockWaveTypeId,
-  isPublished: false
+  isPublished: false,
 };
 
 export const mockUpdateFlowDto: UpdateFlowDto = {
   name: mockFlowName002,
   description: mockFlowDescription002,
   waveTypeId: mockWaveTypeId,
-  flowId: ''
+  flowId: '',
 };
 
 export const mockGetOneFlowDto: GetOneFlowDto = {

@@ -42,7 +42,10 @@ export class EvaluationVariableCollectionKafkaService {
     );
   }
 
-  async createEvaluationVariableCollectionEntity(message: any, key: string) {
+  async createEvaluationVariableCollectionEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_EVALUATION_VARIABLE_COLLECTION_ENTITY,
@@ -56,7 +59,10 @@ export class EvaluationVariableCollectionKafkaService {
     );
   }
 
-  async updateEvaluationVariableCollectionEntity(message: any, key: string) {
+  async updateEvaluationVariableCollectionEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_EVALUATION_VARIABLE_COLLECTION_ENTITY,
@@ -70,7 +76,10 @@ export class EvaluationVariableCollectionKafkaService {
     );
   }
 
-  async deleteEvaluationVariableCollectionEntity(message: any, key: string) {
+  async deleteEvaluationVariableCollectionEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_EVALUATION_VARIABLE_COLLECTION_ENTITY,
@@ -84,7 +93,10 @@ export class EvaluationVariableCollectionKafkaService {
     );
   }
 
-  async getEvaluationVariableCollectionEntity(message: any, key: string) {
+  async getEvaluationVariableCollectionEntity(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_EVALUATION_VARIABLE_COLLECTION_ENTITY,
@@ -98,7 +110,10 @@ export class EvaluationVariableCollectionKafkaService {
     );
   }
 
-  async getManyEvaluationVariableCollections(message: any, key: string) {
+  async getManyEvaluationVariableCollections(
+    message: any,
+    key: string,
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_EVALUATION_VARIABLE_COLLECTIONS,
@@ -115,7 +130,7 @@ export class EvaluationVariableCollectionKafkaService {
   async getHistoryOfEvaluationVariableCollectionEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_EVALUATION_VARIABLE_COLLECTION_ENTITY,

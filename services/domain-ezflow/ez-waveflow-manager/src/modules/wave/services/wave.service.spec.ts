@@ -12,7 +12,7 @@ import {
   mockGetWaveDto,
   mockGetManyWaveDto,
 } from '../test-values.spec';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 describe('WaveService', () => {
   let service: WaveService;

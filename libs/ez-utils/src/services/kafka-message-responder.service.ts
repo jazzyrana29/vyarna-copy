@@ -13,7 +13,7 @@ export class KafkaMessageResponderService {
       `${KafkaMessageResponderService.name} initialized`,
       "",
       "constructor",
-      LogStreamLevel.DebugLight
+      LogStreamLevel.DebugLight,
     );
   }
 
@@ -21,14 +21,14 @@ export class KafkaMessageResponderService {
     serviceMethod: (message: KafkaMessage, key: string) => Promise<void>,
     topicName: string,
     message: KafkaMessage,
-    context: KafkaContext
+    context: KafkaContext,
   ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.ezLogger.debug(
       `Message Pattern hit for kafka topic : ${topicName}`,
       "",
       "handleKafkaRequest",
-      LogStreamLevel.DebugLight
+      LogStreamLevel.DebugLight,
     );
     return serviceMethod(message, key);
   }
@@ -38,8 +38,8 @@ export class KafkaMessageResponderService {
     topic: string,
     message: KafkaMessage,
     key: string,
-    processFn: (value: any, traceId: string) => Promise<any>
-  ) {
+    processFn: (value: any, traceId: string) => Promise<any>,
+  ): Promise<void> {
     const responseTopic = topic + "-response";
     let traceId = "";
     let kafkaResponseKey = "";
@@ -52,7 +52,7 @@ export class KafkaMessageResponderService {
         `Received message from Kafka: ${JSON.stringify(value, null, 2)}`,
         traceId,
         "produceKafkaResponse",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
 
       const response = await processFn(value, traceId);
@@ -68,15 +68,15 @@ export class KafkaMessageResponderService {
             kafkaResponseStatus: true,
             traceId,
           },
-          kafkaResponseKey
-        )
+          kafkaResponseKey,
+        ),
       );
     } catch (e) {
       this.ezLogger.error(
         `Error processing Kafka message: ${e}`,
         traceId,
         "produceKafkaResponse",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
 
       await new EzKafkaProducer().produce(
@@ -90,8 +90,8 @@ export class KafkaMessageResponderService {
             kafkaResponseStatus: false,
             traceId,
           },
-          kafkaResponseKey
-        )
+          kafkaResponseKey,
+        ),
       );
     }
   }

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -8,10 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { colors } from '../theme/color';
-import { createContact } from '../api/contact';
-import { TagsEnum } from '../enums/tags.enum';
+} from "react-native";
+import { colors } from "../theme/color";
+import { createContact } from "../api/contact";
+import { TagsEnum } from "../enums/tags.enum";
 
 type EmailProps = {
   title: string;
@@ -21,16 +21,16 @@ type EmailProps = {
 };
 
 const Email: FC<EmailProps> = ({
-                                 title,
-                                 description,
-                                 className = '',
-                                 formId = TagsEnum.SIGNUP_ABOUT_TOP,
-                               }) => {
-  const [firstName, setFirstName] = useState<string>('');
+  title,
+  description,
+  className = "",
+  formId = TagsEnum.SIGNUP_ABOUT_TOP,
+}) => {
+  const [firstName, setFirstName] = useState<string>("");
   const [firstTouched, setFirstTouched] = useState<boolean>(false);
-  const [lastName, setLastName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>("");
   const [lastTouched, setLastTouched] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const [emailTouched, setEmailTouched] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ const Email: FC<EmailProps> = ({
   const isValid = isFirstValid && isLastValid && isEmailValid;
 
   const showAlert = (title: string, message: string): void => {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       window.alert(`${title}: ${message}`);
     } else {
       Alert.alert(title, message);
@@ -59,19 +59,19 @@ const Email: FC<EmailProps> = ({
         lastName,
         formId,
       });
-      console.log('Sending email...', formId);
+      console.log("Sending email...", formId);
       // showAlert("Success", "Contact created successfully");
       // Reset form
-      setFirstName('');
+      setFirstName("");
       setFirstTouched(false);
-      setLastName('');
+      setLastName("");
       setLastTouched(false);
-      setEmail('');
+      setEmail("");
       setEmailTouched(false);
     } catch (err: any) {
-      const errorMsg = err?.response?.data?.message || '';
-      console.error('Error:', errorMsg);
-      showAlert('Error', errorMsg);
+      const errorMsg = err?.response?.data?.message || "";
+      console.error("Error:", errorMsg);
+      showAlert("Error", errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +79,7 @@ const Email: FC<EmailProps> = ({
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
       className={`flex-1 bg-primary justify-center items-center p-4 ${className}`}
     >
       <View className="w-full max-w-md items-center">
@@ -142,7 +142,7 @@ const Email: FC<EmailProps> = ({
             />
             <TouchableOpacity
               className={`h-11 px-4 rounded justify-center items-center md:w-1/3 ${
-                isValid && !isLoading ? 'bg-blue-800' : 'bg-secondary'
+                isValid && !isLoading ? "bg-blue-800" : "bg-secondary"
               }`}
               onPress={sendEmail}
               disabled={!isValid || isLoading}
@@ -155,7 +155,7 @@ const Email: FC<EmailProps> = ({
                   numberOfLines={1}
                   minimumFontScale={0.7}
                   ellipsizeMode="clip"
-                  className={`text-base font-semibold ${'text-white'}`}
+                  className={`text-base font-semibold ${"text-white"}`}
                   style={{ flexShrink: 1, fontSize: 16 }}
                 >
                   Get Vyarna

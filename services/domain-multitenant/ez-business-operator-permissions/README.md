@@ -8,10 +8,10 @@ logging, configuration management, and testing utilities.
 
 - [Features](#features)
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Running the Service](#running-the-service)
-    - [Running Migrations](#running-migrations)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Service](#running-the-service)
+  - [Running Migrations](#running-migrations)
 - [Testing](#testing)
 - [Scripts](#scripts)
 - [Technologies Used](#technologies-used)
@@ -37,42 +37,42 @@ Ensure you have the following installed and configured:
 - **NPM** or **Yarn**
 - **MySQL** or another supported relational database
 - **Kafka** (for messaging)
-    - For Kafka configuration, refer to the [ez-kafka](https://gitlab.com/ezwaveflow/ez-kafka) for detailed
-      instructions.
+  - For Kafka configuration, refer to the [ez-kafka](https://gitlab.com/ezwaveflow/ez-kafka) for detailed
+    instructions.
 - **TIDB Configuration** (for messaging)
-    - For TiDB configuration, refer to
-      the [ez-tidb](https://gitlab.com/ezwaveflow/ez-tidb#creating-a-cluster-on-tidb-cloud) for detailed
-      instructions. Replace your-database to business-operator-permissions
+  - For TiDB configuration, refer to
+    the [ez-tidb](https://gitlab.com/ezwaveflow/ez-tidb#creating-a-cluster-on-tidb-cloud) for detailed
+    instructions. Replace your-database to business-operator-permissions
 - **Redis** (for caching and other needs)
 
 ### Installation
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://gitlab.com/ezwaveflow/ez-operators-permissions
-    cd ez-operators-permissions
-    ```
+   ```bash
+   git clone https://gitlab.com/ezwaveflow/ez-operators-permissions
+   cd ez-operators-permissions
+   ```
 
 2. Install the dependencies:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
    or
 
-    ```bash
-    yarn install
-    ```
+   ```bash
+   yarn install
+   ```
 
 ### Setting Up Environment Variables
 
 1. Create a `.env` file in the root directory by copying the `.env-example` file:
 
-    ```bash
-    cp .env-example .env
-    ```
+   ```bash
+   cp .env-example .env
+   ```
 
 2. Open the `.env` file and add your specific configurations for the database, Kafka, and Redis connections.
 

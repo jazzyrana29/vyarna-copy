@@ -17,11 +17,10 @@ A simple Expo-powered React Native app for logging your baby’s feedings, sleep
    ```
 
 3. **Expo Go** (on your device)
-
-    - **iOS** (App
-      Store): [https://apps.apple.com/app/expo-go/id982107779](https://apps.apple.com/app/expo-go/id982107779)
-    - **Android** (Play
-      Store): [https://play.google.com/store/apps/details?id=host.exp.exponent](https://play.google.com/store/apps/details?id=host.exp.exponent)
+   - **iOS** (App
+     Store): [https://apps.apple.com/app/expo-go/id982107779](https://apps.apple.com/app/expo-go/id982107779)
+   - **Android** (Play
+     Store): [https://play.google.com/store/apps/details?id=host.exp.exponent](https://play.google.com/store/apps/details?id=host.exp.exponent)
 
 4. **Expo Account**
    You’ll need a free Expo account to publish projects or collaborate.

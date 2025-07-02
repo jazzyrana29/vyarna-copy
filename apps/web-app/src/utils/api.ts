@@ -1,12 +1,17 @@
 // /src/utils/api.ts
-import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { EXPO_PUBLIC_API_URL } from '@env';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
+import { EXPO_PUBLIC_API_URL } from "@env";
 
 const api: AxiosInstance = axios.create({
   baseURL: EXPO_PUBLIC_API_URL,
   timeout: 60000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -31,7 +36,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    console.log('error in interseptor => ', error);
+    console.log("error in interseptor => ", error);
     if (error.response) {
       // const { status } = error.response;
       // if (status === 401) {

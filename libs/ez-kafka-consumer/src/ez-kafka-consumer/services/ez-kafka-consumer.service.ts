@@ -14,7 +14,7 @@ export class EzKafkaConsumer implements OnApplicationShutdown {
       `${EzKafkaConsumer.name} initialized`,
       "",
       "constructor",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
   }
 
@@ -24,17 +24,17 @@ export class EzKafkaConsumer implements OnApplicationShutdown {
     topic,
     correlationId,
     broker,
-  }: IKafkaConsumerOptions) {
+  }: IKafkaConsumerOptions): Promise<void> {
     const consumerService = new KafkaConsumerService(
       topic,
       config,
       broker,
-      correlationId
+      correlationId,
     );
     await consumerService.connect();
 
     // If you want separate logic for the retry messages, define a different callback:
-    const onRetryMessage = async (retryMessage) => {
+    const onRetryMessage = async (retryMessage): Promise<void> => {
       // ... handle the retried message differently if needed
       await onMessage(retryMessage); // or do something else
     };
@@ -45,7 +45,7 @@ export class EzKafkaConsumer implements OnApplicationShutdown {
     this.consumers.push(consumerService);
   }
 
-  async onApplicationShutdown() {
+  async onApplicationShutdown(): Promise<void> {
     for (const consumer of this.consumers) {
       await consumer.disconnect();
     }

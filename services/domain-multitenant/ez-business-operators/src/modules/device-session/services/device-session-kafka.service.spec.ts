@@ -3,14 +3,6 @@ import { DeviceSessionKafkaService } from './device-session-kafka.service';
 import { DeviceSessionService } from './device-session.service';
 import { ZtrackingDeviceSessionService } from './ztracking-device-session.service';
 
-import {
-  CloseDeviceSessionDto,
-  CreateDeviceSessionDto,
-  GetDeviceSessionDto,
-  GetDeviceSessionHistoryDto,
-  StartDeviceSessionDto,
-  UpdateDeviceSessionDto,
-} from 'ez-utils';
 import { ZtrackingDeviceSession } from '../../../entities/ztracking-device-session.entity';
 import { SaveOptions, RemoveOptions } from 'typeorm';
 

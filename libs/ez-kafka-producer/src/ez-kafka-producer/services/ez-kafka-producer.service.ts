@@ -19,18 +19,25 @@ export class EzKafkaProducer implements OnApplicationShutdown {
     );
   }
 
-  async produce(broker: string, topic: string, message: Message) {
+  async produce(
+    broker: string,
+    topic: string,
+    message: Message,
+  ): Promise<void> {
     const producer = await this.getProducer(topic, broker);
     await producer.produce(message);
   }
 
-  async onApplicationShutdown() {
+  async onApplicationShutdown(): Promise<void> {
     for (const producer of this.producers.values()) {
       await producer.disconnect();
     }
   }
 
-  private async getProducer(topic: string, broker: string) {
+  private async getProducer(
+    topic: string,
+    broker: string,
+  ): Promise<IKafkaProducer> {
     let producer = this.producers.get(topic);
     if (!producer) {
       producer = new KafkaProducerService(topic, broker);

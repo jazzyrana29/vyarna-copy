@@ -1,6 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
+import {
+  DocumentBuilder,
+  SwaggerDocumentOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
 
 import * as express from 'express';
 import * as process from 'process';
@@ -13,7 +17,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: function(origin, callback) {
+      origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
           callback(null, true);
         } else {
@@ -53,7 +57,7 @@ async function bootstrap() {
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
   const document = SwaggerModule.createDocument(app, swaggerConfigs, options);
   SwaggerModule.setup('/api', app, document);
 

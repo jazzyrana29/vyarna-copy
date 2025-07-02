@@ -44,7 +44,7 @@ export class ActionKafkaService {
     );
   }
 
-  async createAction(message: any, key: string) {
+  async createAction(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_ACTION,
@@ -55,7 +55,7 @@ export class ActionKafkaService {
     );
   }
 
-  async updateAction(message: any, key: string) {
+  async updateAction(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_ACTION,
@@ -66,7 +66,7 @@ export class ActionKafkaService {
     );
   }
 
-  async deleteAction(message: any, key: string) {
+  async deleteAction(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_ACTION,
@@ -77,7 +77,7 @@ export class ActionKafkaService {
     );
   }
 
-  async getOneAction(message: any, key: string) {
+  async getOneAction(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ONE_ACTION,
@@ -88,7 +88,7 @@ export class ActionKafkaService {
     );
   }
 
-  async getZtrackingAction(message: any, key: string) {
+  async getZtrackingAction(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_ZTRACKING_ACTION,
@@ -99,7 +99,7 @@ export class ActionKafkaService {
     );
   }
 
-  async fuzzySearchActionTypes(message: any, key: string) {
+  async fuzzySearchActionTypes(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_ACTION_TYPES,
@@ -110,7 +110,7 @@ export class ActionKafkaService {
     );
   }
 
-  async fuzzySearchActionVariables(message: any, key: string) {
+  async fuzzySearchActionVariables(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_FUZZY_SEARCH_ACTION_VARIABLES,

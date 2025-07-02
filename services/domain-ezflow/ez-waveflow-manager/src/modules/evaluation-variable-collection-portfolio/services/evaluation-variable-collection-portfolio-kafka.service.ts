@@ -45,7 +45,7 @@ export class EvaluationVariableCollectionPortfolioKafkaService {
   async createEvaluationVariableCollectionPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_CREATE_EVALUATION_VARIABLE_COLLECTION_PORTFOLIO_ENTITY,
@@ -65,7 +65,7 @@ export class EvaluationVariableCollectionPortfolioKafkaService {
   async updateEvaluationVariableCollectionPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_UPDATE_EVALUATION_VARIABLE_COLLECTION_PORTFOLIO_ENTITY,
@@ -85,7 +85,7 @@ export class EvaluationVariableCollectionPortfolioKafkaService {
   async deleteEvaluationVariableCollectionPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_DELETE_EVALUATION_VARIABLE_COLLECTION_PORTFOLIO_ENTITY,
@@ -105,7 +105,7 @@ export class EvaluationVariableCollectionPortfolioKafkaService {
   async getEvaluationVariableCollectionPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_EVALUATION_VARIABLE_COLLECTION_PORTFOLIO_ENTITY,
@@ -125,7 +125,7 @@ export class EvaluationVariableCollectionPortfolioKafkaService {
   async getManyEvaluationVariableCollectionPortfolios(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_MANY_EVALUATION_VARIABLE_COLLECTION_PORTFOLIOS,
@@ -145,7 +145,7 @@ export class EvaluationVariableCollectionPortfolioKafkaService {
   async getHistoryOfEvaluationVariableCollectionPortfolioEntity(
     message: any,
     key: string,
-  ) {
+  ): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
       KT_GET_HISTORY_EVALUATION_VARIABLE_COLLECTION_PORTFOLIO_ENTITY,

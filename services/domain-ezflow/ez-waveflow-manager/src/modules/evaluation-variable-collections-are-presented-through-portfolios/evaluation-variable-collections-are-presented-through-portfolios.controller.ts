@@ -45,7 +45,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async createEvaluationVariableCollectionArePresentedThroughPortfoliosWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,
@@ -65,7 +65,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async updateEvaluationVariableCollectionArePresentedThroughPortfoliosWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_UPDATE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,
@@ -85,7 +85,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async deleteEvaluationVariableCollectionArePresentedThroughPortfoliosWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_DELETE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,
@@ -105,7 +105,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async getEvaluationVariableCollectionArePresentedThroughPortfoliosWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,
@@ -125,7 +125,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async getManyEvaluationVariableCollectionsArePresentedThroughPortfoliosWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_MANY_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS}`,
@@ -145,7 +145,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async getHistoryOfEvaluationVariableCollectionArePresentedThroughPortfoliosWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,
@@ -165,7 +165,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async addEvaluationVariableCollectionFromPortfolioWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_ADD_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,
@@ -185,7 +185,7 @@ export class EvaluationVariableCollectionsArePresentedThroughPortfoliosControlle
   async removeEvaluationVariableCollectionFromPortfolioWithKafka(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
-  ) {
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic: ${KT_REMOVE_EVALUATION_VARIABLE_COLLECTIONS_PRESENTED_THROUGH_PORTFOLIOS_ENTITY}`,

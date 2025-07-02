@@ -8,9 +8,7 @@ import { ClientMessagesMode } from '../../constants/ClientMessagesMode';
 
 @Injectable()
 export class ContactService {
-  constructor(
-    private readonly websocketGateway: WebsocketGateway) {
-  }
+  constructor(private readonly websocketGateway: WebsocketGateway) {}
 
   async createContact(createBusinessUnitDto: CreateContactDto): Promise<any> {
     const { firstName, lastName, email, formId } = createBusinessUnitDto;

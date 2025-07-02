@@ -6,7 +6,6 @@ import {
   KafkaMessage,
   Admin,
   EachMessagePayload,
-  Producer,
 } from "kafkajs";
 import { IKafkaConsumer } from "../interface";
 import * as retry from "async-retry";
@@ -41,13 +40,13 @@ export class KafkaConsumerService implements IKafkaConsumer {
     private readonly topic: ConsumerSubscribeTopic,
     config: ConsumerConfig,
     broker: string,
-    private readonly correlationId: string
+    private readonly correlationId: string,
   ) {
     this.logger.debug(
       `${KafkaConsumerService.name} initialized`,
       "",
       "constructor",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
 
     this.kafka = new Kafka({ brokers: [broker] });
@@ -72,7 +71,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
    * @private
    * @param {string} topicName - The name of the topic to create.
    */
-  private async createTopicIfNotExists(topicName: string) {
+  private async createTopicIfNotExists(topicName: string): Promise<void> {
     const existingTopics = await this.admin.listTopics();
     if (!existingTopics.includes(topicName)) {
       await this.admin.createTopics({
@@ -88,14 +87,14 @@ export class KafkaConsumerService implements IKafkaConsumer {
         `Topic ${topicName} created`,
         "",
         "createTopicIfNotExists",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
     } else {
       this.logger.log(
         `Topic ${topicName} already exists`,
         "",
         "createTopicIfNotExists",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
     }
   }
@@ -105,7 +104,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
    * @private
    * @param {KafkaMessage} message - The message to be added to the DLQ.
    */
-  async addMessageToDlq(message: KafkaMessage) {
+  async addMessageToDlq(message: KafkaMessage): Promise<void> {
     const topic = this.topic.topic as string;
     if (!this.dlqMessages.has(topic)) {
       this.dlqMessages.set(topic, []);
@@ -116,7 +115,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
   /**
    * Connects the consumers (main and retry) to the Kafka cluster.
    */
-  async connect() {
+  async connect(): Promise<void> {
     try {
       // Ensure both main topic and retry topic exist
       await this.createTopicIfNotExists(this.topic.topic as string);
@@ -130,21 +129,25 @@ export class KafkaConsumerService implements IKafkaConsumer {
         "kafka consumer (main + retry) connected",
         "",
         "connect",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
-    } catch (err) {
+    } catch (err: unknown) {
+      // Normalize to a string:
+      const errStr =
+        err instanceof Error ? (err.stack ?? err.message) : String(err);
+
       this.logger.warn(
-        "kafka consumer is sleep retrying after 5 sec",
+        `kafka consumer is sleep retrying after 5 sec => ${errStr}`,
         "",
         "connect",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
       await sleep(5000);
       this.logger.warn(
         "kafka consumer retry after 5 sec",
         "",
         "connect",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
 
       // Retry connecting
@@ -160,8 +163,8 @@ export class KafkaConsumerService implements IKafkaConsumer {
    */
   async consume(
     onMessage: (message: KafkaMessage) => Promise<void>,
-    onRetryMessage?: (message: KafkaMessage) => Promise<void>
-  ): Promise<any> {
+    onRetryMessage?: (message: KafkaMessage) => Promise<void>,
+  ): Promise<void> {
     // If onRetryMessage is not provided, use the same onMessage for both
     if (!onRetryMessage) {
       onRetryMessage = onMessage;
@@ -178,7 +181,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
       `Kafka consumer subscribed to main topic [${this.topic.topic}] and retry topic [${this.retryTopic}]`,
       "",
       "consume",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
 
     let handleResolve;
@@ -191,7 +194,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
           payload,
           onMessage,
           handleResolve,
-          handleReject
+          handleReject,
         );
       },
     });
@@ -203,7 +206,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
           payload,
           onRetryMessage,
           handleResolve,
-          handleReject
+          handleReject,
         );
       },
     });
@@ -217,16 +220,21 @@ export class KafkaConsumerService implements IKafkaConsumer {
           "disconnecting main + retry consumers",
           this.correlationId,
           "consume->finally",
-          LogStreamLevel.ProdStandard
+          LogStreamLevel.ProdStandard,
         );
         await this.disconnect();
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
+        // Normalize to a string:
+        const errStr =
+          error instanceof Error
+            ? (error.stack ?? error.message)
+            : String(error);
         this.logger.error(
-          `Consume error => ${error}`,
+          `Consume error => ${errStr}`,
           this.correlationId,
           "consume->catch",
-          LogStreamLevel.ProdStandard
+          LogStreamLevel.ProdStandard,
         );
         handleReject(error);
       });
@@ -239,16 +247,16 @@ export class KafkaConsumerService implements IKafkaConsumer {
     { message, partition }: EachMessagePayload,
     onMessage: (message: KafkaMessage) => Promise<void>,
     handleResolve: (value: unknown) => void,
-    handleReject: (reason?: any) => void
-  ) {
+    handleReject: (reason?: any) => void,
+  ): Promise<void> {
     const traceId = this.getTraceId(message);
     const key = message.key?.toString() || "";
 
     this.logger.info(
-      `Received message on MAIN topic [${this.topic.topic}] with key: ${key}`,
+      `Received message on MAIN topic [${this.topic.topic}] with key: ${key} for partition ${partition}`,
       traceId,
       "handleMainMessage",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
 
     try {
@@ -265,7 +273,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
                 `Correlation matches in MAIN. Disconnecting RETRY consumer first...`,
                 traceId,
                 "handleMainMessage",
-                LogStreamLevel.ProdStandard
+                LogStreamLevel.ProdStandard,
               );
               await this.retryConsumer.disconnect();
 
@@ -277,7 +285,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
                 `Correlation mismatch in MAIN consumer. Forwarding to RETRY topic`,
                 traceId,
                 "handleMainMessage",
-                LogStreamLevel.ProdStandard
+                LogStreamLevel.ProdStandard,
               );
               await this.produceToRetryTopic(message, 0); // Initial attempt = 0
             }
@@ -290,17 +298,17 @@ export class KafkaConsumerService implements IKafkaConsumer {
               `Retry attempt#${attempt} for MAIN consumer. Error => ${err?.message}`,
               traceId,
               "handleMainMessage",
-              LogStreamLevel.ProdStandard
+              LogStreamLevel.ProdStandard,
             );
           },
-        }
+        },
       );
     } catch (error) {
       this.logger.error(
         `Error in MAIN consumer => ${error?.message}\nMessage added to DLQ`,
         traceId,
         "handleMainMessage",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
       await this.addMessageToDlq(message);
       handleReject?.(error);
@@ -314,22 +322,22 @@ export class KafkaConsumerService implements IKafkaConsumer {
     { message, partition }: EachMessagePayload,
     onRetryMessage: (message: KafkaMessage) => Promise<void>,
     handleResolve: (value: unknown) => void,
-    handleReject: (reason?: any) => void
-  ) {
+    handleReject: (reason?: any) => void,
+  ): Promise<void> {
     const traceId = this.getTraceId(message);
     const key = message.key?.toString() || "";
 
     this.logger.info(
-      `Received message on RETRY topic [${this.retryTopic}] with key: ${key}`,
+      `Received message on RETRY topic [${this.retryTopic}] with key: ${key} for partition ${partition}`,
       traceId,
       "handleRetryMessage",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
 
     // Check attempts from the headers or default to 0
     const currentAttempts = parseInt(
       message.headers?.["x-attempts"]?.toString() || "0",
-      10
+      10,
     );
 
     try {
@@ -346,7 +354,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
                 `Correlation matches in RETRY. Disconnecting MAIN consumer first...`,
                 traceId,
                 "handleRetryMessage",
-                LogStreamLevel.ProdStandard
+                LogStreamLevel.ProdStandard,
               );
               await this.consumer.disconnect();
 
@@ -358,7 +366,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
                 `Correlation mismatch in RETRY consumer`,
                 traceId,
                 "handleRetryMessage",
-                LogStreamLevel.ProdStandard
+                LogStreamLevel.ProdStandard,
               );
 
               // Increase attempts
@@ -369,7 +377,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
                   `Max retry attempts exceeded. Sending to DLQ`,
                   traceId,
                   "handleRetryMessage",
-                  LogStreamLevel.ProdStandard
+                  LogStreamLevel.ProdStandard,
                 );
                 await this.addMessageToDlq(message);
               } else {
@@ -378,7 +386,7 @@ export class KafkaConsumerService implements IKafkaConsumer {
                   `Re-trying the message again on RETRY topic [attempt=${nextAttempts}]`,
                   traceId,
                   "handleRetryMessage",
-                  LogStreamLevel.ProdStandard
+                  LogStreamLevel.ProdStandard,
                 );
                 await this.produceToRetryTopic(message, nextAttempts);
               }
@@ -392,17 +400,17 @@ export class KafkaConsumerService implements IKafkaConsumer {
               `Retry attempt#${attempt} for RETRY consumer. Error => ${err?.message}`,
               traceId,
               "handleRetryMessage",
-              LogStreamLevel.ProdStandard
+              LogStreamLevel.ProdStandard,
             );
           },
-        }
+        },
       );
     } catch (error) {
       this.logger.error(
         `Error in RETRY consumer => ${error?.message}\nMessage added to DLQ`,
         traceId,
         "handleRetryMessage",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
       await this.addMessageToDlq(message);
       handleReject?.(error);
@@ -412,7 +420,10 @@ export class KafkaConsumerService implements IKafkaConsumer {
   /**
    * Produce the message to the retry topic with a given attempt count in the headers.
    */
-  private async produceToRetryTopic(message: KafkaMessage, attempts: number) {
+  private async produceToRetryTopic(
+    message: KafkaMessage,
+    attempts: number,
+  ): Promise<void> {
     const producer = new EzKafkaProducer();
     // @ts-ignore
     const broker = this.kafka?.config?.brokers?.[0] || "localhost:9092";
@@ -438,10 +449,19 @@ export class KafkaConsumerService implements IKafkaConsumer {
         `value : ${value}`,
         "",
         "consume -> consumer.run() -> eachMessage",
-        LogStreamLevel.ProdStandard
+        LogStreamLevel.ProdStandard,
       );
       return JSON.parse(value)?.traceId || "";
-    } catch (e) {
+    } catch (e: unknown) {
+      // Normalize to a string:
+      const errStr = e instanceof Error ? (e.stack ?? e.message) : String(e);
+
+      this.logger.warn(
+        `Failed to parse traceId: ${errStr}`,
+        "",
+        "getTraceId",
+        LogStreamLevel.ProdStandard,
+      );
       return "";
     }
   }
@@ -458,12 +478,12 @@ export class KafkaConsumerService implements IKafkaConsumer {
   /**
    * Disconnects both the main consumer and the retry consumer from the Kafka cluster.
    */
-  async disconnect() {
+  async disconnect(): Promise<void> {
     this.logger.log(
       "kafka consumers (main + retry) disconnected",
       "",
       "disconnect",
-      LogStreamLevel.ProdStandard
+      LogStreamLevel.ProdStandard,
     );
     await this.consumer.disconnect();
     await this.retryConsumer.disconnect();

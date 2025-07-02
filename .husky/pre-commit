@@ -8,10 +8,10 @@ if [ -n "$(git diff --name-only)" ]; then
 fi
 
 # 2. Run your linter fixes and stage them too
-npm run lint:fix
-if [ -n "$(git diff --name-only)" ]; then
-  git add .
-fi
+# npm run lint:fix
+# if [ -n "$(git diff --name-only)" ]; then
+#   git add .
+# fi
 
 # 3. Now exit cleanly so that Git proceeds with the original commit message
 exit 0

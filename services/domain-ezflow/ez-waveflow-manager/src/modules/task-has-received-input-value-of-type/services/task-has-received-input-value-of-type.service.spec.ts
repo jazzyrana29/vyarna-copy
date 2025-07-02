@@ -3,7 +3,7 @@ import { TaskHasReceiveInputValueOfTypeService } from './task-has-received-input
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskHasReceiveInputValueOfType } from '../../../entities/task-has-received-input-value-of-type.entity';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import {
   mockCreateTaskHasReceivedInputValueOfTypeDto,
   mockSavedTaskHasReceivedInputValueOfType001,

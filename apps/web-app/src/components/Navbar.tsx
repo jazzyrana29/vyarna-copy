@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { JSX, useState } from "react";
 import {
   FlatList,
   Image,
@@ -10,13 +10,13 @@ import {
   useWindowDimensions,
   View,
   ViewProps,
-} from 'react-native';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import { useNavigation, useNavigationState } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
-import { NAV_ROUTE_HOME } from '../constants/routes';
-import { getBaseUrl } from 'src/utils/env';
+} from "react-native";
+import FeatherIcon from "react-native-vector-icons/Feather";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
+import { NAV_ROUTE_HOME } from "../constants/routes";
+import { getBaseUrl } from "src/utils/env";
 
 export interface NavItem {
   key: keyof RootStackParamList;
@@ -51,12 +51,12 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
   const getPathFromKey = (key: string): string => {
     return key
       .toLowerCase()
-      .replace('vyarna - ', '')
-      .replace(/\s+/g, '-')
-      .replace(/^\/+/, ''); // ✅ strip leading slashes
+      .replace("vyarna - ", "")
+      .replace(/\s+/g, "-")
+      .replace(/^\/+/, ""); // ✅ strip leading slashes
   };
 
-  const renderGroup = (group: NavItem) => {
+  const renderGroup = (group: NavItem): JSX.Element => {
     const isActive = currentRoute === group.key;
     const isOpen = hoveredGroup === group.label;
     const hasChildren = !!group.children?.length;
@@ -81,23 +81,25 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
             <Text
               onPress={async () => {
                 handleNavigate(group.key);
-                if (Platform.OS === 'web') {
+                if (Platform.OS === "web") {
                   window.open(
                     `${baseUrl}/${getPathFromKey(group.key)}`,
-                    '_self',     // ← open in the same tab
+                    "_self", // ← open in the same tab
                   );
                 } else {
-                  await Linking.openURL(`${baseUrl}/${getPathFromKey(group.key)}`);
+                  await Linking.openURL(
+                    `${baseUrl}/${getPathFromKey(group.key)}`,
+                  );
                 }
               }}
               accessibilityRole="link"
-              className={isActive ? 'font-bold text-primary' : 'font-medium'}
+              className={isActive ? "font-bold text-primary" : "font-medium"}
             >
               {group.label}
             </Text>
             {hasChildren && (
               <Text className="text-gray-500 text-xs">
-                {isMobile ? '' : '▼'}
+                {isMobile ? "" : "▼"}
               </Text>
             )}
           </View>
@@ -106,8 +108,6 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
         {!isMobile && hasChildren && isOpen && (
           <View
             className="absolute top-full left-0 bg-white rounded-md shadow-lg border w-56 z-50"
-
-
             {...({
               onMouseEnter: () => setHoveredGroup(group.label),
               onMouseLeave: () => setHoveredGroup(null),
@@ -124,7 +124,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
                     handleNavigate(child.key);
                     const url = `${baseUrl}/${getPathFromKey(child.key)}`;
 
-                    if (Platform.OS === 'web') {
+                    if (Platform.OS === "web") {
                       // same-tab
                       window.location.assign(url);
                     } else {
@@ -134,8 +134,8 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
                   }}
                   className={`px-4 py-2 text-sm ${
                     currentRoute === child.key
-                      ? 'text-primary font-semibold'
-                      : 'text-gray-800'
+                      ? "text-primary font-semibold"
+                      : "text-gray-800"
                   }`}
                 >
                   • {child.label}
@@ -153,7 +153,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
       <View className="flex-row items-center justify-between px-4 py-3">
         <Pressable onPress={() => navigation.navigate(NAV_ROUTE_HOME)}>
           <Image
-            source={require('../assets/images/logo-full.png')}
+            source={require("../assets/images/logo-full.png")}
             style={{ width: 120, height: 40 }}
             resizeMode="contain"
           />
@@ -161,7 +161,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
 
         {isMobile ? (
           <Pressable onPress={() => setMenuOpen((prev) => !prev)}>
-            <FeatherIcon name={menuOpen ? 'x' : 'menu'} size={28} />
+            <FeatherIcon name={menuOpen ? "x" : "menu"} size={28} />
           </Pressable>
         ) : (
           <View className="flex-row items-center space-x-4">
@@ -179,12 +179,12 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
           onRequestClose={() => setMenuOpen(false)}
         >
           <Pressable
-            style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
+            style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.3)" }}
             onPress={() => setMenuOpen(false)}
           >
             <View
               style={{
-                backgroundColor: '#fff',
+                backgroundColor: "#fff",
                 paddingVertical: 16,
                 paddingHorizontal: 24,
                 marginTop: 60,

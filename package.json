@@ -11,9 +11,12 @@
     "prepare": "husky install .husky",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "devDependencies": {
+    "prettier": "^3.6.2",
     "turbo": "latest",
     "typescript": "latest"
   },

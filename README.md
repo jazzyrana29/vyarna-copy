@@ -2,9 +2,9 @@
 
 This repository houses **all** of Vyarna’s code—front-ends (web site, admin portal, mobile app), back-end microservices, shared packages, and infra scripts—organized as a single Git monorepo with workspaces. It’s designed for:
 
-* **Developer DX**: share code, types, components, configs
-* **LLM/AI tooling**: point at one repo, see *every* module
-* **CI/CD** and **Docker builds**: each workspace installs only what it needs
+- **Developer DX**: share code, types, components, configs
+- **LLM/AI tooling**: point at one repo, see _every_ module
+- **CI/CD** and **Docker builds**: each workspace installs only what it needs
 
 ---
 
@@ -35,10 +35,10 @@ vyarna-nucleus/
     ├── person/
     │   ├── vy-person-identity/
     │   ├── vy-person-roles/
-    │   └── …  
+    │   └── …
     ├── milk/
     ├── sales/
-    └── …  
+    └── …
 ```
 
 ---
@@ -53,21 +53,17 @@ Defines workspaces, dev-dependencies, and top-level scripts:
 {
   "name": "vyarna-nucleus",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "services/*/*"
-  ],
+  "workspaces": ["packages/*", "apps/*", "services/*/*"],
   "scripts": {
-    "dev":   "turbo run dev",
+    "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint":  "turbo run lint",
-    "test":  "turbo run test"
+    "lint": "turbo run lint",
+    "test": "turbo run test",
   },
   "devDependencies": {
     "turbo": "^1.8.0",
-    "typescript": "^5.0.0"
-  }
+    "typescript": "^5.0.0",
+  },
 }
 ```
 
@@ -83,12 +79,12 @@ Shared TypeScript settings and path aliases:
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@vyarna/ui":          ["packages/ui/src"],
-      "@vyarna/api-client":  ["packages/api-client/src"],
-      "@vyarna/models":      ["packages/models/src"]
+      "@vyarna/ui": ["packages/ui/src"],
+      "@vyarna/api-client": ["packages/api-client/src"],
+      "@vyarna/models": ["packages/models/src"],
     },
-    "strict": true
-  }
+    "strict": true,
+  },
 }
 ```
 
@@ -101,10 +97,10 @@ High-level pipeline for builds, tests, linting, and dev:
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": { "dependsOn": ["^build"], "outputs": ["dist/**"] },
-    "dev":   { "cache": false },
-    "lint":  { "outputs": [] },
-    "test":  { "outputs": [] }
-  }
+    "dev": { "cache": false },
+    "lint": { "outputs": [] },
+    "test": { "outputs": [] },
+  },
 }
 ```
 
@@ -126,11 +122,11 @@ High-level pipeline for builds, tests, linting, and dev:
    npm run dev
    ```
 
-   * Spins up all `dev` scripts in every workspace in parallel
-   * Web-app: [http://localhost:3000](http://localhost:3000)
-   * Admin portal: [http://localhost:3001](http://localhost:3001)
-   * Mobile-app: Metro bundler on its own port
-   * Backend services on their configured ports
+   - Spins up all `dev` scripts in every workspace in parallel
+   - Web-app: [http://localhost:3000](http://localhost:3000)
+   - Admin portal: [http://localhost:3001](http://localhost:3001)
+   - Mobile-app: Metro bundler on its own port
+   - Backend services on their configured ports
 
 3. **Build all**
 
@@ -138,8 +134,8 @@ High-level pipeline for builds, tests, linting, and dev:
    npm run build
    ```
 
-   * Runs each workspace’s `build` script in the correct dependency order
-   * Artifacts end up in each workspace’s `dist/` or `.next/`
+   - Runs each workspace’s `build` script in the correct dependency order
+   - Artifacts end up in each workspace’s `dist/` or `.next/`
 
 4. **Lint & Test**
 
@@ -154,11 +150,11 @@ High-level pipeline for builds, tests, linting, and dev:
 
 ### **`packages/`**
 
-Shared libraries *only*.
+Shared libraries _only_.
 
-* **ui/**: React components, design tokens
-* **api-client/**: auto-generated OpenAPI or GraphQL SDKs
-* **models/**: TS interfaces, Zod/Yup schemas
+- **ui/**: React components, design tokens
+- **api-client/**: auto-generated OpenAPI or GraphQL SDKs
+- **models/**: TS interfaces, Zod/Yup schemas
 
 Each has its own `package.json` and `tsconfig.json`. No direct runnable apps here.
 
@@ -166,23 +162,23 @@ Each has its own `package.json` and `tsconfig.json`. No direct runnable apps her
 
 User-facing front-ends: must be marked `"private": true`.
 
-* **web-app/**: Next.js universal site (marketing + embedded app features)
-* **admin-portal/**: internal dashboards
-* **mobile-app/**: React Native / Expo
+- **web-app/**: Next.js universal site (marketing + embedded app features)
+- **admin-portal/**: internal dashboards
+- **mobile-app/**: React Native / Expo
 
 Each workspace:
 
-* Has normal React/Next or Expo CLI structure
-* Defines its own `Dockerfile` for filtered installs (`npm ci --workspace=...`)
-* Imports code from `@vyarna/ui`, `@vyarna/api-client`, and TS models
+- Has normal React/Next or Expo CLI structure
+- Defines its own `Dockerfile` for filtered installs (`npm ci --workspace=...`)
+- Imports code from `@vyarna/ui`, `@vyarna/api-client`, and TS models
 
 ### **`services/`**
 
 Each microservice lives in `services/<domain>/<service-name>/`.
 
-* Uses Node.js + your framework of choice (Express, Nest, Fastify, etc.)
-* Has its own `package.json`, `tsconfig.json`, and `Dockerfile`
-* Imports shared models & validation from `@vyarna/models`
+- Uses Node.js + your framework of choice (Express, Nest, Fastify, etc.)
+- Has its own `package.json`, `tsconfig.json`, and `Dockerfile`
+- Imports shared models & validation from `@vyarna/models`
 
 ### **`infrastructure/`**
 
@@ -232,13 +228,13 @@ This ensures **only** that workspace’s dependencies end up in its image—keep
 
 ## 🎯 Why One Repo?
 
-* **Shared logic & types** live side-by-side with apps & services.
-* **LLMs / Codex** see all code without juggling multiple repos.
-* **Turbo/NX** orchestrates cross-workspace builds/tests/lints.
-* **Filtered Dockerfiles** keep container images lean.
+- **Shared logic & types** live side-by-side with apps & services.
+- **LLMs / Codex** see all code without juggling multiple repos.
+- **Turbo/NX** orchestrates cross-workspace builds/tests/lints.
+- **Filtered Dockerfiles** keep container images lean.
 
 > When micro-frontends or radically independent stacks become necessary, you can always split a workspace into its own repo—but for now, this monorepo maximizes code-sharing and developer velocity.
 
 ---
 
-> *This README is your single source of truth for repo layout, conventions, and workflows. Whenever in doubt, refer back here—both human devs and AI assistants alike.*
+> _This README is your single source of truth for repo layout, conventions, and workflows. Whenever in doubt, refer back here—both human devs and AI assistants alike._
