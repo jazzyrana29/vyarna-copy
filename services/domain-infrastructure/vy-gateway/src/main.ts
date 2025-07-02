@@ -6,7 +6,6 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 import { Partitioners } from 'kafkajs';
 import * as express from 'express';
 
@@ -24,9 +23,6 @@ async function bootstrap(): Promise<void> {
     bufferLogs: true,
     logger,
   });
-
-  // Attach the Socket.io adapter
-  app.useWebSocketAdapter(new IoAdapter(app));
 
   // Global validation + transformation for incoming DTOs
   app.useGlobalPipes(
