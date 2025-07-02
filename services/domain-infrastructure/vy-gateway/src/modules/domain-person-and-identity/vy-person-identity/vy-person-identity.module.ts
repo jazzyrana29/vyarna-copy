@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { PersonIdentityGateway } from './dice.gateway';
 import { KafkaModule } from '../../utils/kafka/kafka.module';
-import { PersonIdentityKafkaService } from './dice-kafka.service';
-import { PersonIdentityResponseController } from './dice-response.controller';
+import { PersonIdentityWebsocket } from './vy-person-identity.websocket';
+import { PersonIdentityKafkaService } from './vy-person-identity-kafka.service';
+import { PersonIdentityResponseController } from './vy-person-identity-response.controller';
+import { PersonIdentityController } from './vy-person-identity.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
