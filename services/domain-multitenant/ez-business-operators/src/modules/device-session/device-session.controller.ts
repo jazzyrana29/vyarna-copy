@@ -21,10 +21,7 @@ export class DeviceSessionController {
 
   constructor(
     private readonly deviceSessionKafkaService: DeviceSessionKafkaService,
-    @Payload() message: any,
-    @Ctx() context: KafkaContext,
   ) {
-    const key = context.getMessage().key.toString();
     this.logger.debug(
       `${DeviceSessionController.name} initialized`,
       '',

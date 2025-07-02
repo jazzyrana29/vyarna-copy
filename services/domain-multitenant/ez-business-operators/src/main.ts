@@ -27,7 +27,7 @@ async function bootstrap(): Promise<void> {
 
   const broker = process.env.KAFKA_BROKER || 'localhost:9092';
   const groupId = process.env.KAFKA_GROUP || 'ez-business-operators';
-  const microservice = app.connectMicroservice<MicroserviceOptions>({
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {

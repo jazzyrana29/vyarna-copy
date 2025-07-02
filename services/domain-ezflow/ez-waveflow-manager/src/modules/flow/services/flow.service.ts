@@ -600,6 +600,13 @@ export class FlowService {
       )) {
         const { manifold, nodeExits, incomingExits, ...nodeData } = oldNode;
 
+        this.logger.debug(
+          `oldNode isolated with: manifold => ${manifold.manifoldId}, nodeExits => ${nodeExits.length}, incomingExits => ${incomingExits.length}`,
+          traceId,
+          'cloneFlow',
+          LogStreamLevel.DebugHeavy,
+        );
+
         const newNode = nodeRepo.create({
           ...nodeData,
           nodeId: undefined,
@@ -643,7 +650,15 @@ export class FlowService {
       )) {
         if (oldNode.manifold && !oldNode.manifold.isDeleted) {
           const oldManifold = oldNode.manifold;
+
           const { filters, ...manifoldData } = oldManifold;
+
+          this.logger.debug(
+            `oldNode isolated with: filters=> ${filters.length}`,
+            traceId,
+            'cloneFlow',
+            LogStreamLevel.DebugHeavy,
+          );
 
           const newManifold = manifoldRepo.create({
             ...manifoldData,
