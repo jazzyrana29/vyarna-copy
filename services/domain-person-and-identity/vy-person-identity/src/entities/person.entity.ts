@@ -23,7 +23,7 @@ export class Person extends BaseEntity {
   @Column("uuid", { nullable: true })
   rootBusinessUnitId: string;
 
-  @Column({ type: "varchar", length: 50 })
+  @Column({ type: "varchar", length: 50, nullable: true })
   @Index()
   username: string;
 
@@ -39,7 +39,7 @@ export class Person extends BaseEntity {
   @Index()
   nameLastFirst: string;
 
-  @Column({ type: "varchar", length: 50 })
+  @Column({ type: "varchar", length: 50, nullable: true })
   @Index()
   nameLastSecond: string;
 
@@ -50,7 +50,7 @@ export class Person extends BaseEntity {
   @OneToMany(() => PhysicalAddress, (e) => e.person)
   addresses: PhysicalAddress[];
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 255, nullable: true })
   @Index()
   password: string;
 

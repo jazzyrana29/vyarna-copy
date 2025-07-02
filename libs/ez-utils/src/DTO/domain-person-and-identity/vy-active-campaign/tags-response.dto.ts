@@ -1,6 +1,6 @@
 // src/vy-active-campaign/dto/tags-response.dto.ts
 
-import { TagsEnum } from '../../../enums/domain-person-and-identity/vy-active-campaign/tags.enum';
+import { TagsEnum } from "../../../enums/domain-person-and-identity/vy-active-campaign/tags.enum";
 
 /**
  * Links related to a tag
