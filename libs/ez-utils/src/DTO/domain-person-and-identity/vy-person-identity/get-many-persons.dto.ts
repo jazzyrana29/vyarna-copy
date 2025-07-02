@@ -5,7 +5,7 @@ import { SortOptionDto } from '../../shared-dtos/sort-option.dto';
 import { PaginationDto } from '../../shared-dtos/pagination.dto';
 import { PersonDto } from './person.dto';
 
-export class GetManyOperatorsDto extends PartialType(
+export class GetManyPersonsDto extends PartialType(
   PickType(PersonDto, [
     'username',
     'nameFirst',
