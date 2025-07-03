@@ -4,6 +4,8 @@ import {
   KafkaMessageResponderService,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
+  CreateGrowthMeasurementDto,
+  GetGrowthMeasurementsDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -33,7 +35,7 @@ export class GrowthMeasurementKafkaService {
       KT_CREATE_GROWTH_MEASUREMENT,
       message,
       key,
-      async (value: any, traceId: string) =>
+      async (value: CreateGrowthMeasurementDto, traceId: string) =>
         await this.growthService.create(value, traceId),
     );
   }
@@ -44,7 +46,7 @@ export class GrowthMeasurementKafkaService {
       KT_GET_GROWTH_MEASUREMENTS,
       message,
       key,
-      async (value: { babyId: string }, traceId: string) =>
+      async (value: GetGrowthMeasurementsDto, traceId: string) =>
         await this.growthService.getAll(value.babyId),
     );
   }

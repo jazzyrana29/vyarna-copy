@@ -33,3 +33,13 @@ export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/subscribe
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/lists-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/tags-response.dto";
+/* ------------------------------------- domain-health-and-insights DTOs -------------------------------*/
+export * from './src/DTO/domain-health-and-insights/vy-care-log/diaper-change.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/create-diaper-change.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/get-diaper-changes.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/get-growth-measurements.dto';
+export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto';

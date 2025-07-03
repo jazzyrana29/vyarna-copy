@@ -4,6 +4,8 @@ import {
   KafkaMessageResponderService,
   KT_CREATE_DIAPER_CHANGE,
   KT_GET_DIAPER_CHANGES,
+  CreateDiaperChangeDto,
+  GetDiaperChangesDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -33,7 +35,7 @@ export class DiaperChangeKafkaService {
       KT_CREATE_DIAPER_CHANGE,
       message,
       key,
-      async (value: any, traceId: string) =>
+      async (value: CreateDiaperChangeDto, traceId: string) =>
         await this.diaperChangeService.create(value, traceId),
     );
   }
@@ -44,7 +46,7 @@ export class DiaperChangeKafkaService {
       KT_GET_DIAPER_CHANGES,
       message,
       key,
-      async (value: { babyId: string }, traceId: string) =>
+      async (value: GetDiaperChangesDto, traceId: string) =>
         await this.diaperChangeService.findAll(value.babyId),
     );
   }
