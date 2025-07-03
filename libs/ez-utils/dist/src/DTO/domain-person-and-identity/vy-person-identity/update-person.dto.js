@@ -29,6 +29,15 @@ class UpdatePersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)
 exports.UpdatePersonDto = UpdatePersonDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
+        description: "Unique identifier for the person",
+        type: String,
+        format: "uuid",
+    }),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], UpdatePersonDto.prototype, "personId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
         description: "Unique identifier for the operator",
         type: String,
         format: "uuid",
