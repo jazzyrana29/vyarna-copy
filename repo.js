@@ -6,6 +6,7 @@ const { execSync } = require('child_process');
 function collectPackages(root) {
   const result = [];
   function scan(dir, type) {
+    if (path.basename(dir) === 'node_modules') return;
     const pkg = path.join(dir, 'package.json');
     if (fs.existsSync(pkg)) {
       const data = JSON.parse(fs.readFileSync(pkg, 'utf8'));
