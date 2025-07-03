@@ -139,11 +139,13 @@ switch (cmd) {
     break;
   case 'start': {
     if (!args.length) {
-      console.log('Please specify which apps or services to start.');
-      console.log('Use `node repo.js list` to see available names.');
-      console.log('Example: node repo.js start Vyarna website-foundation-scg vy-person-identity');
-      console.log('Vyarna and website-foundation-scg are apps; vy-person-identity is a service.');
-      console.log('Starting everything at once has been disabled to avoid overloading your machine.');
+      console.log(
+        `Please specify which apps or services to start.
+  Use \`node repo.js list\` to see available names.
+  Example: node repo.js start Vyarna website-foundation-scg vy-person-identity
+  Vyarna and website-foundation-scg are apps; vy-person-identity is a service.
+  Starting everything at once has been disabled to avoid overloading your machine.`,
+      );
       break;
     }
     const targets = filterPackages(
