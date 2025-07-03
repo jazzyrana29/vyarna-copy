@@ -1,19 +1,56 @@
-import { Controller, Body, Post, Get, Query } from '@nestjs/common';
-import { DiaperChangeService } from './services/diaper-change.service';
+import { Controller } from '@nestjs/common';
+import {
+  Ctx,
+  KafkaContext,
+  MessagePattern,
+  Payload,
+} from '@nestjs/microservices';
+import { DiaperChangeKafkaService } from './services/diaper-change-kafka.service';
+import { KT_CREATE_DIAPER_CHANGE, KT_GET_DIAPER_CHANGES } from 'ez-utils';
+import { getLoggerConfig } from '../../utils/common';
+import { LogStreamLevel } from 'ez-logger';
 
 @Controller('care')
 export class DiaperChangeController {
-  constructor(private readonly service: DiaperChangeService) {}
+  private logger = getLoggerConfig(DiaperChangeController.name);
 
-  @Post('diaper-changes')
-  async create(@Body() body: any): Promise<any> {
-    const traceId = body.traceId || '';
-    const created = await this.service.create(body, traceId);
-    return { diaperChangeId: created.diaperChangeId };
+  constructor(private readonly kafkaService: DiaperChangeKafkaService) {
+    this.logger.debug(
+      `${DiaperChangeController.name} initialized`,
+      '',
+      'constructor',
+      LogStreamLevel.DebugLight,
+    );
   }
 
-  @Get('diaper-changes')
-  async get(@Query('babyId') babyId: string): Promise<any[]> {
-    return this.service.findAll(babyId);
+
+  @MessagePattern(KT_CREATE_DIAPER_CHANGE)
+  async createDiaperChangeWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_CREATE_DIAPER_CHANGE}`,
+      '',
+      'createDiaperChangeWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.kafkaService.createDiaperChange(message, key);
+  }
+
+  @MessagePattern(KT_GET_DIAPER_CHANGES)
+  async getDiaperChangesWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_DIAPER_CHANGES}`,
+      '',
+      'getDiaperChangesWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.kafkaService.getDiaperChanges(message, key);
   }
 }
