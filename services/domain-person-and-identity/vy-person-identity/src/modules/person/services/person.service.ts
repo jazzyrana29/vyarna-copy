@@ -19,7 +19,8 @@ import {
   PaginatedPersonsResponseDto,
   UpdatePersonDto,
 } from "ez-utils";
-import { BusinessUnit } from "../../../entities/business-unit.entity";
+import { BusinessUnit } from "../../../../../../domain-multitenant/ez-business-operators/src/entities/business-unit.entity";
+import { Email } from "../../../entities/email.entity";
 
 @Injectable()
 export class PersonService {
@@ -30,6 +31,8 @@ export class PersonService {
     private readonly personRepository: Repository<Person>,
     @InjectRepository(BusinessUnit)
     private readonly businessUnitRepository: Repository<BusinessUnit>,
+    @InjectRepository(Email)
+    private readonly emailRepository: Repository<Email>,
     private readonly ztrackingPersonService: ZtrackingPersonService,
   ) {
     this.logger.debug(
@@ -72,7 +75,7 @@ export class PersonService {
       );
     }
 
-    const conflictEmail = await this.personRepository.findOne({
+    const conflictEmail = await this.emailRepository.findOne({
       where: { email: createPersonDto.email },
     });
     if (conflictEmail) {

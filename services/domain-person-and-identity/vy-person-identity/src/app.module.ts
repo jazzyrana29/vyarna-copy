@@ -3,7 +3,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import typeorm from "./config/typeorm/typeorm";
 import { CFG_TOKEN_TYPEORM } from "./config/config.tokens";
-import { DiceModule } from "./modules/dice/dice.module";
 import { getLoggerConfig } from "./utils/common";
 import { LogStreamLevel } from "ez-logger";
 
@@ -17,7 +16,6 @@ import { LogStreamLevel } from "ez-logger";
         return await configService.get(CFG_TOKEN_TYPEORM);
       },
     }),
-    DiceModule,
   ],
   controllers: [],
   providers: [],
