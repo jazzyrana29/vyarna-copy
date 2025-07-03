@@ -14,7 +14,9 @@ import { LogStreamLevel } from 'ez-logger';
 export class DiaperChangeController {
   private logger = getLoggerConfig(DiaperChangeController.name);
 
-  constructor(private readonly kafkaService: DiaperChangeKafkaService) {
+  constructor(
+    private readonly diaperChangeKafkaService: DiaperChangeKafkaService,
+  ) {
     this.logger.debug(
       `${DiaperChangeController.name} initialized`,
       '',
@@ -36,7 +38,7 @@ export class DiaperChangeController {
       'createDiaperChangeWithKafka',
       LogStreamLevel.DebugLight,
     );
-    await this.kafkaService.createDiaperChange(message, key);
+    await this.diaperChangeKafkaService.createDiaperChange(message, key);
   }
 
   @MessagePattern(KT_GET_DIAPER_CHANGES)
@@ -51,6 +53,6 @@ export class DiaperChangeController {
       'getDiaperChangesWithKafka',
       LogStreamLevel.DebugLight,
     );
-    await this.kafkaService.getDiaperChanges(message, key);
+    await this.diaperChangeKafkaService.getDiaperChanges(message, key);
   }
 }

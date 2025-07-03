@@ -14,7 +14,9 @@ import { LogStreamLevel } from 'ez-logger';
 export class NutritionController {
   private logger = getLoggerConfig(NutritionController.name);
 
-  constructor(private readonly kafkaService: NutritionSessionKafkaService) {
+  constructor(
+    private readonly nutritionSessionKafkaService: NutritionSessionKafkaService,
+  ) {
     this.logger.debug(
       `${NutritionController.name} initialized`,
       '',
@@ -36,7 +38,7 @@ export class NutritionController {
       'startNutritionSessionWithKafka',
       LogStreamLevel.DebugLight,
     );
-    await this.kafkaService.startSession(message, key);
+    await this.nutritionSessionKafkaService.startSession(message, key);
   }
 
   @MessagePattern(KT_GET_NUTRITION_SESSION)
@@ -51,6 +53,6 @@ export class NutritionController {
       'getNutritionSessionWithKafka',
       LogStreamLevel.DebugLight,
     );
-    await this.kafkaService.getSession(message, key);
+    await this.nutritionSessionKafkaService.getSession(message, key);
   }
 }
