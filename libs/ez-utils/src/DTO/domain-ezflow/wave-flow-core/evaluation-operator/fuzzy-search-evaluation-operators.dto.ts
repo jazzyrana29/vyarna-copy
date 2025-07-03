@@ -2,8 +2,8 @@ import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
 import { IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { EvaluationOperatorDto } from "./evaluation-operator.dto";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
 
 export class FuzzySearchEvaluationOperatorsDto extends PartialType(
   PickType(EvaluationOperatorDto, [

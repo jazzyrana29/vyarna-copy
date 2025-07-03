@@ -1,8 +1,8 @@
 import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
 import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { FlowDto } from "./flow.dto";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
 import { Type } from "class-transformer";
 
 export class FuzzySearchFlowsDto extends PartialType(

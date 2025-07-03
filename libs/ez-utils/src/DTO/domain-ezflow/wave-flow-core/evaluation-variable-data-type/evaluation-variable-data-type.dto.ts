@@ -8,8 +8,8 @@ import {
   IsUUID,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { EvaluationOperatorIdDto } from "../../shared-dtos/wave-flow-core/evaluation-operator-id.dto";
-import { EvaluationVariableIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-id.dto";
+import { EvaluationOperatorIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-operator-id.dto";
+import { EvaluationVariableIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-id.dto";
 
 export class EvaluationVariableDataTypeDto {
   @ApiProperty({

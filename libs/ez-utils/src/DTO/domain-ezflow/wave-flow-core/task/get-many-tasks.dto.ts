@@ -8,8 +8,8 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
 
 export class GetManyTasksDto {
   @ApiPropertyOptional({

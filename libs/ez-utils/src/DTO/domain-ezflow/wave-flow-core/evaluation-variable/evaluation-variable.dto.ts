@@ -9,8 +9,8 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-is-grouped-through-evaluation-variable-collection-id.dto";
-import { EvaluationVariableDataTypeIdDto } from "../../shared-dtos/wave-flow-core/evaluation-variable-data-type-id.dto";
+import { EvaluationVariableIsGroupedThroughEvaluationVariableCollectionIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-is-grouped-through-evaluation-variable-collection-id.dto";
+import { EvaluationVariableDataTypeIdDto } from "../../../shared-dtos/wave-flow-core/evaluation-variable-data-type-id.dto";
 
 class EvaluationValueOptionDto {
   @ApiProperty({ example: "AR", description: "Country or item ID" })

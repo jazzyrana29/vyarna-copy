@@ -3,8 +3,8 @@ import { ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
 import { IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { WaveTypeGenreDto } from "./wave-type-genre.dto";
-import { SortOptionDto } from "../../shared-dtos/sort-option.dto";
-import { PaginationDto } from "../../shared-dtos/pagination.dto";
+import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
+import { PaginationDto } from "../../../shared-dtos/pagination.dto";
 
 export class GetManyWaveTypeGenresDto extends PartialType(
   PickType(WaveTypeGenreDto, [

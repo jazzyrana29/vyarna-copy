@@ -5,37 +5,53 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { Partitioners } from 'kafkajs';
 import * as express from 'express';
-import * as process from 'process';
 
 import { AppModule } from './app.module';
-import { IoAdapter } from '@nestjs/platform-socket.io';
+import { getLoggerConfig, CORS_ALLOW } from './utils/common';
+import { LogStreamLevel } from 'ez-logger';
 
 async function bootstrap(): Promise<void> {
-  const allowedOrigins = process.env.ALLOWED_ORIGINS!;
+  // Configure custom logger
+  const logger = getLoggerConfig('VyGatewayMain');
 
+  // Create Nest app with CORS, buffered logs, and custom logger
   const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(new Error(`Not allowed by CORS ${origin}`));
-        }
-      },
-    },
+    cors: CORS_ALLOW,
     bufferLogs: true,
+    logger,
   });
-  // attach the Socket.io adapter
-  app.useWebSocketAdapter(new IoAdapter(app));
 
+  // Global validation + transformation for incoming DTOs
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
     }),
   );
 
+  const broker = process.env.KAFKA_BROKER || 'localhost:9092';
+  const groupId = process.env.KAFKA_GROUP || 'vy-gateway';
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [broker],
+        retry: { retries: 10, initialRetryTime: 300 },
+        connectionTimeout: 5000,
+        requestTimeout: 12000,
+      },
+      consumer: {
+        groupId,
+        sessionTimeout: 90000,
+        heartbeatInterval: 30000,
+      },
+      producer: { createPartitioner: Partitioners.LegacyPartitioner },
+    },
+  });
+
+  // Enable URL-encoded requests
   app.use(express.urlencoded({ extended: true }));
 
   const swaggerConfigs = new DocumentBuilder()
@@ -61,9 +77,17 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, swaggerConfigs, options);
   SwaggerModule.setup('/api', app, document);
 
-  await app.listen(process.env.APP_PORT!, () => {
-    console.log(
-      `${process.env.APP} is running on PORT: ${process.env.APP_PORT}\nSwagger => ${process.env.SWAGGER_URL}`,
+  // Start Kafka microservice listener
+  await app.startAllMicroservices();
+
+  // Start HTTP/WebSocket server (fallback to port 4040)
+  const port = parseInt(process.env.APP_PORT || '', 10) || 4040;
+  await app.listen(port, () => {
+    logger.debug(
+      `${process.env.APP || 'vy-gateway'} is running on PORT: ${port}\nSwagger => ${process.env.SWAGGER_URL}`,
+      '',
+      'bootstrap',
+      LogStreamLevel.ProdStandard,
     );
   });
 }

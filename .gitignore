@@ -40,3 +40,6 @@ yarn-error.*
 *.tsbuildinfo
 depcheck-report.json
 .env
+
+!libs/**/dist/
+!libs/**/dist/**
