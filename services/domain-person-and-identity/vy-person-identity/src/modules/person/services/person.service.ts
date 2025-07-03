@@ -261,7 +261,7 @@ export class PersonService {
 
     // 7) Return structured pagination & sorting response
     return {
-      data: persons as PersonDto[],
+      data: persons as unknown as PersonDto[],
       maxPages,
       currentPage,
       pageSize: usedPageSize,

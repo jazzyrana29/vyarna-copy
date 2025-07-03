@@ -13,9 +13,18 @@ exports.GetPersonDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const person_dto_1 = require("./person.dto");
-class GetPersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)(person_dto_1.PersonDto, ["nameFirst", "isDeleted"])) {
+class GetPersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)(person_dto_1.PersonDto, ["personId", "nameFirst", "isDeleted"])) {
 }
 exports.GetPersonDto = GetPersonDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Unique identifier for the person",
+        type: String,
+        format: "uuid",
+    }),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], GetPersonDto.prototype, "personId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: "The unique identifier for the operator",
