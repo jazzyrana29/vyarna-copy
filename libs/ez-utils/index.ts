@@ -37,6 +37,8 @@ export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/tags-resp
 export * from './src/DTO/domain-health-and-insights/vy-care-log/diaper-change.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/create-diaper-change.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/get-diaper-changes.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/ztracking-diaper-change.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-diaper-change.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/get-growth-measurements.dto';
