@@ -12,10 +12,7 @@ This repository houses **all** of Vyarna’s code—front-ends (web site, admin 
 
 ```text
 vyarna-nucleus/
-├── package.json            # root workspace config & scripts
-├── package-lock.json       # lockfile for all workspaces
-├── pnpm-workspace.yaml     # (or "workspaces" in package.json)
-├── turbo.json              # Turborepo / Nx task pipelines & caching
+├── repo.js                 # cross-workspace helper script
 ├── tsconfig.base.json      # shared TS config, path aliases
 ├── .npmrc                  # hoisting / registry overrides
 ├── docker-compose.yml      # local-dev overrides
@@ -45,26 +42,15 @@ vyarna-nucleus/
 
 ## 🔧 Key Configs
 
-### 1. Root `package.json`
+### 1. `repo.js`
 
-Defines workspaces, dev-dependencies, and top-level scripts:
+A lightweight Node helper script that scans each
+workspace for a `package.json` and forwards common npm commands.
 
-```jsonc
-{
-  "name": "vyarna-nucleus",
-  "private": true,
-  "workspaces": ["packages/*", "apps/*", "services/*/*"],
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-  },
-  "devDependencies": {
-    "turbo": "^1.8.0",
-    "typescript": "^5.0.0",
-  },
-}
+```bash
+node repo.js install            # install all service dependencies
+node repo.js start:dev service  # run a service in dev mode
+node repo.js build-libs lib     # build a shared library
 ```
 
 ### 2. `tsconfig.base.json`
@@ -88,22 +74,6 @@ Shared TypeScript settings and path aliases:
 }
 ```
 
-### 3. `turbo.json`
-
-High-level pipeline for builds, tests, linting, and dev:
-
-```jsonc
-{
-  "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
-    "build": { "dependsOn": ["^build"], "outputs": ["dist/**"] },
-    "dev": { "cache": false },
-    "lint": { "outputs": [] },
-    "test": { "outputs": [] },
-  },
-}
-```
-
 ---
 
 ## 🚀 Getting Started
@@ -113,35 +83,26 @@ High-level pipeline for builds, tests, linting, and dev:
    ```bash
    git clone git@github.com:vyarna/monorepo.git
    cd monorepo
-   npm install
+   node repo.js install
    ```
 
-2. **Develop everything**
+2. **Develop a service**
 
    ```bash
-   npm run dev
+   node repo.js start:dev vy-person-identity
    ```
 
-   - Spins up all `dev` scripts in every workspace in parallel
-   - Web-app: [http://localhost:3000](http://localhost:3000)
-   - Admin portal: [http://localhost:3001](http://localhost:3001)
-   - Mobile-app: Metro bundler on its own port
-   - Backend services on their configured ports
-
-3. **Build all**
+3. **Build libraries**
 
    ```bash
-   npm run build
+   node repo.js build-libs ez-utils
    ```
-
-   - Runs each workspace’s `build` script in the correct dependency order
-   - Artifacts end up in each workspace’s `dist/` or `.next/`
 
 4. **Lint & Test**
 
    ```bash
-   npm run lint
-   npm run test
+   node repo.js lint vy-person-identity
+   node repo.js test vy-person-identity
    ```
 
 ---
@@ -230,7 +191,7 @@ This ensures **only** that workspace’s dependencies end up in its image—keep
 
 - **Shared logic & types** live side-by-side with apps & services.
 - **LLMs / Codex** see all code without juggling multiple repos.
-- **Turbo/NX** orchestrates cross-workspace builds/tests/lints.
+- **`repo.js`** orchestrates cross-workspace installs, builds and tests.
 - **Filtered Dockerfiles** keep container images lean.
 
 > When micro-frontends or radically independent stacks become necessary, you can always split a workspace into its own repo—but for now, this monorepo maximizes code-sharing and developer velocity.
