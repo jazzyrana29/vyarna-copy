@@ -53,9 +53,7 @@ Commands:
   clone-configs              copy eslint/prettier configs to apps/services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
-  clone-configs [names...]   copy shared ESLint config to packages
   list [names...]            list packages (all types)
-  clone-configs [names...]   copy root .prettierrc into packages
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
   node repo.js install
@@ -69,7 +67,6 @@ Examples:
 const all = collectPackages(__dirname);
 const services = all.filter(p => p.type === 'service');
 const libs = all.filter(p => p.type === 'lib');
-const apps = all.filter(p => p.type === 'app');
 
 const [,,cmd, ...args] = process.argv;
 
@@ -114,29 +111,9 @@ switch (cmd) {
   case 'test':
     filterPackages(services, args).forEach(p => runNpm(p, 'run test'));
     break;
-  case 'clone-configs': {
-    const src = path.join(__dirname, '.eslintrc.cjs');
-    filterPackages([...services, ...apps], args).forEach(p => {
-      fs.copyFileSync(src, path.join(p.path, '.eslintrc.js'));
-      console.log(`[${p.name}] copied .eslintrc.js`);
-    });
-    break;
-  }
   case 'list':
     filterPackages(all, args).forEach(p => {
       console.log(`${p.type}\t${p.name}\t${p.path}`);
-    });
-    break;
-  case 'clone-configs':
-    const src = path.join(__dirname, '.prettierrc');
-    if (!fs.existsSync(src)) {
-      console.error('Root .prettierrc not found');
-      break;
-    }
-    filterPackages(all, args).forEach(p => {
-      const dest = path.join(p.path, '.prettierrc');
-      fs.copyFileSync(src, dest);
-      console.log(`Copied .prettierrc to ${p.name}`);
     });
     break;
   case 'run':
