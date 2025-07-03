@@ -39,7 +39,6 @@
     "@nestjs/swagger": "^7.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "ez-kafka-consumer": "file:../ez-kafka-consumer",
     "ez-kafka-producer": "file:../ez-kafka-producer",
     "ez-logger": "file:../ez-logger",
     "fast-safe-stringify": "^2.1.1",
