@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { DiaperChangeService } from './diaper-change.service';
-import { KafkaMessageResponderService } from 'ez-utils';
+import {
+  KafkaMessageResponderService,
+  KT_CREATE_DIAPER_CHANGE,
+  KT_GET_DIAPER_CHANGES,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
-export const KT_CREATE_DIAPER_CHANGE = 'create-diaper-change';
-export const KT_GET_DIAPER_CHANGES = 'get-diaper-changes';
 
 @Injectable()
 export class DiaperChangeKafkaService {

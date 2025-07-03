@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { GrowthMeasurementService } from './growth-measurement.service';
-import { KafkaMessageResponderService } from 'ez-utils';
+import {
+  KafkaMessageResponderService,
+  KT_CREATE_GROWTH_MEASUREMENT,
+  KT_GET_GROWTH_MEASUREMENTS,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
-export const KT_CREATE_GROWTH_MEASUREMENT = 'create-growth-measurement';
-export const KT_GET_GROWTH_MEASUREMENTS = 'get-growth-measurements';
 
 @Injectable()
 export class GrowthMeasurementKafkaService {

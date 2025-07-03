@@ -11,6 +11,10 @@ export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.e
 /**************************************** Kafka Topics **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person";
+/* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
 
 /**************************************** DTOs **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/

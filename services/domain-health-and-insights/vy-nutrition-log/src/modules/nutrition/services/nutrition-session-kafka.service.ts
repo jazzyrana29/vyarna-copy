@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { NutritionSessionService } from './nutrition-session.service';
-import { KafkaMessageResponderService } from 'ez-utils';
+import {
+  KafkaMessageResponderService,
+  KT_START_NUTRITION_SESSION,
+  KT_GET_NUTRITION_SESSION,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
-export const KT_START_NUTRITION_SESSION = 'start-nutrition-session';
-export const KT_GET_NUTRITION_SESSION = 'get-nutrition-session';
 
 @Injectable()
 export class NutritionSessionKafkaService {

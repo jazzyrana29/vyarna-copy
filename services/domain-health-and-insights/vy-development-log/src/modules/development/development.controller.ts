@@ -1,19 +1,56 @@
-import { Controller, Body, Post, Get, Query } from '@nestjs/common';
-import { GrowthMeasurementService } from './services/growth-measurement.service';
+import { Controller } from '@nestjs/common';
+import {
+  Ctx,
+  KafkaContext,
+  MessagePattern,
+  Payload,
+} from '@nestjs/microservices';
+import { GrowthMeasurementKafkaService } from './services/growth-measurement-kafka.service';
+import { KT_CREATE_GROWTH_MEASUREMENT, KT_GET_GROWTH_MEASUREMENTS } from 'ez-utils';
+import { getLoggerConfig } from '../../utils/common';
+import { LogStreamLevel } from 'ez-logger';
 
 @Controller('development')
 export class DevelopmentController {
-  constructor(private readonly service: GrowthMeasurementService) {}
+  private logger = getLoggerConfig(DevelopmentController.name);
 
-  @Post('growth')
-  async create(@Body() body: any): Promise<any> {
-    const traceId = body.traceId || '';
-    const created = await this.service.create(body, traceId);
-    return { growthId: created.growthId };
+  constructor(private readonly kafkaService: GrowthMeasurementKafkaService) {
+    this.logger.debug(
+      `${DevelopmentController.name} initialized`,
+      '',
+      'constructor',
+      LogStreamLevel.DebugLight,
+    );
   }
 
-  @Get('growth')
-  async list(@Query('babyId') babyId: string): Promise<any[]> {
-    return this.service.getAll(babyId);
+
+  @MessagePattern(KT_CREATE_GROWTH_MEASUREMENT)
+  async createGrowthMeasurementWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_CREATE_GROWTH_MEASUREMENT}`,
+      '',
+      'createGrowthMeasurementWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.kafkaService.createGrowthMeasurement(message, key);
+  }
+
+  @MessagePattern(KT_GET_GROWTH_MEASUREMENTS)
+  async getGrowthMeasurementsWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_GROWTH_MEASUREMENTS}`,
+      '',
+      'getGrowthMeasurementsWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.kafkaService.getGrowthMeasurements(message, key);
   }
 }
