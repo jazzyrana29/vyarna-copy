@@ -80,7 +80,8 @@ function usage() {
   console.log(`Usage: node repo.js <command> [names...]
 Commands:
   install                   install libs, apps then services
-  start [names...]           run apps (npm start) and services (npm start:dev)
+  start <names...>           run apps (npm start) or services (npm start:dev)
+                             use "node repo.js list" to view package names
   lint <service...>          npm run lint in services
   lint:fix [names...]        npm run lint:fix in packages
   prettier:check [names...]  npm run prettier:check in packages
@@ -92,7 +93,7 @@ Commands:
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
   node repo.js install
-  node repo.js start vy-person-identity
+  node repo.js start Vyarna website-foundation-scg vy-person-identity
   node repo.js build-libs ez-logger ez-utils
   node repo.js list
   node repo.js run build vy-person-identity
@@ -137,6 +138,14 @@ switch (cmd) {
     })();
     break;
   case 'start': {
+    if (!args.length) {
+      console.log('Please specify which apps or services to start.');
+      console.log('Use `node repo.js list` to see available names.');
+      console.log('Example: node repo.js start Vyarna website-foundation-scg vy-person-identity');
+      console.log('Vyarna and website-foundation-scg are apps; vy-person-identity is a service.');
+      console.log('Starting everything at once has been disabled to avoid overloading your machine.');
+      break;
+    }
     const targets = filterPackages(
       all.filter((p) => p.type === 'service' || p.type === 'app'),
       args,
