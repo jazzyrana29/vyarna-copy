@@ -47,6 +47,10 @@ Commands:
   start <service...>         npm run start in services
   start:dev <service...>     npm run start:dev in services
   lint <service...>          npm run lint in services
+  lint:fix [names...]        npm run lint:fix in packages
+  prettier:check [names...]  npm run prettier:check in packages
+  prettier:fix [names...]    npm run prettier:fix in packages
+  clone-configs              copy eslint/prettier configs to apps/services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
   clone-configs [names...]   copy shared ESLint config to packages
@@ -80,6 +84,30 @@ switch (cmd) {
   case 'lint':
     filterPackages(services, args).forEach(p => runNpm(p, 'run lint'));
     break;
+  case 'lint:fix':
+    filterPackages(all, args).forEach(p => runNpm(p, 'run lint:fix'));
+    break;
+  case 'prettier:check':
+    filterPackages(all, args).forEach(p => runNpm(p, 'run prettier:check'));
+    break;
+  case 'prettier:fix':
+    filterPackages(all, args).forEach(p => runNpm(p, 'run prettier:fix'));
+    break;
+  case 'clone-configs': {
+    const files = ['.eslintrc.cjs', '.prettierrc'];
+    const targets = all.filter(p => p.type === 'app' || p.type === 'service');
+    targets.forEach(pkg => {
+      files.forEach(f => {
+        const src = path.join(__dirname, f);
+        if (fs.existsSync(src)) {
+          const dest = path.join(pkg.path, f);
+          fs.copyFileSync(src, dest);
+          console.log(`copied ${f} -> ${dest}`);
+        }
+      });
+    });
+    break;
+  }
   case 'build-libs':
     filterPackages(libs, args).forEach(p => runNpm(p, 'run build'));
     break;
