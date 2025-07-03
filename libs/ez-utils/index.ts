@@ -40,6 +40,8 @@ export * from './src/DTO/domain-health-and-insights/vy-care-log/get-diaper-chang
 export * from './src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/get-growth-measurements.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/ztracking-growth-measurement.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/get-ztracking-growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto';
