@@ -49,7 +49,7 @@ workspace for a `package.json` and forwards common npm commands.
 
 ```bash
 node repo.js install            # install libs, apps and service dependencies
-node repo.js start:dev service  # run a service in dev mode
+node repo.js start service      # run an app or service
 node repo.js build-libs lib     # build a shared library
 node repo.js list               # show all workspaces
 node repo.js run script name    # run an npm script in one or more packages
@@ -80,10 +80,10 @@ Shared TypeScript settings and path aliases:
 
 Baseline project settings live in the repo root:
 
-* `.npmrc` – hoisting rules and registry overrides
-* `eslint.config.cjs` – shared lint rules
-* `docker-compose.yml` – local service overrides
-* `example.env.*` – sample environment files
+- `.npmrc` – hoisting rules and registry overrides
+- `eslint.config.cjs` – shared lint rules
+- `docker-compose.yml` – local service overrides
+- `example.env.*` – sample environment files
 
 Each workspace keeps its own copies of these files so it can be used on its own
 without pulling in unrelated configs.
@@ -108,10 +108,10 @@ node repo.js clone-configs path/to/workspace
    node repo.js install    # installs libs, apps and services
    ```
 
-2. **Develop a service**
+2. **Develop a service or app**
 
    ```bash
-   node repo.js start:dev vy-person-identity
+   node repo.js start vy-person-identity
    ```
 
 3. **Build libraries**
