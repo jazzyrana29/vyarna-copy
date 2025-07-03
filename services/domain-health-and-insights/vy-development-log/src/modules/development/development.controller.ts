@@ -6,7 +6,11 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { GrowthMeasurementKafkaService } from './services/growth-measurement-kafka.service';
-import { KT_CREATE_GROWTH_MEASUREMENT, KT_GET_GROWTH_MEASUREMENTS } from 'ez-utils';
+import {
+  KT_CREATE_GROWTH_MEASUREMENT,
+  KT_GET_GROWTH_MEASUREMENTS,
+  KT_GET_HISTORY_GROWTH_MEASUREMENT,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -57,5 +61,23 @@ export class DevelopmentController {
       LogStreamLevel.DebugLight,
     );
     await this.growthMeasurementKafkaService.getGrowthMeasurements(message, key);
+  }
+
+  @MessagePattern(KT_GET_HISTORY_GROWTH_MEASUREMENT)
+  async getGrowthMeasurementHistoryWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_HISTORY_GROWTH_MEASUREMENT}`,
+      '',
+      'getGrowthMeasurementHistoryWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.growthMeasurementKafkaService.getGrowthMeasurementHistory(
+      message,
+      key,
+    );
   }
 }

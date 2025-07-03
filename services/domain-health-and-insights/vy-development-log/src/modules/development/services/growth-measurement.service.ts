@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GrowthMeasurement } from '../../../entities/growth_measurement.entity';
+import { ZtrackingGrowthMeasurementService } from './ztracking-growth-measurement.service';
 import {
   CreateGrowthMeasurementDto,
   GrowthMeasurementDto,
   GetGrowthMeasurementsDto,
+  GetZtrackingGrowthMeasurementDto,
+  ZtrackingGrowthMeasurementDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -17,6 +20,7 @@ export class GrowthMeasurementService {
   constructor(
     @InjectRepository(GrowthMeasurement)
     private readonly growthMeasurementRepo: Repository<GrowthMeasurement>,
+    private readonly ztrackingGrowthMeasurementService: ZtrackingGrowthMeasurementService,
   ) {
     this.logger.debug(
       `${GrowthMeasurementService.name} initialized`,
@@ -58,5 +62,35 @@ export class GrowthMeasurementService {
     );
 
     return measurements;
+  }
+
+  async updateGrowthMeasurement(
+    growthMeasurementDto: GrowthMeasurementDto,
+    traceId: string,
+  ): Promise<GrowthMeasurementDto> {
+    await this.growthMeasurementRepo.save(growthMeasurementDto);
+    this.logger.info(
+      'GrowthMeasurement updated',
+      traceId,
+      'updateGrowthMeasurement',
+      LogStreamLevel.ProdStandard,
+    );
+
+    await this.ztrackingGrowthMeasurementService.createZtrackingGrowthMeasurementEntity(
+      growthMeasurementDto as GrowthMeasurement,
+      traceId,
+    );
+
+    return growthMeasurementDto;
+  }
+
+  async getGrowthMeasurementHistory(
+    dto: GetZtrackingGrowthMeasurementDto,
+    traceId: string,
+  ): Promise<ZtrackingGrowthMeasurementDto[]> {
+    return await this.ztrackingGrowthMeasurementService.findZtrackingGrowthMeasurementEntity(
+      dto,
+      traceId,
+    );
   }
 }
