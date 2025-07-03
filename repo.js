@@ -84,7 +84,7 @@ const [,,cmd, ...args] = process.argv;
 switch (cmd) {
   case 'install':
     (function installAll() {
-      const order = ['ez-logger', 'ez-utils', 'ez-kafka-producer', 'ez-kafka-consumer'];
+      const order = ['ez-logger', 'ez-utils', 'ez-kafka-producer'];
       const map = new Map(libs.map(l => [l.name, l]));
       const libsSorted = [];
       order.forEach(n => {
