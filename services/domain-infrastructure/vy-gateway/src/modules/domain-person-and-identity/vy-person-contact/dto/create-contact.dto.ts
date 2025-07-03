@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from 'class-validator';
-import { TagsEnum } from '../../../enum/tags.enum';
+import { TagsEnum } from '../../../../enum/tags.enum';
 
 export class CreateContactDto {
   @ApiProperty({
