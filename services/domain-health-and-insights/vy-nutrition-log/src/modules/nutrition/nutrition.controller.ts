@@ -6,7 +6,11 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { NutritionSessionKafkaService } from './services/nutrition-session-kafka.service';
-import { KT_START_NUTRITION_SESSION, KT_GET_NUTRITION_SESSION } from 'ez-utils';
+import {
+  KT_START_NUTRITION_SESSION,
+  KT_GET_NUTRITION_SESSION,
+  KT_GET_ZTRACKING_NUTRITION_SESSION,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -54,5 +58,20 @@ export class NutritionController {
       LogStreamLevel.DebugLight,
     );
     await this.nutritionSessionKafkaService.getSession(message, key);
+  }
+
+  @MessagePattern(KT_GET_ZTRACKING_NUTRITION_SESSION)
+  async getZtrackingNutritionSessionWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_NUTRITION_SESSION}`,
+      '',
+      'getZtrackingNutritionSessionWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.nutritionSessionKafkaService.getZtrackingSession(message, key);
   }
 }

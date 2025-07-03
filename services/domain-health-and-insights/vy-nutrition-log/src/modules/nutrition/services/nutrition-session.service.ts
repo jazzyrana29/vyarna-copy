@@ -6,9 +6,12 @@ import {
   StartNutritionSessionDto,
   NutritionSessionDto,
   GetNutritionSessionDto,
+  GetZtrackingNutritionSessionDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { ZtrackingNutritionSessionService } from './ztracking-nutrition-session.service';
+import { ZtrackingNutritionSession } from '../../../entities/ztracking_nutrition_session.entity';
 
 @Injectable()
 export class NutritionSessionService {
@@ -17,6 +20,7 @@ export class NutritionSessionService {
   constructor(
     @InjectRepository(NutritionSession)
     private readonly nutritionSessionRepo: Repository<NutritionSession>,
+    private readonly ztrackingService: ZtrackingNutritionSessionService,
   ) {
     this.logger.debug(
       `${NutritionSessionService.name} initialized`,
@@ -36,6 +40,10 @@ export class NutritionSessionService {
       startedAt: new Date(),
     });
     await this.nutritionSessionRepo.save(entity);
+    await this.ztrackingService.createZtrackingNutritionSessionEntity(
+      entity,
+      traceId,
+    );
     this.logger.info(
       'Nutrition session created',
       traceId,
@@ -64,5 +72,15 @@ export class NutritionSessionService {
     );
 
     return session;
+  }
+
+  async getZtrackingNutritionSession(
+    getDto: GetZtrackingNutritionSessionDto,
+    traceId: string,
+  ): Promise<ZtrackingNutritionSession[]> {
+    return this.ztrackingService.findZtrackingNutritionSessionEntity(
+      getDto,
+      traceId,
+    );
   }
 }

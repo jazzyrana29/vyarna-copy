@@ -47,3 +47,5 @@ export * from './src/DTO/domain-health-and-insights/vy-development-log/get-ztrac
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/ztracking-nutrition-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracking-nutrition-session.dto';
