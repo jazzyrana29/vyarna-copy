@@ -6,7 +6,11 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { DiaperChangeKafkaService } from './services/diaper-change-kafka.service';
-import { KT_CREATE_DIAPER_CHANGE, KT_GET_DIAPER_CHANGES } from 'ez-utils';
+import {
+  KT_CREATE_DIAPER_CHANGE,
+  KT_GET_DIAPER_CHANGES,
+  KT_GET_ZTRACKING_DIAPER_CHANGE,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -54,5 +58,20 @@ export class DiaperChangeController {
       LogStreamLevel.DebugLight,
     );
     await this.diaperChangeKafkaService.getDiaperChanges(message, key);
+  }
+
+  @MessagePattern(KT_GET_ZTRACKING_DIAPER_CHANGE)
+  async getZtrackingDiaperChangeWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_DIAPER_CHANGE}`,
+      '',
+      'getZtrackingDiaperChangeWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.diaperChangeKafkaService.getZtrackingDiaperChange(message, key);
   }
 }

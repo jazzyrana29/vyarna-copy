@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DiaperChange } from '../../../entities/diaper_change.entity';
+import { ZtrackingDiaperChangeService } from './ztracking-diaper-change.service';
 import {
   CreateDiaperChangeDto,
   DiaperChangeDto,
   GetDiaperChangesDto,
+  GetZtrackingDiaperChangeDto,
+  ZtrackingDiaperChangeDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -17,6 +20,7 @@ export class DiaperChangeService {
   constructor(
     @InjectRepository(DiaperChange)
     private readonly diaperChangeRepo: Repository<DiaperChange>,
+    private readonly ztrackingDiaperChangeService: ZtrackingDiaperChangeService,
   ) {
     this.logger.debug(
       `${DiaperChangeService.name} initialized`,
@@ -38,6 +42,12 @@ export class DiaperChangeService {
       'createDiaperChange',
       LogStreamLevel.ProdStandard,
     );
+
+    await this.ztrackingDiaperChangeService.createZtrackingForDiaperChange(
+      entity,
+      traceId,
+    );
+
     return entity;
   }
 
@@ -58,5 +68,15 @@ export class DiaperChangeService {
     );
 
     return diaperChanges;
+  }
+
+  async getZtrackingDiaperChange(
+    getDto: GetZtrackingDiaperChangeDto,
+    traceId: string,
+  ): Promise<ZtrackingDiaperChangeDto[]> {
+    return this.ztrackingDiaperChangeService.getZtrackingForDiaperChange(
+      getDto,
+      traceId,
+    );
   }
 }
