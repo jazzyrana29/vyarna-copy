@@ -51,6 +51,8 @@ workspace for a `package.json` and forwards common npm commands.
 node repo.js install            # install all service dependencies
 node repo.js start:dev service  # run a service in dev mode
 node repo.js build-libs lib     # build a shared library
+node repo.js list               # show all workspaces
+node repo.js run script name    # run an npm script in one or more packages
 ```
 
 ### 2. `tsconfig.base.json`
@@ -103,6 +105,13 @@ Shared TypeScript settings and path aliases:
    ```bash
    node repo.js lint vy-person-identity
    node repo.js test vy-person-identity
+   ```
+
+5. **List & Run Scripts**
+
+   ```bash
+   node repo.js list
+   node repo.js run build vy-person-identity
    ```
 
 ---
