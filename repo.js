@@ -102,7 +102,10 @@ switch (cmd) {
         runNpm(pkg, 'run build', true);
       });
 
-      apps.forEach(pkg => runNpm(pkg, 'install', true));
+      apps.forEach(pkg => {
+        // use legacy peer deps for apps to satisfy React Native requirements
+        runNpm(pkg, 'install --legacy-peer-deps', true);
+      });
       services.forEach(pkg => runNpm(pkg, 'install', true));
     })();
     break;
