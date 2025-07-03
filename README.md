@@ -48,7 +48,7 @@ A lightweight Node helper script that scans each
 workspace for a `package.json` and forwards common npm commands.
 
 ```bash
-node repo.js install            # install all service dependencies
+node repo.js install            # install libs, apps and service dependencies
 node repo.js start:dev service  # run a service in dev mode
 node repo.js build-libs lib     # build a shared library
 node repo.js list               # show all workspaces
@@ -105,7 +105,7 @@ node repo.js clone-configs path/to/workspace
    ```bash
    git clone git@github.com:vyarna/monorepo.git
    cd monorepo
-   node repo.js install
+   node repo.js install    # installs libs, apps and services
    ```
 
 2. **Develop a service**
