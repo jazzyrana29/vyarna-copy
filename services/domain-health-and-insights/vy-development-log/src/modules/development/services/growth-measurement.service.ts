@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GrowthMeasurement } from '../../../entities/growth_measurement.entity';
+import {
+  CreateGrowthMeasurementDto,
+  GrowthMeasurementDto,
+  GetGrowthMeasurementsDto,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -11,7 +16,7 @@ export class GrowthMeasurementService {
 
   constructor(
     @InjectRepository(GrowthMeasurement)
-    private readonly repo: Repository<GrowthMeasurement>,
+    private readonly growthMeasurementRepo: Repository<GrowthMeasurement>,
   ) {
     this.logger.debug(
       `${GrowthMeasurementService.name} initialized`,
@@ -21,14 +26,37 @@ export class GrowthMeasurementService {
     );
   }
 
-  async create(data: Partial<GrowthMeasurement>, traceId: string): Promise<GrowthMeasurement> {
-    const entity = this.repo.create(data);
-    await this.repo.save(entity);
-    this.logger.info('GrowthMeasurement created', traceId, 'create', LogStreamLevel.ProdStandard);
+  async createGrowthMeasurement(
+    createGrowthMeasurementDto: CreateGrowthMeasurementDto,
+    traceId: string,
+  ): Promise<GrowthMeasurementDto> {
+    const entity = this.growthMeasurementRepo.create(createGrowthMeasurementDto);
+    await this.growthMeasurementRepo.save(entity);
+    this.logger.info(
+      'GrowthMeasurement created',
+      traceId,
+      'createGrowthMeasurement',
+      LogStreamLevel.ProdStandard,
+    );
     return entity;
   }
 
-  async getAll(babyId: string): Promise<GrowthMeasurement[]> {
-    return this.repo.find({ where: { babyId, isDeleted: false } });
+  async getGrowthMeasurements(
+    getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
+    traceId: string,
+  ): Promise<GrowthMeasurementDto[]> {
+    const { babyId } = getGrowthMeasurementsDto;
+    const measurements = await this.growthMeasurementRepo.find({
+      where: { babyId, isDeleted: false },
+    });
+
+    this.logger.info(
+      `${measurements.length} GrowthMeasurement(s) retrieved`,
+      traceId,
+      'getGrowthMeasurements',
+      LogStreamLevel.ProdStandard,
+    );
+
+    return measurements;
   }
 }

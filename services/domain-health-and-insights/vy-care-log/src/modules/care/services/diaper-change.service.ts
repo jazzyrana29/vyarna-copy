@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DiaperChange } from '../../../entities/diaper_change.entity';
+import {
+  CreateDiaperChangeDto,
+  DiaperChangeDto,
+  GetDiaperChangesDto,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -11,7 +16,7 @@ export class DiaperChangeService {
 
   constructor(
     @InjectRepository(DiaperChange)
-    private readonly diaperRepo: Repository<DiaperChange>,
+    private readonly diaperChangeRepo: Repository<DiaperChange>,
   ) {
     this.logger.debug(
       `${DiaperChangeService.name} initialized`,
@@ -21,14 +26,37 @@ export class DiaperChangeService {
     );
   }
 
-  async create(change: Partial<DiaperChange>, traceId: string): Promise<DiaperChange> {
-    const entity = this.diaperRepo.create(change);
-    await this.diaperRepo.save(entity);
-    this.logger.info('DiaperChange created', traceId, 'create', LogStreamLevel.ProdStandard);
+  async createDiaperChange(
+    createDiaperChangeDto: CreateDiaperChangeDto,
+    traceId: string,
+  ): Promise<DiaperChangeDto> {
+    const entity = this.diaperChangeRepo.create(createDiaperChangeDto);
+    await this.diaperChangeRepo.save(entity);
+    this.logger.info(
+      'DiaperChange created',
+      traceId,
+      'createDiaperChange',
+      LogStreamLevel.ProdStandard,
+    );
     return entity;
   }
 
-  async findAll(babyId: string): Promise<DiaperChange[]> {
-    return this.diaperRepo.find({ where: { babyId, isDeleted: false } });
+  async getDiaperChanges(
+    getDiaperChangesDto: GetDiaperChangesDto,
+    traceId: string,
+  ): Promise<DiaperChangeDto[]> {
+    const { babyId } = getDiaperChangesDto;
+    const diaperChanges = await this.diaperChangeRepo.find({
+      where: { babyId, isDeleted: false },
+    });
+
+    this.logger.info(
+      `${diaperChanges.length} DiaperChange(s) retrieved`,
+      traceId,
+      'getDiaperChanges',
+      LogStreamLevel.ProdStandard,
+    );
+
+    return diaperChanges;
   }
 }
