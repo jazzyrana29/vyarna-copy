@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NutritionSession } from '../../../entities/nutrition_session.entity';
+import {
+  StartNutritionSessionDto,
+  NutritionSessionDto,
+  GetNutritionSessionDto,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -11,7 +16,7 @@ export class NutritionSessionService {
 
   constructor(
     @InjectRepository(NutritionSession)
-    private readonly repo: Repository<NutritionSession>,
+    private readonly nutritionSessionRepo: Repository<NutritionSession>,
   ) {
     this.logger.debug(
       `${NutritionSessionService.name} initialized`,
@@ -21,14 +26,43 @@ export class NutritionSessionService {
     );
   }
 
-  async startSession(data: Partial<NutritionSession>, traceId: string): Promise<NutritionSession> {
-    const entity = this.repo.create({ ...data, status: 'IN_PROGRESS', startedAt: new Date() });
-    await this.repo.save(entity);
-    this.logger.info('Nutrition session created', traceId, 'startSession', LogStreamLevel.ProdStandard);
+  async startNutritionSession(
+    startNutritionSessionDto: StartNutritionSessionDto,
+    traceId: string,
+  ): Promise<NutritionSessionDto> {
+    const entity = this.nutritionSessionRepo.create({
+      ...startNutritionSessionDto,
+      status: 'IN_PROGRESS',
+      startedAt: new Date(),
+    });
+    await this.nutritionSessionRepo.save(entity);
+    this.logger.info(
+      'Nutrition session created',
+      traceId,
+      'startNutritionSession',
+      LogStreamLevel.ProdStandard,
+    );
     return entity;
   }
 
-  async getSession(sessionId: string): Promise<NutritionSession | null> {
-    return this.repo.findOne({ where: { sessionId } });
+  async getNutritionSession(
+    getNutritionSessionDto: GetNutritionSessionDto,
+    traceId: string,
+  ): Promise<NutritionSessionDto | null> {
+    const { sessionId } = getNutritionSessionDto;
+    const session = await this.nutritionSessionRepo.findOne({
+      where: { sessionId },
+    });
+
+    this.logger.info(
+      session
+        ? `Nutrition session found with ID: ${sessionId}`
+        : `No Nutrition session found with ID: ${sessionId}`,
+      traceId,
+      'getNutritionSession',
+      LogStreamLevel.ProdStandard,
+    );
+
+    return session;
   }
 }

@@ -36,7 +36,7 @@ export class NutritionSessionKafkaService {
       message,
       key,
       async (value: StartNutritionSessionDto, traceId: string) =>
-        await this.sessionService.startSession(value, traceId),
+        await this.sessionService.startNutritionSession(value, traceId),
     );
   }
 
@@ -47,7 +47,7 @@ export class NutritionSessionKafkaService {
       message,
       key,
       async (value: GetNutritionSessionDto, traceId: string) =>
-        await this.sessionService.getSession(value.sessionId),
+        await this.sessionService.getNutritionSession(value, traceId),
     );
   }
 }

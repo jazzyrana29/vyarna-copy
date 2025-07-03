@@ -36,7 +36,7 @@ export class GrowthMeasurementKafkaService {
       message,
       key,
       async (value: CreateGrowthMeasurementDto, traceId: string) =>
-        await this.growthService.create(value, traceId),
+        await this.growthService.createGrowthMeasurement(value, traceId),
     );
   }
 
@@ -47,7 +47,7 @@ export class GrowthMeasurementKafkaService {
       message,
       key,
       async (value: GetGrowthMeasurementsDto, traceId: string) =>
-        await this.growthService.getAll(value.babyId),
+        await this.growthService.getGrowthMeasurements(value, traceId),
     );
   }
 }

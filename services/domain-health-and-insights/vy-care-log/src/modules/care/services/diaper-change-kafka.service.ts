@@ -36,7 +36,7 @@ export class DiaperChangeKafkaService {
       message,
       key,
       async (value: CreateDiaperChangeDto, traceId: string) =>
-        await this.diaperChangeService.create(value, traceId),
+        await this.diaperChangeService.createDiaperChange(value, traceId),
     );
   }
 
@@ -47,7 +47,7 @@ export class DiaperChangeKafkaService {
       message,
       key,
       async (value: GetDiaperChangesDto, traceId: string) =>
-        await this.diaperChangeService.findAll(value.babyId),
+        await this.diaperChangeService.getDiaperChanges(value, traceId),
     );
   }
 }
