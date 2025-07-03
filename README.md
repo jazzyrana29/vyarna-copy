@@ -49,7 +49,7 @@ workspace for a `package.json` and forwards common npm commands.
 
 ```bash
 node repo.js install            # install libs, apps and service dependencies
-node repo.js start service      # run an app or service
+node repo.js start <names...>   # run one or more apps or services
 node repo.js build-libs lib     # build a shared library
 node repo.js list               # show all workspaces
 node repo.js run script name    # run an npm script in one or more packages
@@ -111,7 +111,8 @@ node repo.js clone-configs path/to/workspace
 2. **Develop a service or app**
 
    ```bash
-   node repo.js start vy-person-identity
+   node repo.js start Vyarna website-foundation-scg vy-person-identity
+   # Vyarna and website-foundation-scg are apps; vy-person-identity is a service
    ```
 
 3. **Build libraries**
