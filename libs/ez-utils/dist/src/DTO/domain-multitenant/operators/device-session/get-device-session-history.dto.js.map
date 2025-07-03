@@ -1,0 +1,1 @@
+{"version":3,"file":"get-device-session-history.dto.js","sourceRoot":"","sources":["../../../../../../src/DTO/domain-multitenant/operators/device-session/get-device-session-history.dto.ts"],"names":[],"mappings":";;;AAAA,6CAA2C;AAC3C,6DAAwD;AAExD,MAAa,0BAA2B,SAAQ,IAAA,kBAAQ,EAAC,qCAAgB,EAAE;IACzE,MAAM;IACN,WAAW;IACX,SAAS;CACD,CAAC;CAAG;AAJd,gEAIc"}
