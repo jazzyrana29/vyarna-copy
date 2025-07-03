@@ -14,7 +14,9 @@ import { LogStreamLevel } from 'ez-logger';
 export class DevelopmentController {
   private logger = getLoggerConfig(DevelopmentController.name);
 
-  constructor(private readonly kafkaService: GrowthMeasurementKafkaService) {
+  constructor(
+    private readonly growthMeasurementKafkaService: GrowthMeasurementKafkaService,
+  ) {
     this.logger.debug(
       `${DevelopmentController.name} initialized`,
       '',
@@ -36,7 +38,10 @@ export class DevelopmentController {
       'createGrowthMeasurementWithKafka',
       LogStreamLevel.DebugLight,
     );
-    await this.kafkaService.createGrowthMeasurement(message, key);
+    await this.growthMeasurementKafkaService.createGrowthMeasurement(
+      message,
+      key,
+    );
   }
 
   @MessagePattern(KT_GET_GROWTH_MEASUREMENTS)
@@ -51,6 +56,6 @@ export class DevelopmentController {
       'getGrowthMeasurementsWithKafka',
       LogStreamLevel.DebugLight,
     );
-    await this.kafkaService.getGrowthMeasurements(message, key);
+    await this.growthMeasurementKafkaService.getGrowthMeasurements(message, key);
   }
 }
