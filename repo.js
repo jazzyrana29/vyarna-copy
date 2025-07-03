@@ -50,6 +50,7 @@ Commands:
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
   list [names...]            list packages (all types)
+  clone-configs [names...]   copy root .prettierrc into packages
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
   node repo.js install
@@ -86,6 +87,18 @@ switch (cmd) {
   case 'list':
     filterPackages(all, args).forEach(p => {
       console.log(`${p.type}\t${p.name}\t${p.path}`);
+    });
+    break;
+  case 'clone-configs':
+    const src = path.join(__dirname, '.prettierrc');
+    if (!fs.existsSync(src)) {
+      console.error('Root .prettierrc not found');
+      break;
+    }
+    filterPackages(all, args).forEach(p => {
+      const dest = path.join(p.path, '.prettierrc');
+      fs.copyFileSync(src, dest);
+      console.log(`Copied .prettierrc to ${p.name}`);
     });
     break;
   case 'run':
