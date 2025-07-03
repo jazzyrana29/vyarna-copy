@@ -49,6 +49,7 @@ Commands:
   lint <service...>          npm run lint in services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
+  clone-configs [names...]   copy shared ESLint config to packages
   list [names...]            list packages (all types)
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
@@ -63,6 +64,7 @@ Examples:
 const all = collectPackages(__dirname);
 const services = all.filter(p => p.type === 'service');
 const libs = all.filter(p => p.type === 'lib');
+const apps = all.filter(p => p.type === 'app');
 
 const [,,cmd, ...args] = process.argv;
 
@@ -83,6 +85,14 @@ switch (cmd) {
   case 'test':
     filterPackages(services, args).forEach(p => runNpm(p, 'run test'));
     break;
+  case 'clone-configs': {
+    const src = path.join(__dirname, '.eslintrc.cjs');
+    filterPackages([...services, ...apps], args).forEach(p => {
+      fs.copyFileSync(src, path.join(p.path, '.eslintrc.js'));
+      console.log(`[${p.name}] copied .eslintrc.js`);
+    });
+    break;
+  }
   case 'list':
     filterPackages(all, args).forEach(p => {
       console.log(`${p.type}\t${p.name}\t${p.path}`);
