@@ -57,22 +57,25 @@ function runNpm(pkg, args, exitOnFail = false) {
   }
 }
 
+function openTerminal(cwd, command) {
+  const platform = process.platform;
+  if (platform === 'win32') {
+    spawn('cmd', ['/c', 'start', 'cmd', '/k', command], { cwd, detached: true }).unref();
+  } else if (platform === 'darwin') {
+    const script = `tell application "Terminal" to do script "cd ${cwd.replace(/"/g, '\\"')} && ${command}"`;
+    spawn('osascript', ['-e', script], { detached: true }).unref();
+  } else {
+    const term = process.env.TERM_PROGRAM || 'x-terminal-emulator';
+    spawn(term, ['-e', `bash -c 'cd "${cwd}" && ${command}; exec bash'`], { detached: true }).unref();
+  }
+}
+
 function startPackages(packages) {
   if (!packages.length) return;
   packages.forEach((pkg) => {
     const script = pkg.type === 'service' ? 'start:dev' : 'start';
     console.log(`[${pkg.type}] ${pkg.name} > npm run ${script}`);
-    const child = spawn('npm', ['run', script], {
-      cwd: pkg.path,
-      stdio: 'inherit',
-      shell: true,
-    });
-    child.on('close', (code) => {
-      if (code) {
-        console.log(`[${pkg.type}] ${pkg.name} exited with code ${code}`);
-        process.exitCode = process.exitCode || code;
-      }
-    });
+    openTerminal(pkg.path, `npm run ${script}`);
   });
 }
 
@@ -81,6 +84,7 @@ function usage() {
 Commands:
   install                   install libs, apps then services
   start <names...>           run apps (npm start) or services (npm start:dev)
+                             each launches in its own terminal window
                              use "node repo.js list" to view package names
   lint <service...>          npm run lint in services
   lint:fix [names...]        npm run lint:fix in packages
