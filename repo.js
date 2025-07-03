@@ -49,10 +49,14 @@ Commands:
   lint <service...>          npm run lint in services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
+  list [names...]            list packages (all types)
+  run <script> [names...]    run arbitrary npm script in packages
 Examples:
   node repo.js install
   node repo.js start:dev vy-person-identity
   node repo.js build-libs ez-logger ez-utils
+  node repo.js list
+  node repo.js run build vy-person-identity
 `);
 }
 
@@ -78,6 +82,19 @@ switch (cmd) {
     break;
   case 'test':
     filterPackages(services, args).forEach(p => runNpm(p, 'run test'));
+    break;
+  case 'list':
+    filterPackages(all, args).forEach(p => {
+      console.log(`${p.type}\t${p.name}\t${p.path}`);
+    });
+    break;
+  case 'run':
+    const script = args.shift();
+    if (!script) {
+      usage();
+      break;
+    }
+    filterPackages(all, args).forEach(p => runNpm(p, `run ${script}`));
     break;
   default:
     usage();
