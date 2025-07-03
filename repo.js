@@ -31,19 +31,29 @@ function filterPackages(pkgs, names) {
   return names.map(n => map.get(n)).filter(Boolean);
 }
 
-function runNpm(pkg, args) {
-  console.log(`[${pkg.name}] npm ${args}`);
+function runNpm(pkg, args, exitOnFail = false) {
+  console.log(`[${pkg.type}] ${pkg.name} > npm ${args}`);
   try {
-    execSync(`npm ${args}`, { stdio: 'inherit', cwd: pkg.path, shell: process.platform === 'win32' });
+    execSync(`npm ${args}`, {
+      stdio: 'inherit',
+      cwd: pkg.path,
+      shell: process.platform === 'win32',
+    });
+    return true;
   } catch (err) {
-    process.exitCode = err.status || 1;
+    if (exitOnFail) {
+      process.exit(err.status || 1);
+    } else {
+      process.exitCode = err.status || 1;
+    }
+    return false;
   }
 }
 
 function usage() {
   console.log(`Usage: node repo.js <command> [names...]
 Commands:
-  install <service...>       npm install in services
+  install                   install libs, apps then services
   start <service...>         npm run start in services
   start:dev <service...>     npm run start:dev in services
   lint <service...>          npm run lint in services
@@ -67,12 +77,32 @@ Examples:
 const all = collectPackages(__dirname);
 const services = all.filter(p => p.type === 'service');
 const libs = all.filter(p => p.type === 'lib');
+const apps = all.filter(p => p.type === 'app');
 
 const [,,cmd, ...args] = process.argv;
 
 switch (cmd) {
   case 'install':
-    filterPackages(services, args).forEach(p => runNpm(p, 'install'));
+    (function installAll() {
+      const order = ['ez-logger', 'ez-utils', 'ez-kafka-producer', 'ez-kafka-consumer'];
+      const map = new Map(libs.map(l => [l.name, l]));
+      const libsSorted = [];
+      order.forEach(n => {
+        if (map.has(n)) {
+          libsSorted.push(map.get(n));
+          map.delete(n);
+        }
+      });
+      libsSorted.push(...Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name)));
+
+      libsSorted.forEach(pkg => {
+        runNpm(pkg, 'install', true);
+        runNpm(pkg, 'run build', true);
+      });
+
+      apps.forEach(pkg => runNpm(pkg, 'install', true));
+      services.forEach(pkg => runNpm(pkg, 'install', true));
+    })();
     break;
   case 'start':
   case 'start:dev':
