@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID, IsString, IsDate, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsUUID,
+  IsString,
+  IsDate,
+  IsOptional,
+  IsBoolean,
+  IsUrl,
+} from 'class-validator';
 
 export class DiaperChangeDto {
   @ApiProperty({ description: 'Unique identifier', required: true })
@@ -18,9 +25,45 @@ export class DiaperChangeDto {
   @IsString()
   changeType: 'WET' | 'SOILED' | 'BOTH';
 
-  @ApiProperty({ description: 'Timestamp of event', type: String, format: 'date-time' })
+  @ApiProperty({ description: 'When the change actually occurred', type: String, format: 'date-time' })
   @IsDate()
-  timestamp: Date;
+  eventTime: Date;
+
+  @ApiProperty({
+    description: 'Texture of poo, if applicable',
+    enum: [
+      'VERY_RUNNY',
+      'RUNNY',
+      'MUSHY',
+      'MUCOUSY',
+      'SOLID',
+      'LITTLE_BALLS',
+    ],
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  pooTexture?:
+    | 'VERY_RUNNY'
+    | 'RUNNY'
+    | 'MUSHY'
+    | 'MUCOUSY'
+    | 'SOLID'
+    | 'LITTLE_BALLS';
+
+  @ApiProperty({
+    description: 'Colour of poo, if applicable',
+    enum: ['GREEN', 'YELLOW', 'BROWN', 'BLACK', 'RED', 'WHITE'],
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  pooColor?: 'GREEN' | 'YELLOW' | 'BROWN' | 'BLACK' | 'RED' | 'WHITE';
+
+  @ApiProperty({ description: 'Optional photo URL', required: false })
+  @IsOptional()
+  @IsUrl()
+  photoUrl?: string;
 
   @ApiProperty({ description: 'Optional notes', required: false })
   @IsOptional()
@@ -36,4 +79,14 @@ export class DiaperChangeDto {
   @IsOptional()
   @IsDate()
   createdAt?: Date;
+
+  @ApiProperty({ description: 'Last update timestamp', required: false })
+  @IsOptional()
+  @IsDate()
+  updatedAt?: Date;
+
+  @ApiProperty({ description: 'Soft deletion timestamp', required: false })
+  @IsOptional()
+  @IsDate()
+  deletedAt?: Date;
 }

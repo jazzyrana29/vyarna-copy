@@ -128,8 +128,8 @@ Commands:
                              use "node repo.js list" to view package names
   lint [names...]            npm run lint in apps and services
   lint:fix [names...]        npm run lint:fix in apps and services
-  prettier:check [names...]  npm run prettier:check in packages
-  prettier:fix [names...]    npm run prettier:fix in packages
+  prettier:check [names...]  npm run prettier:check in apps and services
+  prettier:fix [names...]    npm run prettier:fix in apps and services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
   list [names...]            list packages (all types)
@@ -211,10 +211,14 @@ switch (cmd) {
     filterPackages(lintTargets, args).forEach((p) => runNpm(p, 'run lint:fix'));
     break;
   case 'prettier:check':
-    filterPackages(all, args).forEach((p) => runNpm(p, 'run prettier:check'));
+    filterPackages(lintTargets, args).forEach((p) =>
+      runNpm(p, 'run prettier:check')
+    );
     break;
   case 'prettier:fix':
-    filterPackages(all, args).forEach((p) => runNpm(p, 'run prettier:fix'));
+    filterPackages(lintTargets, args).forEach((p) =>
+      runNpm(p, 'run prettier:fix')
+    );
     break;
   case 'build-libs':
     filterPackages(libs, args).forEach((p) => runNpm(p, 'run build'));
