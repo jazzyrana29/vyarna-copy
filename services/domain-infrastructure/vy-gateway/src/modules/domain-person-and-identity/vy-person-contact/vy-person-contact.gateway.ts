@@ -1,4 +1,4 @@
-import { WebSocketGateway, WebSocketServer, OnGatewayInit, ConnectedSocket } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer, OnGatewayInit } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';

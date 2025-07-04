@@ -7,7 +7,7 @@ export class AppLoggerMiddleware implements NestMiddleware {
   public constructor() {}
 
   use(request: Request, response: Response, next: NextFunction): void {
-    const { ip, method, baseUrl, body } = request;
+    const { ip, method, baseUrl } = request;
     const userAgent = request.get('user-agent') || '';
     const { statusCode } = response;
 
@@ -15,7 +15,7 @@ export class AppLoggerMiddleware implements NestMiddleware {
       stream: {
         write: () => {
           console.debug(
-            ` \`Method: ${method}, To: ${baseUrl}, ResponseCode: ${statusCode},  UserAgent: - ${userAgent} ${ip}\``,
+            ` \`Method: ${method}, To: ${baseUrl}, ResponseCode: ${statusCode},  UserAgent: - ${userAgent} ${ip}, Body: ${JSON.stringify(request.body)}\``,
           );
         },
       },
