@@ -103,9 +103,11 @@ export class FlowVariableValidatorService {
           .map((s) => s.trim())
           .every((s) => s.length > 0);
       case 'Coordinates':
-        if (typeof value !== 'string') return false;
-        const parts = value.split(',').map((p) => parseFloat(p.trim()));
-        return parts.length === 2 && parts.every((n) => !isNaN(n));
+        {
+          if (typeof value !== 'string') return false;
+          const parts = value.split(',').map((p) => parseFloat(p.trim()));
+          return parts.length === 2 && parts.every((n) => !isNaN(n));
+        }
       default:
         return false;
     }
