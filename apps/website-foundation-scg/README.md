@@ -80,14 +80,14 @@ Tell people where they can go to for help. It can be any combination of an issue
 
 ## Troubleshooting
 
-If `expo start` fails with `listen EADDRINUSE: address already in use :::8081`, another process is using the default Metro Bundler port.
-Set the `RCT_METRO_PORT` environment variable to run on a different port:
+This workspace's `npm start` script launches Metro Bundler on port `8083` by default.
+If that port is already in use, specify another port with the `RCT_METRO_PORT` environment variable:
 
 ```bash
-RCT_METRO_PORT=8083 npm start
+RCT_METRO_PORT=8090 npm start
 ```
 
-The `metro.config.js` file in this workspace reads `RCT_METRO_PORT` and falls back to port `8083`.
+The `metro.config.js` file reads `RCT_METRO_PORT` and falls back to port `8083`.
 
 ## Roadmap
 
