@@ -70,6 +70,36 @@ function openTerminal(cwd, command) {
   }
 }
 
+function ensureLibsBuilt(libraries) {
+  libraries.forEach((pkg) => {
+    const nm = path.join(pkg.path, 'node_modules');
+    const dist = path.join(pkg.path, 'dist');
+    if (!fs.existsSync(nm)) {
+      console.log(`[${pkg.type}] ${pkg.name} missing node_modules, running install`);
+      runNpm(pkg, 'install', true);
+    }
+    if (!fs.existsSync(dist)) {
+      console.log(`[${pkg.type}] ${pkg.name} missing dist, running build`);
+      runNpm(pkg, 'run build', true);
+    }
+  });
+}
+
+function ensureDepsInstalled(packages) {
+  packages.forEach((pkg) => {
+    const nm = path.join(pkg.path, 'node_modules');
+    if (!fs.existsSync(nm)) {
+      if (pkg.type === 'app') {
+        console.log(`[${pkg.type}] ${pkg.name} installing dependencies (--legacy-peer-deps)`);
+        runNpm(pkg, 'install --legacy-peer-deps', true);
+      } else if (pkg.type === 'service') {
+        console.log(`[${pkg.type}] ${pkg.name} installing dependencies`);
+        runNpm(pkg, 'install', true);
+      }
+    }
+  });
+}
+
 function startPackages(packages) {
   if (!packages.length) return;
   packages.forEach((pkg) => {
@@ -152,10 +182,18 @@ switch (cmd) {
       );
       break;
     }
+
+    console.log('Checking libraries before starting...');
+    ensureLibsBuilt(libs);
+
     const targets = filterPackages(
       all.filter((p) => p.type === 'service' || p.type === 'app'),
       args,
     );
+
+    console.log('Ensuring dependencies for selected packages...');
+    ensureDepsInstalled(targets);
+
     startPackages(targets);
     break;
   }
