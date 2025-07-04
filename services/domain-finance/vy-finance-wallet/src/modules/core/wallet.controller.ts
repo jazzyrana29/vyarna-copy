@@ -1,6 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
-import { WalletAccountService } from './services/wallet-account.service';
+import { WalletAccountKafkaService } from './services/wallet-account-kafka.service';
+import {
+  KT_CREATE_WALLET_ACCOUNT,
+  KT_GET_WALLET_ACCOUNTS,
+  KT_GET_ZTRACKING_WALLET_ACCOUNT,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -8,7 +13,7 @@ import { LogStreamLevel } from 'ez-logger';
 export class WalletController {
   private logger = getLoggerConfig(WalletController.name);
 
-  constructor(private readonly walletService: WalletAccountService) {
+  constructor(private readonly walletKafkaService: WalletAccountKafkaService) {
     this.logger.debug(
       `${WalletController.name} initialized`,
       '',
@@ -17,15 +22,48 @@ export class WalletController {
     );
   }
 
-  @MessagePattern('wallet.create')
-  async create(@Payload() data: any, @Ctx() context: KafkaContext): Promise<void> {
+  @MessagePattern(KT_CREATE_WALLET_ACCOUNT)
+  async createWalletAccount(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
-    await this.walletService.create(data, key);
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_CREATE_WALLET_ACCOUNT}`,
+      '',
+      'createWalletAccount',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletKafkaService.createWalletAccount(message, key);
   }
 
-  @MessagePattern('wallet.list')
-  async list(@Payload() _data: any, @Ctx() context: KafkaContext): Promise<void> {
+  @MessagePattern(KT_GET_WALLET_ACCOUNTS)
+  async getWalletAccounts(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
-    await this.walletService.findAll(key);
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_WALLET_ACCOUNTS}`,
+      '',
+      'getWalletAccounts',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletKafkaService.getWalletAccounts(message, key);
+  }
+
+  @MessagePattern(KT_GET_ZTRACKING_WALLET_ACCOUNT)
+  async getZtrackingWalletAccount(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_WALLET_ACCOUNT}`,
+      '',
+      'getZtrackingWalletAccount',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletKafkaService.getZtrackingWalletAccount(message, key);
   }
 }

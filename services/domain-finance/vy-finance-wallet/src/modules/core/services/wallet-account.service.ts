@@ -2,6 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WalletAccount } from '../../../entities/wallet_account.entity';
+import { ZtrackingWalletAccountService } from './ztracking-wallet-account.service';
+import {
+  CreateWalletAccountDto,
+  GetWalletAccountsDto,
+  GetZtrackingWalletAccountDto,
+  WalletAccountDto,
+  ZtrackingWalletAccountDto,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -12,6 +20,7 @@ export class WalletAccountService {
   constructor(
     @InjectRepository(WalletAccount)
     private readonly walletRepo: Repository<WalletAccount>,
+    private readonly ztrackingWalletAccountService: ZtrackingWalletAccountService,
   ) {
     this.logger.debug(
       `${WalletAccountService.name} initialized`,
@@ -21,16 +30,38 @@ export class WalletAccountService {
     );
   }
 
-  async create(account: Partial<WalletAccount>, traceId: string): Promise<WalletAccount> {
+  async createWalletAccount(
+    account: CreateWalletAccountDto,
+    traceId: string,
+  ): Promise<WalletAccountDto> {
     const entity = this.walletRepo.create(account);
     await this.walletRepo.save(entity);
-    this.logger.info('WalletAccount created', traceId, 'create', LogStreamLevel.ProdStandard);
+    this.logger.info('WalletAccount created', traceId, 'createWalletAccount', LogStreamLevel.ProdStandard);
+
+    await this.ztrackingWalletAccountService.createZtrackingForWalletAccount(
+      entity,
+      traceId,
+    );
+
     return entity;
   }
 
-  async findAll(traceId: string): Promise<WalletAccount[]> {
+  async getWalletAccounts(
+    _getDto: GetWalletAccountsDto,
+    traceId: string,
+  ): Promise<WalletAccountDto[]> {
     const list = await this.walletRepo.find();
-    this.logger.info(`Retrieved ${list.length} wallet accounts`, traceId, 'findAll', LogStreamLevel.DebugLight);
+    this.logger.info(`Retrieved ${list.length} wallet accounts`, traceId, 'getWalletAccounts', LogStreamLevel.DebugLight);
     return list;
+  }
+
+  async getZtrackingWalletAccount(
+    getDto: GetZtrackingWalletAccountDto,
+    traceId: string,
+  ): Promise<ZtrackingWalletAccountDto[]> {
+    return this.ztrackingWalletAccountService.getZtrackingForWalletAccount(
+      getDto,
+      traceId,
+    );
   }
 }

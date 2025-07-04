@@ -4,14 +4,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Index,
-  CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('payment_intent', { schema: process.env.TIDB_DATABASE })
-export class PaymentIntent extends BaseEntity {
+@Entity('ztracking_payment_intent', { schema: process.env.TIDB_DATABASE })
+export class ZtrackingPaymentIntent extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
+  ztrackingVersion: string;
+
   @Index()
+  @Column('uuid')
   paymentIntentId: string;
 
   @Column({ unique: true })
@@ -38,9 +39,12 @@ export class PaymentIntent extends BaseEntity {
   @Column('timestamp', { nullable: true })
   nextRetryAt?: Date;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ nullable: true })
+  createdAt?: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @Column({ nullable: true })
+  updatedAt?: Date;
+
+  @Column()
+  versionDate: Date;
 }

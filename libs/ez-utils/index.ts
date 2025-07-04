@@ -15,6 +15,9 @@ export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
+/* ------------------------------------- domain-finance ------------------------------*/
+export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent";
+export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
 
 /**************************************** DTOs **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
@@ -49,3 +52,14 @@ export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutri
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/ztracking-nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracking-nutrition-session.dto';
+/* ------------------------------------- domain-finance DTOs -------------------------*/
+export * from './src/DTO/domain-finance/vy-finance-payments/payment-intent.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/get-payment-intents.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/get-wallet-accounts.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/ztracking-wallet-account.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/get-ztracking-wallet-account.dto';
