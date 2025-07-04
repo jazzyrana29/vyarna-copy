@@ -100,6 +100,15 @@ function ensureDepsInstalled(packages) {
   });
 }
 
+function cleanInstallPackages(packages) {
+  packages.forEach((pkg) => {
+    const nm = path.join(pkg.path, 'node_modules');
+    const dist = path.join(pkg.path, 'dist');
+    fs.rmSync(nm, { recursive: true, force: true });
+    fs.rmSync(dist, { recursive: true, force: true });
+  });
+}
+
 function startPackages(packages) {
   if (!packages.length) return;
   packages.forEach((pkg) => {
@@ -113,6 +122,7 @@ function usage() {
   console.log(`Usage: node repo.js <command> [names...]
 Commands:
   install [names...]        install packages (apps use --legacy-peer-deps)
+  clean-install [names...]  remove dist & node_modules directories
   start <names...>           run apps (npm start) or services (npm start:dev)
                              each launches in its own terminal window
                              use "node repo.js list" to view package names
@@ -126,6 +136,7 @@ Commands:
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
   node repo.js install
+  node repo.js clean-install
   node repo.js start Vyarna website-foundation-scg vy-person-identity
   node repo.js build-libs ez-logger ez-utils
   node repo.js list
@@ -160,6 +171,11 @@ switch (cmd) {
       const selected = filterPackages(all, args);
       doInstall(selected);
     }
+    break;
+  }
+  case 'clean-install': {
+    const target = args.length === 0 ? all : filterPackages(all, args);
+    cleanInstallPackages(target);
     break;
   }
   case 'start': {
