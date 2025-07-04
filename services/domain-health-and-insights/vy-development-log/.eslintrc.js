@@ -2,6 +2,8 @@
 const unusedImports = require("eslint-plugin-unused-imports");
 const tsPlugin = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
+
+module.exports = [
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     ignores: ["node_modules/**", "babel.config.js", "metro.config.js"],
