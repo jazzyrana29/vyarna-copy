@@ -161,6 +161,10 @@ switch (cmd) {
           runNpm(pkg, 'install --legacy-peer-deps', true);
         } else if (pkg.type === 'service' || pkg.type === 'lib') {
           runNpm(pkg, 'install', true);
+          if (pkg.type === 'lib') {
+            // automatically build libraries after installing
+            runNpm(pkg, 'run build', true);
+          }
         }
       });
     }
