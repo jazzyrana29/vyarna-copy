@@ -1,6 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
-import { PaymentIntentService } from './services/payment-intent.service';
+import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
+import {
+  KT_CREATE_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENTS,
+  KT_GET_ZTRACKING_PAYMENT_INTENT,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -8,7 +13,7 @@ import { LogStreamLevel } from 'ez-logger';
 export class PaymentController {
   private logger = getLoggerConfig(PaymentController.name);
 
-  constructor(private readonly paymentService: PaymentIntentService) {
+  constructor(private readonly paymentKafkaService: PaymentIntentKafkaService) {
     this.logger.debug(
       `${PaymentController.name} initialized`,
       '',
@@ -17,15 +22,48 @@ export class PaymentController {
     );
   }
 
-  @MessagePattern('payments.create')
-  async create(@Payload() data: any, @Ctx() context: KafkaContext): Promise<void> {
+  @MessagePattern(KT_CREATE_PAYMENT_INTENT)
+  async createPaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
-    await this.paymentService.create(data, key);
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_CREATE_PAYMENT_INTENT}`,
+      '',
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.createPaymentIntent(message, key);
   }
 
-  @MessagePattern('payments.list')
-  async list(@Payload() _data: any, @Ctx() context: KafkaContext): Promise<void> {
+  @MessagePattern(KT_GET_PAYMENT_INTENTS)
+  async getPaymentIntents(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
-    await this.paymentService.findAll(key);
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_PAYMENT_INTENTS}`,
+      '',
+      'getPaymentIntents',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.getPaymentIntents(message, key);
+  }
+
+  @MessagePattern(KT_GET_ZTRACKING_PAYMENT_INTENT)
+  async getZtrackingPaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_PAYMENT_INTENT}`,
+      '',
+      'getZtrackingPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.getZtrackingPaymentIntent(message, key);
   }
 }
