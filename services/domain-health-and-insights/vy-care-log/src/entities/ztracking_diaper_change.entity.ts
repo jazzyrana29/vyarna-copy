@@ -1,4 +1,10 @@
-import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('ztracking_diaper_change', { schema: process.env.TIDB_DATABASE })
 export class ZtrackingDiaperChange extends BaseEntity {
@@ -19,7 +25,22 @@ export class ZtrackingDiaperChange extends BaseEntity {
   changeType: 'WET' | 'SOILED' | 'BOTH';
 
   @Column('timestamp')
-  timestamp: Date;
+  eventTime: Date;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  pooTexture?:
+    | 'VERY_RUNNY'
+    | 'RUNNY'
+    | 'MUSHY'
+    | 'MUCOUSY'
+    | 'SOLID'
+    | 'LITTLE_BALLS';
+
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  pooColor?: 'GREEN' | 'YELLOW' | 'BROWN' | 'BLACK' | 'RED' | 'WHITE';
+
+  @Column('text', { nullable: true })
+  photoUrl?: string;
 
   @Column('text', { nullable: true })
   notes?: string;
@@ -29,6 +50,12 @@ export class ZtrackingDiaperChange extends BaseEntity {
 
   @Column({ nullable: true })
   createdAt?: Date;
+
+  @Column({ nullable: true })
+  updatedAt?: Date;
+
+  @Column({ nullable: true })
+  deletedAt?: Date;
 
   @Column()
   versionDate: Date;

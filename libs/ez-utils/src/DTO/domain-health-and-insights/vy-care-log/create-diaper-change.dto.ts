@@ -5,6 +5,9 @@ export class CreateDiaperChangeDto extends PickType(DiaperChangeDto, [
   'babyId',
   'personId',
   'changeType',
-  'timestamp',
+  'eventTime',
+  'pooTexture',
+  'pooColor',
   'notes',
+  'photoUrl',
 ] as const) {}
