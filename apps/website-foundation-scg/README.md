@@ -89,6 +89,17 @@ RCT_METRO_PORT=8090 npm start
 
 The `metro.config.js` file reads `RCT_METRO_PORT` and falls back to port `8083`.
 
+On Windows systems you may see an `ENOTEMPTY` error about `metro-cache` when
+starting Metro Bundler. Clearing the cache directory manually usually resolves
+this:
+
+```bash
+rimraf %LOCALAPPDATA%\Temp\metro-cache
+```
+
+The project now stores Metro's cache under `node_modules/.cache/metro` to avoid
+this issue.
+
 ## Roadmap
 
 If you have ideas for releases in the future, it is a good idea to list them in the README.
