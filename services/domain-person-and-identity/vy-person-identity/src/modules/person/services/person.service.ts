@@ -19,7 +19,7 @@ import {
   PaginatedPersonsResponseDto,
   UpdatePersonDto,
 } from "ez-utils";
-import { BusinessUnit } from "../../../../../../domain-multitenant/ez-business-operators/src/entities/business-unit.entity";
+import { BusinessUnit } from "../../../entities/business-unit.entity";
 import { Email } from "../../../entities/email.entity";
 
 @Injectable()
