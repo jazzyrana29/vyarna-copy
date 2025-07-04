@@ -1,5 +1,6 @@
 {
   "root": true,
+  "ignorePatterns": ["node_modules/", "dist/"],
   "env": {
     "node": true,
     "es2021": true
@@ -31,4 +32,3 @@
     "semi": ["error", "always"]
   }
 }
-
