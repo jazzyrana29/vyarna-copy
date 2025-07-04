@@ -48,7 +48,7 @@ A lightweight Node helper script that scans each
 workspace for a `package.json` and forwards common npm commands.
 
 ```bash
-node repo.js install [names...] # install all or specific libs, apps or services
+node repo.js install [names...] # install packages (apps use --legacy-peer-deps)
 node repo.js start <names...>   # run one or more apps or services
 node repo.js build-libs lib     # build a shared library
 node repo.js list               # show all workspaces
@@ -94,9 +94,9 @@ without pulling in unrelated configs.
    ```bash
    git clone git@github.com:vyarna/monorepo.git
    cd monorepo
-   node repo.js install    # install all packages
+   node repo.js install    # install all packages (apps use --legacy-peer-deps)
    # or install specific ones
-   node repo.js install vy-person-identity website-foundation-scg
+   node repo.js install vy-person-identity website-foundation-scg  # example
    ```
 
 2. **Develop a service or app**

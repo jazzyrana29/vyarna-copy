@@ -112,7 +112,7 @@ function startPackages(packages) {
 function usage() {
   console.log(`Usage: node repo.js <command> [names...]
 Commands:
-  install                   install libs, apps then services
+  install [names...]        install packages (apps use --legacy-peer-deps)
   start <names...>           run apps (npm start) or services (npm start:dev)
                              each launches in its own terminal window
                              use "node repo.js list" to view package names
@@ -143,35 +143,14 @@ const [, , cmd, ...args] = process.argv;
 switch (cmd) {
   case 'install': {
     function doInstall(targetPkgs) {
-      const libsTarget = targetPkgs.filter((p) => p.type === 'lib');
-      const appsTarget = targetPkgs.filter((p) => p.type === 'app');
-      const servicesTarget = targetPkgs.filter((p) => p.type === 'service');
-
-      const order = ['ez-logger', 'ez-utils', 'ez-kafka-producer'];
-      const map = new Map(libsTarget.map((l) => [l.name, l]));
-      const libsSorted = [];
-      order.forEach((n) => {
-        if (map.has(n)) {
-          libsSorted.push(map.get(n));
-          map.delete(n);
+      targetPkgs.forEach((pkg) => {
+        if (pkg.type === 'app') {
+          // use legacy peer deps for apps to satisfy React Native requirements
+          runNpm(pkg, 'install --legacy-peer-deps', true);
+        } else if (pkg.type === 'service' || pkg.type === 'lib') {
+          runNpm(pkg, 'install', true);
         }
       });
-      libsSorted.push(
-        ...Array.from(map.values()).sort((a, b) =>
-          a.name.localeCompare(b.name),
-        ),
-      );
-
-      libsSorted.forEach((pkg) => {
-        runNpm(pkg, 'install', true);
-        runNpm(pkg, 'run build', true);
-      });
-
-      appsTarget.forEach((pkg) => {
-        // use legacy peer deps for apps to satisfy React Native requirements
-        runNpm(pkg, 'install --legacy-peer-deps', true);
-      });
-      servicesTarget.forEach((pkg) => runNpm(pkg, 'install', true));
     }
 
     if (args.length === 0) {
