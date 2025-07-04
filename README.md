@@ -97,7 +97,11 @@ without pulling in unrelated configs.
    node repo.js install    # install all packages (apps use --legacy-peer-deps)
    # or install specific ones
    node repo.js install vy-person-identity website-foundation-scg  # example
+   # ensure a modern npm version
+   # older npm releases can error with "Invalid Version"
    ```
+
+   > **Requires Node 18+ and npm 9+** – older versions may fail with `npm ERR! Invalid Version`.
 
 2. **Develop a service or app**
 
