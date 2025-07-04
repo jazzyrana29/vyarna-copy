@@ -25,9 +25,27 @@ export class PaymentIntentDto {
   @IsString()
   currency: string;
 
-  @ApiProperty({ description: 'Status of the intent' })
+  @ApiProperty({
+    description: 'Status of the intent',
+    enum: [
+      'REQUIRES_PAYMENT_METHOD',
+      'REQUIRES_CONFIRMATION',
+      'PROCESSING',
+      'SUCCEEDED',
+      'REQUIRES_ACTION',
+      'FAILED',
+      'CANCELED',
+    ],
+  })
   @IsString()
-  status: string;
+  status:
+    | 'REQUIRES_PAYMENT_METHOD'
+    | 'REQUIRES_CONFIRMATION'
+    | 'PROCESSING'
+    | 'SUCCEEDED'
+    | 'REQUIRES_ACTION'
+    | 'FAILED'
+    | 'CANCELED';
 
   @ApiProperty({ description: 'Optional metadata', required: false })
   @IsOptional()

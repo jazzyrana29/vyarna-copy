@@ -5,7 +5,7 @@ import { WalletAccount } from '../../../entities/wallet_account.entity';
 import { ZtrackingWalletAccountService } from './ztracking-wallet-account.service';
 import {
   CreateWalletAccountDto,
-  GetWalletAccountsDto,
+  GetWalletAccountDto,
   GetZtrackingWalletAccountDto,
   WalletAccountDto,
   ZtrackingWalletAccountDto,
@@ -34,7 +34,10 @@ export class WalletAccountService {
     account: CreateWalletAccountDto,
     traceId: string,
   ): Promise<WalletAccountDto> {
-    const entity = this.walletRepo.create(account);
+    const entity = this.walletRepo.create({
+      ...account,
+      balanceCents: 0,
+    });
     await this.walletRepo.save(entity);
     this.logger.info('WalletAccount created', traceId, 'createWalletAccount', LogStreamLevel.ProdStandard);
 
@@ -46,13 +49,17 @@ export class WalletAccountService {
     return entity;
   }
 
-  async getWalletAccounts(
-    _getDto: GetWalletAccountsDto,
+  async getWalletAccount(
+    { accountId }: GetWalletAccountDto,
     traceId: string,
-  ): Promise<WalletAccountDto[]> {
-    const list = await this.walletRepo.find();
-    this.logger.info(`Retrieved ${list.length} wallet accounts`, traceId, 'getWalletAccounts', LogStreamLevel.DebugLight);
-    return list;
+  ): Promise<WalletAccountDto | null> {
+    const entity = await this.walletRepo.findOne({ where: { accountId } });
+    if (entity) {
+      this.logger.info('Retrieved wallet account', traceId, 'getWalletAccount', LogStreamLevel.DebugLight);
+    } else {
+      this.logger.warn(`Wallet account not found => ${accountId}`, traceId, 'getWalletAccount', LogStreamLevel.DebugLight);
+    }
+    return entity;
   }
 
   async getZtrackingWalletAccount(

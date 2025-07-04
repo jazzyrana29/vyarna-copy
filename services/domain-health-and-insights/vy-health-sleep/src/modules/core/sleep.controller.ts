@@ -1,6 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
-import { SleepSessionService } from './services/sleep-session.service';
+import { SleepSessionKafkaService } from './services/sleep-session-kafka.service';
+import {
+  KT_CREATE_SLEEP_SESSION,
+  KT_GET_SLEEP_SESSIONS,
+  KT_GET_ZTRACKING_SLEEP_SESSION,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -8,7 +13,7 @@ import { LogStreamLevel } from 'ez-logger';
 export class SleepController {
   private logger = getLoggerConfig(SleepController.name);
 
-  constructor(private readonly sleepService: SleepSessionService) {
+  constructor(private readonly sleepKafkaService: SleepSessionKafkaService) {
     this.logger.debug(
       `${SleepController.name} initialized`,
       '',
@@ -17,15 +22,48 @@ export class SleepController {
     );
   }
 
-  @MessagePattern('sleep.create')
-  async create(@Payload() data: any, @Ctx() context: KafkaContext): Promise<void> {
+  @MessagePattern(KT_CREATE_SLEEP_SESSION)
+  async createSleepSessionWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
-    await this.sleepService.create(data, key);
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_CREATE_SLEEP_SESSION}`,
+      '',
+      'createSleepSessionWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.sleepKafkaService.createSleepSession(message, key);
   }
 
-  @MessagePattern('sleep.list')
-  async list(@Payload() _data: any, @Ctx() context: KafkaContext): Promise<void> {
+  @MessagePattern(KT_GET_SLEEP_SESSIONS)
+  async getSleepSessionsWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
-    await this.sleepService.findAll(key);
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_SLEEP_SESSIONS}`,
+      '',
+      'getSleepSessionsWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.sleepKafkaService.getSleepSessions(message, key);
+  }
+
+  @MessagePattern(KT_GET_ZTRACKING_SLEEP_SESSION)
+  async getZtrackingSleepSessionWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_SLEEP_SESSION}`,
+      '',
+      'getZtrackingSleepSessionWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.sleepKafkaService.getZtrackingSleepSession(message, key);
   }
 }

@@ -15,9 +15,11 @@ export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session";
 /* ------------------------------------- domain-finance ------------------------------*/
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
 
 /**************************************** DTOs **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
@@ -55,11 +57,21 @@ export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracki
 /* ------------------------------------- domain-finance DTOs -------------------------*/
 export * from './src/DTO/domain-finance/vy-finance-payments/payment-intent.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto';
-export * from './src/DTO/domain-finance/vy-finance-payments/get-payment-intents.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto';
-export * from './src/DTO/domain-finance/vy-finance-wallet/get-wallet-accounts.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/ztracking-wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/get-ztracking-wallet-account.dto';
+export * from './src/DTO/domain-health-and-insights/vy-health-sleep/sleep-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-health-sleep/create-sleep-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-sessions.dto';
+export * from './src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-session.dto';
+export * from './src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-session.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/order.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/create-order.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-orders.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto';

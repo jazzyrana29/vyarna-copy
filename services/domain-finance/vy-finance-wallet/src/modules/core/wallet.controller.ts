@@ -3,7 +3,7 @@ import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservice
 import { WalletAccountKafkaService } from './services/wallet-account-kafka.service';
 import {
   KT_CREATE_WALLET_ACCOUNT,
-  KT_GET_WALLET_ACCOUNTS,
+  KT_GET_WALLET_ACCOUNT,
   KT_GET_ZTRACKING_WALLET_ACCOUNT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
@@ -37,19 +37,19 @@ export class WalletController {
     await this.walletKafkaService.createWalletAccount(message, key);
   }
 
-  @MessagePattern(KT_GET_WALLET_ACCOUNTS)
-  async getWalletAccounts(
+  @MessagePattern(KT_GET_WALLET_ACCOUNT)
+  async getWalletAccount(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
   ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Message Pattern hit for kafka topic : ${KT_GET_WALLET_ACCOUNTS}`,
+      `Message Pattern hit for kafka topic : ${KT_GET_WALLET_ACCOUNT}`,
       '',
-      'getWalletAccounts',
+      'getWalletAccount',
       LogStreamLevel.DebugLight,
     );
-    await this.walletKafkaService.getWalletAccounts(message, key);
+    await this.walletKafkaService.getWalletAccount(message, key);
   }
 
   @MessagePattern(KT_GET_ZTRACKING_WALLET_ACCOUNT)
