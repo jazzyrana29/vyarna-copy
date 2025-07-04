@@ -4,10 +4,10 @@ import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.servic
 import {
   KafkaMessageResponderService,
   KT_CREATE_PAYMENT_INTENT,
-  KT_GET_PAYMENT_INTENTS,
+  KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
   CreatePaymentIntentDto,
-  GetPaymentIntentsDto,
+  GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -43,14 +43,14 @@ export class PaymentIntentKafkaService {
     );
   }
 
-  async getPaymentIntents(message: any, key: string): Promise<void> {
+  async getPaymentIntent(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
-      KT_GET_PAYMENT_INTENTS,
+      KT_GET_PAYMENT_INTENT,
       message,
       key,
-      async (value: GetPaymentIntentsDto, traceId: string) =>
-        await this.paymentIntentService.getPaymentIntents(value, traceId),
+      async (value: GetPaymentIntentDto, traceId: string) =>
+        await this.paymentIntentService.getPaymentIntent(value, traceId),
     );
   }
 

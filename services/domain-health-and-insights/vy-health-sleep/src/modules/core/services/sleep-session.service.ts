@@ -2,6 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SleepSession } from '../../../entities/sleep_session.entity';
+import { ZtrackingSleepSessionService } from './ztracking-sleep-session.service';
+import {
+  CreateSleepSessionDto,
+  SleepSessionDto,
+  GetSleepSessionsDto,
+  GetZtrackingSleepSessionDto,
+  ZtrackingSleepSessionDto,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -12,6 +20,7 @@ export class SleepSessionService {
   constructor(
     @InjectRepository(SleepSession)
     private readonly sleepRepo: Repository<SleepSession>,
+    private readonly ztrackingSleepSessionService: ZtrackingSleepSessionService,
   ) {
     this.logger.debug(
       `${SleepSessionService.name} initialized`,
@@ -21,16 +30,48 @@ export class SleepSessionService {
     );
   }
 
-  async create(session: Partial<SleepSession>, traceId: string): Promise<SleepSession> {
-    const entity = this.sleepRepo.create(session);
+  async createSleepSession(
+    createDto: CreateSleepSessionDto,
+    traceId: string,
+  ): Promise<SleepSessionDto> {
+    const entity = this.sleepRepo.create(createDto);
     await this.sleepRepo.save(entity);
-    this.logger.info('SleepSession created', traceId, 'create', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'SleepSession created',
+      traceId,
+      'createSleepSession',
+      LogStreamLevel.ProdStandard,
+    );
+
+    await this.ztrackingSleepSessionService.createZtrackingForSleepSession(
+      entity,
+      traceId,
+    );
+
     return entity;
   }
 
-  async findAll(traceId: string): Promise<SleepSession[]> {
+  async getSleepSessions(
+    _getDto: GetSleepSessionsDto,
+    traceId: string,
+  ): Promise<SleepSessionDto[]> {
     const list = await this.sleepRepo.find();
-    this.logger.info(`Retrieved ${list.length} sleep sessions`, traceId, 'findAll', LogStreamLevel.DebugLight);
+    this.logger.info(
+      `Retrieved ${list.length} sleep sessions`,
+      traceId,
+      'getSleepSessions',
+      LogStreamLevel.DebugLight,
+    );
     return list;
+  }
+
+  async getZtrackingSleepSession(
+    getDto: GetZtrackingSleepSessionDto,
+    traceId: string,
+  ): Promise<ZtrackingSleepSessionDto[]> {
+    return this.ztrackingSleepSessionService.getZtrackingForSleepSession(
+      getDto,
+      traceId,
+    );
   }
 }

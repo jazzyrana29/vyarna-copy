@@ -5,7 +5,7 @@ import { PaymentIntent } from '../../../entities/payment_intent.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import {
   CreatePaymentIntentDto,
-  GetPaymentIntentsDto,
+  GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   PaymentIntentDto,
   ZtrackingPaymentIntentDto,
@@ -34,7 +34,10 @@ export class PaymentIntentService {
     createDto: CreatePaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto> {
-    const entity = this.paymentRepo.create(createDto);
+    const entity = this.paymentRepo.create({
+      ...createDto,
+      status: 'REQUIRES_PAYMENT_METHOD',
+    });
     await this.paymentRepo.save(entity);
     this.logger.info(
       'PaymentIntent created',
@@ -51,18 +54,27 @@ export class PaymentIntentService {
     return entity;
   }
 
-  async getPaymentIntents(
-    _getDto: GetPaymentIntentsDto,
+  async getPaymentIntent(
+    { paymentIntentId }: GetPaymentIntentDto,
     traceId: string,
-  ): Promise<PaymentIntentDto[]> {
-    const list = await this.paymentRepo.find();
-    this.logger.info(
-      `Retrieved ${list.length} payment intents`,
-      traceId,
-      'getPaymentIntents',
-      LogStreamLevel.DebugLight,
-    );
-    return list;
+  ): Promise<PaymentIntentDto | null> {
+    const entity = await this.paymentRepo.findOne({ where: { paymentIntentId } });
+    if (entity) {
+      this.logger.info(
+        `PaymentIntent retrieved`,
+        traceId,
+        'getPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+    } else {
+      this.logger.warn(
+        `PaymentIntent not found => ${paymentIntentId}`,
+        traceId,
+        'getPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+    }
+    return entity;
   }
 
   async getZtrackingPaymentIntent(

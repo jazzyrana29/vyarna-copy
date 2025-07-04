@@ -3,7 +3,7 @@ import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservice
 import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
 import {
   KT_CREATE_PAYMENT_INTENT,
-  KT_GET_PAYMENT_INTENTS,
+  KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
@@ -37,19 +37,19 @@ export class PaymentController {
     await this.paymentKafkaService.createPaymentIntent(message, key);
   }
 
-  @MessagePattern(KT_GET_PAYMENT_INTENTS)
-  async getPaymentIntents(
+  @MessagePattern(KT_GET_PAYMENT_INTENT)
+  async getPaymentIntent(
     @Payload() message: any,
     @Ctx() context: KafkaContext,
   ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Message Pattern hit for kafka topic : ${KT_GET_PAYMENT_INTENTS}`,
+      `Message Pattern hit for kafka topic : ${KT_GET_PAYMENT_INTENT}`,
       '',
-      'getPaymentIntents',
+      'getPaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    await this.paymentKafkaService.getPaymentIntents(message, key);
+    await this.paymentKafkaService.getPaymentIntent(message, key);
   }
 
   @MessagePattern(KT_GET_ZTRACKING_PAYMENT_INTENT)

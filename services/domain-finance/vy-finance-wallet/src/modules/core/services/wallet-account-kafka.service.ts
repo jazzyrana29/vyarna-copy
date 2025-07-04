@@ -4,10 +4,10 @@ import { ZtrackingWalletAccountService } from './ztracking-wallet-account.servic
 import {
   KafkaMessageResponderService,
   KT_CREATE_WALLET_ACCOUNT,
-  KT_GET_WALLET_ACCOUNTS,
+  KT_GET_WALLET_ACCOUNT,
   KT_GET_ZTRACKING_WALLET_ACCOUNT,
   CreateWalletAccountDto,
-  GetWalletAccountsDto,
+  GetWalletAccountDto,
   GetZtrackingWalletAccountDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -43,14 +43,14 @@ export class WalletAccountKafkaService {
     );
   }
 
-  async getWalletAccounts(message: any, key: string): Promise<void> {
+  async getWalletAccount(message: any, key: string): Promise<void> {
     await this.kafkaResponder.produceKafkaResponse(
       this.serviceName,
-      KT_GET_WALLET_ACCOUNTS,
+      KT_GET_WALLET_ACCOUNT,
       message,
       key,
-      async (value: GetWalletAccountsDto, traceId: string) =>
-        await this.walletAccountService.getWalletAccounts(value, traceId),
+      async (value: GetWalletAccountDto, traceId: string) =>
+        await this.walletAccountService.getWalletAccount(value, traceId),
     );
   }
 
