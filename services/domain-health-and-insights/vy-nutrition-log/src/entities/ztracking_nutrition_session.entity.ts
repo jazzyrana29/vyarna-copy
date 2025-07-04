@@ -1,5 +1,4 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, Index } from 'typeorm';
-import { NutritionSession } from './nutrition_session.entity';
 
 @Entity('ztracking_nutrition_session', { schema: process.env.TIDB_DATABASE })
 export class ZtrackingNutritionSession extends BaseEntity {
