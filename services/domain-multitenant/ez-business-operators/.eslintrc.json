@@ -22,7 +22,7 @@
       "error",
       {
         "varsIgnorePattern": "^_",
-        "argsIgnorePattern": "^_",
+        "argsIgnorePattern": "^(metadata|_)",
         "caughtErrorsIgnorePattern": "^ignore",
         "destructuredArrayIgnorePattern": "^_"
       }
