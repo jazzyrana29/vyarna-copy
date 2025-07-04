@@ -41,10 +41,43 @@ __decorate([
     __metadata("design:type", String)
 ], ZtrackingDiaperChangeDto.prototype, "changeType", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Timestamp of event', type: String, format: 'date-time' }),
+    (0, swagger_1.ApiProperty)({ description: 'When the change actually occurred', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
-], ZtrackingDiaperChangeDto.prototype, "timestamp", void 0);
+], ZtrackingDiaperChangeDto.prototype, "eventTime", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Texture of poo, if applicable',
+        enum: [
+            'VERY_RUNNY',
+            'RUNNY',
+            'MUSHY',
+            'MUCOUSY',
+            'SOLID',
+            'LITTLE_BALLS',
+        ],
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ZtrackingDiaperChangeDto.prototype, "pooTexture", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Colour of poo, if applicable',
+        enum: ['GREEN', 'YELLOW', 'BROWN', 'BLACK', 'RED', 'WHITE'],
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ZtrackingDiaperChangeDto.prototype, "pooColor", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Optional photo URL', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUrl)(),
+    __metadata("design:type", String)
+], ZtrackingDiaperChangeDto.prototype, "photoUrl", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Optional notes', required: false }),
     (0, class_validator_1.IsOptional)(),
@@ -63,6 +96,18 @@ __decorate([
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
 ], ZtrackingDiaperChangeDto.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Last update timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], ZtrackingDiaperChangeDto.prototype, "updatedAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Soft deletion timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], ZtrackingDiaperChangeDto.prototype, "deletedAt", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Date of this version', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),

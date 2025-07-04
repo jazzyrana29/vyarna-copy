@@ -7,8 +7,11 @@ class CreateDiaperChangeDto extends (0, swagger_1.PickType)(diaper_change_dto_1.
     'babyId',
     'personId',
     'changeType',
-    'timestamp',
+    'eventTime',
+    'pooTexture',
+    'pooColor',
     'notes',
+    'photoUrl',
 ]) {
 }
 exports.CreateDiaperChangeDto = CreateDiaperChangeDto;
