@@ -90,7 +90,7 @@ export class SystemMechanismService {
       if (filter.name) {
         conditions.name = filter.name;
       }
-      if (filter.isDeleted != null) {
+      if (filter.isDeleted !== undefined && filter.isDeleted !== null) {
         conditions.isDeleted = filter.isDeleted;
       }
 
