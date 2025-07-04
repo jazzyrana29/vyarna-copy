@@ -116,8 +116,8 @@ Commands:
   start <names...>           run apps (npm start) or services (npm start:dev)
                              each launches in its own terminal window
                              use "node repo.js list" to view package names
-  lint <service...>          npm run lint in services
-  lint:fix [names...]        npm run lint:fix in packages
+  lint [names...]            npm run lint in apps and services
+  lint:fix [names...]        npm run lint:fix in apps and services
   prettier:check [names...]  npm run prettier:check in packages
   prettier:fix [names...]    npm run prettier:fix in packages
   build-libs <lib...>        npm run build in libs
@@ -137,6 +137,7 @@ const all = collectPackages(__dirname);
 const services = all.filter((p) => p.type === 'service');
 const libs = all.filter((p) => p.type === 'lib');
 const apps = all.filter((p) => p.type === 'app');
+const lintTargets = [...apps, ...services];
 
 const [, , cmd, ...args] = process.argv;
 
@@ -188,10 +189,10 @@ switch (cmd) {
     break;
   }
   case 'lint':
-    filterPackages(services, args).forEach((p) => runNpm(p, 'run lint'));
+    filterPackages(lintTargets, args).forEach((p) => runNpm(p, 'run lint'));
     break;
   case 'lint:fix':
-    filterPackages(all, args).forEach((p) => runNpm(p, 'run lint:fix'));
+    filterPackages(lintTargets, args).forEach((p) => runNpm(p, 'run lint:fix'));
     break;
   case 'prettier:check':
     filterPackages(all, args).forEach((p) => runNpm(p, 'run prettier:check'));

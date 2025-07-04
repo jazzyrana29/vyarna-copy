@@ -119,8 +119,9 @@ without pulling in unrelated configs.
 4. **Lint & Test**
 
    ```bash
-   node repo.js lint vy-person-identity
-   node repo.js lint:fix Vyarna
+   node repo.js lint                               # lint all apps and services
+   node repo.js lint web-app vy-person-identity    # targeted lint
+   node repo.js lint:fix web-app vy-person-identity
    node repo.js prettier:check Vyarna
    node repo.js prettier:fix Vyarna
    node repo.js test vy-person-identity
