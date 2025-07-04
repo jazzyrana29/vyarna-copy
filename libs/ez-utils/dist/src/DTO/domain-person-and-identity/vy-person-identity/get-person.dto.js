@@ -13,7 +13,7 @@ exports.GetPersonDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const person_dto_1 = require("./person.dto");
-class GetPersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)(person_dto_1.PersonDto, ["nameFirst", "isDeleted"])) {
+class GetPersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)(person_dto_1.PersonDto, ["personId", "nameFirst", "isDeleted"])) {
 }
 exports.GetPersonDto = GetPersonDto;
 __decorate([

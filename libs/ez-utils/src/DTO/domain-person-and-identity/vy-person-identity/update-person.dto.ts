@@ -17,6 +17,14 @@ export class UpdatePersonDto extends PartialType(
   ] as const),
 ) {
   @ApiProperty({
+    description: "Unique identifier for the person",
+    type: String,
+    format: "uuid",
+  })
+  @IsUUID()
+  personId: string;
+
+  @ApiProperty({
     description: "Unique identifier for the operator",
     type: String,
     format: "uuid",

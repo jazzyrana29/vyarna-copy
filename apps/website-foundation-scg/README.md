@@ -78,6 +78,28 @@ Use examples liberally, and show the expected output if you can. It's helpful to
 
 Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
+## Troubleshooting
+
+This workspace's `npm start` script launches Metro Bundler on port `8083` by default.
+If that port is already in use, specify another port with the `RCT_METRO_PORT` environment variable:
+
+```bash
+RCT_METRO_PORT=8090 npm start
+```
+
+The `metro.config.js` file reads `RCT_METRO_PORT` and falls back to port `8083`.
+
+On Windows systems you may see an `ENOTEMPTY` error about `metro-cache` when
+starting Metro Bundler. Clearing the cache directory manually usually resolves
+this:
+
+```bash
+rimraf %LOCALAPPDATA%\Temp\metro-cache
+```
+
+The project now stores Metro's cache under `node_modules/.cache/metro` to avoid
+this issue.
+
 ## Roadmap
 
 If you have ideas for releases in the future, it is a good idea to list them in the README.

@@ -166,6 +166,21 @@ npm run build:ios # runs: eas build --platform ios
 
 ---
 
+## 🛠 Troubleshooting
+
+If `expo start` fails with an error like `EPERM: operation not permitted, lstat`,
+Watchman may be trying to read protected system folders. A `.watchmanconfig`
+file has been added to limit watched directories. If you still see the error,
+delete `node_modules` and run `npm install` again, then start Expo with:
+
+```bash
+npx expo start --clear
+```
+
+This clears Metro's cache and reloads with the restricted watch settings.
+
+---
+
 ## 🎯 Next Steps
 
 - Build out additional UI components under `src/components/`

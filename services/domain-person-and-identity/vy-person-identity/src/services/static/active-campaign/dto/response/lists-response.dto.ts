@@ -1,6 +1,6 @@
 // src/vy-active-campaign/dto/lists-response.dto.ts
 
-import { ListsEnum } from "../../../../../enum/lists.enum";
+import { ListsEnum } from "ez-utils";
 
 /**
  * DTO for the nested links object inside each list
