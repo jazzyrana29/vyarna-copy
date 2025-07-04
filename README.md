@@ -81,22 +81,11 @@ Shared TypeScript settings and path aliases:
 Baseline project settings live in the repo root:
 
 - `.npmrc` – hoisting rules and registry overrides
-- `eslint.config.cjs` – shared lint rules
 - `docker-compose.yml` – local service overrides
 - `example.env.*` – sample environment files
 
 Each workspace keeps its own copies of these files so it can be used on its own
 without pulling in unrelated configs.
-
-### 4. `clone-configs`
-
-Copies the baseline configs into a new workspace:
-
-```bash
-node repo.js clone-configs path/to/workspace
-```
-
----
 
 ## 🚀 Getting Started
 
