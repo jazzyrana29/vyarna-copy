@@ -11,7 +11,7 @@ config.watchFolders = [projectRoot];
 // Change Metro server port to avoid conflicts with the default 8081
 config.server = {
   ...config.server,
-  port: Number(process.env.RCT_METRO_PORT) || 8082,
+  port: Number(process.env.RCT_METRO_PORT) || 8083,
 };
 
 module.exports = withNativeWind(config, { input: "./global.css" });

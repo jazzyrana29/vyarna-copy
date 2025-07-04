@@ -78,6 +78,17 @@ Use examples liberally, and show the expected output if you can. It's helpful to
 
 Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
+## Troubleshooting
+
+If `expo start` fails with `listen EADDRINUSE: address already in use :::8081`, another process is using the default Metro Bundler port.
+Set the `RCT_METRO_PORT` environment variable to run on a different port:
+
+```bash
+RCT_METRO_PORT=8083 npm start
+```
+
+The `metro.config.js` file in this workspace reads `RCT_METRO_PORT` and falls back to port `8083`.
+
 ## Roadmap
 
 If you have ideas for releases in the future, it is a good idea to list them in the README.
