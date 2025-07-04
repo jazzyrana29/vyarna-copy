@@ -71,7 +71,7 @@ export class TaskTypeService {
   }
 
   async getManyTaskTypes(
-    {}: GetManyTaskTypesDto,
+    _: GetManyTaskTypesDto,
     traceId: string,
   ): Promise<TaskTypeDto[]> {
     const where: FindOptionsWhere<TaskType> = {};
