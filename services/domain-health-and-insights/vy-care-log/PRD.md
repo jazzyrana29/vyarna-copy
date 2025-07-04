@@ -85,6 +85,9 @@ Below are **all** the tables this service will own in its primary TiDB schema, w
 - **Baby → Events**
   - One **Baby** (`babyId` in vy-person-baby) is the subject of many care-log events.
   - Enforced by FK constraints; ensures only authorized caregivers may log.
+  - diaper_change(baby_id, person_id) → ensure valid caregiver & baby.
+  - baby_medication(baby_id) → medication catalog per baby.
+  - medication_administration(baby_medication_id) → enforce selection from catalog.
 
 - **Soft-Delete**
   - Each table includes an `isDeleted` boolean.
@@ -96,6 +99,7 @@ Below are **all** the tables this service will own in its primary TiDB schema, w
 - **Indexing Strategy**
   - Composite indexes on `(baby_id, timestamp)` for efficient timeline queries.
   - Index on `(person_id, created_at)` for audit and caregiver activity reports.
+
 
 ---
 
@@ -110,6 +114,12 @@ Below are all the enum types you’ll need in **vy-care-log**, analogous to the 
 | `WET`    | Wet diaper only     |
 | `SOILED` | Dirty diaper only   |
 | `BOTH`   | Both wet and soiled |
+
+### **PooTexture**
+VERY_RUNNY, RUNNY, MUSHY, MUCOUSY, SOLID, LITTLE_BALLS
+
+### **PooColor**
+GREEN, YELLOW, BROWN, BLACK, RED, WHITE
 
 ---
 
@@ -225,23 +235,44 @@ CREATE TABLE diaper_change (
   diaper_change_id UUID PRIMARY KEY,
   baby_id          UUID NOT NULL,
   person_id        UUID NOT NULL,
-  change_type      VARCHAR(6) NOT NULL,  -- 'WET','SOILED','BOTH'
-  timestamp        TIMESTAMP NOT NULL,
+  change_type      VARCHAR(10) NOT NULL,    -- ENUM: PEE, POO, BOTH
+  event_time       TIMESTAMP NOT NULL,       -- when the change actually occurred
+  poo_texture      VARCHAR(20),              -- ENUM: VERY_RUNNY, RUNNY, MUSHY, MUCOUSY, SOLID, LITTLE_BALLS
+  poo_color        VARCHAR(10),              -- ENUM: GREEN, YELLOW, BROWN, BLACK, RED, WHITE
   notes            TEXT,
-  created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  photo_url        TEXT,
+  created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at       TIMESTAMP
 );
 
 CREATE TABLE medication_administration (
-  med_admin_id    UUID PRIMARY KEY,
-  baby_id         UUID NOT NULL,
-  person_id       UUID NOT NULL,
-  medication_name VARCHAR(100) NOT NULL,
-  dosage          FLOAT NOT NULL,
-  unit            VARCHAR(10) NOT NULL,
-  route           VARCHAR(50) NOT NULL,
-  timestamp       TIMESTAMP NOT NULL,
-  notes           TEXT,
-  created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  med_admin_id     UUID PRIMARY KEY,
+  baby_id          UUID NOT NULL,
+  person_id        UUID NOT NULL,
+  baby_medication_id UUID REFERENCES baby_medication(baby_medication_id),
+  dosage           DECIMAL(6,2) NOT NULL,
+  unit             VARCHAR(10)       NOT NULL,    -- fallback if no `baby_medication_id`
+  route            VARCHAR(50)       NOT NULL,    -- ENUM: ORAL, TOPICAL, INJECTION, INHALATION
+  event_time       TIMESTAMP         NOT NULL,
+  notes            TEXT,
+  photo_url        TEXT,
+  created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at       TIMESTAMP
+);
+
+CREATE TABLE baby_medication (
+  baby_medication_id UUID PRIMARY KEY,
+  baby_id            UUID NOT NULL,
+  name               VARCHAR(100) NOT NULL,
+  form               VARCHAR(50),           -- e.g. 'liquid', 'tablet'
+  default_dosage     DECIMAL(6,2),
+  dosage_unit        VARCHAR(10),           -- e.g. 'mL', 'mg'
+  instructions       TEXT,
+  created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at         TIMESTAMP
 );
 
 CREATE TABLE temperature_measurement (
