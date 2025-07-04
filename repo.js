@@ -142,10 +142,14 @@ const apps = all.filter((p) => p.type === 'app');
 const [, , cmd, ...args] = process.argv;
 
 switch (cmd) {
-  case 'install':
-    (function installAll() {
+  case 'install': {
+    function doInstall(targetPkgs) {
+      const libsTarget = targetPkgs.filter((p) => p.type === 'lib');
+      const appsTarget = targetPkgs.filter((p) => p.type === 'app');
+      const servicesTarget = targetPkgs.filter((p) => p.type === 'service');
+
       const order = ['ez-logger', 'ez-utils', 'ez-kafka-producer'];
-      const map = new Map(libs.map((l) => [l.name, l]));
+      const map = new Map(libsTarget.map((l) => [l.name, l]));
       const libsSorted = [];
       order.forEach((n) => {
         if (map.has(n)) {
@@ -164,13 +168,21 @@ switch (cmd) {
         runNpm(pkg, 'run build', true);
       });
 
-      apps.forEach((pkg) => {
+      appsTarget.forEach((pkg) => {
         // use legacy peer deps for apps to satisfy React Native requirements
         runNpm(pkg, 'install --legacy-peer-deps', true);
       });
-      services.forEach((pkg) => runNpm(pkg, 'install', true));
-    })();
+      servicesTarget.forEach((pkg) => runNpm(pkg, 'install', true));
+    }
+
+    if (args.length === 0) {
+      doInstall(all);
+    } else {
+      const selected = filterPackages(all, args);
+      doInstall(selected);
+    }
     break;
+  }
   case 'start': {
     if (!args.length) {
       console.log(
