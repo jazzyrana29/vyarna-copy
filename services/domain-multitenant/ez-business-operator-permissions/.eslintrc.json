@@ -1,5 +1,6 @@
 {
   "root": true,
+  "ignorePatterns": ["node_modules/", "dist/"],
   "env": {
     "node": true,
     "es2021": true
@@ -20,13 +21,15 @@
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
-        "varsIgnorePattern": "^_",
-        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^(?:_|T)$",
+        "argsIgnorePattern": "^(metadata|_)",
         "caughtErrorsIgnorePattern": "^ignore",
-        "destructuredArrayIgnorePattern": "^_"
+        "destructuredArrayIgnorePattern": "^_",
+        "ignoreRestSiblings": true
       }
     ],
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-object-type": "off",
     "eqeqeq": "error",
     "semi": ["error", "always"]
   }

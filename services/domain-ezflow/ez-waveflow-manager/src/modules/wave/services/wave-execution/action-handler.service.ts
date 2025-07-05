@@ -701,10 +701,10 @@ export class ActionHandlerService {
         action.email,
         waveContext.inputVariables,
       );
-      const password = this.substituteTemplate(
-        action.password,
-        waveContext.inputVariables,
-      );
+      // const password = this.substituteTemplate(
+      //   action.password,
+      //   waveContext.inputVariables,
+      // );
       const updatedBy = action._updatedBy
         ? this.substituteTemplate(action._updatedBy, waveContext.inputVariables)
         : undefined;

@@ -100,6 +100,15 @@ function ensureDepsInstalled(packages) {
   });
 }
 
+function cleanInstallPackages(packages) {
+  packages.forEach((pkg) => {
+    const nm = path.join(pkg.path, 'node_modules');
+    const dist = path.join(pkg.path, 'dist');
+    fs.rmSync(nm, { recursive: true, force: true });
+    fs.rmSync(dist, { recursive: true, force: true });
+  });
+}
+
 function startPackages(packages) {
   if (!packages.length) return;
   packages.forEach((pkg) => {
@@ -113,19 +122,21 @@ function usage() {
   console.log(`Usage: node repo.js <command> [names...]
 Commands:
   install [names...]        install packages (apps use --legacy-peer-deps)
+  clean-install [names...]  remove dist & node_modules directories
   start <names...>           run apps (npm start) or services (npm start:dev)
                              each launches in its own terminal window
                              use "node repo.js list" to view package names
-  lint <service...>          npm run lint in services
-  lint:fix [names...]        npm run lint:fix in packages
-  prettier:check [names...]  npm run prettier:check in packages
-  prettier:fix [names...]    npm run prettier:fix in packages
+  lint [names...]            npm run lint in apps and services
+  lint:fix [names...]        npm run lint:fix in apps and services
+  prettier:check [names...]  npm run prettier:check in apps and services
+  prettier:fix [names...]    npm run prettier:fix in apps and services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
   list [names...]            list packages (all types)
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
   node repo.js install
+  node repo.js clean-install
   node repo.js start Vyarna website-foundation-scg vy-person-identity
   node repo.js build-libs ez-logger ez-utils
   node repo.js list
@@ -137,6 +148,7 @@ const all = collectPackages(__dirname);
 const services = all.filter((p) => p.type === 'service');
 const libs = all.filter((p) => p.type === 'lib');
 const apps = all.filter((p) => p.type === 'app');
+const lintTargets = [...apps, ...services];
 
 const [, , cmd, ...args] = process.argv;
 
@@ -149,6 +161,10 @@ switch (cmd) {
           runNpm(pkg, 'install --legacy-peer-deps', true);
         } else if (pkg.type === 'service' || pkg.type === 'lib') {
           runNpm(pkg, 'install', true);
+          if (pkg.type === 'lib') {
+            // automatically build libraries after installing
+            runNpm(pkg, 'run build', true);
+          }
         }
       });
     }
@@ -159,6 +175,11 @@ switch (cmd) {
       const selected = filterPackages(all, args);
       doInstall(selected);
     }
+    break;
+  }
+  case 'clean-install': {
+    const target = args.length === 0 ? all : filterPackages(all, args);
+    cleanInstallPackages(target);
     break;
   }
   case 'start': {
@@ -188,16 +209,20 @@ switch (cmd) {
     break;
   }
   case 'lint':
-    filterPackages(services, args).forEach((p) => runNpm(p, 'run lint'));
+    filterPackages(lintTargets, args).forEach((p) => runNpm(p, 'run lint'));
     break;
   case 'lint:fix':
-    filterPackages(all, args).forEach((p) => runNpm(p, 'run lint:fix'));
+    filterPackages(lintTargets, args).forEach((p) => runNpm(p, 'run lint:fix'));
     break;
   case 'prettier:check':
-    filterPackages(all, args).forEach((p) => runNpm(p, 'run prettier:check'));
+    filterPackages(lintTargets, args).forEach((p) =>
+      runNpm(p, 'run prettier:check')
+    );
     break;
   case 'prettier:fix':
-    filterPackages(all, args).forEach((p) => runNpm(p, 'run prettier:fix'));
+    filterPackages(lintTargets, args).forEach((p) =>
+      runNpm(p, 'run prettier:fix')
+    );
     break;
   case 'build-libs':
     filterPackages(libs, args).forEach((p) => runNpm(p, 'run build'));

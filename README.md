@@ -48,7 +48,7 @@ A lightweight Node helper script that scans each
 workspace for a `package.json` and forwards common npm commands.
 
 ```bash
-node repo.js install [names...] # install packages (apps use --legacy-peer-deps)
+node repo.js install [names...] # install packages (apps use --legacy-peer-deps, libs auto-build)
 node repo.js start <names...>   # run one or more apps or services
 node repo.js build-libs lib     # build a shared library
 node repo.js list               # show all workspaces
@@ -94,7 +94,7 @@ without pulling in unrelated configs.
    ```bash
    git clone git@github.com:vyarna/monorepo.git
    cd monorepo
-   node repo.js install    # install all packages (apps use --legacy-peer-deps)
+   node repo.js install    # install all packages (apps use --legacy-peer-deps, libs build automatically)
    # or install specific ones
    node repo.js install vy-person-identity website-foundation-scg  # example
    # ensure a modern npm version
@@ -110,19 +110,21 @@ without pulling in unrelated configs.
    # Vyarna and website-foundation-scg are apps; vy-person-identity is a service
    ```
 
-3. **Build libraries**
+3. **Rebuild libraries**
 
    ```bash
    node repo.js build-libs ez-utils
    ```
+   Libraries are usually built automatically after installing, but you can run this to rebuild as needed.
 
 4. **Lint & Test**
 
    ```bash
-   node repo.js lint vy-person-identity
-   node repo.js lint:fix Vyarna
-   node repo.js prettier:check Vyarna
-   node repo.js prettier:fix Vyarna
+   node repo.js lint                               # lint all apps and services
+   node repo.js lint web-app vy-person-identity    # targeted lint
+    node repo.js lint:fix web-app vy-person-identity
+    node repo.js prettier:check Vyarna      # run Prettier checks for apps/services
+    node repo.js prettier:fix Vyarna        # auto-format apps/services
    node repo.js test vy-person-identity
    ```
 

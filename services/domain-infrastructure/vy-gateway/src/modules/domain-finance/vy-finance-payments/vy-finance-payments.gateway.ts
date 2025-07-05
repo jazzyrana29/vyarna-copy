@@ -9,11 +9,9 @@ import { Server, Socket } from 'socket.io';
 import { FinancePaymentsKafkaService } from './microservices/vy-finance-payments-kafka.service';
 import {
   generateTraceId,
-  CreatePersonDto,
-  UpdatePersonDto,
-  GetPersonDto,
-  GetHistoryOfPersonDto,
-  GetManyPersonsDto,
+  CreatePaymentIntentDto,
+  GetPaymentIntentDto,
+  GetZtrackingPaymentIntentDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -24,7 +22,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   server: Server;
   private logger = getLoggerConfig(FinancePaymentsWebsocket.name);
 
-  constructor(private readonly personBabyKafka: FinancePaymentsKafkaService) {}
+  constructor(private readonly paymentsKafka: FinancePaymentsKafkaService) {}
 
   afterInit() {
     this.logger.debug(
@@ -53,89 +51,55 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('finance-payments-create')
+  @SubscribeMessage('finance-payments-create-intent')
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createPersonDto: CreatePersonDto,
+    dto: CreatePaymentIntentDto,
   ) {
-    const traceId = generateTraceId('finance-payments-create');
+    const traceId = generateTraceId('finance-payments-create-intent');
     try {
-      const result = await this.personBabyKafka.createPerson(
-        createPersonDto,
-        traceId,
-      );
-      socket.emit('finance-payments-create-result', result);
-    } catch (e: any) {
-      socket.emit('finance-payments-create-error', e.message || 'Unknown error');
-    }
-  }
-
-  @SubscribeMessage('finance-payments-update')
-  async handleUpdate(
-    @ConnectedSocket() socket: Socket,
-    updatePersonDto: UpdatePersonDto,
-  ) {
-    const traceId = generateTraceId('finance-payments-update');
-    try {
-      const result = await this.personBabyKafka.updatePerson(
-        updatePersonDto,
-        traceId,
-      );
-      socket.emit('finance-payments-update-result', result);
-    } catch (e: any) {
-      socket.emit('finance-payments-update-error', e.message || 'Unknown error');
-    }
-  }
-
-  @SubscribeMessage('finance-payments-get')
-  async handleGet(
-    @ConnectedSocket() socket: Socket,
-    getPersonDto: GetPersonDto,
-  ) {
-    const traceId = generateTraceId('finance-payments-get');
-    try {
-      const result = await this.personBabyKafka.getPerson(getPersonDto, traceId);
-      socket.emit('finance-payments-get-result', result);
-    } catch (e: any) {
-      socket.emit('finance-payments-get-error', e.message || 'Unknown error');
-    }
-  }
-
-  @SubscribeMessage('finance-payments-get-history')
-  async handleHistory(
-    @ConnectedSocket() socket: Socket,
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
-  ) {
-    const traceId = generateTraceId('finance-payments-get-history');
-    try {
-      const result = await this.personBabyKafka.getHistory(
-        getHistoryOfPersonDto,
-        traceId,
-      );
-      socket.emit('finance-payments-get-history-result', result);
+      const result = await this.paymentsKafka.createPaymentIntent(dto, traceId);
+      socket.emit('finance-payments-create-intent-result', result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-get-history-error',
+        'finance-payments-create-intent-error',
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-get-many')
-  async handleGetMany(
+  @SubscribeMessage('finance-payments-get-intent')
+  async handleGet(
     @ConnectedSocket() socket: Socket,
-    getManyPersonsDto: GetManyPersonsDto,
+    dto: GetPaymentIntentDto,
   ) {
-    const traceId = generateTraceId('finance-payments-get-many');
+    const traceId = generateTraceId('finance-payments-get-intent');
     try {
-      const result = await this.personBabyKafka.getManyPersons(
-        getManyPersonsDto,
-        traceId,
-      );
-      socket.emit('finance-payments-get-many-result', result);
+      const result = await this.paymentsKafka.getPaymentIntent(dto, traceId);
+      socket.emit('finance-payments-get-intent-result', result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-get-many-error',
+        'finance-payments-get-intent-error',
+        e.message || 'Unknown error',
+      );
+    }
+  }
+
+  @SubscribeMessage('finance-payments-get-ztracking-intent')
+  async handleZtracking(
+    @ConnectedSocket() socket: Socket,
+    dto: GetZtrackingPaymentIntentDto,
+  ) {
+    const traceId = generateTraceId('finance-payments-get-ztracking-intent');
+    try {
+      const result = await this.paymentsKafka.getZtrackingPaymentIntent(
+        dto,
+        traceId,
+      );
+      socket.emit('finance-payments-get-ztracking-intent-result', result);
+    } catch (e: any) {
+      socket.emit(
+        'finance-payments-get-ztracking-intent-error',
         e.message || 'Unknown error',
       );
     }
