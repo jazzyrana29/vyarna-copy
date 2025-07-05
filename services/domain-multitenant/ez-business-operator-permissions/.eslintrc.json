@@ -21,10 +21,11 @@
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
-        "varsIgnorePattern": "^_",
+        "varsIgnorePattern": "^(?:_|T)$",
         "argsIgnorePattern": "^(metadata|_)",
         "caughtErrorsIgnorePattern": "^ignore",
-        "destructuredArrayIgnorePattern": "^_"
+        "destructuredArrayIgnorePattern": "^_",
+        "ignoreRestSiblings": true
       }
     ],
     "@typescript-eslint/no-explicit-any": "off",
