@@ -3,16 +3,12 @@ import { KafkaResponderService } from '../../../../utils/kafka/kafka-responder.s
 import { getLoggerConfig } from '../../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import {
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
-  CreatePersonDto,
-  UpdatePersonDto,
-  GetPersonDto,
-  GetHistoryOfPersonDto,
-  GetManyPersonsDto,
+  KT_CREATE_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT,
+  KT_GET_ZTRACKING_PAYMENT_INTENT,
+  CreatePaymentIntentDto,
+  GetPaymentIntentDto,
+  GetZtrackingPaymentIntentDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -29,53 +25,35 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async createPerson(createPersonDto: CreatePersonDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_CREATE_PERSON_ENTITY,
-      createPersonDto,
-      traceId,
-    );
-  }
-
-  async updatePerson(updatePersonDto: UpdatePersonDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_UPDATE_PERSON_ENTITY,
-      updatePersonDto,
-      traceId,
-    );
-  }
-
-  async getPerson(getPersonDto: GetPersonDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_GET_PERSON_ENTITY,
-      getPersonDto,
-      traceId,
-    );
-  }
-
-  async getHistory(
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
+  async createPaymentIntent(
+    createDto: CreatePaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_GET_HISTORY_PERSON_ENTITY,
-      getHistoryOfPersonDto,
+      KT_CREATE_PAYMENT_INTENT,
+      createDto,
       traceId,
     );
   }
 
-  async getManyPersons(
-    getManyPersonsDto: GetManyPersonsDto,
+  async getPaymentIntent(getDto: GetPaymentIntentDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_GET_PAYMENT_INTENT,
+      getDto,
+      traceId,
+    );
+  }
+
+  async getZtrackingPaymentIntent(
+    getDto: GetZtrackingPaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_GET_MANY_PERSONS,
-      getManyPersonsDto,
+      KT_GET_ZTRACKING_PAYMENT_INTENT,
+      getDto,
       traceId,
     );
   }

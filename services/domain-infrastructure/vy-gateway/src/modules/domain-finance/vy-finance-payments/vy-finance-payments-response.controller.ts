@@ -7,11 +7,9 @@ import {
 } from '@nestjs/microservices';
 import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
 import {
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
+  KT_CREATE_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT,
+  KT_GET_ZTRACKING_PAYMENT_INTENT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -29,11 +27,11 @@ export class FinancePaymentsResponseController {
     );
   }
 
-  @MessagePattern(KT_CREATE_PERSON_ENTITY + '-response')
+  @MessagePattern(KT_CREATE_PAYMENT_INTENT + '-response')
   handleCreate(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_CREATE_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_CREATE_PAYMENT_INTENT} | key: ${key}`,
       '',
       'handleCreate',
       LogStreamLevel.DebugLight,
@@ -41,23 +39,11 @@ export class FinancePaymentsResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_UPDATE_PERSON_ENTITY + '-response')
-  handleUpdate(@Payload() message: any, @Ctx() context: KafkaContext) {
-    const key = context.getMessage().key.toString();
-    this.logger.debug(
-      `Kafka response for ${KT_UPDATE_PERSON_ENTITY} | key: ${key}`,
-      '',
-      'handleUpdate',
-      LogStreamLevel.DebugLight,
-    );
-    this.kafkaResponder.handleIncomingMessage(message);
-  }
-
-  @MessagePattern(KT_GET_PERSON_ENTITY + '-response')
+  @MessagePattern(KT_GET_PAYMENT_INTENT + '-response')
   handleGet(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_GET_PAYMENT_INTENT} | key: ${key}`,
       '',
       'handleGet',
       LogStreamLevel.DebugLight,
@@ -65,25 +51,13 @@ export class FinancePaymentsResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_HISTORY_PERSON_ENTITY + '-response')
-  handleHistory(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_GET_ZTRACKING_PAYMENT_INTENT + '-response')
+  handleZtracking(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_HISTORY_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_GET_ZTRACKING_PAYMENT_INTENT} | key: ${key}`,
       '',
-      'handleHistory',
-      LogStreamLevel.DebugLight,
-    );
-    this.kafkaResponder.handleIncomingMessage(message);
-  }
-
-  @MessagePattern(KT_GET_MANY_PERSONS + '-response')
-  handleGetMany(@Payload() message: any, @Ctx() context: KafkaContext) {
-    const key = context.getMessage().key.toString();
-    this.logger.debug(
-      `Kafka response for ${KT_GET_MANY_PERSONS} | key: ${key}`,
-      '',
-      'handleGetMany',
+      'handleZtracking',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
