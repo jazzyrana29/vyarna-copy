@@ -24,7 +24,14 @@ export class PaymentIntent extends BaseEntity {
   currency: string;
 
   @Column({ length: 30 })
-  status: string;
+  status:
+    | 'REQUIRES_PAYMENT_METHOD'
+    | 'REQUIRES_CONFIRMATION'
+    | 'PROCESSING'
+    | 'SUCCEEDED'
+    | 'REQUIRES_ACTION'
+    | 'FAILED'
+    | 'CANCELED';
 
   @Column('json', { nullable: true })
   metadata?: Record<string, unknown>;
