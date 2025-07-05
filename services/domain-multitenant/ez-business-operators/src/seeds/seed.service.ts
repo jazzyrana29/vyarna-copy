@@ -54,7 +54,7 @@ export class SeedService implements OnApplicationBootstrap {
       const rootBu = await buRepo.findOne({
         where: { name: def.rootBusinessUnitName },
       });
-      let op = rootBu
+      const op = rootBu
         ? await opRepo.findOne({
             where: {
               username: def.username,
