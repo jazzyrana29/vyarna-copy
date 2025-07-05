@@ -47,7 +47,6 @@ import { DataVaultModule } from './modules/domain-privacy-and-consent/vy-data-va
 import { ResearchConsentModule } from './modules/domain-privacy-and-consent/vy-research-consent/vy-research-consent.module';
 import { SalesAffiliateProductsModule } from './modules/domain-sales-and-commerce/vy-sales-affiliate-products/vy-sales-affiliate-products.module';
 import { SalesReferralsModule } from './modules/domain-sales-and-commerce/vy-sales-referrals/vy-sales-referrals.module';
-import { SalesStoreModule } from './modules/domain-sales-and-commerce/vy-sales-store/vy-sales-store.module';
 import { SalesSubscriptionsModule } from './modules/domain-sales-and-commerce/vy-sales-subscriptions/vy-sales-subscriptions.module';
 
 import { KafkaModule } from './utils/kafka/kafka.module';
@@ -104,7 +103,6 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
     ResearchConsentModule,
     SalesAffiliateProductsModule,
     SalesReferralsModule,
-    SalesStoreModule,
     SalesSubscriptionsModule,
   ],
   controllers: [AppController],
