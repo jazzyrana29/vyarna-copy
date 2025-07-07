@@ -46,4 +46,18 @@ export class StripeGatewayService {
     );
     return this.stripe.refunds.create(params);
   }
+
+  constructWebhookEvent(
+    payload: Buffer | string,
+    signature: string,
+    secret: string,
+  ): Stripe.Event {
+    this.logger.debug(
+      `Constructing Stripe webhook event`,
+      '',
+      'constructWebhookEvent',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.webhooks.constructEvent(payload, signature, secret);
+  }
 }

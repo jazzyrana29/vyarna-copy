@@ -8,6 +8,7 @@ import {
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Partitioners } from 'kafkajs';
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 
 import { AppModule } from './app.module';
 import { getLoggerConfig, CORS_ALLOW } from './utils/common';
@@ -23,6 +24,11 @@ async function bootstrap(): Promise<void> {
     bufferLogs: true,
     logger,
   });
+
+  app.use(
+    '/vy-finance-payments/webhooks/stripe',
+    bodyParser.raw({ type: 'application/json' }),
+  );
 
   // Global validation + transformation for incoming DTOs
   app.useGlobalPipes(

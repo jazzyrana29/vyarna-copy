@@ -7,10 +7,12 @@ import {
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
   KT_CREATE_REFUND,
+  KT_PROCESS_STRIPE_WEBHOOK,
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
+  StripeWebhookDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -65,6 +67,18 @@ export class FinancePaymentsKafkaService {
       this.serviceName,
       KT_CREATE_REFUND,
       createRefundDto,
+      traceId,
+    );
+  }
+
+  async processStripeWebhook(
+    stripeWebhookDto: StripeWebhookDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_PROCESS_STRIPE_WEBHOOK,
+      stripeWebhookDto,
       traceId,
     );
   }
