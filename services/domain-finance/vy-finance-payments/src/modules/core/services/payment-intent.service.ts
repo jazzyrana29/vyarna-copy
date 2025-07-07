@@ -43,30 +43,51 @@ export class PaymentIntentService {
       externalId: '',
       status: 'REQUIRES_PAYMENT_METHOD',
     });
-    await this.paymentRepo.save(entity);
-    this.logger.info(
-      'PaymentIntent created',
-      traceId,
-      'createPaymentIntent',
-      LogStreamLevel.ProdStandard,
-    );
+    try {
+      const stripeIntent = await this.stripeGateway.createPaymentIntent({
+        amount: entity.amountCents,
+        currency: entity.currency,
+        metadata: entity.metadata as any,
+      });
 
-    const stripeIntent = await this.stripeGateway.createPaymentIntent({
-      amount: entity.amountCents,
-      currency: entity.currency,
-      metadata: entity.metadata as any,
-    });
-    entity.externalId = stripeIntent.id;
-    const statusMap: Record<string, PaymentIntent['status']> = {
-      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-      requires_confirmation: 'REQUIRES_CONFIRMATION',
-      requires_action: 'REQUIRES_ACTION',
-      processing: 'PROCESSING',
-      succeeded: 'SUCCEEDED',
-      canceled: 'CANCELED',
-    };
-    entity.status = statusMap[stripeIntent.status] || entity.status;
-    await this.paymentRepo.save(entity);
+      entity.externalId = stripeIntent.id;
+      const statusMap: Record<string, PaymentIntent['status']> = {
+        requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
+        requires_confirmation: 'REQUIRES_CONFIRMATION',
+        requires_action: 'REQUIRES_ACTION',
+        processing: 'PROCESSING',
+        succeeded: 'SUCCEEDED',
+        canceled: 'CANCELED',
+      };
+      entity.status = statusMap[stripeIntent.status] || entity.status;
+
+      await this.paymentRepo.save(entity);
+
+      this.logger.info(
+        'PaymentIntent created',
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.ProdStandard,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to persist PaymentIntent => ${error}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugHeavy,
+      );
+      entity.nextRetryAt = new Date(Date.now() + 5 * 60 * 1000);
+      try {
+        await this.paymentRepo.save(entity);
+      } catch (saveErr) {
+        this.logger.error(
+          `Failed to save PaymentIntent for retry => ${saveErr}`,
+          traceId,
+          'createPaymentIntent',
+          LogStreamLevel.DebugHeavy,
+        );
+      }
+    }
 
     await this.ztrackingPaymentIntentService.createZtrackingForPaymentIntent(
       entity,
