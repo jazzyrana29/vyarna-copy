@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../../entities/payment_intent.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from './stripe-gateway.service';
-import Stripe from '@stripe/stripe-node';
+import Stripe from 'stripe';
 import {
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
