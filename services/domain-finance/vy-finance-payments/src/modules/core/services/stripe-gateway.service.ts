@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import Stripe from '@stripe/stripe-node';
+import Stripe from 'stripe';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
