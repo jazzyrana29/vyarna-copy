@@ -6,9 +6,11 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CREATE_REFUND,
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
+  CreateRefundDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -54,6 +56,15 @@ export class FinancePaymentsKafkaService {
       this.serviceName,
       KT_GET_ZTRACKING_PAYMENT_INTENT,
       getDto,
+      traceId,
+    );
+  }
+
+  async createRefund(createRefundDto: CreateRefundDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CREATE_REFUND,
+      createRefundDto,
       traceId,
     );
   }

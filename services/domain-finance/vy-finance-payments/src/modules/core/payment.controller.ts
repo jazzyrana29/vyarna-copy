@@ -5,6 +5,7 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CREATE_REFUND,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -65,5 +66,20 @@ export class PaymentController {
       LogStreamLevel.DebugLight,
     );
     await this.paymentKafkaService.getZtrackingPaymentIntent(message, key);
+  }
+
+  @MessagePattern(KT_CREATE_REFUND)
+  async createRefund(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_CREATE_REFUND}`,
+      '',
+      'createRefund',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.createRefund(message, key);
   }
 }
