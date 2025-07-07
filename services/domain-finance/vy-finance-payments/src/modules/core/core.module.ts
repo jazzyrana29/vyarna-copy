@@ -5,6 +5,7 @@ import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.
 import { PaymentIntentService } from './services/payment-intent.service';
 import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
 import { ZtrackingPaymentIntentService } from './services/ztracking-payment-intent.service';
+import { StripeGatewayService } from './services/stripe-gateway.service';
 import { PaymentController } from './payment.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -12,7 +13,12 @@ import { LogStreamLevel } from 'ez-logger';
 @Module({
   imports: [TypeOrmModule.forFeature([PaymentIntent, ZtrackingPaymentIntent])],
   controllers: [PaymentController],
-  providers: [PaymentIntentService, PaymentIntentKafkaService, ZtrackingPaymentIntentService],
+  providers: [
+    PaymentIntentService,
+    PaymentIntentKafkaService,
+    ZtrackingPaymentIntentService,
+    StripeGatewayService,
+  ],
 })
 export class CoreModule {
   private logger = getLoggerConfig(CoreModule.name);

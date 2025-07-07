@@ -60,6 +60,8 @@ export * from './src/DTO/domain-finance/vy-finance-payments/create-payment-inten
 export * from './src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/refund.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/create-refund.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto';

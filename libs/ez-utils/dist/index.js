@@ -63,6 +63,8 @@ __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-paymen
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/refund.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-refund.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto"), exports);
