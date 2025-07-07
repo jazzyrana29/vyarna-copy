@@ -9,11 +9,13 @@ import { FinancePaymentsKafkaService } from './microservices/vy-finance-payments
 import { ValidateCreatePaymentIntentDtoPipe } from './pipes/validate-create-payment-intent-dto.pipe';
 import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-intent-dto.pipe';
 import { ValidateGetZtrackingPaymentIntentDtoPipe } from './pipes/validate-get-ztracking-payment-intent-dto.pipe';
+import { ValidateCreateRefundDtoPipe } from './pipes/validate-create-refund-dto.pipe';
 import {
   generateTraceId,
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
+  CreateRefundDto,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -76,6 +78,22 @@ export class FinancePaymentsController {
       HttpStatus.OK,
       await this.paymentsKafkaService.getZtrackingPaymentIntent(getDto, traceId),
       'Ztracking retrieved',
+      traceId,
+    );
+  }
+
+  @Post('refunds')
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: CreateRefundDto })
+  async createRefund(
+    @Body(new ValidateCreateRefundDtoPipe()) createRefundDto: CreateRefundDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('createRefund');
+    this.logger.info('traceId generated successfully', traceId, 'createRefund', LogStreamLevel.ProdStandard);
+    return new ResponseDTO(
+      HttpStatus.OK,
+      await this.paymentsKafkaService.createRefund(createRefundDto, traceId),
+      'Refund created',
       traceId,
     );
   }
