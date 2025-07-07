@@ -6,6 +6,7 @@ import {
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
   KT_CREATE_REFUND,
+  KT_PROCESS_STRIPE_WEBHOOK,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -81,5 +82,20 @@ export class PaymentController {
       LogStreamLevel.DebugLight,
     );
     await this.paymentKafkaService.createRefund(message, key);
+  }
+
+  @MessagePattern(KT_PROCESS_STRIPE_WEBHOOK)
+  async processStripeWebhook(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_PROCESS_STRIPE_WEBHOOK}`,
+      '',
+      'processStripeWebhook',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.processStripeWebhook(message, key);
   }
 }

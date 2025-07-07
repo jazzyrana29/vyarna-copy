@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../../entities/payment_intent.entity';
+import { PaymentRefund } from '../../../entities/payment_refund.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from './stripe-gateway.service';
 import Stripe from 'stripe';
@@ -23,6 +24,8 @@ export class PaymentIntentService {
   constructor(
     @InjectRepository(PaymentIntent)
     private readonly paymentRepo: Repository<PaymentIntent>,
+    @InjectRepository(PaymentRefund)
+    private readonly refundRepo: Repository<PaymentRefund>,
     private readonly ztrackingPaymentIntentService: ZtrackingPaymentIntentService,
     private readonly stripeGateway: StripeGatewayService,
   ) {
@@ -141,5 +144,65 @@ export class PaymentIntentService {
       reason: createRefundDto.reason as any,
       metadata: createRefundDto.metadata as any,
     });
+  }
+
+  async handleStripeWebhook(
+    payload: Buffer | string,
+    signature: string,
+    traceId: string,
+  ): Promise<void> {
+    let event: Stripe.Event;
+    try {
+      event = this.stripeGateway.constructWebhookEvent(
+        payload,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET as string,
+      );
+    } catch (err) {
+      this.logger.error(
+        `Invalid webhook signature: ${err}`,
+        traceId,
+        'handleStripeWebhook',
+        LogStreamLevel.ProdStandard,
+      );
+      throw err;
+    }
+
+    const intentStatusMap: Record<string, PaymentIntent['status']> = {
+      'payment_intent.succeeded': 'SUCCEEDED',
+      'payment_intent.canceled': 'CANCELED',
+      'payment_intent.processing': 'PROCESSING',
+      'payment_intent.payment_failed': 'FAILED',
+    };
+
+    if (intentStatusMap[event.type]) {
+      const pi = event.data.object as Stripe.PaymentIntent;
+      await this.paymentRepo.update(
+        { externalId: pi.id },
+        { status: intentStatusMap[event.type] },
+      );
+    }
+
+    if (event.type.startsWith('charge.refund') || event.type.startsWith('refund.')) {
+      const refundObj: any = (event.data.object as any).refund || event.data.object;
+      const statusMap: Record<string, PaymentRefund['status']> = {
+        succeeded: 'SUCCEEDED',
+        failed: 'FAILED',
+        pending: 'PENDING',
+      };
+      if (refundObj && refundObj.id) {
+        await this.refundRepo.update(
+          { externalId: refundObj.id },
+          { status: statusMap[refundObj.status] },
+        );
+      }
+    }
+
+    this.logger.debug(
+      `Processed Stripe event ${event.type}`,
+      traceId,
+      'handleStripeWebhook',
+      LogStreamLevel.DebugLight,
+    );
   }
 }
