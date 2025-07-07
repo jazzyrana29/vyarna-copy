@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ZtrackingPersonService } from "./ztracking-person.service";
+import { ActiveCampaignService } from "./active-campaign.service";
 import { LogStreamLevel } from "ez-logger";
 
 import { getLoggerConfig } from "../../../utils/common";
@@ -34,6 +35,7 @@ export class PersonService {
     @InjectRepository(Email)
     private readonly emailRepository: Repository<Email>,
     private readonly ztrackingPersonService: ZtrackingPersonService,
+    private readonly activeCampaignService: ActiveCampaignService,
   ) {
     this.logger.debug(
       `${PersonService.name} initialized`,
@@ -91,12 +93,35 @@ export class PersonService {
       }),
     );
 
+    await this.emailRepository.save(
+      this.emailRepository.create({
+        personId: person.personId,
+        email: createPersonDto.email,
+        isPrimary: true,
+      }),
+    );
+
     this.logger.info(
       `person entity saved in database`,
       traceId,
       "createPerson",
       LogStreamLevel.ProdStandard,
     );
+
+    try {
+      await this.activeCampaignService.createContact({
+        firstName: person.nameFirst,
+        lastName: person.nameLastFirst,
+        email: createPersonDto.email,
+      });
+    } catch (err) {
+      this.logger.error(
+        `Failed to create ActiveCampaign contact`,
+        traceId,
+        "createPerson",
+        LogStreamLevel.ProdStandard,
+      );
+    }
 
     if (
       await this.ztrackingPersonService.createZtrackingPersonEntity(

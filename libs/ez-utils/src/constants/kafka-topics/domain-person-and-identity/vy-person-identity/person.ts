@@ -8,3 +8,4 @@ export const KT_GET_HISTORY_PERSON_ENTITY = "get-history-person-entity";
 
 export const KT_GET_MANY_PERSONS = "get-many-persons";
 
+
