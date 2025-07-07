@@ -24,7 +24,6 @@ import { AppLoggerMiddleware } from './middlewares/app.log.middleware';
 
 import { AppController } from './app.controller';
 
-import { PersonContactModule } from './modules/domain-person-and-identity/vy-person-contact/contact.module';
 import { EducationFeedModule } from './modules/domain-emotional-and-engagement/vy-education-feed/vy-education-feed.module';
 import { EmotionalEngagementModule } from './modules/domain-emotional-and-engagement/vy-emotional-engagement/vy-emotional-engagement.module';
 import { FinancePaymentsModule } from './modules/domain-finance/vy-finance-payments/vy-finance-payments.module';
@@ -80,7 +79,6 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
       },
     ]),
     KafkaModule,
-    PersonContactModule,
     EducationFeedModule,
     EmotionalEngagementModule,
     FinancePaymentsModule,
