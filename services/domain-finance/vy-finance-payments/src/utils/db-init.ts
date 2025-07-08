@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import * as mysql from 'mysql2/promise';
 
 export interface DbInitOptions {
   host: string;
@@ -11,7 +11,13 @@ export interface DbInitOptions {
 
 export async function ensureDatabaseExists(opts: DbInitOptions): Promise<void> {
   const { host, port, user, password, database, ssl } = opts;
-  const connection = await mysql.createConnection({ host, port, user, password, ssl });
+  const connection = await mysql.createConnection({
+    host,
+    port,
+    user,
+    password,
+    ssl,
+  });
   await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
   await connection.end();
 }
