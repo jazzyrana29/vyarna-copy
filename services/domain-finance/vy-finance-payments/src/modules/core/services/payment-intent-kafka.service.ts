@@ -7,11 +7,13 @@ import {
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
   KT_CREATE_REFUND,
+  KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
+  GetPaymentRefundDto,
   StripeWebhookDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -77,6 +79,17 @@ export class PaymentIntentKafkaService {
       key,
       async (value: CreateRefundDto, traceId: string) =>
         await this.paymentIntentService.createRefund(value, traceId),
+    );
+  }
+
+  async getRefund(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_GET_REFUND,
+      message,
+      key,
+      async (value: GetPaymentRefundDto, traceId: string) =>
+        await this.paymentIntentService.getRefund(value, traceId),
     );
   }
 
