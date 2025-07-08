@@ -32,6 +32,7 @@ import { HealthCryAnalyzerModule } from './modules/domain-health-and-insights/vy
 import { HealthGrowthTrackerModule } from './modules/domain-health-and-insights/vy-health-growth-tracker/vy-health-growth-tracker.module';
 import { HealthLogModule } from './modules/domain-health-and-insights/vy-health-log/vy-health-log.module';
 import { HealthSleepModule } from './modules/domain-health-and-insights/vy-health-sleep/vy-health-sleep.module';
+import { NutritionLogModule } from './modules/domain-health-and-insights/vy-nutrition-log/vy-nutrition-log.module';
 import { PersonBabyModule } from './modules/domain-person-and-identity/vy-person-baby/vy-person-baby.module';
 import { PersonConsumerModule } from './modules/domain-person-and-identity/vy-person-consumer/vy-person-consumer.module';
 import { PersonCosharerModule } from './modules/domain-person-and-identity/vy-person-cosharer/vy-person-cosharer.module';
@@ -87,6 +88,7 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
     HealthGrowthTrackerModule,
     HealthLogModule,
     HealthSleepModule,
+    NutritionLogModule,
     PersonBabyModule,
     PersonConsumerModule,
     PersonCosharerModule,
