@@ -18,6 +18,18 @@ export class ZtrackingOrder extends BaseEntity {
   @Column({ length: 30 })
   status: string;
 
+  @Column({ length: 3 })
+  currency: string;
+
+  @Column({ length: 100, nullable: true })
+  paymentIntentId?: string;
+
+  @Column({ nullable: true })
+  createdAt?: Date;
+
+  @Column({ nullable: true })
+  updatedAt?: Date;
+
   @Column()
   versionDate: Date;
 }

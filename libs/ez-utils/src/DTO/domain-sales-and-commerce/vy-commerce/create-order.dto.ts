@@ -5,4 +5,6 @@ export class CreateOrderDto extends PickType(OrderDto, [
   'personId',
   'totalCents',
   'status',
+  'currency',
+  'paymentIntentId',
 ] as const) {}
