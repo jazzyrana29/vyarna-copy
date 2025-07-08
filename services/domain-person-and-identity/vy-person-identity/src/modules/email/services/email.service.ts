@@ -10,9 +10,13 @@ import {
   UpdateEmailDto,
   GetZtrackingEmailDto,
   ZtrackingEmailDto,
+  encodeKafkaMessage,
+  KT_CONTACT_CREATED,
+  KT_CONTACT_UPDATED,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 
 @Injectable()
 export class EmailService {
@@ -35,6 +39,16 @@ export class EmailService {
     const entity = this.emailRepo.create(createDto);
     await this.emailRepo.save(entity);
     this.logger.info('Email created', traceId, 'createEmail', LogStreamLevel.ProdStandard);
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_CONTACT_CREATED,
+      encodeKafkaMessage(EmailService.name, {
+        emailId: entity.emailId,
+        personId: entity.personId,
+        traceId,
+      }),
+    );
     await this.ztrackingEmailService.createZtrackingEmail(entity, traceId);
     return entity;
   }
@@ -47,7 +61,18 @@ export class EmailService {
     await this.emailRepo.update(updateDto.emailId, updateDto);
     const updated = await this.emailRepo.findOne({ where: { emailId: updateDto.emailId } });
     this.logger.info('Email updated', traceId, 'updateEmail', LogStreamLevel.ProdStandard);
-    if (updated) await this.ztrackingEmailService.createZtrackingEmail(updated, traceId);
+    if (updated) {
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_CONTACT_UPDATED,
+        encodeKafkaMessage(EmailService.name, {
+          emailId: updated.emailId,
+          personId: updated.personId,
+          traceId,
+        }),
+      );
+      await this.ztrackingEmailService.createZtrackingEmail(updated, traceId);
+    }
     return updated;
   }
 

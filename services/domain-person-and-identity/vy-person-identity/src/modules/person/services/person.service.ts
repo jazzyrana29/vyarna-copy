@@ -19,9 +19,13 @@ import {
   PersonDto,
   PaginatedPersonsResponseDto,
   UpdatePersonDto,
+  encodeKafkaMessage,
+  KT_PERSON_CREATED,
+  KT_PERSON_UPDATED,
 } from "ez-utils";
 import { BusinessUnit } from "../../../entities/business-unit.entity";
 import { Email } from "../../../entities/email.entity";
+import { EzKafkaProducer } from "ez-kafka-producer";
 
 @Injectable()
 export class PersonService {
@@ -109,6 +113,15 @@ export class PersonService {
       LogStreamLevel.ProdStandard,
     );
 
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_PERSON_CREATED,
+      encodeKafkaMessage(PersonService.name, {
+        personId: person.personId,
+        traceId,
+      }),
+    );
+
     try {
       await this.activeCampaignService.createContact({
         firstName: person.nameFirst,
@@ -153,6 +166,15 @@ export class PersonService {
       traceId,
       "updatedBusinessUnit",
       LogStreamLevel.ProdStandard,
+    );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_PERSON_UPDATED,
+      encodeKafkaMessage(PersonService.name, {
+        personId: updatedPerson.personId,
+        traceId,
+      }),
     );
 
     if (
