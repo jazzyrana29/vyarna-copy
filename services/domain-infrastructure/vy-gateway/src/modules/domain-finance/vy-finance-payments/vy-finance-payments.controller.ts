@@ -1,5 +1,5 @@
 // src/contact/contact.controller.ts
-import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, HttpStatus, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from '../../../dto/response.dto';
 import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
@@ -7,10 +7,8 @@ import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { FinancePaymentsKafkaService } from './microservices/vy-finance-payments-kafka.service';
 import { ValidateCreatePaymentIntentDtoPipe } from './pipes/validate-create-payment-intent-dto.pipe';
-import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-intent-dto.pipe';
 import { ValidateGetZtrackingPaymentIntentDtoPipe } from './pipes/validate-get-ztracking-payment-intent-dto.pipe';
 import { ValidateCreateRefundDtoPipe } from './pipes/validate-create-refund-dto.pipe';
-import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-refund-dto.pipe';
 import { ValidateCreatePaymentMethodDtoPipe } from './pipes/validate-create-payment-method-dto.pipe';
 import {
   generateTraceId,
@@ -57,17 +55,15 @@ export class FinancePaymentsController {
     );
   }
 
-  @Post('payment-intents/get')
+  @Post('payment-intents/:id')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetPaymentIntentDto })
-  async getPaymentIntent(
-    @Body(new ValidateGetPaymentIntentDtoPipe()) getDto: GetPaymentIntentDto,
-  ): Promise<ResponseDTO<any>> {
+  async getPaymentIntent(@Param('id') id: string): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getPaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'getPaymentIntent', LogStreamLevel.ProdStandard);
+    const dto: GetPaymentIntentDto = { paymentIntentId: id } as GetPaymentIntentDto;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.paymentsKafkaService.getPaymentIntent(getDto, traceId),
+      await this.paymentsKafkaService.getPaymentIntent(dto, traceId),
       'Payment intent retrieved',
       traceId,
     );
@@ -105,17 +101,28 @@ export class FinancePaymentsController {
     );
   }
 
-  @Post('payment-refunds/get')
+  @Post('refunds/:id')
   @ApiCreatedResponse({ type: ResponseDTO<RefundDto> })
-  @ApiBody({ type: GetPaymentRefundDto })
-  async getPaymentRefund(
-    @Body(new ValidateGetPaymentRefundDtoPipe())
-    getPaymentRefundDto: GetPaymentRefundDto,
-  ): Promise<ResponseDTO<RefundDto>> {
+  async getPaymentRefund(@Param('id') id: string): Promise<ResponseDTO<RefundDto>> {
     const traceId = generateTraceId('getPaymentRefund');
     this.logger.info('traceId generated successfully', traceId, 'getPaymentRefund', LogStreamLevel.ProdStandard);
-    const refund = await this.paymentsKafkaService.getRefund(getPaymentRefundDto, traceId);
+    const dto: GetPaymentRefundDto = { refundId: id } as GetPaymentRefundDto;
+    const refund = await this.paymentsKafkaService.getRefund(dto, traceId);
     return new ResponseDTO(HttpStatus.OK, refund, 'Refund retrieved', traceId);
+  }
+
+  @Post('payment-attempts/:id/retry')
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  async retryPaymentAttempt(@Param('id') id: string): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('retryPaymentAttempt');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'retryPaymentAttempt',
+      LogStreamLevel.ProdStandard,
+    );
+    const result = await this.paymentsKafkaService.retryPaymentAttempt(id, traceId);
+    return new ResponseDTO(HttpStatus.OK, result, 'Retry scheduled', traceId);
   }
 
   @Post('payment-methods')
