@@ -3,16 +3,16 @@ import { KafkaResponderService } from '../../../../utils/kafka/kafka-responder.s
 import { getLoggerConfig } from '../../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import {
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
-  CreatePersonDto,
-  UpdatePersonDto,
-  GetPersonDto,
-  GetHistoryOfPersonDto,
-  GetManyPersonsDto,
+  KT_CREATE_WALLET_ACCOUNT,
+  KT_SCHEDULE_PROVIDER_PAYOUT,
+  KT_ISSUE_CONSUMER_REWARD,
+  KT_CREATE_AFFILIATE_COMMISSION,
+  KT_CREATE_INTERNAL_CHARGE,
+  CreateWalletAccountDto,
+  ScheduleProviderPayoutDto,
+  IssueConsumerRewardDto,
+  CreateAffiliateCommissionDto,
+  CreateInternalChargeDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -29,53 +29,62 @@ export class FinanceWalletKafkaService {
     );
   }
 
-  async createPerson(createPersonDto: CreatePersonDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_CREATE_PERSON_ENTITY,
-      createPersonDto,
-      traceId,
-    );
-  }
-
-  async updatePerson(updatePersonDto: UpdatePersonDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_UPDATE_PERSON_ENTITY,
-      updatePersonDto,
-      traceId,
-    );
-  }
-
-  async getPerson(getPersonDto: GetPersonDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_GET_PERSON_ENTITY,
-      getPersonDto,
-      traceId,
-    );
-  }
-
-  async getHistory(
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
+  async createWalletAccount(
+    createWalletAccountDto: CreateWalletAccountDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_GET_HISTORY_PERSON_ENTITY,
-      getHistoryOfPersonDto,
+      KT_CREATE_WALLET_ACCOUNT,
+      createWalletAccountDto,
       traceId,
     );
   }
 
-  async getManyPersons(
-    getManyPersonsDto: GetManyPersonsDto,
+  async scheduleProviderPayout(
+    scheduleProviderPayoutDto: ScheduleProviderPayoutDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_GET_MANY_PERSONS,
-      getManyPersonsDto,
+      KT_SCHEDULE_PROVIDER_PAYOUT,
+      scheduleProviderPayoutDto,
+      traceId,
+    );
+  }
+
+  async issueConsumerReward(
+    issueConsumerRewardDto: IssueConsumerRewardDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_ISSUE_CONSUMER_REWARD,
+      issueConsumerRewardDto,
+      traceId,
+    );
+  }
+
+  async createAffiliateCommission(
+    createAffiliateCommissionDto: CreateAffiliateCommissionDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CREATE_AFFILIATE_COMMISSION,
+      createAffiliateCommissionDto,
+      traceId,
+    );
+  }
+
+  async createInternalCharge(
+    createInternalChargeDto: CreateInternalChargeDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CREATE_INTERNAL_CHARGE,
+      createInternalChargeDto,
       traceId,
     );
   }
