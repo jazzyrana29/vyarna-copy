@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { PaymentIntent } from '../../../entities/payment_intent.entity';
-import { ZtrackingPaymentIntent } from '../../../entities/ztracking_payment_intent.entity';
+import { PaymentIntent } from '../../entities/payment_intent.entity';
+import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.entity';
 import { GetZtrackingPaymentIntentDto, ZtrackingPaymentIntentDto } from 'ez-utils';
 
 @Injectable()

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaymentMethod } from '../../../entities/payment_method.entity';
+import { PaymentMethod } from '../../entities/payment_method.entity';
 import {
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
   PaymentMethodDto,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()

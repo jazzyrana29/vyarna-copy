@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaymentIntent } from '../../../entities/payment_intent.entity';
-import { PaymentRefund } from '../../../entities/payment_refund.entity';
-import { PaymentAttempt } from '../../../entities/payment_attempt.entity';
-import { WebhookEvent } from '../../../entities/webhook_event.entity';
+import { PaymentIntent } from '../../entities/payment_intent.entity';
+import { PaymentRefund } from '../../entities/payment_refund.entity';
+import { PaymentAttempt } from '../../entities/payment_attempt.entity';
+import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from './stripe-gateway.service';
 import Stripe from 'stripe';
@@ -25,7 +25,7 @@ import {
   encodeKafkaMessage,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { v4 as uuid } from 'uuid';
 import { LogStreamLevel } from 'ez-logger';
 
