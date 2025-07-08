@@ -1,35 +1,35 @@
-import React, { FC } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import * as Animatable from "react-native-animatable";
-import { useNavigation } from "@react-navigation/native";
+import React, { FC } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
 import {
   NAV_ROUTE_BENEFITS,
   NAV_ROUTE_IS_MADE,
   NAV_ROUTE_PARENTS,
   NAV_ROUTE_PREORDER,
   NAV_ROUTE_VALUES,
-} from "../constants/routes";
-import { BenefitsNavProp } from "../types";
-import Email from "../components/Email";
-import Footer from "../components/Footer";
-import { JSX } from "react/jsx-runtime";
-import Section from "../components/Section";
-import { Helmet } from "react-helmet-async";
-import { TagsEnum } from "../enums/tags.enum";
-import { EXPO_PUBLIC_BASE_URL } from "@env";
+} from '../constants/routes';
+import { BenefitsNavProp } from '../types';
+import Email from '../components/Email';
+import Footer from '../components/Footer';
+import { JSX } from 'react/jsx-runtime';
+import Section from '../components/Section';
+import { Helmet } from 'react-helmet-async';
+import { TagsEnum } from '../enums/tags.enum';
+import { EXPO_PUBLIC_BASE_URL } from '@env';
 
 const steps = [
   {
-    img: require("../assets/images/steps/step_1.jpg"),
-    label: "1. Add water & formula powder",
+    img: require('../assets/images/steps/step_1.jpg'),
+    label: '1. Add water & formula powder',
   },
   {
-    img: require("../assets/images/steps/step_2.png"),
-    label: "2. Shake in a Booster envelope",
+    img: require('../assets/images/steps/step_2.png'),
+    label: '2. Shake in a Booster envelope',
   },
   {
-    img: require("../assets/images/steps/step_3.jpg"),
-    label: "3. Feed your baby",
+    img: require('../assets/images/steps/step_3.jpg'),
+    label: '3. Feed your baby',
   },
 ];
 
@@ -82,24 +82,27 @@ const HomeScreen: FC = (): JSX.Element => {
           </script>
         ))}
       </Helmet>
-      <ScrollView className="flex-1 bg-white">
+      <ScrollView
+        style={{ flex: 1, backgroundColor: 'white' }}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <View className="max-w-screen-xl mx-auto px-4 py-8 font-raleway">
           {/* Hero Section */}
           <Animatable.View animation="fadeIn" delay={100}>
             <View className="relative w-full h-[500px] md:h-[600px] overflow-hidden rounded-lg shadow-sm">
               <Image
-                source={require("../assets/images/home/vyarnasharelife.jpg")}
+                source={require('../assets/images/home/vyarnasharelife.jpg')}
                 style={{
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  resizeMode: "cover",
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  resizeMode: 'cover',
                 }}
               />
               <View className="absolute inset-0 bg-gradient-to-b from-[#00000033] to-[#ffffff99]" />
               <View className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
                 <Text className="text-white text-3xl md:text-5xl font-bold leading-snug drop-shadow-lg">
-                  REAL BREAST MILK.{"\n"}REINVENTED FOR MODERN LIFE.
+                  REAL BREAST MILK.{'\n'}REINVENTED FOR MODERN LIFE.
                 </Text>
                 <Text className="text-white text-base md:text-lg mt-4 max-w-2xl drop-shadow-md">
                   Vyarna is freeze-dried breast milk—lab-tested, shelf-stable,
@@ -159,9 +162,9 @@ const HomeScreen: FC = (): JSX.Element => {
                   <Image
                     source={step.img}
                     style={{
-                      width: "100%",
+                      width: '100%',
                       height: 200,
-                      resizeMode: "contain",
+                      resizeMode: 'contain',
                       borderRadius: 8,
                     }}
                   />
@@ -184,7 +187,7 @@ const HomeScreen: FC = (): JSX.Element => {
           {/* Sections */}
           <View className="mb-12 bg-[#f9fafb] py-4 md:py-6 rounded-lg shadow-sm">
             <Section
-              image={require("../assets/images/home/boosterPack.png")}
+              image={require('../assets/images/home/boosterPack.png')}
               title="What is Vyarna?"
               text={`Vyarna is real breast milk, freeze-dried into 1g Boosters you can add to formula, foods, or use on their own.
 
@@ -208,7 +211,7 @@ One pacekt. Real breast milk. Ready when you are.`}
 
           <View className="mb-12">
             <Section
-              image={require("../assets/images/home/breastFeeding.jpg")}
+              image={require('../assets/images/home/breastFeeding.jpg')}
               title="What makes breast milk special?"
               text={`Breast milk isn’t just nutrition. It’s full of natural components that respond to a baby’s needs—complex sugars, cellular signals, protective factors, and more. It’s dynamic, diverse, and deeply personal. Vyarna was created to preserve that complexity and make it available in moments when direct breastfeeding isn’t an option—or isn’t enough.`}
               linkText="Find out about the benefits of breast milk."
@@ -219,7 +222,7 @@ One pacekt. Real breast milk. Ready when you are.`}
 
           <View className="mb-12 bg-[#f9fafb] py-4 md:py-6 rounded-lg shadow-sm">
             <Section
-              image={require("../assets/images/home/boosterBox.jpg")}
+              image={require('../assets/images/home/boosterBox.jpg')}
               title="How is Vyarna made?"
               text={`We created a process that keeps what matters—and nothing else.
 
@@ -244,7 +247,7 @@ Single-gram Booster sachets are sealed, QR-coded, and shelf-stable for 24 months
 
           <View className="mb-12">
             <Section
-              image={require("../assets/images/home/forParents.jpg")}
+              image={require('../assets/images/home/forParents.jpg')}
               title="Who it's for"
               text={`Formula-feeding?
 Pumping and worried it’s not enough?
@@ -259,7 +262,7 @@ Vyarna fits your routine.`}
 
           <View className="mb-12 bg-[#f9fafb] py-4 md:py-6 rounded-lg shadow-sm">
             <Section
-              image={require("../assets/images/home/children.jpg")}
+              image={require('../assets/images/home/children.jpg')}
               title="Our values"
               text={`Vyarna isn’t just a product. It’s a way to share health and value.  
 - 4% of profits reserved for providers and staff  
