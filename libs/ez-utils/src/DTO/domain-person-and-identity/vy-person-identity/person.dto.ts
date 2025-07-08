@@ -36,6 +36,13 @@ export class PersonDto {
   rootBusinessUnitId: string;
 
   @ApiProperty({
+    description: "Roles assigned to the person",
+    type: [String],
+  })
+  @IsString({ each: true })
+  roles: string[];
+
+  @ApiProperty({
     description: "Username of the person",
     type: String,
     required: true,

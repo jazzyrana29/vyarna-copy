@@ -23,6 +23,10 @@ export class Person extends BaseEntity {
   @Column("uuid", { nullable: true })
   rootBusinessUnitId: string;
 
+  @Column("text", { array: true })
+  @Index()
+  roles: string[];
+
   @Column({ type: "varchar", length: 50, nullable: true })
   @Index()
   username: string;
