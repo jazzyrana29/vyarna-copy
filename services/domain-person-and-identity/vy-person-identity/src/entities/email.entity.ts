@@ -30,7 +30,6 @@ export class Email extends BaseEntity {
 
   @Column({ type: "varchar", length: 255, unique: true })
   @IsEmail()
-  @Index()
   email: string;
 
   @Column({ default: false })
