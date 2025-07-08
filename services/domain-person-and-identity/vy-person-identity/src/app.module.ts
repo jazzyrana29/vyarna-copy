@@ -7,6 +7,7 @@ import { getLoggerConfig } from "./utils/common";
 import { LogStreamLevel } from "ez-logger";
 import { PersonModule } from "./modules/person/person.module";
 import { EmailModule } from "./modules/email/email.module";
+import { VerificationModule } from "./modules/verification/verification.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EmailModule } from "./modules/email/email.module";
     }),
     PersonModule,
     EmailModule,
+    VerificationModule,
   ],
   controllers: [],
   providers: [],
