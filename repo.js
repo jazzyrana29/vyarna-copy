@@ -3,6 +3,25 @@ const fs = require('fs');
 const path = require('path');
 const { execSync, spawn } = require('child_process');
 
+function parseEnv(content) {
+  const env = {};
+  content
+    .split(/\r?\n/)
+    .forEach((line) => {
+      const m = line.match(/^\s*([^#=\s]+)\s*=(.*)$/);
+      if (m) env[m[1]] = m[2].trim();
+    });
+  return env;
+}
+
+function adaptCaPath(servicePath, rootPath, caPath) {
+  if (!caPath) return caPath;
+  const abs = path.resolve(rootPath, caPath);
+  let rel = path.relative(servicePath, abs);
+  if (!rel.startsWith('.')) rel = './' + rel;
+  return rel.split(path.sep).join('/');
+}
+
 function collectPackages(root) {
   const result = [];
   function scan(dir, type) {
@@ -133,6 +152,7 @@ Commands:
   prettier:fix [names...]    npm run prettier:fix in apps and services
   build-libs <lib...>        npm run build in libs
   test <service...>          npm run test in services
+  fill-env                   generate .env files for services
   list [names...]            list packages (all types)
   run <script> [names...]    run arbitrary npm script in packages
 Examples:
@@ -141,6 +161,7 @@ Examples:
   node repo.js start Vyarna website-foundation-scg vy-person-identity
   node repo.js build-libs ez-logger ez-utils
   node repo.js list
+  node repo.js fill-env
   node repo.js run build vy-person-identity
 `);
 }
@@ -231,6 +252,55 @@ switch (cmd) {
   case 'test':
     filterPackages(services, args).forEach((p) => runNpm(p, 'run test'));
     break;
+  case 'fill-env': {
+    const globalPath = path.join(__dirname, 'global.env.local');
+    if (!fs.existsSync(globalPath)) {
+      console.log('global.env.local not found. Create it from global.env.local-example first.');
+      break;
+    }
+    const globalEnv = parseEnv(fs.readFileSync(globalPath, 'utf8'));
+    services.forEach((pkg) => {
+      const examplePath = path.join(pkg.path, '.env-example');
+      if (!fs.existsSync(examplePath)) return;
+      const exampleEnv = parseEnv(fs.readFileSync(examplePath, 'utf8'));
+      const keys = Object.keys(exampleEnv);
+      if (!keys.length) return;
+      const envPath = path.join(pkg.path, '.env');
+      let envLines = [];
+      let envVars = {};
+      if (fs.existsSync(envPath)) {
+        const cnt = fs.readFileSync(envPath, 'utf8');
+        envLines = cnt.split(/\r?\n/);
+        envVars = parseEnv(cnt);
+      }
+      let changed = false;
+      keys.forEach((key) => {
+        if (envVars[key]) return;
+        let value;
+        if (key === 'TIDB_CA_PATH') {
+          if (globalEnv[key]) {
+            value = adaptCaPath(pkg.path, __dirname, globalEnv[key]);
+          } else {
+            value = exampleEnv[key];
+          }
+        } else if (key in globalEnv) {
+          value = globalEnv[key];
+        } else {
+          value = exampleEnv[key];
+        }
+        if (value !== undefined) {
+          envLines.push(`${key}=${value}`);
+          envVars[key] = value;
+          changed = true;
+        }
+      });
+      if (changed) {
+        fs.writeFileSync(envPath, envLines.join('\n'));
+        console.log(`[service] ${pkg.name} wrote ${envPath}`);
+      }
+    });
+    break;
+  }
   case 'list':
     filterPackages(all, args).forEach((p) => {
       console.log(`${p.type}\t${p.name}\t${p.path}`);

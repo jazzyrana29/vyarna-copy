@@ -43,3 +43,6 @@ depcheck-report.json
 
 !libs/**/dist/
 !libs/**/dist/**
+global.env.local
+isrgrootx1.pem
+

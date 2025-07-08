@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import typeorm from "./config/typeorm/typeorm";
 import { CFG_TOKEN_TYPEORM } from "./config/config.tokens";
 import { getLoggerConfig } from "./utils/common";
+import { ensureDatabaseExists } from "./utils/db-init";
 import { LogStreamLevel } from "ez-logger";
 import { PersonModule } from "./modules/person/person.module";
 import { EmailModule } from "./modules/email/email.module";
@@ -16,7 +17,16 @@ import { VerificationModule } from "./modules/verification/verification.module";
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        return await configService.get(CFG_TOKEN_TYPEORM);
+        const cfg = await configService.get(CFG_TOKEN_TYPEORM);
+        await ensureDatabaseExists({
+          host: cfg.host,
+          port: cfg.port,
+          user: cfg.username,
+          password: cfg.password,
+          database: cfg.database,
+          ssl: cfg.ssl,
+        });
+        return cfg;
       },
     }),
     PersonModule,

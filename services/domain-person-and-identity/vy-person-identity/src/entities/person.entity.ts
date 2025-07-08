@@ -24,8 +24,7 @@ export class Person extends BaseEntity {
   @Column("uuid", { nullable: true })
   rootBusinessUnitId: string;
 
-  @Column("text", { array: true })
-  @Index()
+  @Column('simple-array')
   roles: string[];
 
   @Column({ type: "varchar", length: 50, nullable: true })

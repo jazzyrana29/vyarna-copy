@@ -37,9 +37,6 @@ npm install
 # create .env from template and edit values
 cp .env-example .env
 
-# run database migrations
-npm run migration:run
-
 # start the microservice
 npm run start:dev
 ```
