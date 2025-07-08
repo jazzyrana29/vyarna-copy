@@ -1,7 +1,13 @@
 import { Controller } from '@nestjs/common';
-import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  Ctx,
+  KafkaContext,
+  MessagePattern,
+  Payload,
+} from '@nestjs/microservices';
 import { WalletAccountKafkaService } from './services/wallet-account-kafka.service';
 import { WalletOperationsKafkaService } from './services/wallet-operations-kafka.service';
+import { WalletEventsKafkaService } from './services/wallet-events-kafka.service';
 import {
   KT_CREATE_WALLET_ACCOUNT,
   KT_GET_WALLET_ACCOUNT,
@@ -13,6 +19,10 @@ import {
   KT_REDEEM_CONSUMER_REWARD,
   KT_CREATE_AFFILIATE_COMMISSION,
   KT_CREATE_INTERNAL_CHARGE,
+  KT_WALLET_ORDER_PAID,
+  KT_WALLET_SUBSCRIPTION_RENEWED,
+  KT_WALLET_REFUND_SUCCEEDED,
+  KT_WALLET_AFFILIATE_COMMISSION_CREATED,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -24,6 +34,7 @@ export class WalletController {
   constructor(
     private readonly walletKafkaService: WalletAccountKafkaService,
     private readonly walletOpsKafkaService: WalletOperationsKafkaService,
+    private readonly walletEventsKafkaService: WalletEventsKafkaService,
   ) {
     this.logger.debug(
       `${WalletController.name} initialized`,
@@ -181,5 +192,68 @@ export class WalletController {
       LogStreamLevel.DebugLight,
     );
     await this.walletOpsKafkaService.createCharge(message, key);
+  }
+
+  @MessagePattern(KT_WALLET_ORDER_PAID)
+  async handleOrderPaid(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Event consumed : ${KT_WALLET_ORDER_PAID}`,
+      '',
+      'handleOrderPaid',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletEventsKafkaService.handleOrderPaid(message, key);
+  }
+
+  @MessagePattern(KT_WALLET_SUBSCRIPTION_RENEWED)
+  async handleSubscriptionRenewed(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Event consumed : ${KT_WALLET_SUBSCRIPTION_RENEWED}`,
+      '',
+      'handleSubscriptionRenewed',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletEventsKafkaService.handleSubscriptionRenewed(message, key);
+  }
+
+  @MessagePattern(KT_WALLET_REFUND_SUCCEEDED)
+  async handleRefundSucceeded(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Event consumed : ${KT_WALLET_REFUND_SUCCEEDED}`,
+      '',
+      'handleRefundSucceeded',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletEventsKafkaService.handleRefundSucceeded(message, key);
+  }
+
+  @MessagePattern(KT_WALLET_AFFILIATE_COMMISSION_CREATED)
+  async handleAffiliateCommissionCreated(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Event consumed : ${KT_WALLET_AFFILIATE_COMMISSION_CREATED}`,
+      '',
+      'handleAffiliateCommissionCreated',
+      LogStreamLevel.DebugLight,
+    );
+    await this.walletEventsKafkaService.handleAffiliateCommissionCreated(
+      message,
+      key,
+    );
   }
 }

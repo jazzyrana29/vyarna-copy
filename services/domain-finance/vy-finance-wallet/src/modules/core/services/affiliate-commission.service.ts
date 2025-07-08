@@ -4,7 +4,11 @@ import { Repository } from 'typeorm';
 import { AffiliateCommission } from '../../../entities/affiliate_commission.entity';
 import { LedgerService } from './ledger.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { encodeKafkaMessage, CreateAffiliateCommissionDto } from 'ez-utils';
+import {
+  encodeKafkaMessage,
+  CreateAffiliateCommissionDto,
+  KT_WALLET_AFFILIATE_COMMISSION_CREATED,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -53,7 +57,7 @@ export class AffiliateCommissionService {
     });
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      'AffiliateCommissionCreated',
+      KT_WALLET_AFFILIATE_COMMISSION_CREATED,
       encodeKafkaMessage(AffiliateCommissionService.name, { commissionId: commission!.commissionId, traceId }),
     );
     this.logger.info('Affiliate commission created', traceId, 'createCommission', LogStreamLevel.ProdStandard);

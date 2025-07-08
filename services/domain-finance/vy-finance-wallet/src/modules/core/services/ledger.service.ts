@@ -4,7 +4,11 @@ import { Repository } from 'typeorm';
 import { WalletAccount } from '../../../entities/wallet_account.entity';
 import { LedgerTransaction } from '../../../entities/ledger_transaction.entity';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { encodeKafkaMessage, RecordTransactionDto } from 'ez-utils';
+import {
+  encodeKafkaMessage,
+  RecordTransactionDto,
+  KT_TRANSACTION_RECORDED,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -48,7 +52,7 @@ export class LedgerService {
       const saved = await manager.save(LedgerTransaction, tx);
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        'TransactionRecorded',
+        KT_TRANSACTION_RECORDED,
         encodeKafkaMessage(LedgerService.name, { transactionId: saved.transactionId, traceId }),
       );
       this.logger.info('Ledger transaction recorded', traceId, 'recordTransaction', LogStreamLevel.ProdStandard);

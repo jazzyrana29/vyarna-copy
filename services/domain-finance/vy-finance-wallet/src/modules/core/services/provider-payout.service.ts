@@ -4,7 +4,12 @@ import { Repository } from 'typeorm';
 import { ProviderPayout } from '../../../entities/provider_payout.entity';
 import { LedgerService } from './ledger.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { encodeKafkaMessage, ScheduleProviderPayoutDto } from 'ez-utils';
+import {
+  encodeKafkaMessage,
+  ScheduleProviderPayoutDto,
+  KT_PROVIDER_PAYOUT_SCHEDULED,
+  KT_PROVIDER_PAYOUT_PAID,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -39,7 +44,7 @@ export class ProviderPayoutService {
     );
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      'ProviderPayoutScheduled',
+      KT_PROVIDER_PAYOUT_SCHEDULED,
       encodeKafkaMessage(ProviderPayoutService.name, { payoutId: payout.payoutId, traceId }),
     );
     this.logger.info('Provider payout scheduled', traceId, 'schedulePayout', LogStreamLevel.ProdStandard);
@@ -66,7 +71,7 @@ export class ProviderPayoutService {
     });
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      'ProviderPayoutPaid',
+      KT_PROVIDER_PAYOUT_PAID,
       encodeKafkaMessage(ProviderPayoutService.name, { payoutId, traceId }),
     );
     this.logger.info('Provider payout paid', traceId, 'markPayoutPaid', LogStreamLevel.ProdStandard);
