@@ -10,6 +10,12 @@ import { InternalCharge } from '../../entities/internal_charge.entity';
 import { WalletAccountService } from './services/wallet-account.service';
 import { WalletAccountKafkaService } from './services/wallet-account-kafka.service';
 import { ZtrackingWalletAccountService } from './services/ztracking-wallet-account.service';
+import { LedgerService } from './services/ledger.service';
+import { ProviderPayoutService } from './services/provider-payout.service';
+import { ConsumerRewardService } from './services/consumer-reward.service';
+import { AffiliateCommissionService } from './services/affiliate-commission.service';
+import { InternalChargeService } from './services/internal-charge.service';
+import { WalletOperationsKafkaService } from './services/wallet-operations-kafka.service';
 import { WalletController } from './wallet.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -27,7 +33,17 @@ import { LogStreamLevel } from 'ez-logger';
     ]),
   ],
   controllers: [WalletController],
-  providers: [WalletAccountService, WalletAccountKafkaService, ZtrackingWalletAccountService],
+  providers: [
+    WalletAccountService,
+    WalletAccountKafkaService,
+    ZtrackingWalletAccountService,
+    LedgerService,
+    ProviderPayoutService,
+    ConsumerRewardService,
+    AffiliateCommissionService,
+    InternalChargeService,
+    WalletOperationsKafkaService,
+  ],
 })
 export class CoreModule {
   private logger = getLoggerConfig(CoreModule.name);

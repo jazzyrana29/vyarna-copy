@@ -22,6 +22,7 @@ export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health
 /* ------------------------------------- domain-finance ------------------------------*/
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
+export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-operations";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
 
 /**************************************** DTOs **************************************************************/
@@ -81,6 +82,16 @@ export * from './src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.
 export * from './src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/ztracking-wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/get-ztracking-wallet-account.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/ledger-transaction.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/record-transaction.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/provider-payout.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/schedule-provider-payout.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/consumer-reward.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/issue-consumer-reward.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/affiliate-commission.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/create-affiliate-commission.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/internal-charge.dto';
+export * from './src/DTO/domain-finance/vy-finance-wallet/create-internal-charge.dto';
 export * from './src/DTO/domain-health-and-insights/vy-health-sleep/sleep-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-health-sleep/create-sleep-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-sessions.dto';
