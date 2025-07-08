@@ -13,6 +13,15 @@ import { ZtrackingDevelopmentMomentPhoto } from '../../entities/ztracking_develo
 import { GrowthMeasurementService } from './services/growth-measurement.service';
 import { GrowthMeasurementKafkaService } from './services/growth-measurement-kafka.service';
 import { ZtrackingGrowthMeasurementService } from './services/ztracking-growth-measurement.service';
+import { MilestoneService } from './services/milestone.service';
+import { MilestoneKafkaService } from './services/milestone-kafka.service';
+import { ZtrackingMilestoneService } from './services/ztracking-milestone.service';
+import { TeethingEventService } from './services/teething-event.service';
+import { TeethingEventKafkaService } from './services/teething-event-kafka.service';
+import { ZtrackingTeethingEventService } from './services/ztracking-teething-event.service';
+import { DevelopmentMomentService } from './services/development-moment.service';
+import { DevelopmentMomentKafkaService } from './services/development-moment-kafka.service';
+import { ZtrackingDevelopmentMomentService } from './services/ztracking-development-moment.service';
 import { DevelopmentController } from './development.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -37,6 +46,15 @@ import { LogStreamLevel } from 'ez-logger';
     GrowthMeasurementService,
     GrowthMeasurementKafkaService,
     ZtrackingGrowthMeasurementService,
+    MilestoneService,
+    MilestoneKafkaService,
+    ZtrackingMilestoneService,
+    TeethingEventService,
+    TeethingEventKafkaService,
+    ZtrackingTeethingEventService,
+    DevelopmentMomentService,
+    DevelopmentMomentKafkaService,
+    ZtrackingDevelopmentMomentService,
   ],
 })
 export class DevelopmentModule {

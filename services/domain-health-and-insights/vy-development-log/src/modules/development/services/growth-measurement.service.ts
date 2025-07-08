@@ -85,11 +85,11 @@ export class GrowthMeasurementService {
   }
 
   async getGrowthMeasurementHistory(
-    dto: GetZtrackingGrowthMeasurementDto,
+    getZtrackingGrowthMeasurementDto: GetZtrackingGrowthMeasurementDto,
     traceId: string,
   ): Promise<ZtrackingGrowthMeasurementDto[]> {
     return await this.ztrackingGrowthMeasurementService.findZtrackingGrowthMeasurementEntity(
-      dto,
+      getZtrackingGrowthMeasurementDto,
       traceId,
     );
   }
