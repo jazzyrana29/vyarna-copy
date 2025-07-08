@@ -26,6 +26,21 @@ __decorate([
     __metadata("design:type", String)
 ], SleepSessionDto.prototype, "babyId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Person identifier', required: true }),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], SleepSessionDto.prototype, "personId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Session type', enum: ['NAP', 'NIGHT'] }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], SleepSessionDto.prototype, "type", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Session status', enum: ['IN_PROGRESS', 'COMPLETED'] }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], SleepSessionDto.prototype, "status", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Start time', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
@@ -35,4 +50,22 @@ __decorate([
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
 ], SleepSessionDto.prototype, "end", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Creation timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], SleepSessionDto.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Last update timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], SleepSessionDto.prototype, "updatedAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Soft deletion timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], SleepSessionDto.prototype, "deletedAt", void 0);
 //# sourceMappingURL=sleep-session.dto.js.map

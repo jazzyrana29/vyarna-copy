@@ -46,6 +46,14 @@ __decorate([
 ], PersonDto.prototype, "rootBusinessUnitId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
+        description: "Roles assigned to the person",
+        type: [String],
+    }),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], PersonDto.prototype, "roles", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
         description: "Username of the person",
         type: String,
         required: true,

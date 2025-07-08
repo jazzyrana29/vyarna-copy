@@ -22,6 +22,7 @@ class UpdatePersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)
     "nameLast",
     "email",
     "password",
+    "roles",
     "isDeleted",
     "updatedBy",
 ])) {

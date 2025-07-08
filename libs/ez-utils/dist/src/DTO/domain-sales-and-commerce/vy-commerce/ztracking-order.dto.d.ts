@@ -4,5 +4,9 @@ export declare class ZtrackingOrderDto {
     personId: string;
     totalCents: number;
     status: string;
+    currency: string;
+    paymentIntentId?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
     versionDate: Date;
 }

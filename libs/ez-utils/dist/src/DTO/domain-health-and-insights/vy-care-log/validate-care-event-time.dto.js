@@ -16,12 +16,16 @@ class ValidateCareEventTimeDto {
 }
 exports.ValidateCareEventTimeDto = ValidateCareEventTimeDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Baby identifier' }),
+    (0, swagger_1.ApiProperty)({ description: "Baby identifier" }),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], ValidateCareEventTimeDto.prototype, "babyId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Event timestamp', type: String, format: 'date-time' }),
+    (0, swagger_1.ApiProperty)({
+        description: "Event timestamp",
+        type: String,
+        format: "date-time",
+    }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
 ], ValidateCareEventTimeDto.prototype, "eventTime", void 0);

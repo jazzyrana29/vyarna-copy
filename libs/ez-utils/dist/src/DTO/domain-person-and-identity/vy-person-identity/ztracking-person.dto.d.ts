@@ -7,6 +7,7 @@ export declare class ZtrackingPersonDto {
     nameLast: string;
     email: string;
     businessUnitId: string;
+    roles: string[];
     isDeleted: boolean;
     createdAt?: Date;
     updatedBy?: string;
