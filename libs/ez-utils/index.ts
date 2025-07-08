@@ -17,6 +17,9 @@ export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-l
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/temperature-measurement";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/symptom-report";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/milestone";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/teething-event";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/development-moment";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session";
 /* ------------------------------------- domain-finance ------------------------------*/
@@ -62,6 +65,15 @@ export * from './src/DTO/domain-health-and-insights/vy-development-log/create-gr
 export * from './src/DTO/domain-health-and-insights/vy-development-log/get-growth-measurements.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/ztracking-growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/get-ztracking-growth-measurement.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/milestone.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/create-milestone.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/get-milestones.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/teething-event.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/create-teething-event.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/get-teething-events.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/development-moment.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/create-development-moment.dto';
+export * from './src/DTO/domain-health-and-insights/vy-development-log/get-development-moments.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto';
 export * from './src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto';

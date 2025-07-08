@@ -37,8 +37,14 @@ export class GrowthMeasurementKafkaService {
       KT_CREATE_GROWTH_MEASUREMENT,
       message,
       key,
-      async (value: CreateGrowthMeasurementDto, traceId: string) =>
-        await this.growthService.createGrowthMeasurement(value, traceId),
+      async (
+        createGrowthMeasurementDto: CreateGrowthMeasurementDto,
+        traceId: string,
+      ) =>
+        await this.growthService.createGrowthMeasurement(
+          createGrowthMeasurementDto,
+          traceId,
+        ),
     );
   }
 
@@ -48,8 +54,14 @@ export class GrowthMeasurementKafkaService {
       KT_GET_GROWTH_MEASUREMENTS,
       message,
       key,
-      async (value: GetGrowthMeasurementsDto, traceId: string) =>
-        await this.growthService.getGrowthMeasurements(value, traceId),
+      async (
+        getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
+        traceId: string,
+      ) =>
+        await this.growthService.getGrowthMeasurements(
+          getGrowthMeasurementsDto,
+          traceId,
+        ),
     );
   }
 
@@ -59,8 +71,14 @@ export class GrowthMeasurementKafkaService {
       KT_GET_HISTORY_GROWTH_MEASUREMENT,
       message,
       key,
-      async (value: GetZtrackingGrowthMeasurementDto, traceId: string) =>
-        await this.growthService.getGrowthMeasurementHistory(value, traceId),
+      async (
+        getZtrackingGrowthMeasurementDto: GetZtrackingGrowthMeasurementDto,
+        traceId: string,
+      ) =>
+        await this.growthService.getGrowthMeasurementHistory(
+          getZtrackingGrowthMeasurementDto,
+          traceId,
+        ),
     );
   }
 }
