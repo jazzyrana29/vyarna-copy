@@ -24,7 +24,7 @@ export class Person extends BaseEntity {
   @Column("uuid", { nullable: true })
   rootBusinessUnitId: string;
 
-  @Column("text", { array: true })
+  @Column('simple-array')
   @Index()
   roles: string[];
 
