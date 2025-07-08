@@ -5,6 +5,8 @@ import typeorm from "./config/typeorm/typeorm";
 import { CFG_TOKEN_TYPEORM } from "./config/config.tokens";
 import { getLoggerConfig } from "./utils/common";
 import { LogStreamLevel } from "ez-logger";
+import { PersonModule } from "./modules/person/person.module";
+import { EmailModule } from "./modules/email/email.module";
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { LogStreamLevel } from "ez-logger";
         return await configService.get(CFG_TOKEN_TYPEORM);
       },
     }),
+    PersonModule,
+    EmailModule,
   ],
   controllers: [],
   providers: [],
