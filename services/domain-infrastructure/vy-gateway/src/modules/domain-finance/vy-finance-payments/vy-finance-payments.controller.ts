@@ -11,6 +11,7 @@ import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-in
 import { ValidateGetZtrackingPaymentIntentDtoPipe } from './pipes/validate-get-ztracking-payment-intent-dto.pipe';
 import { ValidateCreateRefundDtoPipe } from './pipes/validate-create-refund-dto.pipe';
 import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-refund-dto.pipe';
+import { ValidateCreatePaymentMethodDtoPipe } from './pipes/validate-create-payment-method-dto.pipe';
 import {
   generateTraceId,
   CreatePaymentIntentDto,
@@ -19,6 +20,9 @@ import {
   CreateRefundDto,
   GetPaymentRefundDto,
   RefundDto,
+  CreatePaymentMethodDto,
+  GetPaymentMethodsDto,
+  DeletePaymentMethodDto,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -112,5 +116,74 @@ export class FinancePaymentsController {
     this.logger.info('traceId generated successfully', traceId, 'getPaymentRefund', LogStreamLevel.ProdStandard);
     const refund = await this.paymentsKafkaService.getRefund(getPaymentRefundDto, traceId);
     return new ResponseDTO(HttpStatus.OK, refund, 'Refund retrieved', traceId);
+  }
+
+  @Post('payment-methods')
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: CreatePaymentMethodDto })
+  async createPaymentMethod(
+    @Body(new ValidateCreatePaymentMethodDtoPipe())
+    createPaymentMethodDto: CreatePaymentMethodDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('createPaymentMethod');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'createPaymentMethod',
+      LogStreamLevel.ProdStandard,
+    );
+    return new ResponseDTO(
+      HttpStatus.OK,
+      await this.paymentsKafkaService.createPaymentMethod(
+        createPaymentMethodDto,
+        traceId,
+      ),
+      'Payment method created',
+      traceId,
+    );
+  }
+
+  @Post('payment-methods/get')
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetPaymentMethodsDto })
+  async listPaymentMethods(
+    @Body() getPaymentMethodsDto: GetPaymentMethodsDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('listPaymentMethods');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'listPaymentMethods',
+      LogStreamLevel.ProdStandard,
+    );
+    return new ResponseDTO(
+      HttpStatus.OK,
+      await this.paymentsKafkaService.listPaymentMethods(
+        getPaymentMethodsDto,
+        traceId,
+      ),
+      'Payment methods retrieved',
+      traceId,
+    );
+  }
+
+  @Post('payment-methods/delete')
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: DeletePaymentMethodDto })
+  async deletePaymentMethod(
+    @Body() deletePaymentMethodDto: DeletePaymentMethodDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('deletePaymentMethod');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'deletePaymentMethod',
+      LogStreamLevel.ProdStandard,
+    );
+    await this.paymentsKafkaService.deletePaymentMethod(
+      deletePaymentMethodDto,
+      traceId,
+    );
+    return new ResponseDTO(HttpStatus.OK, null, 'Payment method deleted', traceId);
   }
 }

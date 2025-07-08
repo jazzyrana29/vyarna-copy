@@ -22,6 +22,7 @@ export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrit
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session";
 /* ------------------------------------- domain-finance ------------------------------*/
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent";
+export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-method";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-operations";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
@@ -84,6 +85,10 @@ export * from './src/DTO/domain-finance/vy-finance-payments/refund.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/create-refund.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/get-payment-refund.dto';
 export * from './src/DTO/domain-finance/vy-finance-payments/stripe-webhook.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/payment-method.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/create-payment-method.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/get-payment-methods.dto';
+export * from './src/DTO/domain-finance/vy-finance-payments/delete-payment-method.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto';
 export * from './src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto';
