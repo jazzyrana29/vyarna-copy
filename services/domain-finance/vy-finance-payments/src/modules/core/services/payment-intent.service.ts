@@ -16,7 +16,15 @@ import {
   ZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
+  KT_PAYMENT_INTENT_CREATED,
+  KT_PAYMENT_SUCCEEDED,
+  KT_PAYMENT_FAILED,
+  KT_REFUND_CREATED,
+  KT_REFUND_SUCCEEDED,
+  KT_REFUND_FAILED,
+  encodeKafkaMessage,
 } from 'ez-utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -98,6 +106,18 @@ export class PaymentIntentService {
         'createPaymentIntent',
         LogStreamLevel.ProdStandard,
       );
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_PAYMENT_INTENT_CREATED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          paymentIntentId: entity.paymentIntentId,
+          orderId: entity.orderId,
+          subscriptionId: entity.subscriptionId,
+          amountCents: entity.amountCents,
+          currency: entity.currency,
+          traceId,
+        }),
+      );
     } catch (error) {
       this.logger.error(
         `Failed to persist PaymentIntent => ${error}`,
@@ -122,6 +142,16 @@ export class PaymentIntentService {
         errorMessage: (error as any)?.message,
         gatewayResponse: error as any,
       });
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_PAYMENT_FAILED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          paymentIntentId: entity.paymentIntentId,
+          errorCode: (error as any)?.code,
+          errorMessage: (error as any)?.message,
+          traceId,
+        }),
+      );
     }
 
     await this.ztrackingPaymentIntentService.createZtrackingForPaymentIntent(
@@ -208,12 +238,33 @@ export class PaymentIntentService {
         status: statusMap[stripeRefund.status] || refundEntity.status,
       });
 
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_REFUND_CREATED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          refundId: refundEntity.refundId,
+          paymentIntentId: refundEntity.paymentIntentId,
+          amountCents: refundEntity.amountCents,
+          traceId,
+        }),
+      );
+
       return stripeRefund;
     } catch (error) {
       await this.refundRepo.update(refundEntity.refundId, {
         status: 'FAILED',
       });
       this.logger.error(`Failed to create refund => ${error}`, traceId, 'createRefund', LogStreamLevel.DebugHeavy);
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_REFUND_FAILED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          refundId: refundEntity.refundId,
+          paymentIntentId: refundEntity.paymentIntentId,
+          errorCode: (error as any)?.code,
+          traceId,
+        }),
+      );
       throw error;
     }
   }
@@ -290,6 +341,32 @@ export class PaymentIntentService {
           { externalId: pi.id },
           { status: intentStatusMap[event.type] },
         );
+        const updated = await this.paymentRepo.findOne({ where: { externalId: pi.id } });
+        if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
+          await new EzKafkaProducer().produce(
+            process.env.KAFKA_BROKER as string,
+            KT_PAYMENT_SUCCEEDED,
+            encodeKafkaMessage(PaymentIntentService.name, {
+              paymentIntentId: updated.paymentIntentId,
+              orderId: updated.orderId,
+              subscriptionId: updated.subscriptionId,
+              traceId,
+            }),
+          );
+        }
+        if (updated && intentStatusMap[event.type] === 'FAILED') {
+          const err = (pi as any).last_payment_error;
+          await new EzKafkaProducer().produce(
+            process.env.KAFKA_BROKER as string,
+            KT_PAYMENT_FAILED,
+            encodeKafkaMessage(PaymentIntentService.name, {
+              paymentIntentId: updated.paymentIntentId,
+              errorCode: err?.code,
+              errorMessage: err?.message,
+              traceId,
+            }),
+          );
+        }
       }
 
       if (event.type.startsWith('charge.refund') || event.type.startsWith('refund.')) {
@@ -304,6 +381,18 @@ export class PaymentIntentService {
             { externalId: refundObj.id },
             { status: statusMap[refundObj.status] },
           );
+          const updatedRefund = await this.refundRepo.findOne({ where: { externalId: refundObj.id } });
+          if (updatedRefund && statusMap[refundObj.status] === 'SUCCEEDED') {
+            await new EzKafkaProducer().produce(
+              process.env.KAFKA_BROKER as string,
+              KT_REFUND_SUCCEEDED,
+              encodeKafkaMessage(PaymentIntentService.name, {
+                refundId: updatedRefund.refundId,
+                paymentIntentId: updatedRefund.paymentIntentId,
+                traceId,
+              }),
+            );
+          }
         }
       }
 
