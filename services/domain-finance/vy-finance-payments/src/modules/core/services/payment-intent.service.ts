@@ -76,12 +76,16 @@ export class PaymentIntentService {
       }),
     );
 
+    let clientSecret: string | undefined;
+
     try {
       const stripeIntent = await this.stripeGateway.createPaymentIntent({
         amount: entity.amountCents,
         currency: entity.currency,
         metadata: entity.metadata as any,
       });
+
+      clientSecret = stripeIntent.client_secret || undefined;
 
       entity.externalId = stripeIntent.id;
       const statusMap: Record<string, PaymentIntent['status']> = {
@@ -159,7 +163,7 @@ export class PaymentIntentService {
       traceId,
     );
 
-    return entity;
+    return { ...entity, clientSecret } as PaymentIntentDto;
   }
 
   async getPaymentIntent(

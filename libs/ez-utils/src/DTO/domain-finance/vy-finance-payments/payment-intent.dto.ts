@@ -17,6 +17,11 @@ export class PaymentIntentDto {
   @IsString()
   externalId: string;
 
+  @ApiProperty({ description: 'Stripe client secret', required: false })
+  @IsOptional()
+  @IsString()
+  clientSecret?: string;
+
   @ApiProperty({ description: 'Amount in cents' })
   @IsInt()
   amountCents: number;
