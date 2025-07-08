@@ -34,6 +34,7 @@ import {
   KT_NUTRITION_EVENT_LOGGED,
   KT_NUTRITION_SESSION_ENDED,
 } from 'ez-utils';
+import { PersonIdentityClientService } from './person-identity-client.service';
 
 @Injectable()
 export class NutritionSessionService {
@@ -55,6 +56,7 @@ export class NutritionSessionService {
     @InjectRepository(ZtrackingSessionSummary)
     private readonly ztrackingSummaryRepo: Repository<ZtrackingSessionSummary>,
     private readonly ztrackingService: ZtrackingNutritionSessionService,
+    private readonly personClient: PersonIdentityClientService,
   ) {
     this.logger.debug(
       `${NutritionSessionService.name} initialized`,
@@ -68,6 +70,14 @@ export class NutritionSessionService {
     startNutritionSessionDto: StartNutritionSessionDto,
     traceId: string,
   ): Promise<NutritionSessionDto> {
+    await this.personClient.validatePerson(
+      startNutritionSessionDto.milkGiverId,
+      traceId,
+    );
+    await this.personClient.validatePerson(
+      startNutritionSessionDto.babyId,
+      traceId,
+    );
     const entity = this.nutritionSessionRepo.create({
       ...startNutritionSessionDto,
       status: 'IN_PROGRESS',
