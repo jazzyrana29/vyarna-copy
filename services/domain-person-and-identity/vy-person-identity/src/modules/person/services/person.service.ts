@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ZtrackingPersonService } from "./ztracking-person.service";
+import { ActiveCampaignService } from "./active-campaign.service";
 import { LogStreamLevel } from "ez-logger";
 
 import { getLoggerConfig } from "../../../utils/common";
@@ -18,9 +19,13 @@ import {
   PersonDto,
   PaginatedPersonsResponseDto,
   UpdatePersonDto,
+  encodeKafkaMessage,
+  KT_PERSON_CREATED,
+  KT_PERSON_UPDATED,
 } from "ez-utils";
 import { BusinessUnit } from "../../../entities/business-unit.entity";
 import { Email } from "../../../entities/email.entity";
+import { EzKafkaProducer } from "ez-kafka-producer";
 
 @Injectable()
 export class PersonService {
@@ -34,6 +39,7 @@ export class PersonService {
     @InjectRepository(Email)
     private readonly emailRepository: Repository<Email>,
     private readonly ztrackingPersonService: ZtrackingPersonService,
+    private readonly activeCampaignService: ActiveCampaignService,
   ) {
     this.logger.debug(
       `${PersonService.name} initialized`,
@@ -88,6 +94,15 @@ export class PersonService {
       this.personRepository.create({
         ...createPersonDto,
         rootBusinessUnitId: rootBusinessUnit.businessUnitId,
+        roles: createPersonDto.roles,
+      }),
+    );
+
+    await this.emailRepository.save(
+      this.emailRepository.create({
+        personId: person.personId,
+        email: createPersonDto.email,
+        isPrimary: true,
       }),
     );
 
@@ -97,6 +112,30 @@ export class PersonService {
       "createPerson",
       LogStreamLevel.ProdStandard,
     );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_PERSON_CREATED,
+      encodeKafkaMessage(PersonService.name, {
+        personId: person.personId,
+        traceId,
+      }),
+    );
+
+    try {
+      await this.activeCampaignService.createContact({
+        firstName: person.nameFirst,
+        lastName: person.nameLastFirst,
+        email: createPersonDto.email,
+      });
+    } catch (err) {
+      this.logger.error(
+        `Failed to create ActiveCampaign contact`,
+        traceId,
+        "createPerson",
+        LogStreamLevel.ProdStandard,
+      );
+    }
 
     if (
       await this.ztrackingPersonService.createZtrackingPersonEntity(
@@ -127,6 +166,15 @@ export class PersonService {
       traceId,
       "updatedBusinessUnit",
       LogStreamLevel.ProdStandard,
+    );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_PERSON_UPDATED,
+      encodeKafkaMessage(PersonService.name, {
+        personId: updatedPerson.personId,
+        traceId,
+      }),
     );
 
     if (

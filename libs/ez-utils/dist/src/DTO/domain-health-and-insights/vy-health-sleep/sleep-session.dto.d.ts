@@ -1,6 +1,12 @@
 export declare class SleepSessionDto {
     sessionId: string;
     babyId: string;
-    start: Date;
-    end: Date;
+    personId: string;
+    type: 'NAP' | 'NIGHT';
+    status: 'IN_PROGRESS' | 'COMPLETED';
+    startTime: Date;
+    endTime?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date;
 }

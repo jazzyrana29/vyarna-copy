@@ -59,14 +59,15 @@ function runNpm(pkg, args, exitOnFail = false) {
 
 function openTerminal(cwd, command) {
   const platform = process.platform;
+  const opts = { cwd, detached: true, stdio: 'ignore' };
   if (platform === 'win32') {
-    spawn('cmd', ['/c', 'start', 'cmd', '/k', command], { cwd, detached: true }).unref();
+    spawn('cmd', ['/c', 'start', 'cmd', '/k', command], opts).unref();
   } else if (platform === 'darwin') {
     const script = `tell application "Terminal" to do script "cd ${cwd.replace(/"/g, '\\"')} && ${command}"`;
-    spawn('osascript', ['-e', script], { detached: true }).unref();
+    spawn('osascript', ['-e', script], opts).unref();
   } else {
     const term = process.env.TERM_PROGRAM || 'x-terminal-emulator';
-    spawn(term, ['-e', `bash -c 'cd "${cwd}" && ${command}; exec bash'`], { detached: true }).unref();
+    spawn(term, ['-e', `bash -c 'cd "${cwd}" && ${command}; exec bash'`], opts).unref();
   }
 }
 

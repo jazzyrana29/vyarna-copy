@@ -5,8 +5,8 @@ const swagger_1 = require("@nestjs/swagger");
 const sleep_session_dto_1 = require("./sleep-session.dto");
 class CreateSleepSessionDto extends (0, swagger_1.PickType)(sleep_session_dto_1.SleepSessionDto, [
     'babyId',
-    'start',
-    'end',
+    'startTime',
+    'endTime',
 ]) {
 }
 exports.CreateSleepSessionDto = CreateSleepSessionDto;

@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SleepSession } from '../../../entities/sleep_session.entity';
 import { ZtrackingSleepSessionService } from './ztracking-sleep-session.service';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   CreateSleepSessionDto,
   SleepSessionDto,
   GetSleepSessionsDto,
   GetZtrackingSleepSessionDto,
+  DeleteSleepSessionDto,
   ZtrackingSleepSessionDto,
+  encodeKafkaMessage,
+  KT_SLEEP_SESSION_STARTED,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -31,10 +35,10 @@ export class SleepSessionService {
   }
 
   async createSleepSession(
-    createDto: CreateSleepSessionDto,
+    createSleepSessionDto: CreateSleepSessionDto,
     traceId: string,
   ): Promise<SleepSessionDto> {
-    const entity = this.sleepRepo.create(createDto);
+    const entity = this.sleepRepo.create(createSleepSessionDto);
     await this.sleepRepo.save(entity);
     this.logger.info(
       'SleepSession created',
@@ -48,11 +52,24 @@ export class SleepSessionService {
       traceId,
     );
 
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_SLEEP_SESSION_STARTED,
+      encodeKafkaMessage(SleepSessionService.name, {
+        sessionId: entity.sessionId,
+        babyId: entity.babyId,
+        personId: entity.personId,
+        type: entity.type,
+        startTime: entity.startTime,
+        traceId,
+      }),
+    );
+
     return entity;
   }
 
   async getSleepSessions(
-    _getDto: GetSleepSessionsDto,
+    getSleepSessionsDto: GetSleepSessionsDto,
     traceId: string,
   ): Promise<SleepSessionDto[]> {
     const list = await this.sleepRepo.find();
@@ -66,11 +83,28 @@ export class SleepSessionService {
   }
 
   async getZtrackingSleepSession(
-    getDto: GetZtrackingSleepSessionDto,
+    getZtrackingSleepSessionDto: GetZtrackingSleepSessionDto,
     traceId: string,
   ): Promise<ZtrackingSleepSessionDto[]> {
     return this.ztrackingSleepSessionService.getZtrackingForSleepSession(
-      getDto,
+      getZtrackingSleepSessionDto,
+      traceId,
+    );
+  }
+
+  async deleteSleepSession(
+    deleteSleepSessionDto: DeleteSleepSessionDto,
+    traceId: string,
+  ): Promise<void> {
+    const { sessionId } = deleteSleepSessionDto;
+    const entity = await this.sleepRepo.findOne({ where: { sessionId } });
+    if (!entity) {
+      throw new NotFoundException(`Sleep session not found => ${sessionId}`);
+    }
+    await this.sleepRepo.softDelete(sessionId);
+    entity.deletedAt = new Date();
+    await this.ztrackingSleepSessionService.createZtrackingForSleepSession(
+      entity,
       traceId,
     );
   }

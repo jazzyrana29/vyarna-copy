@@ -12,6 +12,7 @@ import {
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
+  CreateRefundDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -100,6 +101,23 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
     } catch (e: any) {
       socket.emit(
         'finance-payments-get-ztracking-intent-error',
+        e.message || 'Unknown error',
+      );
+    }
+  }
+
+  @SubscribeMessage('finance-payments-create-refund')
+  async handleCreateRefund(
+    @ConnectedSocket() socket: Socket,
+    dto: CreateRefundDto,
+  ) {
+    const traceId = generateTraceId('finance-payments-create-refund');
+    try {
+      const result = await this.paymentsKafka.createRefund(dto, traceId);
+      socket.emit('finance-payments-create-refund-result', result);
+    } catch (e: any) {
+      socket.emit(
+        'finance-payments-create-refund-error',
         e.message || 'Unknown error',
       );
     }

@@ -1,75 +1,78 @@
-# Vyarna API
+# vy-gateway
 
-This is the README file for the vy-bd-siteapp API built using NestJS. Follow the instructions below to set up and run
-the
-project.
+The gateway exposes REST and WebSocket APIs for the platform. Incoming
+HTTP requests are converted into Kafka messages and dispatched to the
+appropriate microservice such as `vy-finance-payments`.
 
-## Getting Started
+## Environment Variables
 
-### 1. Clone the Repository
+Copy `.env-example` to `.env` and adjust the values as needed:
 
-First, clone the repository to your local machine using the following command:
+| Variable | Description |
+| --- | --- |
+| `APP` | Name used in logs |
+| `APP_PORT` | Port for HTTP/WebSocket server |
+| `KAFKA_BROKER` | Connection string for Kafka |
+| `KAFKA_GROUP` | Kafka consumer group id |
+| `LOG_STREAM_LEVEL` | Logging verbosity |
+| `CONTEXT` | Prefix for structured logs |
+| `REST_TIMEOUT` | Timeout for outbound HTTP calls in ms |
+| `ALLOWED_ORIGINS` | JSON array of allowed CORS origins |
+| `NODE_ENV` | Environment mode (`local`, `production`, etc.) |
+| `SWAGGER_URL` | URL where Swagger docs are served |
+| `REDIS_PORT` | Redis port for caching |
+| `REDIS_HOST` | Redis host |
+| `ACTIVE_CAMPAIGN_NAME` | ActiveCampaign account name |
+| `ACTIVE_CAMPAIGN_API_KEY` | API key for ActiveCampaign |
+
+## Build & Test
 
 ```bash
-git clone git@gitlab.com:vyarna/vy-bd-siteapp.git
+npm run build      # compile TypeScript
+npm run test       # unit tests
+npm run test:e2e   # end-to-end tests
 ```
 
-Replace `<repository-url>` with the actual URL of the repository.
+## REST API
 
-### 2. Navigate to the Project Directory
+All endpoints use the HTTP `POST` method and are forwarded to the appropriate
+Kafka topic:
 
-Change your current directory to the project directory `vy-bd-siteapp`:
+| Method | Path | Description |
+| ------ | ---- | ----------- |
+| `POST` | `/payment-intents` | Create a new payment intent. |
+| `POST` | `/payment-intents/get` | Retrieve a payment intent by id. |
+| `POST` | `/payment-intents/ztracking` | Get ztracking information for an intent. |
+| `POST` | `/refunds` | Issue a refund for a payment intent. |
+| `POST` | `/payment-refunds/get` | Get a refund record. |
+| `POST` | `/payment-methods` | Vault a payment method. |
+| `POST` | `/payment-methods/get` | List vaulted methods for a customer. |
+| `POST` | `/payment-methods/delete` | Remove a vaulted method. |
 
-```bash
-cd vy-bd-siteapp
-```
+## Running the Gateway
 
-### 3. Set Up Environment Variables
-
-Create a `.env` file in the project root directory by copying the `.env-example` file:
-
-```bash
-cp .env-example .env
-```
-
-Make sure to configure the environment variables in the `.env` file as per your requirements.
-
-### 4. Install Dependencies
-
-Install the project dependencies using npm:
+Start Redis and then launch the service in development mode:
 
 ```bash
-npm install
-```
-
-### 5. Run Redis For Cache
-
-Ensure redis is installed and running on your machine.You can start redis by running:
-
-```bash
-redis-server
-```
-
-### Kafka Configuration
-
-The service communicates with other microservices using Kafka. Ensure the
-`KAFKA_BROKER` and `KAFKA_GROUP` variables in your `.env` file point to a running
-Kafka broker. Sample values are provided in `env-example`.
-
-## Running the Application
-
-After setting up the environment and dependencies, you can start the NestJS application using:
-
-```bash
+redis-server &
 npm run start:dev
 ```
 
-The application should now be running and accessible according to the configuration in your `.env` file.
+## Example API Call
 
-## License
+With the gateway listening on `http://localhost:4040` you can create a payment
+intent which will be forwarded to `vy-finance-payments`:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+curl -X POST http://localhost:4040/vy-finance-payments/payment-intents \
+  -H 'Content-Type: application/json' \
+  -d '{"amount": 1000, "currency": "usd"}'
+```
 
----
+The gateway sends the request over Kafka and returns the microservice response.
 
-For further assistance or questions, please refer to the project's documentation or contact the maintainers.
+## Interplay with Microservices
+
+Each controller under `src/modules` communicates with its corresponding
+microservice via Kafka. This gateway is effectively the public API layer while
+the domain services remain decoupled and headless.

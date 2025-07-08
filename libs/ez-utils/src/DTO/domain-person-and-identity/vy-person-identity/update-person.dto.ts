@@ -12,6 +12,7 @@ export class UpdatePersonDto extends PartialType(
     "nameLast",
     "email",
     "password",
+    "roles",
     "isDeleted",
     "updatedBy",
   ] as const),

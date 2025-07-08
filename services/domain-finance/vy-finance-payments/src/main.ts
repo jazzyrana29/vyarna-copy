@@ -11,6 +11,7 @@ async function bootstrap(): Promise<void> {
   const logger = getLoggerConfig('Main');
   const app = await NestFactory.create(AppModule, { bufferLogs: true, logger });
 
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

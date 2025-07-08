@@ -2,6 +2,7 @@ export declare class PersonDto {
     personId: string;
     businessUnitId: string;
     rootBusinessUnitId: string;
+    roles: string[];
     username: string;
     nameFirst: string;
     nameMiddle: string;
