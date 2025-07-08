@@ -6,6 +6,7 @@ import { CFG_TOKEN_TYPEORM } from './config/config.tokens';
 import typeorm from './config/typeorm/typeorm';
 
 import { getLoggerConfig } from './utils/common';
+import { ensureDatabaseExists } from './utils/db-init';
 import { LogStreamLevel } from 'ez-logger';
 import { MechanismPermitsModule } from './modules/mechanism-permits/mechanism-permit.module';
 import { PermissionProfileModule } from './modules/permission-profile/permission-profile.module';
@@ -24,7 +25,16 @@ import { PermissionProfileManagedThroughMechanismPermitModule } from './modules/
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        return await configService.get(CFG_TOKEN_TYPEORM);
+        const cfg = await configService.get(CFG_TOKEN_TYPEORM);
+        await ensureDatabaseExists({
+          host: cfg.host,
+          port: cfg.port,
+          user: cfg.username,
+          password: cfg.password,
+          database: cfg.database,
+          ssl: cfg.ssl,
+        });
+        return cfg;
       },
     }),
 
