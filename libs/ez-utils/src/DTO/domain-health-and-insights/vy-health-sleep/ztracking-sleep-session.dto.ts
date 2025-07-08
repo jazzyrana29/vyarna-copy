@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID, IsDate } from 'class-validator';
+import { IsUUID, IsDate, IsOptional } from 'class-validator';
 
 export class ZtrackingSleepSessionDto {
   @ApiProperty({ description: 'Unique identifier for the ztracking version', type: 'string', format: 'uuid' })
@@ -18,9 +18,10 @@ export class ZtrackingSleepSessionDto {
   @IsDate()
   startTime: Date;
 
-  @ApiProperty({ description: 'End time', type: String, format: 'date-time' })
+  @ApiProperty({ description: 'End time', required: false, type: String, format: 'date-time' })
+  @IsOptional()
   @IsDate()
-  endTime: Date;
+  endTime?: Date;
 
   @ApiProperty({ description: 'Date of this version', type: String, format: 'date-time' })
   @IsDate()
