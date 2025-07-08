@@ -1,6 +1,7 @@
 import * as clc from 'cli-color';
 import { LoggerService, Optional } from '@nestjs/common';
-import { isObject } from 'util';
+const isObject = (arg: unknown): arg is Record<string, unknown> =>
+  arg !== null && typeof arg === 'object';
 import { LogLevel, LogStreamLevel } from './ez.logger.enum';
 
 declare const process: any;
