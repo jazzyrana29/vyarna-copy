@@ -66,6 +66,7 @@ export * from './src/DTO/domain-health-and-insights/vy-care-log/get-medication-a
 export * from './src/DTO/domain-health-and-insights/vy-care-log/temperature-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/create-temperature-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/get-temperature-measurements.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/validate-care-event-time.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/symptom-report.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/create-symptom-report.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/get-symptom-reports.dto';
