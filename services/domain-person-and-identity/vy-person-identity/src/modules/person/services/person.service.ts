@@ -90,6 +90,7 @@ export class PersonService {
       this.personRepository.create({
         ...createPersonDto,
         rootBusinessUnitId: rootBusinessUnit.businessUnitId,
+        roles: createPersonDto.roles,
       }),
     );
 
