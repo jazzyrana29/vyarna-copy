@@ -263,8 +263,8 @@ switch (cmd) {
       const examplePath = path.join(pkg.path, '.env-example');
       if (!fs.existsSync(examplePath)) return;
       const exampleEnv = parseEnv(fs.readFileSync(examplePath, 'utf8'));
-      const keys = Object.keys(exampleEnv).filter(
-        (k) => k in globalEnv || k === 'TIDB_DATABASE',
+      const keys = Array.from(
+        new Set([...Object.keys(exampleEnv), ...Object.keys(globalEnv)]),
       );
       if (!keys.length) return;
       const envPath = path.join(pkg.path, '.env');
@@ -280,11 +280,15 @@ switch (cmd) {
         if (envVars[key]) return;
         let value;
         if (key === 'TIDB_CA_PATH') {
-          if (globalEnv[key]) value = adaptCaPath(pkg.path, __dirname, globalEnv[key]);
-        } else if (key === 'TIDB_DATABASE') {
-          value = globalEnv[key] || exampleEnv[key];
-        } else {
+          if (globalEnv[key]) {
+            value = adaptCaPath(pkg.path, __dirname, globalEnv[key]);
+          } else {
+            value = exampleEnv[key];
+          }
+        } else if (key in globalEnv) {
           value = globalEnv[key];
+        } else {
+          value = exampleEnv[key];
         }
         if (value !== undefined) {
           envLines.push(`${key}=${value}`);
