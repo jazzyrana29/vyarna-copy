@@ -26,6 +26,7 @@ import {
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
+import { v4 as uuid } from 'uuid';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
@@ -58,7 +59,7 @@ export class PaymentIntentService {
   ): Promise<PaymentIntentDto> {
     let entity = this.paymentRepo.create({
       ...createDto,
-      externalId: '',
+      externalId: uuid(),
       status: 'REQUIRES_PAYMENT_METHOD',
     });
 
@@ -170,7 +171,9 @@ export class PaymentIntentService {
     { paymentIntentId }: GetPaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto | null> {
-    const entity = await this.paymentRepo.findOne({ where: { paymentIntentId } });
+    const entity = await this.paymentRepo.findOne({
+      where: { paymentIntentId },
+    });
     if (entity) {
       this.logger.info(
         `PaymentIntent retrieved`,
@@ -203,7 +206,12 @@ export class PaymentIntentService {
     createRefundDto: CreateRefundDto,
     traceId: string,
   ): Promise<Stripe.Refund> {
-    this.logger.info('Creating refund', traceId, 'createRefund', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Creating refund',
+      traceId,
+      'createRefund',
+      LogStreamLevel.ProdStandard,
+    );
 
     const intent = await this.paymentRepo.findOne({
       where: { paymentIntentId: createRefundDto.paymentIntentId },
@@ -211,7 +219,7 @@ export class PaymentIntentService {
 
     let refundEntity = this.refundRepo.create({
       paymentIntentId: createRefundDto.paymentIntentId,
-      externalId: '',
+      externalId: uuid(),
       amountCents: createRefundDto.amountCents,
       currency: intent?.currency || 'USD',
       status: 'PENDING',
@@ -258,7 +266,12 @@ export class PaymentIntentService {
       await this.refundRepo.update(refundEntity.refundId, {
         status: 'FAILED',
       });
-      this.logger.error(`Failed to create refund => ${error}`, traceId, 'createRefund', LogStreamLevel.DebugHeavy);
+      this.logger.error(
+        `Failed to create refund => ${error}`,
+        traceId,
+        'createRefund',
+        LogStreamLevel.DebugHeavy,
+      );
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
         KT_REFUND_FAILED,
@@ -279,9 +292,19 @@ export class PaymentIntentService {
   ): Promise<PaymentRefund | null> {
     const entity = await this.refundRepo.findOne({ where: { refundId } });
     if (entity) {
-      this.logger.info('Refund retrieved', traceId, 'getRefund', LogStreamLevel.DebugLight);
+      this.logger.info(
+        'Refund retrieved',
+        traceId,
+        'getRefund',
+        LogStreamLevel.DebugLight,
+      );
     } else {
-      this.logger.warn(`Refund not found => ${refundId}`, traceId, 'getRefund', LogStreamLevel.DebugLight);
+      this.logger.warn(
+        `Refund not found => ${refundId}`,
+        traceId,
+        'getRefund',
+        LogStreamLevel.DebugLight,
+      );
     }
     return entity;
   }
@@ -345,7 +368,9 @@ export class PaymentIntentService {
           { externalId: pi.id },
           { status: intentStatusMap[event.type] },
         );
-        const updated = await this.paymentRepo.findOne({ where: { externalId: pi.id } });
+        const updated = await this.paymentRepo.findOne({
+          where: { externalId: pi.id },
+        });
         if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
           await new EzKafkaProducer().produce(
             process.env.KAFKA_BROKER as string,
@@ -373,8 +398,12 @@ export class PaymentIntentService {
         }
       }
 
-      if (event.type.startsWith('charge.refund') || event.type.startsWith('refund.')) {
-        const refundObj: any = (event.data.object as any).refund || event.data.object;
+      if (
+        event.type.startsWith('charge.refund') ||
+        event.type.startsWith('refund.')
+      ) {
+        const refundObj: any =
+          (event.data.object as any).refund || event.data.object;
         const statusMap: Record<string, PaymentRefund['status']> = {
           succeeded: 'SUCCEEDED',
           failed: 'FAILED',
@@ -385,7 +414,9 @@ export class PaymentIntentService {
             { externalId: refundObj.id },
             { status: statusMap[refundObj.status] },
           );
-          const updatedRefund = await this.refundRepo.findOne({ where: { externalId: refundObj.id } });
+          const updatedRefund = await this.refundRepo.findOne({
+            where: { externalId: refundObj.id },
+          });
           if (updatedRefund && statusMap[refundObj.status] === 'SUCCEEDED') {
             await new EzKafkaProducer().produce(
               process.env.KAFKA_BROKER as string,
