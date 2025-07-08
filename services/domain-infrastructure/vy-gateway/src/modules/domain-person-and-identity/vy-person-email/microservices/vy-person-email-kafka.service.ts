@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
-import { getLoggerConfig } from '../../../utils/common';
+import { KafkaResponderService } from '../../../../utils/kafka/kafka-responder.service';
+import { getLoggerConfig } from '../../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import {
   KT_CREATE_EMAIL,

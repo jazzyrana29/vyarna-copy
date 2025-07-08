@@ -54,7 +54,6 @@ import { SalesSubscriptionsModule } from './modules/domain-sales-and-commerce/vy
 import { SalesCommerceModule } from './modules/domain-sales-and-commerce/vy-sales-commerce/vy-sales-commerce.module';
 
 import { KafkaModule } from './utils/kafka/kafka.module';
-import { ActiveCampaignService } from './services/static/active-campaign/active-campaign.service';
 
 @Module({
   imports: [
@@ -120,7 +119,6 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
       useClass: ValidationPipe,
     },
     AppService,
-    ActiveCampaignService,
     SentryInterceptor,
   ],
 })
