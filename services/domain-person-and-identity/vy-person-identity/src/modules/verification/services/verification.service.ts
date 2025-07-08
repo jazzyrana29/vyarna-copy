@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { EzKafkaProducer, encodeKafkaMessage } from 'ez-utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
+import { encodeKafkaMessage } from 'ez-utils';
 import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import {
@@ -61,7 +62,7 @@ export class VerificationService {
     const entity = await this.verificationRepo.findOne({ where: { verificationId: dto.verificationId } });
     if (!entity) throw new NotFoundException(`no verification with id => ${dto.verificationId}`);
 
-    const status = dto.status as VerificationStatus;
+    const status = dto.status as unknown as VerificationStatus;
     await this.verificationRepo.update(dto.verificationId, {
       status,
       reviewedAt: new Date(),
