@@ -5,6 +5,7 @@ import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { PaymentMethod } from '../../entities/payment_method.entity';
 import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.entity';
+import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { PaymentIntentService } from './services/payment-intent.service';
 import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
 import { PaymentMethodService } from './services/payment-method.service';
@@ -23,6 +24,7 @@ import { LogStreamLevel } from 'ez-logger';
       PaymentAttempt,
       ZtrackingPaymentIntent,
       PaymentMethod,
+      WebhookEvent,
     ]),
   ],
   controllers: [PaymentController],

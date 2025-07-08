@@ -25,6 +25,7 @@ __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session"), exports);
+__exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-events"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account"), exports);
@@ -58,6 +59,7 @@ __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/star
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/ztracking-nutrition-session.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracking-nutrition-session.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/log-nutrition-event.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto"), exports);

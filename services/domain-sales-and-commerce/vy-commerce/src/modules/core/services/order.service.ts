@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EzKafkaProducer } from 'ez-kafka-producer';
+import { encodeKafkaMessage } from 'ez-utils';
 import { Order } from '../../../entities/order.entity';
 import { ZtrackingOrderService } from './ztracking-order.service';
 import {
@@ -43,6 +45,22 @@ export class OrderService {
       LogStreamLevel.ProdStandard,
     );
 
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      'OrderCreated',
+      encodeKafkaMessage(OrderService.name, { orderId: entity.orderId, traceId }),
+    );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      'PaymentRequested',
+      encodeKafkaMessage(OrderService.name, {
+        orderId: entity.orderId,
+        paymentIntentId: entity.paymentIntentId,
+        traceId,
+      }),
+    );
+
     await this.ztrackingOrderService.createZtrackingForOrder(entity, traceId);
 
     return entity;
@@ -67,5 +85,45 @@ export class OrderService {
     traceId: string,
   ): Promise<ZtrackingOrderDto[]> {
     return this.ztrackingOrderService.getZtrackingForOrder(getDto, traceId);
+  }
+
+  async updateOrderStatus(
+    orderId: string,
+    status: string,
+    traceId: string,
+  ): Promise<void> {
+    await this.orderRepo.update({ orderId }, { status });
+    this.logger.info(
+      `Order ${orderId} status updated to ${status}`,
+      traceId,
+      'updateOrderStatus',
+      LogStreamLevel.ProdStandard,
+    );
+  }
+
+  async handlePaymentSucceeded(
+    event: { orderId?: string; paymentIntentId: string },
+    traceId: string,
+  ): Promise<void> {
+    if (event.orderId) {
+      await this.updateOrderStatus(event.orderId, 'PAID', traceId);
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        'OrderPaid',
+        encodeKafkaMessage(OrderService.name, {
+          orderId: event.orderId,
+          traceId,
+        }),
+      );
+    }
+  }
+
+  async handlePaymentFailed(
+    event: { orderId?: string; paymentIntentId: string },
+    traceId: string,
+  ): Promise<void> {
+    if (event.orderId) {
+      await this.updateOrderStatus(event.orderId, 'PAYMENT_FAILED', traceId);
+    }
   }
 }
