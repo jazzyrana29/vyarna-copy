@@ -33,6 +33,9 @@ export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wal
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-operations";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-events";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/product";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/cart";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription";
 
 /**************************************** DTOs **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
@@ -114,6 +117,7 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/payment-method.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-payment-method.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/get-payment-methods.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/delete-payment-method.dto";
+
 export * from "./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto";
@@ -129,6 +133,7 @@ export * from "./src/DTO/domain-finance/vy-finance-wallet/affiliate-commission.d
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-affiliate-commission.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/internal-charge.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-internal-charge.dto";
+
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-session.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/create-sleep-session.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-sessions.dto";
@@ -166,8 +171,21 @@ export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sl
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-pattern-summary.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-pattern-summaries.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-pattern-summary.dto";
+
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-orders.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/add-cart-item.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/remove-cart-item.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/apply-cart-promotion.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/update-order-shipping.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-subscription.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-subscription.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cancel-subscription.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
+
