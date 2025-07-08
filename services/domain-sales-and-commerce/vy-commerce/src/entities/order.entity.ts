@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, Index } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Index,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('order', { schema: process.env.TIDB_DATABASE })
 export class Order extends BaseEntity {
@@ -14,4 +22,16 @@ export class Order extends BaseEntity {
 
   @Column({ length: 30 })
   status: string;
+
+  @Column({ length: 3 })
+  currency: string;
+
+  @Column({ length: 100, nullable: true })
+  paymentIntentId?: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
