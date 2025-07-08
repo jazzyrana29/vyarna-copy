@@ -14,6 +14,7 @@ import {
   PaymentIntentDto,
   ZtrackingPaymentIntentDto,
   CreateRefundDto,
+  GetPaymentRefundDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -166,12 +167,65 @@ export class PaymentIntentService {
     traceId: string,
   ): Promise<Stripe.Refund> {
     this.logger.info('Creating refund', traceId, 'createRefund', LogStreamLevel.ProdStandard);
-    return this.stripeGateway.createRefund({
-      payment_intent: createRefundDto.paymentIntentId,
-      amount: createRefundDto.amountCents,
-      reason: createRefundDto.reason as any,
-      metadata: createRefundDto.metadata as any,
+
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId: createRefundDto.paymentIntentId },
     });
+
+    let refundEntity = this.refundRepo.create({
+      paymentIntentId: createRefundDto.paymentIntentId,
+      externalId: '',
+      amountCents: createRefundDto.amountCents,
+      currency: intent?.currency || 'USD',
+      status: 'PENDING',
+      reason: createRefundDto.reason,
+      metadata: createRefundDto.metadata,
+    });
+
+    refundEntity = await this.refundRepo.save(refundEntity);
+
+    try {
+      const stripeRefund = await this.stripeGateway.createRefund({
+        payment_intent: createRefundDto.paymentIntentId,
+        amount: createRefundDto.amountCents,
+        reason: createRefundDto.reason as any,
+        metadata: createRefundDto.metadata as any,
+      });
+
+      const statusMap: Record<string, PaymentRefund['status']> = {
+        succeeded: 'SUCCEEDED',
+        failed: 'FAILED',
+        pending: 'PENDING',
+      };
+
+      await this.refundRepo.update(refundEntity.refundId, {
+        externalId: stripeRefund.id,
+        amountCents: stripeRefund.amount ?? refundEntity.amountCents,
+        currency: stripeRefund.currency?.toUpperCase() || refundEntity.currency,
+        status: statusMap[stripeRefund.status] || refundEntity.status,
+      });
+
+      return stripeRefund;
+    } catch (error) {
+      await this.refundRepo.update(refundEntity.refundId, {
+        status: 'FAILED',
+      });
+      this.logger.error(`Failed to create refund => ${error}`, traceId, 'createRefund', LogStreamLevel.DebugHeavy);
+      throw error;
+    }
+  }
+
+  async getRefund(
+    { refundId }: GetPaymentRefundDto,
+    traceId: string,
+  ): Promise<PaymentRefund | null> {
+    const entity = await this.refundRepo.findOne({ where: { refundId } });
+    if (entity) {
+      this.logger.info('Refund retrieved', traceId, 'getRefund', LogStreamLevel.DebugLight);
+    } else {
+      this.logger.warn(`Refund not found => ${refundId}`, traceId, 'getRefund', LogStreamLevel.DebugLight);
+    }
+    return entity;
   }
 
   async handleStripeWebhook(
