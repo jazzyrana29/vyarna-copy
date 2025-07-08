@@ -26,9 +26,10 @@ export class SleepSessionDto {
   @IsDate()
   startTime: Date;
 
-  @ApiProperty({ description: 'End time', type: String, format: 'date-time' })
+  @ApiProperty({ description: 'End time', required: false, type: String, format: 'date-time' })
+  @IsOptional()
   @IsDate()
-  endTime: Date;
+  endTime?: Date;
 
   @ApiProperty({ description: 'Creation timestamp', required: false })
   @IsOptional()

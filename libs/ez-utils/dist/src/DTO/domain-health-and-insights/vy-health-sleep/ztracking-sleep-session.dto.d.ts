@@ -3,6 +3,6 @@ export declare class ZtrackingSleepSessionDto {
     sessionId: string;
     babyId: string;
     startTime: Date;
-    endTime: Date;
+    endTime?: Date;
     versionDate: Date;
 }

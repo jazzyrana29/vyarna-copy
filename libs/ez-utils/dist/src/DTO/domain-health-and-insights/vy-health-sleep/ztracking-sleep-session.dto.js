@@ -36,7 +36,8 @@ __decorate([
     __metadata("design:type", Date)
 ], ZtrackingSleepSessionDto.prototype, "startTime", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'End time', type: String, format: 'date-time' }),
+    (0, swagger_1.ApiProperty)({ description: 'End time', required: false, type: String, format: 'date-time' }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
 ], ZtrackingSleepSessionDto.prototype, "endTime", void 0);
