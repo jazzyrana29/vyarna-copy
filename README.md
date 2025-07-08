@@ -83,6 +83,7 @@ Baseline project settings live in the repo root:
 - `.npmrc` – hoisting rules and registry overrides
 - `docker-compose.yml` – local service overrides
 - `example.env.*` – sample environment files
+- `global.env.local-example` – template for shared service variables
 
 Each workspace keeps its own copies of these files so it can be used on its own
 without pulling in unrelated configs.
@@ -102,6 +103,8 @@ without pulling in unrelated configs.
    ```
 
    > **Requires Node 18+ and npm 9+** – older versions may fail with `npm ERR! Invalid Version`.
+
+   Create a `global.env.local` file at the repo root using `global.env.local-example` as a starting point. This file stores shared database credentials and is ignored by Git.
 
 2. **Develop a service or app**
 
