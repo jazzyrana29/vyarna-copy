@@ -9,6 +9,7 @@ export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-events";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
