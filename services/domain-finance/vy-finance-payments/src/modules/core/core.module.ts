@@ -3,9 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
+import { PaymentMethod } from '../../entities/payment_method.entity';
 import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.entity';
 import { PaymentIntentService } from './services/payment-intent.service';
 import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
+import { PaymentMethodService } from './services/payment-method.service';
+import { PaymentMethodKafkaService } from './services/payment-method-kafka.service';
 import { ZtrackingPaymentIntentService } from './services/ztracking-payment-intent.service';
 import { StripeGatewayService } from './services/stripe-gateway.service';
 import { PaymentController } from './payment.controller';
@@ -19,6 +22,7 @@ import { LogStreamLevel } from 'ez-logger';
       PaymentRefund,
       PaymentAttempt,
       ZtrackingPaymentIntent,
+      PaymentMethod,
     ]),
   ],
   controllers: [PaymentController],
@@ -27,6 +31,8 @@ import { LogStreamLevel } from 'ez-logger';
     PaymentIntentKafkaService,
     ZtrackingPaymentIntentService,
     StripeGatewayService,
+    PaymentMethodService,
+    PaymentMethodKafkaService,
   ],
 })
 export class CoreModule {

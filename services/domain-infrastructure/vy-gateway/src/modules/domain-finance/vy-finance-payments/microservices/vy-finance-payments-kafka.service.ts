@@ -9,6 +9,9 @@ import {
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
+  KT_CREATE_PAYMENT_METHOD,
+  KT_LIST_PAYMENT_METHODS,
+  KT_DELETE_PAYMENT_METHOD,
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
@@ -16,6 +19,9 @@ import {
   GetPaymentRefundDto,
   StripeWebhookDto,
   RefundDto,
+  CreatePaymentMethodDto,
+  GetPaymentMethodsDto,
+  DeletePaymentMethodDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -94,6 +100,42 @@ export class FinancePaymentsKafkaService {
       this.serviceName,
       KT_PROCESS_STRIPE_WEBHOOK,
       stripeWebhookDto,
+      traceId,
+    );
+  }
+
+  async createPaymentMethod(
+    createPaymentMethodDto: CreatePaymentMethodDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CREATE_PAYMENT_METHOD,
+      createPaymentMethodDto,
+      traceId,
+    );
+  }
+
+  async listPaymentMethods(
+    getPaymentMethodsDto: GetPaymentMethodsDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_LIST_PAYMENT_METHODS,
+      getPaymentMethodsDto,
+      traceId,
+    );
+  }
+
+  async deletePaymentMethod(
+    deletePaymentMethodDto: DeletePaymentMethodDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_DELETE_PAYMENT_METHOD,
+      deletePaymentMethodDto,
       traceId,
     );
   }
