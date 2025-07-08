@@ -16,11 +16,11 @@ export class ZtrackingSleepSessionDto {
 
   @ApiProperty({ description: 'Start time', type: String, format: 'date-time' })
   @IsDate()
-  start: Date;
+  startTime: Date;
 
   @ApiProperty({ description: 'End time', type: String, format: 'date-time' })
   @IsDate()
-  end: Date;
+  endTime: Date;
 
   @ApiProperty({ description: 'Date of this version', type: String, format: 'date-time' })
   @IsDate()

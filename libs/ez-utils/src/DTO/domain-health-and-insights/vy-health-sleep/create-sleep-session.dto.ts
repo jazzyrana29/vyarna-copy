@@ -3,6 +3,6 @@ import { SleepSessionDto } from './sleep-session.dto';
 
 export class CreateSleepSessionDto extends PickType(SleepSessionDto, [
   'babyId',
-  'start',
-  'end',
+  'startTime',
+  'endTime',
 ] as const) {}

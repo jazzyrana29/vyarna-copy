@@ -5,7 +5,10 @@ import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { SleepSchedule } from '../../../entities/sleep_schedule.entity';
 import { ZtrackingSleepSchedule } from '../../../entities/ztracking_sleep_schedule.entity';
-import { GetZtrackingSleepSessionDto, ZtrackingSleepScheduleDto } from 'ez-utils';
+import {
+  GetZtrackingSleepSchedulesDto,
+  ZtrackingSleepScheduleDto,
+} from 'ez-utils';
 
 @Injectable()
 export class ZtrackingSleepScheduleService {
@@ -37,7 +40,7 @@ export class ZtrackingSleepScheduleService {
   }
 
   async getZtrackingForSleepSchedule(
-    { babyId = '' }: GetZtrackingSleepSessionDto,
+    { babyId = '' }: GetZtrackingSleepSchedulesDto,
     traceId: string,
   ): Promise<ZtrackingSleepScheduleDto[]> {
     const entities = await this.ztrackingRepo.find({ where: { babyId } });
