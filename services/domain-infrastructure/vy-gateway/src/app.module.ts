@@ -44,6 +44,7 @@ import { PersonMilkGiverModule } from './modules/domain-person-and-identity/vy-p
 import { PersonParentModule } from './modules/domain-person-and-identity/vy-person-parent/vy-person-parent.module';
 import { PersonProviderModule } from './modules/domain-person-and-identity/vy-person-provider/vy-person-provider.module';
 import { PersonRolesModule } from './modules/domain-person-and-identity/vy-person-roles/vy-person-roles.module';
+import { PersonEmailModule } from './modules/domain-person-and-identity/vy-person-email/vy-person-email.module';
 import { DataVaultModule } from './modules/domain-privacy-and-consent/vy-data-vault/vy-data-vault.module';
 import { ResearchConsentModule } from './modules/domain-privacy-and-consent/vy-research-consent/vy-research-consent.module';
 import { SalesAffiliateProductsModule } from './modules/domain-sales-and-commerce/vy-sales-affiliate-products/vy-sales-affiliate-products.module';
@@ -101,6 +102,7 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
     PersonParentModule,
     PersonProviderModule,
     PersonRolesModule,
+    PersonEmailModule,
     DataVaultModule,
     ResearchConsentModule,
     SalesAffiliateProductsModule,

@@ -11,6 +11,7 @@ export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.e
 /**************************************** Kafka Topics **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person";
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/email";
 /* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/medication-administration";
@@ -35,6 +36,12 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/paginated
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-many-persons.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-person.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/add-tag-to-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto";
