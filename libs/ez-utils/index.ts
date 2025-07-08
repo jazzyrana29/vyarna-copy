@@ -13,6 +13,9 @@ export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.e
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person";
 /* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/medication-administration";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/temperature-measurement";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/symptom-report";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session";
@@ -44,6 +47,15 @@ export * from './src/DTO/domain-health-and-insights/vy-care-log/create-diaper-ch
 export * from './src/DTO/domain-health-and-insights/vy-care-log/get-diaper-changes.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/ztracking-diaper-change.dto';
 export * from './src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-diaper-change.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/medication-administration.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/create-medication-administration.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/get-medication-administrations.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/temperature-measurement.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/create-temperature-measurement.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/get-temperature-measurements.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/symptom-report.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/create-symptom-report.dto';
+export * from './src/DTO/domain-health-and-insights/vy-care-log/get-symptom-reports.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto';
 export * from './src/DTO/domain-health-and-insights/vy-development-log/get-growth-measurements.dto';
