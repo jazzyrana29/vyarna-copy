@@ -263,9 +263,7 @@ switch (cmd) {
       const examplePath = path.join(pkg.path, '.env-example');
       if (!fs.existsSync(examplePath)) return;
       const exampleEnv = parseEnv(fs.readFileSync(examplePath, 'utf8'));
-      const keys = Array.from(
-        new Set([...Object.keys(exampleEnv), ...Object.keys(globalEnv)]),
-      );
+      const keys = Object.keys(exampleEnv);
       if (!keys.length) return;
       const envPath = path.join(pkg.path, '.env');
       let envLines = [];
