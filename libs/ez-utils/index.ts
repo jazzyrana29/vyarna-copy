@@ -30,6 +30,9 @@ export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/p
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-operations";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/product";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/cart";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription";
 
 /**************************************** DTOs **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
@@ -160,3 +163,14 @@ export * from './src/DTO/domain-sales-and-commerce/vy-commerce/create-order.dto'
 export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-orders.dto';
 export * from './src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto';
 export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/add-cart-item.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/remove-cart-item.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/apply-cart-promotion.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/update-order-shipping.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/create-subscription.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-subscription.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/cancel-subscription.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto';
+export * from './src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto';

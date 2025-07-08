@@ -50,6 +50,7 @@ import { ResearchConsentModule } from './modules/domain-privacy-and-consent/vy-r
 import { SalesAffiliateProductsModule } from './modules/domain-sales-and-commerce/vy-sales-affiliate-products/vy-sales-affiliate-products.module';
 import { SalesReferralsModule } from './modules/domain-sales-and-commerce/vy-sales-referrals/vy-sales-referrals.module';
 import { SalesSubscriptionsModule } from './modules/domain-sales-and-commerce/vy-sales-subscriptions/vy-sales-subscriptions.module';
+import { SalesCommerceModule } from './modules/domain-sales-and-commerce/vy-sales-commerce/vy-sales-commerce.module';
 
 import { KafkaModule } from './utils/kafka/kafka.module';
 import { ActiveCampaignService } from './services/static/active-campaign/active-campaign.service';
@@ -108,6 +109,7 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
     SalesAffiliateProductsModule,
     SalesReferralsModule,
     SalesSubscriptionsModule,
+    SalesCommerceModule,
   ],
   controllers: [AppController],
   providers: [
