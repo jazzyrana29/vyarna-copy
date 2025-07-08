@@ -62,4 +62,14 @@ export class OrderKafkaService {
         await this.orderService.getZtrackingOrder(value, traceId),
     );
   }
+
+  async handlePaymentSucceeded(message: any, _key: string): Promise<void> {
+    const { traceId, ...event } = message;
+    await this.orderService.handlePaymentSucceeded(event, traceId);
+  }
+
+  async handlePaymentFailed(message: any, _key: string): Promise<void> {
+    const { traceId, ...event } = message;
+    await this.orderService.handlePaymentFailed(event, traceId);
+  }
 }

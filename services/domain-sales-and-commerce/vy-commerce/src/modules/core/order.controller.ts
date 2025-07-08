@@ -66,4 +66,34 @@ export class OrderController {
     );
     await this.orderKafkaService.getZtrackingOrder(message, key);
   }
+
+  @MessagePattern('PaymentSucceeded')
+  async paymentSucceeded(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : PaymentSucceeded`,
+      '',
+      'paymentSucceeded',
+      LogStreamLevel.DebugLight,
+    );
+    await this.orderKafkaService.handlePaymentSucceeded(message, key);
+  }
+
+  @MessagePattern('PaymentFailed')
+  async paymentFailed(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : PaymentFailed`,
+      '',
+      'paymentFailed',
+      LogStreamLevel.DebugLight,
+    );
+    await this.orderKafkaService.handlePaymentFailed(message, key);
+  }
 }
