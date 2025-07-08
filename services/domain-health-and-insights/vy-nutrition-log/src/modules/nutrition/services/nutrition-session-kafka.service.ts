@@ -5,9 +5,12 @@ import {
   KT_START_NUTRITION_SESSION,
   KT_GET_NUTRITION_SESSION,
   KT_GET_ZTRACKING_NUTRITION_SESSION,
+  KT_LOG_NUTRITION_EVENT,
+  KT_END_NUTRITION_SESSION,
   StartNutritionSessionDto,
   GetNutritionSessionDto,
   GetZtrackingNutritionSessionDto,
+  LogNutritionEventDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -61,6 +64,28 @@ export class NutritionSessionKafkaService {
       key,
       async (value: GetZtrackingNutritionSessionDto, traceId: string) =>
         await this.sessionService.getZtrackingNutritionSession(value, traceId),
+    );
+  }
+
+  async logEvent(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_LOG_NUTRITION_EVENT,
+      message,
+      key,
+      async (value: LogNutritionEventDto, traceId: string) =>
+        await this.sessionService.logEvent(value, traceId),
+    );
+  }
+
+  async endSession(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_END_NUTRITION_SESSION,
+      message,
+      key,
+      async (value: any, traceId: string) =>
+        await this.sessionService.endSession(value.sessionId, traceId),
     );
   }
 }
