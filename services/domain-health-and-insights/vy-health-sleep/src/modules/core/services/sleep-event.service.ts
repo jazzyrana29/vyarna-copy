@@ -7,7 +7,10 @@ import {
   SleepEventDto,
   GetSleepEventsDto,
   DeleteSleepEventDto,
+  encodeKafkaMessage,
+  KT_SLEEP_EVENT_LOGGED,
 } from 'ez-utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -36,6 +39,18 @@ export class SleepEventService {
       this.eventRepo.create(sleepEventDto),
     );
     await this.ztrackingService.createZtrackingForSleepEvent(entity, traceId);
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_SLEEP_EVENT_LOGGED,
+      encodeKafkaMessage(SleepEventService.name, {
+        sessionId: entity.sessionId,
+        eventId: entity.eventId,
+        eventType: entity.eventType,
+        eventTime: entity.eventTime,
+        traceId,
+      }),
+    );
     return entity;
   }
 

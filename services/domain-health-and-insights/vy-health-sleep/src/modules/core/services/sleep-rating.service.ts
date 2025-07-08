@@ -7,7 +7,10 @@ import {
   SleepRatingDto,
   GetSleepRatingsDto,
   DeleteSleepRatingDto,
+  encodeKafkaMessage,
+  KT_SLEEP_RATED,
 } from 'ez-utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -36,6 +39,18 @@ export class SleepRatingService {
       this.ratingRepo.create(sleepRatingDto),
     );
     await this.ztrackingService.createZtrackingForSleepRating(entity, traceId);
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_SLEEP_RATED,
+      encodeKafkaMessage(SleepRatingService.name, {
+        ratingId: entity.ratingId,
+        sessionId: entity.sessionId,
+        ratingType: entity.ratingType,
+        ratingValue: entity.ratingValue,
+        traceId,
+      }),
+    );
     return entity;
   }
 

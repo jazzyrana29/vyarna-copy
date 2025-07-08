@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SleepSession } from '../../../entities/sleep_session.entity';
 import { ZtrackingSleepSessionService } from './ztracking-sleep-session.service';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   CreateSleepSessionDto,
   SleepSessionDto,
@@ -10,6 +11,8 @@ import {
   GetZtrackingSleepSessionDto,
   DeleteSleepSessionDto,
   ZtrackingSleepSessionDto,
+  encodeKafkaMessage,
+  KT_SLEEP_SESSION_STARTED,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -47,6 +50,19 @@ export class SleepSessionService {
     await this.ztrackingSleepSessionService.createZtrackingForSleepSession(
       entity,
       traceId,
+    );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_SLEEP_SESSION_STARTED,
+      encodeKafkaMessage(SleepSessionService.name, {
+        sessionId: entity.sessionId,
+        babyId: entity.babyId,
+        personId: entity.personId,
+        type: entity.type,
+        startTime: entity.startTime,
+        traceId,
+      }),
     );
 
     return entity;
