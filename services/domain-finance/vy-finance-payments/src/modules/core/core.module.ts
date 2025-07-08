@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../entities/payment_refund.entity';
+import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.entity';
 import { PaymentIntentService } from './services/payment-intent.service';
 import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
@@ -13,7 +14,12 @@ import { LogStreamLevel } from 'ez-logger';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PaymentIntent, PaymentRefund, ZtrackingPaymentIntent]),
+    TypeOrmModule.forFeature([
+      PaymentIntent,
+      PaymentRefund,
+      PaymentAttempt,
+      ZtrackingPaymentIntent,
+    ]),
   ],
   controllers: [PaymentController],
   providers: [
