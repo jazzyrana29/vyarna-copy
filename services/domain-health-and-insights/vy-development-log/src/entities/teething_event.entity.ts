@@ -16,7 +16,7 @@ export class TeethingEvent extends BaseEntity {
   toothName: string;
 
   @Column('date')
-  eruptionDate: string | Date;
+  eruptionDate: Date;
 
   @Column('text', { nullable: true })
   notes?: string;
