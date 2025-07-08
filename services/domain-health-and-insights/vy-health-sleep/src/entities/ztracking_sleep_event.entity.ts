@@ -2,36 +2,30 @@ import {
   BaseEntity,
   Column,
   Entity,
-  PrimaryGeneratedColumn,
   Index,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('ztracking_sleep_session', { schema: process.env.TIDB_DATABASE })
-export class ZtrackingSleepSession extends BaseEntity {
+@Entity('ztracking_sleep_event', { schema: process.env.TIDB_DATABASE })
+export class ZtrackingSleepEvent extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   ztrackingVersion: string;
 
   @Index()
   @Column('uuid')
+  eventId: string;
+
+  @Column('uuid')
   sessionId: string;
 
-  @Column('uuid')
-  personId: string;
-
-  @Column('uuid')
-  babyId: string;
-
   @Column({ type: 'varchar', length: 10 })
-  type: 'NAP' | 'NIGHT';
-
-  @Column({ type: 'varchar', length: 12 })
-  status: 'IN_PROGRESS' | 'COMPLETED';
+  eventType: 'START' | 'WAKE' | 'RESUME' | 'END';
 
   @Column('timestamp')
-  startTime: Date;
+  eventTime: Date;
 
-  @Column('timestamp', { nullable: true })
-  endTime?: Date;
+  @Column('text', { nullable: true })
+  notes?: string;
 
   @Column({ nullable: true })
   createdAt?: Date;
