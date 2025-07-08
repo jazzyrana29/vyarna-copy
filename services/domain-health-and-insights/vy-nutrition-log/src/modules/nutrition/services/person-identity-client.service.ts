@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { KafkaResponderService } from '../../utils/kafka/kafka-responder.service';
+import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
 import { LogStreamLevel } from 'ez-logger';
-import { getLoggerConfig } from '../../utils/common';
+import { getLoggerConfig } from '../../../utils/common';
 import { GetPersonDto, KT_GET_PERSON_ENTITY } from 'ez-utils';
 
 @Injectable()
