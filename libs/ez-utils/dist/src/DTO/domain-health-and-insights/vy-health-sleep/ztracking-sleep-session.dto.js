@@ -34,12 +34,12 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Start time', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
-], ZtrackingSleepSessionDto.prototype, "start", void 0);
+], ZtrackingSleepSessionDto.prototype, "startTime", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'End time', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
-], ZtrackingSleepSessionDto.prototype, "end", void 0);
+], ZtrackingSleepSessionDto.prototype, "endTime", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Date of this version', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),

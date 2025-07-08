@@ -165,8 +165,10 @@ export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-schedu
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-schedules.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/delete-sleep-schedule.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-schedule.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-schedules.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-notification.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-notifications.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-notifications.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/delete-sleep-notification.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-notification.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-summary.dto";
@@ -175,6 +177,7 @@ export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/delete-sleep
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-summary.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-pattern-summary.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-pattern-summaries.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-pattern-summaries.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-pattern-summary.dto";
 
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/order.dto";

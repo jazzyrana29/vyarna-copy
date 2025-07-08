@@ -44,12 +44,12 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Start time', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
-], SleepSessionDto.prototype, "start", void 0);
+], SleepSessionDto.prototype, "startTime", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'End time', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)
-], SleepSessionDto.prototype, "end", void 0);
+], SleepSessionDto.prototype, "endTime", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Creation timestamp', required: false }),
     (0, class_validator_1.IsOptional)(),

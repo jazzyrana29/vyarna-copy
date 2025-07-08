@@ -163,8 +163,10 @@ __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/sleep
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-schedules.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/delete-sleep-schedule.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-schedule.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-schedules.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-notification.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-notifications.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-notifications.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/delete-sleep-notification.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-notification.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-summary.dto"), exports);
@@ -173,6 +175,7 @@ __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/delet
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-summary.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/sleep-pattern-summary.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/get-sleep-pattern-summaries.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/get-ztracking-sleep-pattern-summaries.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-health-sleep/ztracking-sleep-pattern-summary.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/order.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/create-order.dto"), exports);
