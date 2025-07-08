@@ -15,7 +15,7 @@ import { ZtrackingSessionSummary } from '../../entities/ztracking_session_summar
 import { NutritionSessionService } from './services/nutrition-session.service';
 import { NutritionSessionKafkaService } from './services/nutrition-session-kafka.service';
 import { ZtrackingNutritionSessionService } from './services/ztracking-nutrition-session.service';
-import { KafkaModule } from '../utils/kafka/kafka.module';
+import { KafkaModule } from '../../utils/kafka/kafka.module';
 import { PersonIdentityClientService } from './services/person-identity-client.service';
 import { PersonIdentityResponseController } from './person-identity-response.controller';
 import { NutritionController } from './nutrition.controller';
