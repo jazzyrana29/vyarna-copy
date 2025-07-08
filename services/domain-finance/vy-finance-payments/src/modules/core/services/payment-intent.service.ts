@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../../entities/payment_refund.entity';
+import { PaymentAttempt } from '../../../entities/payment_attempt.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from './stripe-gateway.service';
 import Stripe from 'stripe';
@@ -26,6 +27,8 @@ export class PaymentIntentService {
     private readonly paymentRepo: Repository<PaymentIntent>,
     @InjectRepository(PaymentRefund)
     private readonly refundRepo: Repository<PaymentRefund>,
+    @InjectRepository(PaymentAttempt)
+    private readonly attemptRepo: Repository<PaymentAttempt>,
     private readonly ztrackingPaymentIntentService: ZtrackingPaymentIntentService,
     private readonly stripeGateway: StripeGatewayService,
   ) {
@@ -41,11 +44,26 @@ export class PaymentIntentService {
     createDto: CreatePaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto> {
-    const entity = this.paymentRepo.create({
+    let entity = this.paymentRepo.create({
       ...createDto,
       externalId: '',
       status: 'REQUIRES_PAYMENT_METHOD',
     });
+
+    // persist the intent first so we can reference it in attempts
+    entity = await this.paymentRepo.save(entity);
+
+    const attempt = await this.attemptRepo.save(
+      this.attemptRepo.create({
+        paymentIntentId: entity.paymentIntentId,
+        attemptNumber:
+          (await this.attemptRepo.count({
+            where: { paymentIntentId: entity.paymentIntentId },
+          })) + 1,
+        status: 'PENDING',
+      }),
+    );
+
     try {
       const stripeIntent = await this.stripeGateway.createPaymentIntent({
         amount: entity.amountCents,
@@ -65,6 +83,10 @@ export class PaymentIntentService {
       entity.status = statusMap[stripeIntent.status] || entity.status;
 
       await this.paymentRepo.save(entity);
+      await this.attemptRepo.update(attempt.attemptId, {
+        status: 'SUCCESS',
+        gatewayResponse: stripeIntent as any,
+      });
 
       this.logger.info(
         'PaymentIntent created',
@@ -90,6 +112,12 @@ export class PaymentIntentService {
           LogStreamLevel.DebugHeavy,
         );
       }
+      await this.attemptRepo.update(attempt.attemptId, {
+        status: 'FAILED',
+        errorCode: (error as any)?.code,
+        errorMessage: (error as any)?.message,
+        gatewayResponse: error as any,
+      });
     }
 
     await this.ztrackingPaymentIntentService.createZtrackingForPaymentIntent(
