@@ -11,6 +11,7 @@ class CreatePersonDto extends (0, swagger_1.PickType)(person_dto_1.PersonDto, [
     "nameLast",
     "email",
     "password",
+    "roles",
     "updatedBy",
 ]) {
 }

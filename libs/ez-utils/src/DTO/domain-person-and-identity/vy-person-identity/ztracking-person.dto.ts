@@ -79,6 +79,15 @@ export class ZtrackingPersonDto {
   businessUnitId: string;
 
   @ApiProperty({
+    description: "Roles assigned to the person in this version",
+    type: [String],
+    required: false,
+  })
+  @IsString({ each: true })
+  @IsOptional()
+  roles: string[];
+
+  @ApiProperty({
     description: "Indicates if the operator is marked as deleted",
     default: false,
   })

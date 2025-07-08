@@ -12,6 +12,7 @@ import { IsUUID } from "class-validator";
 import { PhysicalAddress } from "./physicalAddress.entity";
 import { Email } from "./email.entity";
 import { Phone } from "./phone.entity";
+import { IdentityVerification } from "./identityVerification.entity";
 
 @Entity("person", { schema: process.env.TIDB_DATABASE })
 export class Person extends BaseEntity {
@@ -22,6 +23,10 @@ export class Person extends BaseEntity {
 
   @Column("uuid", { nullable: true })
   rootBusinessUnitId: string;
+
+  @Column("text", { array: true })
+  @Index()
+  roles: string[];
 
   @Column({ type: "varchar", length: 50, nullable: true })
   @Index()
@@ -49,6 +54,9 @@ export class Person extends BaseEntity {
 
   @OneToMany(() => PhysicalAddress, (e) => e.person)
   addresses: PhysicalAddress[];
+
+  @OneToMany(() => IdentityVerification, (v) => v.person)
+  identityVerifications: IdentityVerification[];
 
   @Column({ type: "varchar", length: 255, nullable: true })
   @Index()

@@ -1,17 +1,12 @@
 import { Controller } from '@nestjs/common';
-import {
-  MessagePattern,
-  Payload,
-  Ctx,
-  KafkaContext,
-} from '@nestjs/microservices';
+import { MessagePattern, Payload, Ctx, KafkaContext } from '@nestjs/microservices';
 import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
 import {
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
+  KT_CREATE_WALLET_ACCOUNT,
+  KT_SCHEDULE_PROVIDER_PAYOUT,
+  KT_ISSUE_CONSUMER_REWARD,
+  KT_CREATE_AFFILIATE_COMMISSION,
+  KT_CREATE_INTERNAL_CHARGE,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -29,61 +24,61 @@ export class FinanceWalletResponseController {
     );
   }
 
-  @MessagePattern(KT_CREATE_PERSON_ENTITY + '-response')
-  handleCreate(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_CREATE_WALLET_ACCOUNT + '-response')
+  handleCreateAccount(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_CREATE_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_CREATE_WALLET_ACCOUNT} | key: ${key}`,
       '',
-      'handleCreate',
+      'handleCreateAccount',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_UPDATE_PERSON_ENTITY + '-response')
-  handleUpdate(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_SCHEDULE_PROVIDER_PAYOUT + '-response')
+  handleSchedulePayout(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_UPDATE_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_SCHEDULE_PROVIDER_PAYOUT} | key: ${key}`,
       '',
-      'handleUpdate',
+      'handleSchedulePayout',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_PERSON_ENTITY + '-response')
-  handleGet(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_ISSUE_CONSUMER_REWARD + '-response')
+  handleIssueReward(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_ISSUE_CONSUMER_REWARD} | key: ${key}`,
       '',
-      'handleGet',
+      'handleIssueReward',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_HISTORY_PERSON_ENTITY + '-response')
-  handleHistory(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_CREATE_AFFILIATE_COMMISSION + '-response')
+  handleCreateCommission(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_HISTORY_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_CREATE_AFFILIATE_COMMISSION} | key: ${key}`,
       '',
-      'handleHistory',
+      'handleCreateCommission',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_MANY_PERSONS + '-response')
-  handleGetMany(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_CREATE_INTERNAL_CHARGE + '-response')
+  handleCreateCharge(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_MANY_PERSONS} | key: ${key}`,
+      `Kafka response for ${KT_CREATE_INTERNAL_CHARGE} | key: ${key}`,
       '',
-      'handleGetMany',
+      'handleCreateCharge',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);

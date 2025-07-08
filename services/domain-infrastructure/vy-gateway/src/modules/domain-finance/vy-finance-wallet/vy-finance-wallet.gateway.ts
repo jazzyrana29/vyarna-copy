@@ -9,11 +9,11 @@ import { Server, Socket } from 'socket.io';
 import { FinanceWalletKafkaService } from './microservices/vy-finance-wallet-kafka.service';
 import {
   generateTraceId,
-  CreatePersonDto,
-  UpdatePersonDto,
-  GetPersonDto,
-  GetHistoryOfPersonDto,
-  GetManyPersonsDto,
+  CreateWalletAccountDto,
+  ScheduleProviderPayoutDto,
+  IssueConsumerRewardDto,
+  CreateAffiliateCommissionDto,
+  CreateInternalChargeDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -24,7 +24,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
   server: Server;
   private logger = getLoggerConfig(FinanceWalletWebsocket.name);
 
-  constructor(private readonly personBabyKafka: FinanceWalletKafkaService) {}
+  constructor(private readonly walletKafka: FinanceWalletKafkaService) {}
 
   afterInit() {
     this.logger.debug(
@@ -53,91 +53,73 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('finance-wallet-create')
-  async handleCreate(
+  @SubscribeMessage('wallet-account-create')
+  async handleCreateAccount(
     @ConnectedSocket() socket: Socket,
-    createPersonDto: CreatePersonDto,
+    createWalletAccountDto: CreateWalletAccountDto,
   ) {
-    const traceId = generateTraceId('finance-wallet-create');
+    const traceId = generateTraceId('wallet-account-create');
     try {
-      const result = await this.personBabyKafka.createPerson(
-        createPersonDto,
-        traceId,
-      );
-      socket.emit('finance-wallet-create-result', result);
+      const result = await this.walletKafka.createWalletAccount(createWalletAccountDto, traceId);
+      socket.emit('wallet-account-create-result', result);
     } catch (e: any) {
-      socket.emit('finance-wallet-create-error', e.message || 'Unknown error');
+      socket.emit('wallet-account-create-error', e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('finance-wallet-update')
-  async handleUpdate(
+  @SubscribeMessage('wallet-provider-payout-schedule')
+  async handleSchedulePayout(
     @ConnectedSocket() socket: Socket,
-    updatePersonDto: UpdatePersonDto,
+    scheduleProviderPayoutDto: ScheduleProviderPayoutDto,
   ) {
-    const traceId = generateTraceId('finance-wallet-update');
+    const traceId = generateTraceId('wallet-provider-payout-schedule');
     try {
-      const result = await this.personBabyKafka.updatePerson(
-        updatePersonDto,
-        traceId,
-      );
-      socket.emit('finance-wallet-update-result', result);
+      const result = await this.walletKafka.scheduleProviderPayout(scheduleProviderPayoutDto, traceId);
+      socket.emit('wallet-provider-payout-schedule-result', result);
     } catch (e: any) {
-      socket.emit('finance-wallet-update-error', e.message || 'Unknown error');
+      socket.emit('wallet-provider-payout-schedule-error', e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('finance-wallet-get')
-  async handleGet(
+  @SubscribeMessage('wallet-consumer-reward-issue')
+  async handleIssueReward(
     @ConnectedSocket() socket: Socket,
-    getPersonDto: GetPersonDto,
+    issueConsumerRewardDto: IssueConsumerRewardDto,
   ) {
-    const traceId = generateTraceId('finance-wallet-get');
+    const traceId = generateTraceId('wallet-consumer-reward-issue');
     try {
-      const result = await this.personBabyKafka.getPerson(getPersonDto, traceId);
-      socket.emit('finance-wallet-get-result', result);
+      const result = await this.walletKafka.issueConsumerReward(issueConsumerRewardDto, traceId);
+      socket.emit('wallet-consumer-reward-issue-result', result);
     } catch (e: any) {
-      socket.emit('finance-wallet-get-error', e.message || 'Unknown error');
+      socket.emit('wallet-consumer-reward-issue-error', e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('finance-wallet-get-history')
-  async handleHistory(
+  @SubscribeMessage('wallet-affiliate-commission-create')
+  async handleCreateCommission(
     @ConnectedSocket() socket: Socket,
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
+    createAffiliateCommissionDto: CreateAffiliateCommissionDto,
   ) {
-    const traceId = generateTraceId('finance-wallet-get-history');
+    const traceId = generateTraceId('wallet-affiliate-commission-create');
     try {
-      const result = await this.personBabyKafka.getHistory(
-        getHistoryOfPersonDto,
-        traceId,
-      );
-      socket.emit('finance-wallet-get-history-result', result);
+      const result = await this.walletKafka.createAffiliateCommission(createAffiliateCommissionDto, traceId);
+      socket.emit('wallet-affiliate-commission-create-result', result);
     } catch (e: any) {
-      socket.emit(
-        'finance-wallet-get-history-error',
-        e.message || 'Unknown error',
-      );
+      socket.emit('wallet-affiliate-commission-create-error', e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('finance-wallet-get-many')
-  async handleGetMany(
+  @SubscribeMessage('wallet-internal-charge-create')
+  async handleCreateCharge(
     @ConnectedSocket() socket: Socket,
-    getManyPersonsDto: GetManyPersonsDto,
+    createInternalChargeDto: CreateInternalChargeDto,
   ) {
-    const traceId = generateTraceId('finance-wallet-get-many');
+    const traceId = generateTraceId('wallet-internal-charge-create');
     try {
-      const result = await this.personBabyKafka.getManyPersons(
-        getManyPersonsDto,
-        traceId,
-      );
-      socket.emit('finance-wallet-get-many-result', result);
+      const result = await this.walletKafka.createInternalCharge(createInternalChargeDto, traceId);
+      socket.emit('wallet-internal-charge-create-result', result);
     } catch (e: any) {
-      socket.emit(
-        'finance-wallet-get-many-error',
-        e.message || 'Unknown error',
-      );
+      socket.emit('wallet-internal-charge-create-error', e.message || 'Unknown error');
     }
   }
 }

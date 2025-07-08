@@ -1,0 +1,10 @@
+export declare const KT_WALLET_ORDER_PAID = "order-paid";
+export declare const KT_WALLET_SUBSCRIPTION_RENEWED = "subscription-renewed";
+export declare const KT_WALLET_REFUND_SUCCEEDED = "refund-succeeded";
+export declare const KT_WALLET_AFFILIATE_COMMISSION_CREATED = "affiliate-commission-created";
+export declare const KT_WALLET_ACCOUNT_CREATED = "wallet-account-created";
+export declare const KT_TRANSACTION_RECORDED = "transaction-recorded";
+export declare const KT_PROVIDER_PAYOUT_SCHEDULED = "provider-payout-scheduled";
+export declare const KT_PROVIDER_PAYOUT_PAID = "provider-payout-paid";
+export declare const KT_CONSUMER_REWARD_ISSUED = "consumer-reward-issued";
+export declare const KT_CONSUMER_REWARD_REDEEMED = "consumer-reward-redeemed";

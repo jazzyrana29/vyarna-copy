@@ -3,4 +3,8 @@ export declare class OrderDto {
     personId: string;
     totalCents: number;
     status: string;
+    currency: string;
+    paymentIntentId?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

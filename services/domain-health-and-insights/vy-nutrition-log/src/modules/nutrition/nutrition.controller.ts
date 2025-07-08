@@ -10,6 +10,8 @@ import {
   KT_START_NUTRITION_SESSION,
   KT_GET_NUTRITION_SESSION,
   KT_GET_ZTRACKING_NUTRITION_SESSION,
+  KT_LOG_NUTRITION_EVENT,
+  KT_END_NUTRITION_SESSION,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -73,5 +75,35 @@ export class NutritionController {
       LogStreamLevel.DebugLight,
     );
     await this.nutritionSessionKafkaService.getZtrackingSession(message, key);
+  }
+
+  @MessagePattern(KT_LOG_NUTRITION_EVENT)
+  async logNutritionEventWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_LOG_NUTRITION_EVENT}`,
+      '',
+      'logNutritionEventWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.nutritionSessionKafkaService.logEvent(message, key);
+  }
+
+  @MessagePattern(KT_END_NUTRITION_SESSION)
+  async endNutritionSessionWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_END_NUTRITION_SESSION}`,
+      '',
+      'endNutritionSessionWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.nutritionSessionKafkaService.endSession(message, key);
   }
 }

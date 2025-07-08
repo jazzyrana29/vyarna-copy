@@ -41,6 +41,29 @@ __decorate([
     __metadata("design:type", String)
 ], ZtrackingOrderDto.prototype, "status", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Currency code' }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ZtrackingOrderDto.prototype, "currency", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'PaymentIntent identifier', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ZtrackingOrderDto.prototype, "paymentIntentId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Creation timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], ZtrackingOrderDto.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Last update timestamp', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], ZtrackingOrderDto.prototype, "updatedAt", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Date of this version', type: String, format: 'date-time' }),
     (0, class_validator_1.IsDate)(),
     __metadata("design:type", Date)

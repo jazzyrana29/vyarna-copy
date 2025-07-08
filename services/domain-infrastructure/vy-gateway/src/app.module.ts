@@ -24,7 +24,6 @@ import { AppLoggerMiddleware } from './middlewares/app.log.middleware';
 
 import { AppController } from './app.controller';
 
-import { PersonContactModule } from './modules/domain-person-and-identity/vy-person-contact/contact.module';
 import { EducationFeedModule } from './modules/domain-emotional-and-engagement/vy-education-feed/vy-education-feed.module';
 import { EmotionalEngagementModule } from './modules/domain-emotional-and-engagement/vy-emotional-engagement/vy-emotional-engagement.module';
 import { FinancePaymentsModule } from './modules/domain-finance/vy-finance-payments/vy-finance-payments.module';
@@ -33,6 +32,9 @@ import { HealthCryAnalyzerModule } from './modules/domain-health-and-insights/vy
 import { HealthGrowthTrackerModule } from './modules/domain-health-and-insights/vy-health-growth-tracker/vy-health-growth-tracker.module';
 import { HealthLogModule } from './modules/domain-health-and-insights/vy-health-log/vy-health-log.module';
 import { HealthSleepModule } from './modules/domain-health-and-insights/vy-health-sleep/vy-health-sleep.module';
+import { NutritionLogModule } from './modules/domain-health-and-insights/vy-nutrition-log/vy-nutrition-log.module';
+import { DevelopmentLogModule } from './modules/domain-health-and-insights/vy-development-log/vy-development-log.module';
+import { CareLogModule } from './modules/domain-health-and-insights/vy-care-log/vy-care-log.module';
 import { PersonBabyModule } from './modules/domain-person-and-identity/vy-person-baby/vy-person-baby.module';
 import { PersonConsumerModule } from './modules/domain-person-and-identity/vy-person-consumer/vy-person-consumer.module';
 import { PersonCosharerModule } from './modules/domain-person-and-identity/vy-person-cosharer/vy-person-cosharer.module';
@@ -43,14 +45,15 @@ import { PersonMilkGiverModule } from './modules/domain-person-and-identity/vy-p
 import { PersonParentModule } from './modules/domain-person-and-identity/vy-person-parent/vy-person-parent.module';
 import { PersonProviderModule } from './modules/domain-person-and-identity/vy-person-provider/vy-person-provider.module';
 import { PersonRolesModule } from './modules/domain-person-and-identity/vy-person-roles/vy-person-roles.module';
+import { PersonEmailModule } from './modules/domain-person-and-identity/vy-person-email/vy-person-email.module';
 import { DataVaultModule } from './modules/domain-privacy-and-consent/vy-data-vault/vy-data-vault.module';
 import { ResearchConsentModule } from './modules/domain-privacy-and-consent/vy-research-consent/vy-research-consent.module';
 import { SalesAffiliateProductsModule } from './modules/domain-sales-and-commerce/vy-sales-affiliate-products/vy-sales-affiliate-products.module';
 import { SalesReferralsModule } from './modules/domain-sales-and-commerce/vy-sales-referrals/vy-sales-referrals.module';
 import { SalesSubscriptionsModule } from './modules/domain-sales-and-commerce/vy-sales-subscriptions/vy-sales-subscriptions.module';
+import { SalesCommerceModule } from './modules/domain-sales-and-commerce/vy-sales-commerce/vy-sales-commerce.module';
 
 import { KafkaModule } from './utils/kafka/kafka.module';
-import { ActiveCampaignService } from './services/static/active-campaign/active-campaign.service';
 
 @Module({
   imports: [
@@ -80,7 +83,6 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
       },
     ]),
     KafkaModule,
-    PersonContactModule,
     EducationFeedModule,
     EmotionalEngagementModule,
     FinancePaymentsModule,
@@ -89,6 +91,9 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
     HealthGrowthTrackerModule,
     HealthLogModule,
     HealthSleepModule,
+    NutritionLogModule,
+    DevelopmentLogModule,
+    CareLogModule,
     PersonBabyModule,
     PersonConsumerModule,
     PersonCosharerModule,
@@ -99,11 +104,13 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
     PersonParentModule,
     PersonProviderModule,
     PersonRolesModule,
+    PersonEmailModule,
     DataVaultModule,
     ResearchConsentModule,
     SalesAffiliateProductsModule,
     SalesReferralsModule,
     SalesSubscriptionsModule,
+    SalesCommerceModule,
   ],
   controllers: [AppController],
   providers: [
@@ -112,7 +119,6 @@ import { ActiveCampaignService } from './services/static/active-campaign/active-
       useClass: ValidationPipe,
     },
     AppService,
-    ActiveCampaignService,
     SentryInterceptor,
   ],
 })

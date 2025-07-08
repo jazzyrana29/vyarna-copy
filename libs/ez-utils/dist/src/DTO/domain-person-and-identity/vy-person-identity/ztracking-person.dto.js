@@ -95,6 +95,16 @@ __decorate([
 ], ZtrackingPersonDto.prototype, "businessUnitId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
+        description: "Roles assigned to the person in this version",
+        type: [String],
+        required: false,
+    }),
+    (0, class_validator_1.IsString)({ each: true }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], ZtrackingPersonDto.prototype, "roles", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
         description: "Indicates if the operator is marked as deleted",
         default: false,
     }),

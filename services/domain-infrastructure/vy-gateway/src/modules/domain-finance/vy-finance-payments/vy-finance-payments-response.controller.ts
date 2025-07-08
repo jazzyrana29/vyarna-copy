@@ -10,6 +10,10 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CREATE_REFUND,
+  KT_CREATE_PAYMENT_METHOD,
+  KT_LIST_PAYMENT_METHODS,
+  KT_DELETE_PAYMENT_METHOD,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -58,6 +62,54 @@ export class FinancePaymentsResponseController {
       `Kafka response for ${KT_GET_ZTRACKING_PAYMENT_INTENT} | key: ${key}`,
       '',
       'handleZtracking',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_CREATE_REFUND + '-response')
+  handleRefund(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_CREATE_REFUND} | key: ${key}`,
+      '',
+      'handleRefund',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_CREATE_PAYMENT_METHOD + '-response')
+  handleCreateMethod(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_CREATE_PAYMENT_METHOD} | key: ${key}`,
+      '',
+      'handleCreateMethod',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_LIST_PAYMENT_METHODS + '-response')
+  handleListMethods(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_LIST_PAYMENT_METHODS} | key: ${key}`,
+      '',
+      'handleListMethods',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_DELETE_PAYMENT_METHOD + '-response')
+  handleDeleteMethod(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_DELETE_PAYMENT_METHOD} | key: ${key}`,
+      '',
+      'handleDeleteMethod',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);

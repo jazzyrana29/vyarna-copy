@@ -1,4 +1,3 @@
-// src/contact/contact.controller.ts
 import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from '../../../dto/response.dto';
@@ -6,23 +5,18 @@ import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
 import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { FinanceWalletKafkaService } from './microservices/vy-finance-wallet-kafka.service';
-import { ValidateCreatePersonDtoPipe } from './pipes/validate-create-person-dto.pipe';
-import { ValidateUpdatePersonDtoPipe } from './pipes/validate-update-person-dto.pipe';
-import { ValidateGetPersonDtoPipe } from './pipes/validate-get-person-dto.pipe';
-import { ValidateGetHistoryPersonDtoPipe } from './pipes/validate-get-history-person-dto.pipe';
-import { ValidateGetManyPersonsDtoPipe } from './pipes/validate-get-many-persons-dto.pipe';
+import { ValidateCreateWalletAccountDtoPipe } from './pipes/validate-create-wallet-account-dto.pipe';
+import { ValidateScheduleProviderPayoutDtoPipe } from './pipes/validate-schedule-provider-payout-dto.pipe';
+import { ValidateIssueConsumerRewardDtoPipe } from './pipes/validate-issue-consumer-reward-dto.pipe';
+import { ValidateCreateAffiliateCommissionDtoPipe } from './pipes/validate-create-affiliate-commission-dto.pipe';
+import { ValidateCreateInternalChargeDtoPipe } from './pipes/validate-create-internal-charge-dto.pipe';
 import {
   generateTraceId,
-  CreatePersonDto,
-  UpdatePersonDto,
-  GetPersonDto,
-  GetHistoryOfPersonDto,
-  GetManyPersonsDto,
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
+  CreateWalletAccountDto,
+  ScheduleProviderPayoutDto,
+  IssueConsumerRewardDto,
+  CreateAffiliateCommissionDto,
+  CreateInternalChargeDto,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -31,9 +25,7 @@ import {
 export class FinanceWalletController {
   private logger = getLoggerConfig(FinanceWalletController.name);
 
-  constructor(
-    private readonly personBabyKafkaService: FinanceWalletKafkaService,
-  ) {
+  constructor(private readonly walletKafkaService: FinanceWalletKafkaService) {
     this.logger.debug(
       `${FinanceWalletController.name} initialized`,
       '',
@@ -42,111 +34,82 @@ export class FinanceWalletController {
     );
   }
 
-  @Post(KT_CREATE_PERSON_ENTITY)
+  @Post('accounts')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CreatePersonDto })
-  async createPerson(
-    @Body(new ValidateCreatePersonDtoPipe()) createPersonDto: CreatePersonDto,
+  @ApiBody({ type: CreateWalletAccountDto })
+  async createAccount(
+    @Body(new ValidateCreateWalletAccountDtoPipe()) createWalletAccountDto: CreateWalletAccountDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('createPerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'createPerson',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('createWalletAccount');
+    this.logger.info('traceId generated successfully', traceId, 'createWalletAccount', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
-      'Person created',
+      await this.walletKafkaService.createWalletAccount(createWalletAccountDto, traceId),
+      'Wallet account created',
       traceId,
     );
   }
 
-  @Post(KT_UPDATE_PERSON_ENTITY)
+  @Post('provider-payouts')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: UpdatePersonDto })
-  async updatePerson(
-    @Body(new ValidateUpdatePersonDtoPipe()) updatePersonDto: UpdatePersonDto,
+  @ApiBody({ type: ScheduleProviderPayoutDto })
+  async scheduleProviderPayout(
+    @Body(new ValidateScheduleProviderPayoutDtoPipe()) scheduleProviderPayoutDto: ScheduleProviderPayoutDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('updatePerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'updatePerson',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('scheduleProviderPayout');
+    this.logger.info('traceId generated successfully', traceId, 'scheduleProviderPayout', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
-      'Person updated',
+      await this.walletKafkaService.scheduleProviderPayout(scheduleProviderPayoutDto, traceId),
+      'Provider payout scheduled',
       traceId,
     );
   }
 
-  @Post(KT_GET_PERSON_ENTITY)
+  @Post('consumer-rewards')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetPersonDto })
-  async getPerson(
-    @Body(new ValidateGetPersonDtoPipe()) getPersonDto: GetPersonDto,
+  @ApiBody({ type: IssueConsumerRewardDto })
+  async issueConsumerReward(
+    @Body(new ValidateIssueConsumerRewardDtoPipe()) issueConsumerRewardDto: IssueConsumerRewardDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('getPerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'getPerson',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('issueConsumerReward');
+    this.logger.info('traceId generated successfully', traceId, 'issueConsumerReward', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
-      'Person retrieved',
+      await this.walletKafkaService.issueConsumerReward(issueConsumerRewardDto, traceId),
+      'Consumer reward issued',
       traceId,
     );
   }
 
-  @Post(KT_GET_HISTORY_PERSON_ENTITY)
+  @Post('affiliate-commissions')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetHistoryOfPersonDto })
-  async getHistory(
-    @Body(new ValidateGetHistoryPersonDtoPipe())
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
+  @ApiBody({ type: CreateAffiliateCommissionDto })
+  async createAffiliateCommission(
+    @Body(new ValidateCreateAffiliateCommissionDtoPipe()) createAffiliateCommissionDto: CreateAffiliateCommissionDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('getHistoryPerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'getHistoryPerson',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('createAffiliateCommission');
+    this.logger.info('traceId generated successfully', traceId, 'createAffiliateCommission', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
-        getHistoryOfPersonDto,
-        traceId,
-      ),
-      'Person history retrieved',
+      await this.walletKafkaService.createAffiliateCommission(createAffiliateCommissionDto, traceId),
+      'Affiliate commission created',
       traceId,
     );
   }
 
-  @Post(KT_GET_MANY_PERSONS)
+  @Post('internal-charges')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetManyPersonsDto })
-  async getManyPersons(
-    @Body(new ValidateGetManyPersonsDtoPipe()) getManyPersonsDto: GetManyPersonsDto,
+  @ApiBody({ type: CreateInternalChargeDto })
+  async createInternalCharge(
+    @Body(new ValidateCreateInternalChargeDtoPipe()) createInternalChargeDto: CreateInternalChargeDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('getManyPersons');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'getManyPersons',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('createInternalCharge');
+    this.logger.info('traceId generated successfully', traceId, 'createInternalCharge', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
-      'Persons retrieved',
+      await this.walletKafkaService.createInternalCharge(createInternalChargeDto, traceId),
+      'Internal charge created',
       traceId,
     );
   }
