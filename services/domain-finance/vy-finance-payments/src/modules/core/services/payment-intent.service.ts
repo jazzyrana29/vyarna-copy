@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../../entities/payment_attempt.entity';
+import { WebhookEvent } from '../../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from './stripe-gateway.service';
 import Stripe from 'stripe';
@@ -30,6 +31,8 @@ export class PaymentIntentService {
     private readonly refundRepo: Repository<PaymentRefund>,
     @InjectRepository(PaymentAttempt)
     private readonly attemptRepo: Repository<PaymentAttempt>,
+    @InjectRepository(WebhookEvent)
+    private readonly webhookRepo: Repository<WebhookEvent>,
     private readonly ztrackingPaymentIntentService: ZtrackingPaymentIntentService,
     private readonly stripeGateway: StripeGatewayService,
   ) {
@@ -250,41 +253,77 @@ export class PaymentIntentService {
       throw err;
     }
 
-    const intentStatusMap: Record<string, PaymentIntent['status']> = {
-      'payment_intent.succeeded': 'SUCCEEDED',
-      'payment_intent.canceled': 'CANCELED',
-      'payment_intent.processing': 'PROCESSING',
-      'payment_intent.payment_failed': 'FAILED',
-    };
-
-    if (intentStatusMap[event.type]) {
-      const pi = event.data.object as Stripe.PaymentIntent;
-      await this.paymentRepo.update(
-        { externalId: pi.id },
-        { status: intentStatusMap[event.type] },
+    const existing = await this.webhookRepo.findOne({
+      where: { gateway: 'STRIPE', externalEventId: event.id },
+    });
+    if (existing) {
+      this.logger.debug(
+        `Duplicate Stripe event ${event.id}`,
+        traceId,
+        'handleStripeWebhook',
+        LogStreamLevel.DebugLight,
       );
+      return;
     }
 
-    if (event.type.startsWith('charge.refund') || event.type.startsWith('refund.')) {
-      const refundObj: any = (event.data.object as any).refund || event.data.object;
-      const statusMap: Record<string, PaymentRefund['status']> = {
-        succeeded: 'SUCCEEDED',
-        failed: 'FAILED',
-        pending: 'PENDING',
+    const webhook = await this.webhookRepo.save(
+      this.webhookRepo.create({
+        gateway: 'STRIPE',
+        externalEventId: event.id,
+        eventType: event.type,
+        payload: event as any,
+        status: 'PENDING',
+      }),
+    );
+
+    try {
+      const intentStatusMap: Record<string, PaymentIntent['status']> = {
+        'payment_intent.succeeded': 'SUCCEEDED',
+        'payment_intent.canceled': 'CANCELED',
+        'payment_intent.processing': 'PROCESSING',
+        'payment_intent.payment_failed': 'FAILED',
       };
-      if (refundObj && refundObj.id) {
-        await this.refundRepo.update(
-          { externalId: refundObj.id },
-          { status: statusMap[refundObj.status] },
+
+      if (intentStatusMap[event.type]) {
+        const pi = event.data.object as Stripe.PaymentIntent;
+        await this.paymentRepo.update(
+          { externalId: pi.id },
+          { status: intentStatusMap[event.type] },
         );
       }
-    }
 
-    this.logger.debug(
-      `Processed Stripe event ${event.type}`,
-      traceId,
-      'handleStripeWebhook',
-      LogStreamLevel.DebugLight,
-    );
+      if (event.type.startsWith('charge.refund') || event.type.startsWith('refund.')) {
+        const refundObj: any = (event.data.object as any).refund || event.data.object;
+        const statusMap: Record<string, PaymentRefund['status']> = {
+          succeeded: 'SUCCEEDED',
+          failed: 'FAILED',
+          pending: 'PENDING',
+        };
+        if (refundObj && refundObj.id) {
+          await this.refundRepo.update(
+            { externalId: refundObj.id },
+            { status: statusMap[refundObj.status] },
+          );
+        }
+      }
+
+      await this.webhookRepo.update(webhook.webhookId, {
+        status: 'PROCESSED',
+        processedAt: new Date(),
+      });
+
+      this.logger.debug(
+        `Processed Stripe event ${event.type}`,
+        traceId,
+        'handleStripeWebhook',
+        LogStreamLevel.DebugLight,
+      );
+    } catch (err) {
+      await this.webhookRepo.update(webhook.webhookId, {
+        status: 'FAILED',
+        processedAt: new Date(),
+      });
+      throw err;
+    }
   }
 }

@@ -9,7 +9,10 @@ import {
   GetZtrackingWalletAccountDto,
   WalletAccountDto,
   ZtrackingWalletAccountDto,
+  encodeKafkaMessage,
+  KT_WALLET_ACCOUNT_CREATED,
 } from 'ez-utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -39,7 +42,21 @@ export class WalletAccountService {
       balanceCents: 0,
     });
     await this.walletRepo.save(entity);
-    this.logger.info('WalletAccount created', traceId, 'createWalletAccount', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'WalletAccount created',
+      traceId,
+      'createWalletAccount',
+      LogStreamLevel.ProdStandard,
+    );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_WALLET_ACCOUNT_CREATED,
+      encodeKafkaMessage(WalletAccountService.name, {
+        accountId: entity.accountId,
+        traceId,
+      }),
+    );
 
     await this.ztrackingWalletAccountService.createZtrackingForWalletAccount(
       entity,
@@ -55,9 +72,19 @@ export class WalletAccountService {
   ): Promise<WalletAccountDto | null> {
     const entity = await this.walletRepo.findOne({ where: { accountId } });
     if (entity) {
-      this.logger.info('Retrieved wallet account', traceId, 'getWalletAccount', LogStreamLevel.DebugLight);
+      this.logger.info(
+        'Retrieved wallet account',
+        traceId,
+        'getWalletAccount',
+        LogStreamLevel.DebugLight,
+      );
     } else {
-      this.logger.warn(`Wallet account not found => ${accountId}`, traceId, 'getWalletAccount', LogStreamLevel.DebugLight);
+      this.logger.warn(
+        `Wallet account not found => ${accountId}`,
+        traceId,
+        'getWalletAccount',
+        LogStreamLevel.DebugLight,
+      );
     }
     return entity;
   }

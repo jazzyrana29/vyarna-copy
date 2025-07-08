@@ -1,17 +1,11 @@
 import { Controller } from '@nestjs/common';
-import {
-  MessagePattern,
-  Payload,
-  Ctx,
-  KafkaContext,
-} from '@nestjs/microservices';
+import { MessagePattern, Payload, Ctx, KafkaContext } from '@nestjs/microservices';
 import { KafkaResponderService } from '../../../utils/kafka/kafka-responder.service';
 import {
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
+  KT_CREATE_SLEEP_SESSION,
+  KT_GET_SLEEP_SESSIONS,
+  KT_GET_ZTRACKING_SLEEP_SESSION,
+  KT_SLEEP_EVENT_LOGGED,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -29,11 +23,11 @@ export class HealthSleepResponseController {
     );
   }
 
-  @MessagePattern(KT_CREATE_PERSON_ENTITY + '-response')
+  @MessagePattern(KT_CREATE_SLEEP_SESSION + '-response')
   handleCreate(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_CREATE_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_CREATE_SLEEP_SESSION} | key: ${key}`,
       '',
       'handleCreate',
       LogStreamLevel.DebugLight,
@@ -41,23 +35,11 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_UPDATE_PERSON_ENTITY + '-response')
-  handleUpdate(@Payload() message: any, @Ctx() context: KafkaContext) {
-    const key = context.getMessage().key.toString();
-    this.logger.debug(
-      `Kafka response for ${KT_UPDATE_PERSON_ENTITY} | key: ${key}`,
-      '',
-      'handleUpdate',
-      LogStreamLevel.DebugLight,
-    );
-    this.kafkaResponder.handleIncomingMessage(message);
-  }
-
-  @MessagePattern(KT_GET_PERSON_ENTITY + '-response')
+  @MessagePattern(KT_GET_SLEEP_SESSIONS + '-response')
   handleGet(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_GET_SLEEP_SESSIONS} | key: ${key}`,
       '',
       'handleGet',
       LogStreamLevel.DebugLight,
@@ -65,25 +47,25 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_HISTORY_PERSON_ENTITY + '-response')
-  handleHistory(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_GET_ZTRACKING_SLEEP_SESSION + '-response')
+  handleZtracking(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_HISTORY_PERSON_ENTITY} | key: ${key}`,
+      `Kafka response for ${KT_GET_ZTRACKING_SLEEP_SESSION} | key: ${key}`,
       '',
-      'handleHistory',
+      'handleZtracking',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_GET_MANY_PERSONS + '-response')
-  handleGetMany(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_SLEEP_EVENT_LOGGED + '-response')
+  handleEvent(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_GET_MANY_PERSONS} | key: ${key}`,
+      `Kafka response for ${KT_SLEEP_EVENT_LOGGED} | key: ${key}`,
       '',
-      'handleGetMany',
+      'handleEvent',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);

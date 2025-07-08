@@ -25,6 +25,7 @@ __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/growth-measurement"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session"), exports);
+__exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-events"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-intent"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account"), exports);

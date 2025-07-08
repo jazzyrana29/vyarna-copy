@@ -1,39 +1,31 @@
-// src/contact/contact.controller.ts
-import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from '../../../dto/response.dto';
 import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
 import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { HealthSleepKafkaService } from './microservices/vy-health-sleep-kafka.service';
-import { ValidateCreatePersonDtoPipe } from './pipes/validate-create-person-dto.pipe';
-import { ValidateUpdatePersonDtoPipe } from './pipes/validate-update-person-dto.pipe';
-import { ValidateGetPersonDtoPipe } from './pipes/validate-get-person-dto.pipe';
-import { ValidateGetHistoryPersonDtoPipe } from './pipes/validate-get-history-person-dto.pipe';
-import { ValidateGetManyPersonsDtoPipe } from './pipes/validate-get-many-persons-dto.pipe';
 import {
+  CreateSleepSessionDto,
+  GetSleepSessionsDto,
+  GetZtrackingSleepSessionDto,
+  SleepEventDto,
   generateTraceId,
-  CreatePersonDto,
-  UpdatePersonDto,
-  GetPersonDto,
-  GetHistoryOfPersonDto,
-  GetManyPersonsDto,
-  KT_CREATE_PERSON_ENTITY,
-  KT_UPDATE_PERSON_ENTITY,
-  KT_GET_PERSON_ENTITY,
-  KT_GET_HISTORY_PERSON_ENTITY,
-  KT_GET_MANY_PERSONS,
+  KT_CREATE_SLEEP_SESSION,
+  KT_GET_SLEEP_SESSIONS,
+  KT_GET_ZTRACKING_SLEEP_SESSION,
+  KT_SLEEP_EVENT_LOGGED,
 } from 'ez-utils';
+import { ValidateCreateSleepSessionDtoPipe } from './pipes/validate-create-sleep-session-dto.pipe';
+import { ValidateSleepEventDtoPipe } from './pipes/validate-sleep-event-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
 @ApiTags('vy-health-sleep')
-@Controller('vy-health-sleep')
+@Controller('sleep')
 export class HealthSleepController {
   private logger = getLoggerConfig(HealthSleepController.name);
 
-  constructor(
-    private readonly personBabyKafkaService: HealthSleepKafkaService,
-  ) {
+  constructor(private readonly kafkaService: HealthSleepKafkaService) {
     this.logger.debug(
       `${HealthSleepController.name} initialized`,
       '',
@@ -42,111 +34,71 @@ export class HealthSleepController {
     );
   }
 
-  @Post(KT_CREATE_PERSON_ENTITY)
+  @Post('sessions')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CreatePersonDto })
-  async createPerson(
-    @Body(new ValidateCreatePersonDtoPipe()) createPersonDto: CreatePersonDto,
+  @ApiBody({ type: CreateSleepSessionDto })
+  async createSession(
+    @Body(new ValidateCreateSleepSessionDtoPipe())
+    createSleepSessionDto: CreateSleepSessionDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('createPerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'createPerson',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('createSleepSession');
+    this.logger.info('traceId generated successfully', traceId, 'createSession', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
-      HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
-      'Person created',
+      HttpStatus.CREATED,
+      await this.kafkaService.createSleepSession(createSleepSessionDto, traceId),
+      'Sleep session created',
       traceId,
     );
   }
 
-  @Post(KT_UPDATE_PERSON_ENTITY)
+  @Get('sessions')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: UpdatePersonDto })
-  async updatePerson(
-    @Body(new ValidateUpdatePersonDtoPipe()) updatePersonDto: UpdatePersonDto,
-  ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('updatePerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'updatePerson',
-      LogStreamLevel.ProdStandard,
-    );
+  async getSessions(@Query('babyId') babyId: string): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('getSleepSessions');
+    this.logger.info('traceId generated successfully', traceId, 'getSessions', LogStreamLevel.ProdStandard);
+    const getSleepSessionsDto: GetSleepSessionsDto = { babyId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
-      'Person updated',
+      await this.kafkaService.getSleepSessions(getSleepSessionsDto, traceId),
+      'Sleep sessions retrieved',
       traceId,
     );
   }
 
-  @Post(KT_GET_PERSON_ENTITY)
+  @Get('sessions/:sessionId')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetPersonDto })
-  async getPerson(
-    @Body(new ValidateGetPersonDtoPipe()) getPersonDto: GetPersonDto,
+  async getZtrackingSession(
+    @Param('sessionId') sessionId: string,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('getPerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'getPerson',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('getZtrackingSleepSession');
+    this.logger.info('traceId generated successfully', traceId, 'getZtrackingSession', LogStreamLevel.ProdStandard);
+    const getZtrackingSleepSessionDto: GetZtrackingSleepSessionDto = {
+      sessionId,
+    } as any;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
-      'Person retrieved',
-      traceId,
-    );
-  }
-
-  @Post(KT_GET_HISTORY_PERSON_ENTITY)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetHistoryOfPersonDto })
-  async getHistory(
-    @Body(new ValidateGetHistoryPersonDtoPipe())
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
-  ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('getHistoryPerson');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'getHistoryPerson',
-      LogStreamLevel.ProdStandard,
-    );
-    return new ResponseDTO(
-      HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
-        getHistoryOfPersonDto,
+      await this.kafkaService.getZtrackingSleepSession(
+        getZtrackingSleepSessionDto,
         traceId,
       ),
-      'Person history retrieved',
+      'Ztracking sleep session retrieved',
       traceId,
     );
   }
 
-  @Post(KT_GET_MANY_PERSONS)
+  @Post('sessions/:sessionId/events')
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetManyPersonsDto })
-  async getManyPersons(
-    @Body(new ValidateGetManyPersonsDtoPipe()) getManyPersonsDto: GetManyPersonsDto,
+  @ApiBody({ type: SleepEventDto })
+  async logEvent(
+    @Param('sessionId') sessionId: string,
+    @Body(new ValidateSleepEventDtoPipe()) sleepEventDto: SleepEventDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('getManyPersons');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'getManyPersons',
-      LogStreamLevel.ProdStandard,
-    );
+    const traceId = generateTraceId('logSleepEvent');
+    this.logger.info('traceId generated successfully', traceId, 'logEvent', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
-      'Persons retrieved',
+      await this.kafkaService.logSleepEvent(sessionId, sleepEventDto, traceId),
+      'Sleep event logged',
       traceId,
     );
   }

@@ -27,6 +27,13 @@ import {
   computeSolidsSummary,
   computeTotalPumped,
 } from './nutrition-summary.utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
+import {
+  encodeKafkaMessage,
+  KT_NUTRITION_SESSION_CREATED,
+  KT_NUTRITION_EVENT_LOGGED,
+  KT_NUTRITION_SESSION_ENDED,
+} from 'ez-utils';
 
 @Injectable()
 export class NutritionSessionService {
@@ -70,6 +77,18 @@ export class NutritionSessionService {
     await this.ztrackingService.createZtrackingNutritionSessionEntity(
       entity,
       traceId,
+    );
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_NUTRITION_SESSION_CREATED,
+      encodeKafkaMessage(NutritionSessionService.name, {
+        sessionId: entity.sessionId,
+        milkGiverId: entity.milkGiverId,
+        babyId: entity.babyId,
+        type: entity.type,
+        startedAt: entity.startedAt,
+        traceId,
+      }),
     );
     this.logger.info(
       'Nutrition session created',
@@ -144,6 +163,18 @@ export class NutritionSessionService {
 
     const entity = await repo.save(repo.create({ sessionId, ...payload }));
 
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_NUTRITION_EVENT_LOGGED,
+      encodeKafkaMessage(NutritionSessionService.name, {
+        sessionId,
+        eventId: entity.eventId,
+        eventType,
+        eventTime: entity.eventTime,
+        traceId,
+      }),
+    );
+
     this.logger.info(
       `Nutrition event logged for session ${sessionId}`,
       traceId,
@@ -196,6 +227,16 @@ export class NutritionSessionService {
     await this.summaryRepo.save(summary);
     await this.ztrackingSummaryRepo.save(
       this.ztrackingSummaryRepo.create({ ...summary, versionDate: new Date() }),
+    );
+
+    await new EzKafkaProducer().produce(
+      process.env.KAFKA_BROKER as string,
+      KT_NUTRITION_SESSION_ENDED,
+      encodeKafkaMessage(NutritionSessionService.name, {
+        sessionId,
+        summary,
+        traceId,
+      }),
     );
 
     this.logger.info(
