@@ -21,6 +21,22 @@ import { ZtrackingSleepPatternSummary } from '../../entities/ztracking_sleep_pat
 import { SleepSessionService } from './services/sleep-session.service';
 import { SleepSessionKafkaService } from './services/sleep-session-kafka.service';
 import { ZtrackingSleepSessionService } from './services/ztracking-sleep-session.service';
+import { SleepEventService } from './services/sleep-event.service';
+import { ZtrackingSleepEventService } from './services/ztracking-sleep-event.service';
+import { SleepInterruptionService } from './services/sleep-interruption.service';
+import { ZtrackingSleepInterruptionReasonService } from './services/ztracking-sleep-interruption-reason.service';
+import { SleepEnvironmentService } from './services/sleep-environment.service';
+import { ZtrackingSleepEnvironmentService } from './services/ztracking-sleep-environment.service';
+import { SleepRatingService } from './services/sleep-rating.service';
+import { ZtrackingSleepRatingService } from './services/ztracking-sleep-rating.service';
+import { SleepScheduleService } from './services/sleep-schedule.service';
+import { ZtrackingSleepScheduleService } from './services/ztracking-sleep-schedule.service';
+import { SleepNotificationService } from './services/sleep-notification.service';
+import { ZtrackingSleepNotificationService } from './services/ztracking-sleep-notification.service';
+import { SleepSummaryService } from './services/sleep-summary.service';
+import { ZtrackingSleepSummaryService } from './services/ztracking-sleep-summary.service';
+import { SleepPatternSummaryService } from './services/sleep-pattern-summary.service';
+import { ZtrackingSleepPatternSummaryService } from './services/ztracking-sleep-pattern-summary.service';
 import { SleepController } from './sleep.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -53,6 +69,22 @@ import { LogStreamLevel } from 'ez-logger';
     SleepSessionService,
     SleepSessionKafkaService,
     ZtrackingSleepSessionService,
+    SleepEventService,
+    ZtrackingSleepEventService,
+    SleepInterruptionService,
+    ZtrackingSleepInterruptionReasonService,
+    SleepEnvironmentService,
+    ZtrackingSleepEnvironmentService,
+    SleepRatingService,
+    ZtrackingSleepRatingService,
+    SleepScheduleService,
+    ZtrackingSleepScheduleService,
+    SleepNotificationService,
+    ZtrackingSleepNotificationService,
+    SleepSummaryService,
+    ZtrackingSleepSummaryService,
+    SleepPatternSummaryService,
+    ZtrackingSleepPatternSummaryService,
   ],
 })
 export class CoreModule {
