@@ -22,6 +22,7 @@ export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-develo
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/teething-event";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-development-log/development-moment";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-session";
+export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-nutrition-log/nutrition-events";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-session";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-health-sleep/sleep-events";
 /* ------------------------------------- domain-finance ------------------------------*/
