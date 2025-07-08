@@ -16,6 +16,7 @@ import { ConsumerRewardService } from './services/consumer-reward.service';
 import { AffiliateCommissionService } from './services/affiliate-commission.service';
 import { InternalChargeService } from './services/internal-charge.service';
 import { WalletOperationsKafkaService } from './services/wallet-operations-kafka.service';
+import { WalletEventsKafkaService } from './services/wallet-events-kafka.service';
 import { WalletController } from './wallet.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -43,6 +44,7 @@ import { LogStreamLevel } from 'ez-logger';
     AffiliateCommissionService,
     InternalChargeService,
     WalletOperationsKafkaService,
+    WalletEventsKafkaService,
   ],
 })
 export class CoreModule {
