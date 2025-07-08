@@ -4,6 +4,11 @@ Microservice handling payment intents and related operations. Generated from PRD
 specifications. All HTTP traffic is routed through `vy-gateway` which forwards
 messages to this service over Kafka.
 
+The codebase is organized into two NestJS modules:
+
+- **PaymentIntentModule** – handles payment intents, refunds and Stripe webhook processing.
+- **PaymentMethodModule** – manages vaulted payment methods.
+
 ## Local Development Setup
 
 ### Install Dependencies

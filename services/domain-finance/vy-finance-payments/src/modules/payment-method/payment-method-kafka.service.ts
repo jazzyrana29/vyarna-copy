@@ -8,7 +8,7 @@ import { KafkaMessageResponderService,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()

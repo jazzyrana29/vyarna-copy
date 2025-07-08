@@ -3,16 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
-import { PaymentMethod } from '../../entities/payment_method.entity';
 import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
-import { PaymentIntentService } from './services/payment-intent.service';
-import { PaymentIntentKafkaService } from './services/payment-intent-kafka.service';
-import { PaymentMethodService } from './services/payment-method.service';
-import { PaymentMethodKafkaService } from './services/payment-method-kafka.service';
-import { ZtrackingPaymentIntentService } from './services/ztracking-payment-intent.service';
-import { StripeGatewayService } from './services/stripe-gateway.service';
-import { PaymentController } from './payment.controller';
+import { PaymentIntentService } from './payment-intent.service';
+import { PaymentIntentKafkaService } from './payment-intent-kafka.service';
+import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
+import { StripeGatewayService } from './stripe-gateway.service';
+import { PaymentIntentController } from './payment-intent.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -23,25 +20,23 @@ import { LogStreamLevel } from 'ez-logger';
       PaymentRefund,
       PaymentAttempt,
       ZtrackingPaymentIntent,
-      PaymentMethod,
       WebhookEvent,
     ]),
   ],
-  controllers: [PaymentController],
+  controllers: [PaymentIntentController],
   providers: [
     PaymentIntentService,
     PaymentIntentKafkaService,
     ZtrackingPaymentIntentService,
     StripeGatewayService,
-    PaymentMethodService,
-    PaymentMethodKafkaService,
   ],
+  exports: [PaymentIntentService, PaymentIntentKafkaService],
 })
-export class CoreModule {
-  private logger = getLoggerConfig(CoreModule.name);
+export class PaymentIntentModule {
+  private logger = getLoggerConfig(PaymentIntentModule.name);
   constructor() {
     this.logger.debug(
-      `${CoreModule.name} initialized`,
+      `${PaymentIntentModule.name} initialized`,
       '',
       'constructor',
       LogStreamLevel.DebugLight,

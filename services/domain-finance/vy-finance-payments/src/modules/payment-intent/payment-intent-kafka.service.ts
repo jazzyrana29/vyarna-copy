@@ -16,7 +16,7 @@ import {
   GetPaymentRefundDto,
   StripeWebhookDto,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
