@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EzLogger = void 0;
 const clc = require("cli-color");
 const common_1 = require("@nestjs/common");
-const util_1 = require("util");
+const isObject = (arg) => arg !== null && typeof arg === 'object';
 const ez_logger_enum_1 = require("./ez.logger.enum");
 const yellow = clc.xterm(3);
 let EzLogger = EzLogger_1 = class EzLogger {
@@ -45,7 +45,7 @@ let EzLogger = EzLogger_1 = class EzLogger {
         this.printMessage(ez_logger_enum_1.LogLevel.Fatal, message, clc.xterm(202), context, isTimeDiffEnabled, traceId);
     }
     static printMessage(name, message, color, context = '', isTimeDiffEnabled, traceId) {
-        const output = (0, util_1.isObject)(message)
+        const output = isObject(message)
             ? `${color('Object:')}\n${JSON.stringify(message, null, 2)}\n`
             : color(message);
         const localeStringOptions = {
