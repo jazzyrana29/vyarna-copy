@@ -50,21 +50,37 @@ Run the service in development mode after the environment is configured:
 npm run start:dev
 ```
 
-### Example API Call
+## REST API
 
-When the gateway is running on `http://localhost:4040` you can create a payment
-intent through the gateway which forwards the request to this service via Kafka:
+The gateway exposes these endpoints which forward requests to the payments
+service:
 
-```bash
-curl -X POST http://localhost:4040/vy-finance-payments/payment-intents \
-  -H 'Content-Type: application/json' \
-  -d '{"amount": 1000, "currency": "usd"}'
-```
+| Method | Path | Description |
+| ------ | ---- | ----------- |
+| `POST` | `/payment-intents` | Create a new payment intent. |
+| `GET` | `/payment-intents/{id}` | Retrieve an intent by id. |
+| `POST` | `/refunds` | Issue a refund for a payment intent. |
+| `GET` | `/refunds/{id}` | Get a refund record. |
+| `POST` | `/payment-methods` | Vault a payment method. |
+| `GET` | `/payment-methods` | List vaulted methods for a customer. |
+| `DELETE` | `/payment-methods/{id}` | Remove a vaulted method. |
 
-### Gateway Interaction
+## Kafka Event Flow
 
-`vy-finance-payments` listens only to Kafka topics. The `vy-gateway` exposes
-POST endpoints under `src/modules/domain-finance/vy-finance-payments/` and
-forwards each call as a Kafka message. All operations — including reads and
-deletes — are invoked via HTTP `POST`. The gateway returns the service’s
-response back to the client.
+Each HTTP/WebSocket request is translated to a Kafka message. The gateway sends
+the payload on a topic and waits for the corresponding `*-response` event. The
+main topics are:
+
+- `create-payment-intent`
+- `get-payment-intent`
+- `get-ztracking-payment-intent`
+- `create-refund`
+- `get-refund`
+- `process-stripe-webhook`
+- `create-payment-method`
+- `list-payment-methods`
+- `delete-payment-method`
+
+The payments service consumes these topics, executes the business logic (Stripe
+operations, persistence, etc.) and publishes the result back on the response
+topic using the same key.

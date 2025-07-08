@@ -74,11 +74,11 @@ export class HealthSleepWebsocket implements OnGatewayInit {
   ) {
     const traceId = generateTraceId('sleep-event');
     try {
-      const result = await this.kafkaService.logSleepEvent(
-        sleepEventData.sessionId,
-        sleepEventData.event,
-        traceId,
-      );
+      const dto: SleepEventDto = {
+        ...sleepEventData.event,
+        sessionId: sleepEventData.sessionId,
+      } as any;
+      const result = await this.kafkaService.logSleepEvent(dto, traceId);
       socket.emit('sleep-event-result', result);
     } catch (e: any) {
       socket.emit('sleep-event-error', e.message || 'Unknown error');
