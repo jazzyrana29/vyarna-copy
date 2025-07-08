@@ -13,6 +13,8 @@ export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.e
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/email";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/verification";
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events";
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events";
 /* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/medication-administration";
