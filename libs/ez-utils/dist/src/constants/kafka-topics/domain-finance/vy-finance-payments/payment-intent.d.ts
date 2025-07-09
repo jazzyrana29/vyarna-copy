@@ -5,3 +5,4 @@ export declare const KT_CREATE_REFUND = "create-refund";
 export declare const KT_GET_REFUND = "get-refund";
 export declare const KT_PROCESS_STRIPE_WEBHOOK = "process-stripe-webhook";
 export declare const KT_CAPTURE_PAYMENT_INTENT = "capture-payment-intent";
+export declare const KT_CONFIRM_PAYMENT_INTENT = "confirm-payment-intent";

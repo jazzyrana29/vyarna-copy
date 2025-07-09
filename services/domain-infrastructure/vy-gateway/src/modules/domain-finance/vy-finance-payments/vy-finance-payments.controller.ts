@@ -111,6 +111,7 @@ export class FinancePaymentsController {
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('capturePaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'capturePaymentIntent', LogStreamLevel.ProdStandard);
+    await this.paymentsKafkaService.confirmPaymentIntent(captureDto, traceId);
     return new ResponseDTO(
       HttpStatus.OK,
       await this.paymentsKafkaService.capturePaymentIntent(captureDto, traceId),
