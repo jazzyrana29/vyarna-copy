@@ -13,6 +13,7 @@ import { ValidateCreatePaymentMethodDtoPipe } from './pipes/validate-create-paym
 import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-intent-dto.pipe';
 import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-refund-dto.pipe';
 import { ValidateRetryPaymentAttemptDtoPipe } from './pipes/validate-retry-payment-attempt-dto.pipe';
+import { ValidateCapturePaymentIntentDtoPipe } from './pipes/validate-capture-payment-intent-dto.pipe';
 import {
   generateTraceId,
   CreatePaymentIntentDto,
@@ -21,6 +22,7 @@ import {
   CreateRefundDto,
   GetPaymentRefundDto,
   RefundDto,
+  CapturePaymentIntentDto,
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
@@ -28,6 +30,7 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_RETRY_PAYMENT_ATTEMPT,
@@ -96,6 +99,22 @@ export class FinancePaymentsController {
       HttpStatus.OK,
       await this.paymentsKafkaService.getZtrackingPaymentIntent(getDto, traceId),
       'Ztracking retrieved',
+      traceId,
+    );
+  }
+
+  @Post(KT_CAPTURE_PAYMENT_INTENT)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: CapturePaymentIntentDto })
+  async capturePaymentIntent(
+    @Body(new ValidateCapturePaymentIntentDtoPipe()) captureDto: CapturePaymentIntentDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('capturePaymentIntent');
+    this.logger.info('traceId generated successfully', traceId, 'capturePaymentIntent', LogStreamLevel.ProdStandard);
+    return new ResponseDTO(
+      HttpStatus.OK,
+      await this.paymentsKafkaService.capturePaymentIntent(captureDto, traceId),
+      'Capture scheduled',
       traceId,
     );
   }
