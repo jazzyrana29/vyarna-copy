@@ -4,8 +4,8 @@ import { SleepEventDto } from 'ez-utils';
 @Injectable()
 export class ValidateSleepEventDtoPipe implements PipeTransform {
   transform(value: SleepEventDto, _metadata: ArgumentMetadata) {
-    const { eventType, eventTime } = value as any;
-    if (!eventType || !eventTime) {
+    const { sessionId, eventType, eventTime } = value as any;
+    if (!sessionId || !eventType || !eventTime) {
       throw new BadRequestException('Missing required fields');
     }
     return value;
