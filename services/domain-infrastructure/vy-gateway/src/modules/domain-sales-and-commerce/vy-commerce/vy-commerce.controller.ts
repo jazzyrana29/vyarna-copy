@@ -4,7 +4,7 @@ import { ResponseDTO } from '../../../dto/response.dto';
 import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { SalesCommerceKafkaService } from './microservices/vy-sales-commerce-kafka.service';
+import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.service';
 import {
   generateTraceId,
   CreateCartDto,
@@ -52,8 +52,8 @@ import { ValidateGetCategoriesDtoPipe } from './pipes/validate-get-categories-dt
 import { ValidateCheckCouponEligibilityDtoPipe } from './pipes/validate-check-coupon-eligibility-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
-@ApiTags('vy-sales-commerce')
-@Controller('vy-sales-commerce')
+@ApiTags('vy-commerce')
+@Controller('vy-commerce')
 export class SalesCommerceController {
   private logger = getLoggerConfig(SalesCommerceController.name);
 

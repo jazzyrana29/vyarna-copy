@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { KafkaModule } from '../../../utils/kafka/kafka.module';
-import { SalesCommerceKafkaService } from './microservices/vy-sales-commerce-kafka.service';
-import { SalesCommerceWebsocket } from './vy-sales-commerce.gateway';
-import { SalesCommerceController } from './vy-sales-commerce.controller';
-import { SalesCommerceResponseController } from './vy-sales-commerce-response.controller';
+import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.service';
+import { SalesCommerceWebsocket } from './vy-commerce.gateway';
+import { SalesCommerceController } from './vy-commerce.controller';
+import { SalesCommerceResponseController } from './vy-commerce-response.controller';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
