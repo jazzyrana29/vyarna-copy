@@ -8,6 +8,7 @@ import {
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
+  KT_RETRY_PAYMENT_ATTEMPT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -95,5 +96,17 @@ export class PaymentIntentController {
       LogStreamLevel.DebugLight,
     );
     await this.paymentKafkaService.processStripeWebhook(message, key);
+  }
+
+  @MessagePattern(KT_RETRY_PAYMENT_ATTEMPT)
+  async retryPaymentAttempt(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_RETRY_PAYMENT_ATTEMPT}`,
+      '',
+      'retryPaymentAttempt',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.retryPaymentAttempt(message, key);
   }
 }

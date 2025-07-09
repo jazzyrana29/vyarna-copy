@@ -21,6 +21,7 @@ import {
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
+  RetryPaymentAttemptDto,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -121,7 +122,13 @@ export class FinancePaymentsController {
       'retryPaymentAttempt',
       LogStreamLevel.ProdStandard,
     );
-    const result = await this.paymentsKafkaService.retryPaymentAttempt(id, traceId);
+    const retryPaymentAttemptDto: RetryPaymentAttemptDto = {
+      attemptId: id,
+    } as RetryPaymentAttemptDto;
+    const result = await this.paymentsKafkaService.retryPaymentAttempt(
+      retryPaymentAttemptDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, result, 'Retry scheduled', traceId);
   }
 
