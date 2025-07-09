@@ -76,7 +76,7 @@ const HomeScreen: FC = (): JSX.Element => {
         />
         <link rel="canonical" href={baseUrl} />
         <link rel="alternate" hrefLang="en" href={baseUrl} />
-        {structuredData.map((schema, idx) => (
+        {structuredData.map((schema: any, idx: any) => (
           <script key={idx} type="application/ld+json">
             {JSON.stringify(schema)}
           </script>

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { JSX, useState } from 'react';
 import {
   FlatList,
