@@ -105,6 +105,7 @@ describe('PaymentIntentService', () => {
       const webhookRepo = {} as unknown as Repository<WebhookEvent>;
       const ztrackingService = { createZtrackingForPaymentIntent: jest.fn() } as any;
       const stripeGateway = {
+        confirmPaymentIntent: jest.fn().mockResolvedValue({ id: 'pi_123', status: 'requires_capture' }),
         capturePaymentIntent: jest
           .fn()
           .mockResolvedValue({ id: 'pi_123', status: 'succeeded' }),
@@ -121,6 +122,7 @@ describe('PaymentIntentService', () => {
 
       await service.capturePaymentIntent({ paymentIntentId: 'intent-uuid' } as any, 'trace');
 
+      expect(stripeGateway.confirmPaymentIntent).toHaveBeenCalledWith('pi_123');
       expect(stripeGateway.capturePaymentIntent).toHaveBeenCalledWith('pi_123');
     });
   });
