@@ -9,14 +9,16 @@ import {
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
+  KT_RETRY_PAYMENT_ATTEMPT,
   CreatePaymentIntentDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
+  RetryPaymentAttemptDto,
   StripeWebhookDto,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
@@ -105,6 +107,17 @@ export class PaymentIntentKafkaService {
           value.signature,
           traceId,
         ),
+    );
+  }
+
+  async retryPaymentAttempt(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_RETRY_PAYMENT_ATTEMPT,
+      message,
+      key,
+      async (value: RetryPaymentAttemptDto, traceId: string) =>
+        await this.paymentIntentService.retryPaymentAttempt(value, traceId),
     );
   }
 }

@@ -8,7 +8,7 @@ import { KafkaMessageResponderService,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
@@ -33,8 +33,12 @@ export class PaymentMethodKafkaService {
       KT_CREATE_PAYMENT_METHOD,
       message,
       key,
-      async (value: CreatePaymentMethodDto, traceId: string) =>
-        await this.methodService.createPaymentMethod(value, traceId),
+      async (value: CreatePaymentMethodDto & { stripeCustomerId?: string }, traceId: string) =>
+        await this.methodService.createPaymentMethod(
+          value,
+          traceId,
+          value.stripeCustomerId,
+        ),
     );
   }
 

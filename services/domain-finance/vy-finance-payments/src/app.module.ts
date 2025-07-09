@@ -3,7 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeorm from './config/typeorm/typeorm';
 import { CFG_TOKEN_TYPEORM } from './config/config.tokens';
-import { CoreModule } from './modules/core/core.module';
+import { PaymentIntentModule } from './modules/payment-intent/payment-intent.module';
+import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
 import { getLoggerConfig } from './utils/common';
 import { ensureDatabaseExists } from './utils/db-init';
 import { LogStreamLevel } from 'ez-logger';
@@ -27,7 +28,8 @@ import { LogStreamLevel } from 'ez-logger';
         return cfg;
       },
     }),
-    CoreModule,
+    PaymentIntentModule,
+    PaymentMethodModule,
   ],
   controllers: [],
   providers: [],

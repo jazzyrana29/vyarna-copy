@@ -1,6 +1,7 @@
 export declare class PaymentIntentDto {
     paymentIntentId: string;
     externalId: string;
+    clientSecret?: string;
     amountCents: number;
     currency: string;
     status: 'REQUIRES_PAYMENT_METHOD' | 'REQUIRES_CONFIRMATION' | 'PROCESSING' | 'SUCCEEDED' | 'REQUIRES_ACTION' | 'FAILED' | 'CANCELED';

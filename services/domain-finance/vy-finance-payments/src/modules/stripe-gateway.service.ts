@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
@@ -45,6 +45,20 @@ export class StripeGatewayService {
       LogStreamLevel.DebugLight,
     );
     return this.stripe.refunds.create(params);
+  }
+
+  async attachPaymentMethod(
+    paymentMethodId: string,
+    customerId: string,
+    traceId?: string,
+  ): Promise<Stripe.PaymentMethod> {
+    this.logger.debug(
+      `Attaching payment method ${paymentMethodId} to customer ${customerId}`,
+      traceId || '',
+      'attachPaymentMethod',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.paymentMethods.attach(paymentMethodId, { customer: customerId });
   }
 
   constructWebhookEvent(

@@ -4,6 +4,11 @@ Microservice handling payment intents and related operations. Generated from PRD
 specifications. All HTTP traffic is routed through `vy-gateway` which forwards
 messages to this service over Kafka.
 
+The codebase is organized into two NestJS modules:
+
+- **PaymentIntentModule** – handles payment intents, refunds and Stripe webhook processing.
+- **PaymentMethodModule** – manages vaulted payment methods.
+
 ## Local Development Setup
 
 ### Install Dependencies
@@ -26,6 +31,7 @@ Copy `.env-example` to `.env` and provide values for the following variables:
 | `SENTRY_DNS` | Optional Sentry DSN for error tracking |
 | `STRIPE_SECRET_KEY` | Stripe secret key |
 | `STRIPE_WEBHOOK_SECRET` | Secret for validating Stripe webhooks |
+| `STRIPE_ATTACH_PAYMENT_METHOD` | Attach new methods to customers when `stripeCustomerId` is provided (`true`/`false`) |
 | `TIDB_HOST` | TiDB/MySQL host |
 | `TIDB_PORT` | TiDB port |
 | `TIDB_USER` | Database username |
@@ -34,6 +40,10 @@ Copy `.env-example` to `.env` and provide values for the following variables:
 | `TIDB_ENABLE_SSL` | Enable SSL connection to the DB (`true`/`false`) |
 | `TIDB_CA_PATH` | Path to CA certificate when SSL is enabled |
 | `AUTO_SEED` | Seed sample data on startup |
+
+When `STRIPE_ATTACH_PAYMENT_METHOD` is `true`, include a `stripeCustomerId` in
+the payload for `POST /payment-methods` to automatically attach the stored
+payment method to that Stripe customer.
 
 ### Build & Test
 

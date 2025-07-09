@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaymentIntent } from '../../../entities/payment_intent.entity';
-import { PaymentRefund } from '../../../entities/payment_refund.entity';
-import { PaymentAttempt } from '../../../entities/payment_attempt.entity';
-import { WebhookEvent } from '../../../entities/webhook_event.entity';
+import { PaymentIntent } from '../../entities/payment_intent.entity';
+import { PaymentRefund } from '../../entities/payment_refund.entity';
+import { PaymentAttempt } from '../../entities/payment_attempt.entity';
+import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
-import { StripeGatewayService } from './stripe-gateway.service';
+import { StripeGatewayService } from '../stripe-gateway.service';
 import Stripe from 'stripe';
 import {
   CreatePaymentIntentDto,
@@ -16,6 +16,8 @@ import {
   ZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
+  CapturePaymentIntentDto,
+  RetryPaymentAttemptDto,
   KT_PAYMENT_INTENT_CREATED,
   KT_PAYMENT_SUCCEEDED,
   KT_PAYMENT_FAILED,
@@ -25,7 +27,8 @@ import {
   encodeKafkaMessage,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { getLoggerConfig } from '../../../utils/common';
+import { getLoggerConfig } from '../../utils/common';
+import { v4 as uuid } from 'uuid';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
@@ -53,12 +56,12 @@ export class PaymentIntentService {
   }
 
   async createPaymentIntent(
-    createDto: CreatePaymentIntentDto,
+    createPaymentIntentDto: CreatePaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto> {
     let entity = this.paymentRepo.create({
-      ...createDto,
-      externalId: '',
+      ...createPaymentIntentDto,
+      externalId: uuid(),
       status: 'REQUIRES_PAYMENT_METHOD',
     });
 
@@ -76,12 +79,16 @@ export class PaymentIntentService {
       }),
     );
 
+    let clientSecret: string | undefined;
+
     try {
       const stripeIntent = await this.stripeGateway.createPaymentIntent({
         amount: entity.amountCents,
         currency: entity.currency,
         metadata: entity.metadata as any,
       });
+
+      clientSecret = stripeIntent.client_secret || undefined;
 
       entity.externalId = stripeIntent.id;
       const statusMap: Record<string, PaymentIntent['status']> = {
@@ -159,14 +166,17 @@ export class PaymentIntentService {
       traceId,
     );
 
-    return entity;
+    return { ...entity, clientSecret } as PaymentIntentDto;
   }
 
   async getPaymentIntent(
-    { paymentIntentId }: GetPaymentIntentDto,
+    getPaymentIntentDto: GetPaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto | null> {
-    const entity = await this.paymentRepo.findOne({ where: { paymentIntentId } });
+    const { paymentIntentId } = getPaymentIntentDto;
+    const entity = await this.paymentRepo.findOne({
+      where: { paymentIntentId },
+    });
     if (entity) {
       this.logger.info(
         `PaymentIntent retrieved`,
@@ -186,11 +196,11 @@ export class PaymentIntentService {
   }
 
   async getZtrackingPaymentIntent(
-    getDto: GetZtrackingPaymentIntentDto,
+    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
     traceId: string,
   ): Promise<ZtrackingPaymentIntentDto[]> {
     return this.ztrackingPaymentIntentService.getZtrackingForPaymentIntent(
-      getDto,
+      getZtrackingPaymentIntentDto,
       traceId,
     );
   }
@@ -199,7 +209,12 @@ export class PaymentIntentService {
     createRefundDto: CreateRefundDto,
     traceId: string,
   ): Promise<Stripe.Refund> {
-    this.logger.info('Creating refund', traceId, 'createRefund', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Creating refund',
+      traceId,
+      'createRefund',
+      LogStreamLevel.ProdStandard,
+    );
 
     const intent = await this.paymentRepo.findOne({
       where: { paymentIntentId: createRefundDto.paymentIntentId },
@@ -207,7 +222,7 @@ export class PaymentIntentService {
 
     let refundEntity = this.refundRepo.create({
       paymentIntentId: createRefundDto.paymentIntentId,
-      externalId: '',
+      externalId: uuid(),
       amountCents: createRefundDto.amountCents,
       currency: intent?.currency || 'USD',
       status: 'PENDING',
@@ -219,7 +234,7 @@ export class PaymentIntentService {
 
     try {
       const stripeRefund = await this.stripeGateway.createRefund({
-        payment_intent: createRefundDto.paymentIntentId,
+        payment_intent: intent?.externalId || createRefundDto.paymentIntentId,
         amount: createRefundDto.amountCents,
         reason: createRefundDto.reason as any,
         metadata: createRefundDto.metadata as any,
@@ -254,7 +269,12 @@ export class PaymentIntentService {
       await this.refundRepo.update(refundEntity.refundId, {
         status: 'FAILED',
       });
-      this.logger.error(`Failed to create refund => ${error}`, traceId, 'createRefund', LogStreamLevel.DebugHeavy);
+      this.logger.error(
+        `Failed to create refund => ${error}`,
+        traceId,
+        'createRefund',
+        LogStreamLevel.DebugHeavy,
+      );
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
         KT_REFUND_FAILED,
@@ -270,16 +290,139 @@ export class PaymentIntentService {
   }
 
   async getRefund(
-    { refundId }: GetPaymentRefundDto,
+    getPaymentRefundDto: GetPaymentRefundDto,
     traceId: string,
   ): Promise<PaymentRefund | null> {
+    const { refundId } = getPaymentRefundDto;
     const entity = await this.refundRepo.findOne({ where: { refundId } });
     if (entity) {
-      this.logger.info('Refund retrieved', traceId, 'getRefund', LogStreamLevel.DebugLight);
+      this.logger.info(
+        'Refund retrieved',
+        traceId,
+        'getRefund',
+        LogStreamLevel.DebugLight,
+      );
     } else {
-      this.logger.warn(`Refund not found => ${refundId}`, traceId, 'getRefund', LogStreamLevel.DebugLight);
+      this.logger.warn(
+        `Refund not found => ${refundId}`,
+        traceId,
+        'getRefund',
+        LogStreamLevel.DebugLight,
+      );
     }
     return entity;
+  }
+
+  async capturePaymentIntent(
+    { paymentIntentId }: CapturePaymentIntentDto,
+    traceId: string,
+  ): Promise<{ attemptId: string; nextRetryAt?: Date }> {
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId },
+    });
+
+    if (!intent) {
+      this.logger.error(
+        `PaymentIntent not found => ${paymentIntentId}`,
+        traceId,
+        'capturePaymentIntent',
+        LogStreamLevel.DebugHeavy,
+      );
+      throw new Error('PaymentIntent not found');
+    }
+
+    const attempt = await this.attemptRepo.save(
+      this.attemptRepo.create({
+        paymentIntentId: intent.paymentIntentId,
+        attemptNumber:
+          (await this.attemptRepo.count({
+            where: { paymentIntentId: intent.paymentIntentId },
+          })) + 1,
+        status: 'PENDING',
+      }),
+    );
+
+    try {
+      const stripeIntent = await this.stripeGateway.capturePaymentIntent(
+        intent.externalId,
+      );
+
+      const statusMap: Record<string, PaymentIntent['status']> = {
+        requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
+        requires_confirmation: 'REQUIRES_CONFIRMATION',
+        requires_action: 'REQUIRES_ACTION',
+        processing: 'PROCESSING',
+        succeeded: 'SUCCEEDED',
+        canceled: 'CANCELED',
+      };
+
+      intent.status = statusMap[stripeIntent.status] || intent.status;
+      intent.nextRetryAt = null;
+      await this.paymentRepo.save(intent);
+
+      await this.attemptRepo.update(attempt.attemptId, {
+        status: 'SUCCESS',
+        gatewayResponse: stripeIntent as any,
+      });
+
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_PAYMENT_SUCCEEDED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          paymentIntentId: intent.paymentIntentId,
+          orderId: intent.orderId,
+          subscriptionId: intent.subscriptionId,
+          traceId,
+        }),
+      );
+    } catch (error) {
+      intent.nextRetryAt = new Date(Date.now() + 5 * 60 * 1000);
+      await this.paymentRepo.save(intent);
+      await this.attemptRepo.update(attempt.attemptId, {
+        status: 'FAILED',
+        errorCode: (error as any)?.code,
+        errorMessage: (error as any)?.message,
+        gatewayResponse: error as any,
+      });
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_PAYMENT_FAILED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          paymentIntentId: intent.paymentIntentId,
+          errorCode: (error as any)?.code,
+          errorMessage: (error as any)?.message,
+          traceId,
+        }),
+      );
+    }
+
+    await this.ztrackingPaymentIntentService.createZtrackingForPaymentIntent(
+      intent,
+      traceId,
+    );
+
+    return { attemptId: attempt.attemptId, nextRetryAt: intent.nextRetryAt };
+  }
+
+  async retryPaymentAttempt(
+    retryPaymentAttemptDto: RetryPaymentAttemptDto,
+    traceId: string,
+  ): Promise<{ attemptId: string; nextRetryAt?: Date }> {
+    const { attemptId } = retryPaymentAttemptDto;
+    const attempt = await this.attemptRepo.findOne({ where: { attemptId } });
+    if (!attempt) {
+      this.logger.error(
+        `PaymentAttempt not found => ${attemptId}`,
+        traceId,
+        'retryPaymentAttempt',
+        LogStreamLevel.DebugHeavy,
+      );
+      throw new Error('PaymentAttempt not found');
+    }
+    return this.capturePaymentIntent(
+      { paymentIntentId: attempt.paymentIntentId },
+      traceId,
+    );
   }
 
   async handleStripeWebhook(
@@ -341,7 +484,9 @@ export class PaymentIntentService {
           { externalId: pi.id },
           { status: intentStatusMap[event.type] },
         );
-        const updated = await this.paymentRepo.findOne({ where: { externalId: pi.id } });
+        const updated = await this.paymentRepo.findOne({
+          where: { externalId: pi.id },
+        });
         if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
           await new EzKafkaProducer().produce(
             process.env.KAFKA_BROKER as string,
@@ -369,8 +514,12 @@ export class PaymentIntentService {
         }
       }
 
-      if (event.type.startsWith('charge.refund') || event.type.startsWith('refund.')) {
-        const refundObj: any = (event.data.object as any).refund || event.data.object;
+      if (
+        event.type.startsWith('charge.refund') ||
+        event.type.startsWith('refund.')
+      ) {
+        const refundObj: any =
+          (event.data.object as any).refund || event.data.object;
         const statusMap: Record<string, PaymentRefund['status']> = {
           succeeded: 'SUCCEEDED',
           failed: 'FAILED',
@@ -381,7 +530,9 @@ export class PaymentIntentService {
             { externalId: refundObj.id },
             { status: statusMap[refundObj.status] },
           );
-          const updatedRefund = await this.refundRepo.findOne({ where: { externalId: refundObj.id } });
+          const updatedRefund = await this.refundRepo.findOne({
+            where: { externalId: refundObj.id },
+          });
           if (updatedRefund && statusMap[refundObj.status] === 'SUCCEEDED') {
             await new EzKafkaProducer().produce(
               process.env.KAFKA_BROKER as string,

@@ -26,6 +26,12 @@ __decorate([
     __metadata("design:type", String)
 ], PaymentIntentDto.prototype, "externalId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Stripe client secret', required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PaymentIntentDto.prototype, "clientSecret", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: 'Amount in cents' }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)

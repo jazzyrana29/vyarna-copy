@@ -23,6 +23,7 @@ import {
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
   KT_RETRY_PAYMENT_ATTEMPT,
+  RetryPaymentAttemptDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -141,11 +142,14 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async retryPaymentAttempt(attemptId: string, traceId: string) {
+  async retryPaymentAttempt(
+    retryPaymentAttemptDto: RetryPaymentAttemptDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_RETRY_PAYMENT_ATTEMPT,
-      { attemptId },
+      retryPaymentAttemptDto,
       traceId,
     );
   }
