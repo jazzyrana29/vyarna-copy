@@ -19,6 +19,7 @@ import {
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
   CapturePaymentIntentDto,
+  CreateContactDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
@@ -30,6 +31,7 @@ import {
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
   KT_RETRY_PAYMENT_ATTEMPT,
+  KT_CREATE_CONTACT,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -224,6 +226,23 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         `${KT_CREATE_PAYMENT_METHOD}-error`,
         e.message || 'Unknown error',
       );
+    }
+  }
+
+  @SubscribeMessage(KT_CREATE_CONTACT)
+  async handleCreateContact(
+    @ConnectedSocket() socket: Socket,
+    createContactDto: CreateContactDto,
+  ) {
+    const traceId = generateTraceId('finance-payments-create-contact');
+    try {
+      const result = await this.paymentsKafka.createContact(
+        createContactDto,
+        traceId,
+      );
+      socket.emit(`${KT_CREATE_CONTACT}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_CREATE_CONTACT}-error`, e.message || 'Unknown error');
     }
   }
 

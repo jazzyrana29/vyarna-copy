@@ -19,6 +19,7 @@ import {
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
   KT_CREATE_PERSON_ENTITY,
+  KT_CREATE_CONTACT,
   KT_UPDATE_PERSON_ENTITY,
   KT_GET_PERSON_ENTITY,
   KT_GET_HISTORY_PERSON_ENTITY,
@@ -41,6 +42,7 @@ export class PersonIdentityController {
       LogStreamLevel.DebugLight,
     );
   }
+
 
   @Post(KT_CREATE_PERSON_ENTITY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })

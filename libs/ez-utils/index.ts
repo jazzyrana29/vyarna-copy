@@ -12,6 +12,7 @@ export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.e
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/email";
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/verification";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events";
@@ -55,6 +56,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-pe
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
