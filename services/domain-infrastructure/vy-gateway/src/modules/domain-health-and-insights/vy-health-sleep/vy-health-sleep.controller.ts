@@ -1,11 +1,8 @@
 import {
   Body,
   Controller,
-  Get,
   HttpStatus,
-  Param,
   Post,
-  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
@@ -26,6 +23,7 @@ import {
   SleepNotificationDto,
   SleepPatternSummaryDto,
   SleepSummaryDto,
+  DeleteSleepSessionDto,
   GetSleepEventsDto,
   GetSleepInterruptionReasonsDto,
   GetSleepEnvironmentsDto,
@@ -72,7 +70,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post('sessions')
+  @Post(KT_CREATE_SLEEP_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateSleepSessionDto })
   async createSession(
@@ -97,10 +95,11 @@ export class HealthSleepController {
     );
   }
 
-  @Get('sessions')
+  @Post(KT_GET_SLEEP_SESSIONS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepSessionsDto })
   async getSessions(
-    @Query('babyId') babyId: string,
+    @Body() getSleepSessionsDto: GetSleepSessionsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepSessions');
     this.logger.info(
@@ -109,7 +108,6 @@ export class HealthSleepController {
       'getSessions',
       LogStreamLevel.ProdStandard,
     );
-    const getSleepSessionsDto: GetSleepSessionsDto = { babyId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepSessions(getSleepSessionsDto, traceId),
@@ -118,10 +116,11 @@ export class HealthSleepController {
     );
   }
 
-  @Get('sessions/:sessionId')
+  @Post(KT_GET_ZTRACKING_SLEEP_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetZtrackingSleepSessionDto })
   async getZtrackingSession(
-    @Param('sessionId') sessionId: string,
+    @Body() getZtrackingSleepSessionDto: GetZtrackingSleepSessionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getZtrackingSleepSession');
     this.logger.info(
@@ -130,9 +129,6 @@ export class HealthSleepController {
       'getZtrackingSession',
       LogStreamLevel.ProdStandard,
     );
-    const getZtrackingSleepSessionDto: GetZtrackingSleepSessionDto = {
-      sessionId,
-    } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getZtrackingSleepSession(
@@ -144,11 +140,10 @@ export class HealthSleepController {
     );
   }
 
-  @Post('sessions/:sessionId/events')
+  @Post(KT_SLEEP_EVENT_LOGGED)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepEventDto })
   async logEvent(
-    @Param('sessionId') sessionId: string,
     @Body(new ValidateSleepEventDtoPipe()) sleepEventDto: SleepEventDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('logSleepEvent');
@@ -158,20 +153,18 @@ export class HealthSleepController {
       'logEvent',
       LogStreamLevel.ProdStandard,
     );
-    const dto: SleepEventDto = { ...sleepEventDto, sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepEvent(dto, traceId),
+      await this.kafkaService.logSleepEvent(sleepEventDto, traceId),
       'Sleep event logged',
       traceId,
     );
   }
 
-  @Post('sessions/:sessionId/interruptions')
+  @Post(KT_SLEEP_INTERRUPTED)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepInterruptionReasonDto })
   async logInterruption(
-    @Param('sessionId') sessionId: string,
     @Body() interruptionDto: SleepInterruptionReasonDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('logSleepInterruption');
@@ -181,23 +174,18 @@ export class HealthSleepController {
       'logInterruption',
       LogStreamLevel.ProdStandard,
     );
-    const dto: SleepInterruptionReasonDto = {
-      ...interruptionDto,
-      sessionId,
-    } as any;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepInterruption(dto, traceId),
+      await this.kafkaService.logSleepInterruption(interruptionDto, traceId),
       'Sleep interruption logged',
       traceId,
     );
   }
 
-  @Post('sessions/:sessionId/environment')
+  @Post(KT_SLEEP_ENVIRONMENT_RECORDED)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepEnvironmentDto })
   async logEnvironment(
-    @Param('sessionId') sessionId: string,
     @Body() envDto: SleepEnvironmentDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('logSleepEnvironment');
@@ -207,20 +195,18 @@ export class HealthSleepController {
       'logEnvironment',
       LogStreamLevel.ProdStandard,
     );
-    const dto: SleepEnvironmentDto = { ...envDto, sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepEnvironment(dto, traceId),
+      await this.kafkaService.logSleepEnvironment(envDto, traceId),
       'Sleep environment recorded',
       traceId,
     );
   }
 
-  @Post('sessions/:sessionId/ratings')
+  @Post(KT_SLEEP_RATED)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepRatingDto })
   async rateSleep(
-    @Param('sessionId') sessionId: string,
     @Body() ratingDto: SleepRatingDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('logSleepRating');
@@ -230,19 +216,19 @@ export class HealthSleepController {
       'rateSleep',
       LogStreamLevel.ProdStandard,
     );
-    const dto: SleepRatingDto = { ...ratingDto, sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepRating(dto, traceId),
+      await this.kafkaService.logSleepRating(ratingDto, traceId),
       'Sleep rated',
       traceId,
     );
   }
 
-  @Post('sessions/:sessionId/end')
+  @Post(KT_SLEEP_SESSION_ENDED)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: DeleteSleepSessionDto })
   async endSession(
-    @Param('sessionId') sessionId: string,
+    @Body() endDto: DeleteSleepSessionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('endSleepSession');
     this.logger.info(
@@ -253,19 +239,19 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.endSleepSession(sessionId, traceId),
+      await this.kafkaService.endSleepSession(endDto.sessionId, traceId),
       'Sleep session ended',
       traceId,
     );
   }
 
-  @Get('sessions/:sessionId/events')
+  @Post(KT_GET_SLEEP_EVENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepEventsDto })
   async getEvents(
-    @Param('sessionId') sessionId: string,
+    @Body() dto: GetSleepEventsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepEvents');
-    const dto: GetSleepEventsDto = { sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepEvents(dto, traceId),
@@ -274,13 +260,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('sessions/:sessionId/interruptions')
+  @Post(KT_GET_SLEEP_INTERRUPTION_REASONS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepInterruptionReasonsDto })
   async getInterruptions(
-    @Param('sessionId') sessionId: string,
+    @Body() dto: GetSleepInterruptionReasonsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepInterruptions');
-    const dto: GetSleepInterruptionReasonsDto = { sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepInterruptionReasons(dto, traceId),
@@ -289,13 +275,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('sessions/:sessionId/environment')
+  @Post(KT_GET_SLEEP_ENVIRONMENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepEnvironmentsDto })
   async getEnvironments(
-    @Param('sessionId') sessionId: string,
+    @Body() dto: GetSleepEnvironmentsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepEnvironments');
-    const dto: GetSleepEnvironmentsDto = { sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepEnvironments(dto, traceId),
@@ -304,13 +290,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('sessions/:sessionId/ratings')
+  @Post(KT_GET_SLEEP_RATINGS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepRatingsDto })
   async getRatings(
-    @Param('sessionId') sessionId: string,
+    @Body() dto: GetSleepRatingsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepRatings');
-    const dto: GetSleepRatingsDto = { sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepRatings(dto, traceId),
@@ -319,13 +305,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('sessions/:sessionId/summary')
+  @Post(KT_GET_SLEEP_SUMMARY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepSummaryDto })
   async getSummary(
-    @Param('sessionId') sessionId: string,
+    @Body() dto: GetSleepSummaryDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepSummary');
-    const dto: GetSleepSummaryDto = { sessionId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepSummary(dto, traceId),
@@ -334,13 +320,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('schedules')
+  @Post(KT_GET_SLEEP_SCHEDULES)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepSchedulesDto })
   async getSchedules(
-    @Query('babyId') babyId: string,
+    @Body() dto: GetSleepSchedulesDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepSchedules');
-    const dto: GetSleepSchedulesDto = { babyId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepSchedules(dto, traceId),
@@ -349,7 +335,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post('schedules')
+  @Post(KT_CREATE_SLEEP_SCHEDULE)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepScheduleDto })
   async createSchedule(
@@ -364,13 +350,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('notifications')
+  @Post(KT_GET_SLEEP_NOTIFICATIONS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepNotificationsDto })
   async getNotifications(
-    @Query('babyId') babyId: string,
+    @Body() dto: GetSleepNotificationsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepNotifications');
-    const dto: GetSleepNotificationsDto = { babyId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepNotifications(dto, traceId),
@@ -379,7 +365,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post('notifications')
+  @Post(KT_CREATE_SLEEP_NOTIFICATION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepNotificationDto })
   async createNotification(
@@ -394,13 +380,13 @@ export class HealthSleepController {
     );
   }
 
-  @Get('patterns')
+  @Post(KT_GET_SLEEP_PATTERN_SUMMARIES)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetSleepPatternSummariesDto })
   async getPatterns(
-    @Query('babyId') babyId: string,
+    @Body() dto: GetSleepPatternSummariesDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSleepPatterns');
-    const dto: GetSleepPatternSummariesDto = { babyId } as any;
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getSleepPatternSummaries(dto, traceId),
