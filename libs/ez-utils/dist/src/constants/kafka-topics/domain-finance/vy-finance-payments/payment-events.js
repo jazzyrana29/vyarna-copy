@@ -6,4 +6,5 @@ exports.KT_PAYMENT_SUCCEEDED = 'payment-succeeded';
 exports.KT_PAYMENT_FAILED = 'payment-failed';
 exports.KT_REFUND_CREATED = 'refund-created';
 exports.KT_REFUND_SUCCEEDED = 'refund-succeeded-payment';
-exports.KT_REFUND_FAILED = 'refund-failed';//# sourceMappingURL=payment-events.js.map
+exports.KT_REFUND_FAILED = 'refund-failed';
+//# sourceMappingURL=payment-events.js.map

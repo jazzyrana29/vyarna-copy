@@ -9,15 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RetryPaymentAttemptDto = void 0;
+exports.NutritionEventDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-class RetryPaymentAttemptDto {
+class NutritionEventDto {
 }
-exports.RetryPaymentAttemptDto = RetryPaymentAttemptDto;
+exports.NutritionEventDto = NutritionEventDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Attempt identifier' }),
+    (0, swagger_1.ApiProperty)({ description: 'Session identifier' }),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
-], RetryPaymentAttemptDto.prototype, "attemptId", void 0);
-//# sourceMappingURL=retry-payment-attempt.dto.js.map
+], NutritionEventDto.prototype, "sessionId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Type of nutrition event' }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], NutritionEventDto.prototype, "eventType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Event payload', required: false, type: 'object' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsObject)(),
+    __metadata("design:type", Object)
+], NutritionEventDto.prototype, "payload", void 0);
+//# sourceMappingURL=nutrition-event.dto.js.map

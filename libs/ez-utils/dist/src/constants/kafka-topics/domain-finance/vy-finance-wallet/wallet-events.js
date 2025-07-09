@@ -10,4 +10,5 @@ exports.KT_TRANSACTION_RECORDED = "transaction-recorded";
 exports.KT_PROVIDER_PAYOUT_SCHEDULED = "provider-payout-scheduled";
 exports.KT_PROVIDER_PAYOUT_PAID = "provider-payout-paid";
 exports.KT_CONSUMER_REWARD_ISSUED = "consumer-reward-issued";
-exports.KT_CONSUMER_REWARD_REDEEMED = "consumer-reward-redeemed";//# sourceMappingURL=wallet-events.js.map
+exports.KT_CONSUMER_REWARD_REDEEMED = "consumer-reward-redeemed";
+//# sourceMappingURL=wallet-events.js.map
