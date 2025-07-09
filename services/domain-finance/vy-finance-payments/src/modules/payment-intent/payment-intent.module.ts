@@ -8,7 +8,7 @@ import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { PaymentIntentService } from './payment-intent.service';
 import { PaymentIntentKafkaService } from './payment-intent-kafka.service';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
-import { StripeGatewayService } from './stripe-gateway.service';
+import { StripeGatewayService } from '../stripe-gateway.service';
 import { PaymentIntentController } from './payment-intent.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';

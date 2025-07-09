@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { StripeGatewayService } from '../stripe-gateway.service';
 import { PaymentMethod } from '../../entities/payment_method.entity';
 import {
   CreatePaymentMethodDto,
@@ -18,6 +19,7 @@ export class PaymentMethodService {
   constructor(
     @InjectRepository(PaymentMethod)
     private readonly methodRepo: Repository<PaymentMethod>,
+    private readonly stripeGateway: StripeGatewayService,
   ) {
     this.logger.debug(
       `${PaymentMethodService.name} initialized`,
@@ -30,10 +32,23 @@ export class PaymentMethodService {
   async createPaymentMethod(
     createPaymentMethodDto: CreatePaymentMethodDto,
     traceId: string,
+    stripeCustomerId?: string,
   ): Promise<PaymentMethodDto> {
     const entity = await this.methodRepo.save(
       this.methodRepo.create(createPaymentMethodDto),
     );
+
+    if (
+      stripeCustomerId &&
+      process.env.STRIPE_ATTACH_PAYMENT_METHOD === 'true'
+    ) {
+      await this.stripeGateway.attachPaymentMethod(
+        entity.externalId,
+        stripeCustomerId,
+        traceId,
+      );
+    }
+
     this.logger.info(
       'PaymentMethod created',
       traceId,
@@ -72,4 +87,5 @@ export class PaymentMethodService {
       LogStreamLevel.ProdStandard,
     );
   }
+
 }
