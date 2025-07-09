@@ -11,6 +11,7 @@ import {
   GetOrdersDto,
   GetZtrackingOrderDto,
   ZtrackingOrderDto,
+  KT_CAPTURE_PAYMENT_INTENT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -92,6 +93,7 @@ export class OrderService {
     status: string,
     traceId: string,
   ): Promise<void> {
+    const order = await this.orderRepo.findOne({ where: { orderId } });
     await this.orderRepo.update({ orderId }, { status });
     this.logger.info(
       `Order ${orderId} status updated to ${status}`,
@@ -99,6 +101,16 @@ export class OrderService {
       'updateOrderStatus',
       LogStreamLevel.ProdStandard,
     );
+    if (status === 'READY_TO_SHIP' && order?.paymentIntentId) {
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_CAPTURE_PAYMENT_INTENT,
+        encodeKafkaMessage(OrderService.name, {
+          paymentIntentId: order.paymentIntentId,
+          traceId,
+        }),
+      );
+    }
   }
 
   async handlePaymentSucceeded(

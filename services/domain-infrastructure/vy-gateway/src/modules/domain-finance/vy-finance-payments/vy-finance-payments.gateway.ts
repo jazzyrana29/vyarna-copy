@@ -18,9 +18,11 @@ import {
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
+  CapturePaymentIntentDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
@@ -124,6 +126,23 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         `${KT_GET_ZTRACKING_PAYMENT_INTENT}-error`,
         e.message || 'Unknown error',
       );
+    }
+  }
+
+  @SubscribeMessage(KT_CAPTURE_PAYMENT_INTENT)
+  async handleCapture(
+    @ConnectedSocket() socket: Socket,
+    capturePaymentIntentDto: CapturePaymentIntentDto,
+  ) {
+    const traceId = generateTraceId('finance-payments-capture-intent');
+    try {
+      const result = await this.paymentsKafka.capturePaymentIntent(
+        capturePaymentIntentDto,
+        traceId,
+      );
+      socket.emit(`${KT_CAPTURE_PAYMENT_INTENT}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_CAPTURE_PAYMENT_INTENT}-error`, e.message || 'Unknown error');
     }
   }
 
