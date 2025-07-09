@@ -26,7 +26,7 @@ import {
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
   KT_CREATE_CONTACT,
-  CreateContactDto,
+  CreateContactStripe,
   KT_RETRY_PAYMENT_ATTEMPT,
   RetryPaymentAttemptDto,
 } from 'ez-utils';
@@ -171,7 +171,7 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async createContact(createContactDto: CreateContactDto, traceId: string) {
+  async createContact(createContactDto: CreateContactStripe, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_CONTACT,
