@@ -7,9 +7,10 @@ import {
   KT_GET_NUTRITION_SESSION,
   StartNutritionSessionDto,
   GetNutritionSessionDto,
+  NutritionEventDto,
+  KT_END_NUTRITION_SESSION,
+  KT_LOG_NUTRITION_EVENT,
 } from 'ez-utils';
-import { NutritionEventDto } from '../dto/nutrition-event.dto';
-import { KT_END_NUTRITION_SESSION, KT_LOG_NUTRITION_EVENT } from '../constants/kafka-topics';
 
 @Injectable()
 export class NutritionLogKafkaService {
@@ -34,30 +35,29 @@ export class NutritionLogKafkaService {
     );
   }
 
-  async logEvent(sessionId: string, dto: NutritionEventDto, traceId: string) {
+  async logEvent(dto: NutritionEventDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_LOG_NUTRITION_EVENT,
-      { sessionId, ...dto },
+      dto,
       traceId,
     );
   }
 
-  async endSession(sessionId: string, traceId: string) {
+  async endSession(dto: GetNutritionSessionDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_END_NUTRITION_SESSION,
-      { sessionId },
+      dto,
       traceId,
     );
   }
 
-  async getSession(sessionId: string, traceId: string) {
-    const payload: GetNutritionSessionDto = { sessionId } as any;
+  async getSession(dto: GetNutritionSessionDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_NUTRITION_SESSION,
-      payload,
+      dto,
       traceId,
     );
   }
