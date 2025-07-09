@@ -7,6 +7,7 @@ export * from "./src/enums/domain-person-and-identity/vy-active-campaign/tags.en
 export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.enum";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/email";
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/verification";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events";
@@ -45,6 +46,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-pe
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
@@ -182,3 +184,5 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cancel-subscripti
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/check-coupon-eligibility-payload.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/check-coupon-eligibility-response.dto";

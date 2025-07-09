@@ -8,4 +8,5 @@ exports.KT_CREATE_REFUND = 'create-refund';
 exports.KT_GET_REFUND = 'get-refund';
 exports.KT_PROCESS_STRIPE_WEBHOOK = 'process-stripe-webhook';
 exports.KT_CAPTURE_PAYMENT_INTENT = 'capture-payment-intent';
-exports.KT_CONFIRM_PAYMENT_INTENT = 'confirm-payment-intent';//# sourceMappingURL=payment-intent.js.map
+exports.KT_CONFIRM_PAYMENT_INTENT = 'confirm-payment-intent';
+//# sourceMappingURL=payment-intent.js.map

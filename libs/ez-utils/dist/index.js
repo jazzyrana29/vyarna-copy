@@ -23,6 +23,7 @@ __exportStar(require("./src/enums/domain-person-and-identity/vy-active-campaign/
 __exportStar(require("./src/enums/domain-person-and-identity/vy-active-campaign/lists.enum"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/email"), exports);
+__exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/verification"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events"), exports);
@@ -61,6 +62,7 @@ __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/up
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-person.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/create-contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto"), exports);
@@ -198,4 +200,6 @@ __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/cancel-sub
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto"), exports);
+__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/check-coupon-eligibility-payload.dto"), exports);
+__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/check-coupon-eligibility-response.dto"), exports);
 //# sourceMappingURL=index.js.map
