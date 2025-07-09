@@ -8,3 +8,7 @@ export class CreatePaymentMethodDto extends PickType(PaymentMethodDto, [
   'details',
   'isDefault',
 ] as const) {}
+
+export class CreatePaymentMethodWithStripeDto extends CreatePaymentMethodDto {
+  stripeCustomerId?: string;
+}
