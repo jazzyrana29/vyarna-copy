@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { StripeGatewayService } from '../stripe-gateway.service';
-import { CreateContactDto } from 'ez-utils';
+import { CreateContactStripe } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -18,7 +18,7 @@ export class ContactService {
   }
 
   async createContact(
-    dto: CreateContactDto,
+    dto: CreateContactStripe,
     traceId: string,
   ): Promise<{ customerId: string }> {
     const customer = await this.stripeGateway.createContact({
