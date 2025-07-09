@@ -41,6 +41,7 @@ export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerc
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/product";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/cart";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/coupon";
 
 /**************************************** DTOs **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/

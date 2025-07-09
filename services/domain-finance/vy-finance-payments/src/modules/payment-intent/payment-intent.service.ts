@@ -24,6 +24,8 @@ import {
   KT_REFUND_CREATED,
   KT_REFUND_SUCCEEDED,
   KT_REFUND_FAILED,
+  KT_COUPON_USED,
+  KT_COUPON_LIMIT_REACHED,
   encodeKafkaMessage,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
@@ -547,6 +549,51 @@ export class PaymentIntentService {
               }),
             );
           }
+        }
+      }
+
+      if (event.type === 'checkout.session.completed') {
+        const session: any = event.data.object;
+        const discount = session.discounts?.[0];
+        const couponId = discount?.coupon?.id || discount?.coupon;
+        const promotionId = discount?.promotion_code || discount?.promotionCode;
+        if (discount && (couponId || promotionId)) {
+          let orderId: string | undefined;
+          if (session.payment_intent) {
+            const intent = await this.paymentRepo.findOne({
+              where: { externalId: session.payment_intent as string },
+            });
+            orderId = intent?.orderId;
+          }
+          await new EzKafkaProducer().produce(
+            process.env.KAFKA_BROKER as string,
+            KT_COUPON_USED,
+            encodeKafkaMessage(PaymentIntentService.name, {
+              couponId: couponId || promotionId,
+              orderId,
+              customerId: session.customer as string,
+              traceId,
+            }),
+          );
+        }
+      }
+
+      if (
+        event.type === 'coupon.updated' ||
+        event.type === 'promotion_code.updated'
+      ) {
+        const obj: any = event.data.object;
+        const times = obj.times_redeemed;
+        const max = obj.max_redemptions;
+        if (max && times >= max) {
+          await new EzKafkaProducer().produce(
+            process.env.KAFKA_BROKER as string,
+            KT_COUPON_LIMIT_REACHED,
+            encodeKafkaMessage(PaymentIntentService.name, {
+              couponId: obj.id,
+              traceId,
+            }),
+          );
         }
       }
 
