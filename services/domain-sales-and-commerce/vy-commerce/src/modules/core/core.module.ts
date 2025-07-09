@@ -4,6 +4,7 @@ import { Order } from '../../entities/order.entity';
 import { ZtrackingOrder } from '../../entities/ztracking_order.entity';
 import { OrderService } from './services/order.service';
 import { OrderKafkaService } from './services/order-kafka.service';
+import { ProductService } from './services/product.service';
 import { ZtrackingOrderService } from './services/ztracking-order.service';
 import { CouponService } from './services/coupon.service';
 import { CouponKafkaService } from './services/coupon-kafka.service';
@@ -19,6 +20,7 @@ import { LogStreamLevel } from 'ez-logger';
     OrderService,
     OrderKafkaService,
     ZtrackingOrderService,
+    ProductService,
     CouponService,
     CouponKafkaService,
   ],

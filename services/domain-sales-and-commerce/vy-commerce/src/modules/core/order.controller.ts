@@ -3,6 +3,7 @@ import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservice
 import { OrderKafkaService } from './services/order-kafka.service';
 import {
   KT_CREATE_ORDER,
+  KT_GET_PRODUCTS,
   KT_GET_ORDERS,
   KT_GET_ZTRACKING_ORDER,
 } from 'ez-utils';
@@ -35,6 +36,21 @@ export class OrderController {
       LogStreamLevel.DebugLight,
     );
     await this.orderKafkaService.createOrder(message, key);
+  }
+
+  @MessagePattern(KT_GET_PRODUCTS)
+  async getProductsWithKafka(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_PRODUCTS}`,
+      '',
+      'getProductsWithKafka',
+      LogStreamLevel.DebugLight,
+    );
+    await this.orderKafkaService.getProducts(message, key);
   }
 
   @MessagePattern(KT_GET_ORDERS)
