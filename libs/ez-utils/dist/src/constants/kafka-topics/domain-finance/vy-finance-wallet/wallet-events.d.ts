@@ -1,6 +1,6 @@
 export declare const KT_WALLET_ORDER_PAID = "order-paid";
 export declare const KT_WALLET_SUBSCRIPTION_RENEWED = "subscription-renewed";
-export declare const KT_WALLET_REFUND_SUCCEEDED = "refund-succeeded";
+export declare const KT_WALLET_REFUND_SUCCEEDED = "refund-succeeded-wallet";
 export declare const KT_WALLET_AFFILIATE_COMMISSION_CREATED = "affiliate-commission-created";
 export declare const KT_WALLET_ACCOUNT_CREATED = "wallet-account-created";
 export declare const KT_TRANSACTION_RECORDED = "transaction-recorded";
