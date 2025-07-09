@@ -85,7 +85,10 @@ export class PaymentIntentService {
       const stripeIntent = await this.stripeGateway.createPaymentIntent({
         amount: entity.amountCents,
         currency: entity.currency,
-        metadata: entity.metadata as any,
+        capture_method: 'manual',
+        metadata: entity.orderId
+          ? { order_id: entity.orderId, ...(entity.metadata as any) }
+          : (entity.metadata as any),
       });
 
       clientSecret = stripeIntent.client_secret || undefined;
