@@ -29,13 +29,20 @@ vyarna-nucleus/
 │   ├── admin-portal/       # internal admin UI
 │   └── mobile-app/         # React Native / Expo consumer/provider app
 └── services/               # back-end microservices by domain
-    ├── person/
+    ├── domain-emotional-and-engagement/
+    ├── domain-ezflow/
+    ├── domain-finance/
+    ├── domain-health-and-insights/
+    ├── domain-infrastructure/
+    ├── domain-milk/
+    ├── domain-multitenant/
+    ├── domain-person-and-identity/
     │   ├── vy-person-identity/
+    │   ├── vy-person-email/
     │   ├── vy-person-roles/
     │   └── …
-    ├── milk/
-    ├── sales/
-    └── …
+    ├── domain-privacy-and-consent/
+    └── domain-sales-and-commerce/
 ```
 
 ---
