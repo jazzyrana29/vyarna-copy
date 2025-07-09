@@ -1,7 +1,7 @@
 import { Controller, Post, Headers, Req, HttpCode } from '@nestjs/common';
 import { Request } from 'express';
 import { FinancePaymentsKafkaService } from './microservices/vy-finance-payments-kafka.service';
-import { generateTraceId, StripeWebhookDto } from 'ez-utils';
+import { generateTraceId, StripeWebhookDto, KT_PROCESS_STRIPE_WEBHOOK } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -11,7 +11,7 @@ export class StripeWebhookController {
 
   constructor(private readonly paymentsKafka: FinancePaymentsKafkaService) {}
 
-  @Post('stripe')
+  @Post(KT_PROCESS_STRIPE_WEBHOOK)
   @HttpCode(200)
   async handleStripe(@Req() req: Request, @Headers('stripe-signature') sig: string) {
     const traceId = generateTraceId('stripeWebhook');
