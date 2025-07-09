@@ -19,6 +19,7 @@ import {
   CreateSubscriptionDto,
   GetSubscriptionDto,
   CancelSubscriptionDto,
+  CheckCouponEligibilityPayloadDto,
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
@@ -36,6 +37,7 @@ import {
   KT_CREATE_SUBSCRIPTION,
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
+  KT_CHECK_COUPON_ELIGIBILITY,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -293,6 +295,20 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       socket.emit(`${KT_CANCEL_SUBSCRIPTION}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_CANCEL_SUBSCRIPTION}-error`, e.message || 'Unknown error');
+    }
+  }
+
+  @SubscribeMessage(KT_CHECK_COUPON_ELIGIBILITY)
+  async checkCouponEligibility(
+    @ConnectedSocket() socket: Socket,
+    payload: CheckCouponEligibilityPayloadDto,
+  ) {
+    const traceId = generateTraceId('sales-commerce-check-coupon');
+    try {
+      const result = await this.kafkaService.checkCouponEligibility(payload, traceId);
+      socket.emit(`${KT_CHECK_COUPON_ELIGIBILITY}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_CHECK_COUPON_ELIGIBILITY}-error`, e.message || 'Unknown error');
     }
   }
 }

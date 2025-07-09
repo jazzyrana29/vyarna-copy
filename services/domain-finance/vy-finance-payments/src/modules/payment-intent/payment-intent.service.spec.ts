@@ -5,7 +5,15 @@ import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
-import { CreateRefundDto } from 'ez-utils';
+import {
+  CreateRefundDto,
+  KT_COUPON_USED,
+  KT_COUPON_LIMIT_REACHED,
+  encodeKafkaMessage,
+} from 'ez-utils';
+import { EzKafkaProducer } from 'ez-kafka-producer';
+
+jest.mock('ez-kafka-producer');
 
 describe('PaymentIntentService', () => {
   describe('createRefund', () => {
@@ -114,6 +122,92 @@ describe('PaymentIntentService', () => {
       await service.capturePaymentIntent({ paymentIntentId: 'intent-uuid' } as any, 'trace');
 
       expect(stripeGateway.capturePaymentIntent).toHaveBeenCalledWith('pi_123');
+    });
+  });
+
+  describe('handleStripeWebhook', () => {
+    it('emits coupon-used on checkout.session.completed with discount', async () => {
+      const paymentRepo = {
+        findOne: jest.fn().mockResolvedValue({ orderId: 'order1' }),
+      } as unknown as Repository<PaymentIntent>;
+      const refundRepo = {} as unknown as Repository<PaymentRefund>;
+      const attemptRepo = {} as unknown as Repository<PaymentAttempt>;
+      const webhookRepo = {
+        findOne: jest.fn().mockResolvedValue(null),
+        save: jest.fn().mockResolvedValue({ webhookId: 'wh1' }),
+        update: jest.fn(),
+      } as unknown as Repository<WebhookEvent>;
+      const ztrackingService = { createZtrackingForPaymentIntent: jest.fn() } as any;
+      const event = {
+        id: 'evt_1',
+        type: 'checkout.session.completed',
+        data: { object: { discounts: [{ coupon: { id: 'c1' } }], payment_intent: 'pi', customer: 'cus1' } },
+      } as any;
+      const stripeGateway = { constructWebhookEvent: jest.fn().mockReturnValue(event) } as unknown as StripeGatewayService;
+      const producerInstance = { produce: jest.fn() };
+      (EzKafkaProducer as jest.Mock).mockImplementation(() => producerInstance);
+
+      const service = new PaymentIntentService(
+        paymentRepo,
+        refundRepo,
+        attemptRepo,
+        webhookRepo,
+        ztrackingService,
+        stripeGateway,
+      );
+
+      await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
+
+      expect(producerInstance.produce).toHaveBeenCalledWith(
+        process.env.KAFKA_BROKER as string,
+        KT_COUPON_USED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          couponId: 'c1',
+          orderId: 'order1',
+          customerId: 'cus1',
+          traceId: 'trace',
+        }),
+      );
+    });
+
+    it('emits coupon-limit-reached when limit hit', async () => {
+      const paymentRepo = {} as unknown as Repository<PaymentIntent>;
+      const refundRepo = {} as unknown as Repository<PaymentRefund>;
+      const attemptRepo = {} as unknown as Repository<PaymentAttempt>;
+      const webhookRepo = {
+        findOne: jest.fn().mockResolvedValue(null),
+        save: jest.fn().mockResolvedValue({ webhookId: 'wh1' }),
+        update: jest.fn(),
+      } as unknown as Repository<WebhookEvent>;
+      const ztrackingService = { createZtrackingForPaymentIntent: jest.fn() } as any;
+      const event = {
+        id: 'evt_2',
+        type: 'coupon.updated',
+        data: { object: { id: 'c1', times_redeemed: 5, max_redemptions: 5 } },
+      } as any;
+      const stripeGateway = { constructWebhookEvent: jest.fn().mockReturnValue(event) } as unknown as StripeGatewayService;
+      const producerInstance = { produce: jest.fn() };
+      (EzKafkaProducer as jest.Mock).mockImplementation(() => producerInstance);
+
+      const service = new PaymentIntentService(
+        paymentRepo,
+        refundRepo,
+        attemptRepo,
+        webhookRepo,
+        ztrackingService,
+        stripeGateway,
+      );
+
+      await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
+
+      expect(producerInstance.produce).toHaveBeenCalledWith(
+        process.env.KAFKA_BROKER as string,
+        KT_COUPON_LIMIT_REACHED,
+        encodeKafkaMessage(PaymentIntentService.name, {
+          couponId: 'c1',
+          traceId: 'trace',
+        }),
+      );
     });
   });
 });

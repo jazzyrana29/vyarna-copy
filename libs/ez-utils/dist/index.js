@@ -50,6 +50,7 @@ __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-
 __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/product"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/cart"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription"), exports);
+__exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/coupon"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/person.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/create-person.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-person.dto"), exports);
