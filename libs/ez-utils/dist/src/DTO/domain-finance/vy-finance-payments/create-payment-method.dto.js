@@ -14,4 +14,5 @@ class CreatePaymentMethodDto extends (0, swagger_1.PickType)(payment_method_dto_
 exports.CreatePaymentMethodDto = CreatePaymentMethodDto;
 class CreatePaymentMethodWithStripeDto extends CreatePaymentMethodDto {
 }
-exports.CreatePaymentMethodWithStripeDto = CreatePaymentMethodWithStripeDto;//# sourceMappingURL=create-payment-method.dto.js.map
+exports.CreatePaymentMethodWithStripeDto = CreatePaymentMethodWithStripeDto;
+//# sourceMappingURL=create-payment-method.dto.js.map
