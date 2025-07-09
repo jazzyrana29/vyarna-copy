@@ -18,6 +18,16 @@ import {
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
+  KT_CREATE_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT,
+  KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CREATE_REFUND,
+  KT_GET_REFUND,
+  KT_PROCESS_STRIPE_WEBHOOK,
+  KT_CREATE_PAYMENT_METHOD,
+  KT_LIST_PAYMENT_METHODS,
+  KT_DELETE_PAYMENT_METHOD,
+  KT_RETRY_PAYMENT_ATTEMPT,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -57,7 +67,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('finance-payments-create-intent')
+  @SubscribeMessage(KT_CREATE_PAYMENT_INTENT)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
     createPaymentIntentDto: CreatePaymentIntentDto,
@@ -68,16 +78,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         createPaymentIntentDto,
         traceId,
       );
-      socket.emit('finance-payments-create-intent-result', result);
+      socket.emit(`${KT_CREATE_PAYMENT_INTENT}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-create-intent-error',
+        `${KT_CREATE_PAYMENT_INTENT}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-get-intent')
+  @SubscribeMessage(KT_GET_PAYMENT_INTENT)
   async handleGet(
     @ConnectedSocket() socket: Socket,
     getPaymentIntentDto: GetPaymentIntentDto,
@@ -88,16 +98,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         getPaymentIntentDto,
         traceId,
       );
-      socket.emit('finance-payments-get-intent-result', result);
+      socket.emit(`${KT_GET_PAYMENT_INTENT}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-get-intent-error',
+        `${KT_GET_PAYMENT_INTENT}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-get-ztracking-intent')
+  @SubscribeMessage(KT_GET_ZTRACKING_PAYMENT_INTENT)
   async handleZtracking(
     @ConnectedSocket() socket: Socket,
     getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
@@ -108,16 +118,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         getZtrackingPaymentIntentDto,
         traceId,
       );
-      socket.emit('finance-payments-get-ztracking-intent-result', result);
+      socket.emit(`${KT_GET_ZTRACKING_PAYMENT_INTENT}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-get-ztracking-intent-error',
+        `${KT_GET_ZTRACKING_PAYMENT_INTENT}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-create-refund')
+  @SubscribeMessage(KT_CREATE_REFUND)
   async handleCreateRefund(
     @ConnectedSocket() socket: Socket,
     createRefundDto: CreateRefundDto,
@@ -128,16 +138,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         createRefundDto,
         traceId,
       );
-      socket.emit('finance-payments-create-refund-result', result);
+      socket.emit(`${KT_CREATE_REFUND}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-create-refund-error',
+        `${KT_CREATE_REFUND}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-get-refund')
+  @SubscribeMessage(KT_GET_REFUND)
   async handleGetRefund(
     @ConnectedSocket() socket: Socket,
     getPaymentRefundDto: GetPaymentRefundDto,
@@ -148,16 +158,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         getPaymentRefundDto,
         traceId,
       );
-      socket.emit('finance-payments-get-refund-result', result);
+      socket.emit(`${KT_GET_REFUND}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-get-refund-error',
+        `${KT_GET_REFUND}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-retry-attempt')
+  @SubscribeMessage(KT_RETRY_PAYMENT_ATTEMPT)
   async handleRetryAttempt(
     @ConnectedSocket() socket: Socket,
     retryPaymentAttemptDto: RetryPaymentAttemptDto,
@@ -168,16 +178,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         retryPaymentAttemptDto,
         traceId,
       );
-      socket.emit('finance-payments-retry-attempt-result', result);
+      socket.emit(`${KT_RETRY_PAYMENT_ATTEMPT}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-retry-attempt-error',
+        `${KT_RETRY_PAYMENT_ATTEMPT}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-create-method')
+  @SubscribeMessage(KT_CREATE_PAYMENT_METHOD)
   async handleCreateMethod(
     @ConnectedSocket() socket: Socket,
     createPaymentMethodDto: CreatePaymentMethodDto,
@@ -188,16 +198,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         createPaymentMethodDto,
         traceId,
       );
-      socket.emit('finance-payments-create-method-result', result);
+      socket.emit(`${KT_CREATE_PAYMENT_METHOD}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-create-method-error',
+        `${KT_CREATE_PAYMENT_METHOD}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-list-methods')
+  @SubscribeMessage(KT_LIST_PAYMENT_METHODS)
   async handleListMethods(
     @ConnectedSocket() socket: Socket,
     getPaymentMethodsDto: GetPaymentMethodsDto,
@@ -208,16 +218,16 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         getPaymentMethodsDto,
         traceId,
       );
-      socket.emit('finance-payments-list-methods-result', result);
+      socket.emit(`${KT_LIST_PAYMENT_METHODS}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-list-methods-error',
+        `${KT_LIST_PAYMENT_METHODS}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('finance-payments-delete-method')
+  @SubscribeMessage(KT_DELETE_PAYMENT_METHOD)
   async handleDeleteMethod(
     @ConnectedSocket() socket: Socket,
     deletePaymentMethodDto: DeletePaymentMethodDto,
@@ -228,10 +238,10 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         deletePaymentMethodDto,
         traceId,
       );
-      socket.emit('finance-payments-delete-method-result', result);
+      socket.emit(`${KT_DELETE_PAYMENT_METHOD}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'finance-payments-delete-method-error',
+        `${KT_DELETE_PAYMENT_METHOD}-error`,
         e.message || 'Unknown error',
       );
     }

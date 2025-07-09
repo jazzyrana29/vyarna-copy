@@ -14,6 +14,11 @@ import {
   GetPersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -53,7 +58,7 @@ export class PersonCosharerWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('person-cosharer-create')
+  @SubscribeMessage(KT_CREATE_PERSON_ENTITY)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
     createPersonDto: CreatePersonDto,
@@ -64,13 +69,13 @@ export class PersonCosharerWebsocket implements OnGatewayInit {
         createPersonDto,
         traceId,
       );
-      socket.emit('person-cosharer-create-result', result);
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('person-cosharer-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('person-cosharer-update')
+  @SubscribeMessage(KT_UPDATE_PERSON_ENTITY)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
     updatePersonDto: UpdatePersonDto,
@@ -81,13 +86,13 @@ export class PersonCosharerWebsocket implements OnGatewayInit {
         updatePersonDto,
         traceId,
       );
-      socket.emit('person-cosharer-update-result', result);
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('person-cosharer-update-error', e.message || 'Unknown error');
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('person-cosharer-get')
+  @SubscribeMessage(KT_GET_PERSON_ENTITY)
   async handleGet(
     @ConnectedSocket() socket: Socket,
     getPersonDto: GetPersonDto,
@@ -95,13 +100,13 @@ export class PersonCosharerWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('person-cosharer-get');
     try {
       const result = await this.personBabyKafka.getPerson(getPersonDto, traceId);
-      socket.emit('person-cosharer-get-result', result);
+      socket.emit(`${KT_GET_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('person-cosharer-get-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('person-cosharer-get-history')
+  @SubscribeMessage(KT_GET_HISTORY_PERSON_ENTITY)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
     getHistoryOfPersonDto: GetHistoryOfPersonDto,
@@ -112,16 +117,16 @@ export class PersonCosharerWebsocket implements OnGatewayInit {
         getHistoryOfPersonDto,
         traceId,
       );
-      socket.emit('person-cosharer-get-history-result', result);
+      socket.emit(`${KT_GET_HISTORY_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'person-cosharer-get-history-error',
+        `${KT_GET_HISTORY_PERSON_ENTITY}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('person-cosharer-get-many')
+  @SubscribeMessage(KT_GET_MANY_PERSONS)
   async handleGetMany(
     @ConnectedSocket() socket: Socket,
     getManyPersonsDto: GetManyPersonsDto,
@@ -132,10 +137,10 @@ export class PersonCosharerWebsocket implements OnGatewayInit {
         getManyPersonsDto,
         traceId,
       );
-      socket.emit('person-cosharer-get-many-result', result);
+      socket.emit(`${KT_GET_MANY_PERSONS}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'person-cosharer-get-many-error',
+        `${KT_GET_MANY_PERSONS}-error`,
         e.message || 'Unknown error',
       );
     }

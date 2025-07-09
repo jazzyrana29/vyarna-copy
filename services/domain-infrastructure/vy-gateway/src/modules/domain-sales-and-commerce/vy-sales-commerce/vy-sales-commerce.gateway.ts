@@ -22,6 +22,20 @@ import {
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
+  KT_GET_PRODUCTS,
+  KT_GET_PRODUCT_VARIANTS,
+  KT_GET_CATEGORIES,
+  KT_CREATE_CART,
+  KT_ADD_CART_ITEM,
+  KT_REMOVE_CART_ITEM,
+  KT_APPLY_CART_PROMOTION,
+  KT_CREATE_ORDER,
+  KT_GET_ORDERS,
+  KT_GET_ZTRACKING_ORDER,
+  KT_UPDATE_ORDER_SHIPPING,
+  KT_CREATE_SUBSCRIPTION,
+  KT_GET_SUBSCRIPTION,
+  KT_CANCEL_SUBSCRIPTION,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -61,7 +75,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('sales-commerce-get-products')
+  @SubscribeMessage(KT_GET_PRODUCTS)
   async getProducts(
     @ConnectedSocket() socket: Socket,
     getProductsDto: GetProductsDto,
@@ -72,13 +86,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         getProductsDto,
         traceId,
       );
-      socket.emit('sales-commerce-get-products-result', result);
+      socket.emit(`${KT_GET_PRODUCTS}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-get-products-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_PRODUCTS}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-get-product-variants')
+  @SubscribeMessage(KT_GET_PRODUCT_VARIANTS)
   async getProductVariants(
     @ConnectedSocket() socket: Socket,
     getProductVariantsDto: GetProductVariantsDto,
@@ -89,13 +103,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         getProductVariantsDto,
         traceId,
       );
-      socket.emit('sales-commerce-get-product-variants-result', result);
+      socket.emit(`${KT_GET_PRODUCT_VARIANTS}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-get-product-variants-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_PRODUCT_VARIANTS}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-get-categories')
+  @SubscribeMessage(KT_GET_CATEGORIES)
   async getCategories(
     @ConnectedSocket() socket: Socket,
     getCategoriesDto: GetCategoriesDto,
@@ -106,13 +120,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         getCategoriesDto,
         traceId,
       );
-      socket.emit('sales-commerce-get-categories-result', result);
+      socket.emit(`${KT_GET_CATEGORIES}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-get-categories-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_CATEGORIES}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-create-cart')
+  @SubscribeMessage(KT_CREATE_CART)
   async createCart(
     @ConnectedSocket() socket: Socket,
     createCartDto: CreateCartDto,
@@ -123,13 +137,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         createCartDto,
         traceId,
       );
-      socket.emit('sales-commerce-create-cart-result', result);
+      socket.emit(`${KT_CREATE_CART}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-create-cart-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_CART}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-add-cart-item')
+  @SubscribeMessage(KT_ADD_CART_ITEM)
   async addCartItem(
     @ConnectedSocket() socket: Socket,
     addCartItemDto: AddCartItemDto,
@@ -140,13 +154,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         addCartItemDto,
         traceId,
       );
-      socket.emit('sales-commerce-add-cart-item-result', result);
+      socket.emit(`${KT_ADD_CART_ITEM}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-add-cart-item-error', e.message || 'Unknown error');
+      socket.emit(`${KT_ADD_CART_ITEM}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-remove-cart-item')
+  @SubscribeMessage(KT_REMOVE_CART_ITEM)
   async removeCartItem(
     @ConnectedSocket() socket: Socket,
     removeCartItemDto: RemoveCartItemDto,
@@ -157,13 +171,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         removeCartItemDto,
         traceId,
       );
-      socket.emit('sales-commerce-remove-cart-item-result', result);
+      socket.emit(`${KT_REMOVE_CART_ITEM}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-remove-cart-item-error', e.message || 'Unknown error');
+      socket.emit(`${KT_REMOVE_CART_ITEM}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-apply-cart-promotion')
+  @SubscribeMessage(KT_APPLY_CART_PROMOTION)
   async applyPromotion(
     @ConnectedSocket() socket: Socket,
     applyCartPromotionDto: ApplyCartPromotionDto,
@@ -174,13 +188,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         applyCartPromotionDto,
         traceId,
       );
-      socket.emit('sales-commerce-apply-cart-promotion-result', result);
+      socket.emit(`${KT_APPLY_CART_PROMOTION}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-apply-cart-promotion-error', e.message || 'Unknown error');
+      socket.emit(`${KT_APPLY_CART_PROMOTION}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-create-order')
+  @SubscribeMessage(KT_CREATE_ORDER)
   async createOrder(
     @ConnectedSocket() socket: Socket,
     createOrderDto: CreateOrderDto,
@@ -191,13 +205,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         createOrderDto,
         traceId,
       );
-      socket.emit('sales-commerce-create-order-result', result);
+      socket.emit(`${KT_CREATE_ORDER}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-create-order-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_ORDER}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-get-order')
+  @SubscribeMessage(KT_GET_ZTRACKING_ORDER)
   async getOrder(
     @ConnectedSocket() socket: Socket,
     getZtrackingOrderDto: GetZtrackingOrderDto,
@@ -208,13 +222,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         getZtrackingOrderDto,
         traceId,
       );
-      socket.emit('sales-commerce-get-order-result', result);
+      socket.emit(`${KT_GET_ZTRACKING_ORDER}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-get-order-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_ZTRACKING_ORDER}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-update-order-shipping')
+  @SubscribeMessage(KT_UPDATE_ORDER_SHIPPING)
   async updateShipping(
     @ConnectedSocket() socket: Socket,
     updateOrderShippingDto: UpdateOrderShippingDto,
@@ -225,13 +239,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         updateOrderShippingDto,
         traceId,
       );
-      socket.emit('sales-commerce-update-order-shipping-result', result);
+      socket.emit(`${KT_UPDATE_ORDER_SHIPPING}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-update-order-shipping-error', e.message || 'Unknown error');
+      socket.emit(`${KT_UPDATE_ORDER_SHIPPING}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-create-subscription')
+  @SubscribeMessage(KT_CREATE_SUBSCRIPTION)
   async createSubscription(
     @ConnectedSocket() socket: Socket,
     createSubscriptionDto: CreateSubscriptionDto,
@@ -242,13 +256,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         createSubscriptionDto,
         traceId,
       );
-      socket.emit('sales-commerce-create-subscription-result', result);
+      socket.emit(`${KT_CREATE_SUBSCRIPTION}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-create-subscription-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_SUBSCRIPTION}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-get-subscription')
+  @SubscribeMessage(KT_GET_SUBSCRIPTION)
   async getSubscription(
     @ConnectedSocket() socket: Socket,
     getSubscriptionDto: GetSubscriptionDto,
@@ -259,13 +273,13 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         getSubscriptionDto,
         traceId,
       );
-      socket.emit('sales-commerce-get-subscription-result', result);
+      socket.emit(`${KT_GET_SUBSCRIPTION}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-get-subscription-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_SUBSCRIPTION}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-commerce-cancel-subscription')
+  @SubscribeMessage(KT_CANCEL_SUBSCRIPTION)
   async cancelSubscription(
     @ConnectedSocket() socket: Socket,
     cancelSubscriptionDto: CancelSubscriptionDto,
@@ -276,9 +290,9 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         cancelSubscriptionDto,
         traceId,
       );
-      socket.emit('sales-commerce-cancel-subscription-result', result);
+      socket.emit(`${KT_CANCEL_SUBSCRIPTION}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-commerce-cancel-subscription-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CANCEL_SUBSCRIPTION}-error`, e.message || 'Unknown error');
     }
   }
 }

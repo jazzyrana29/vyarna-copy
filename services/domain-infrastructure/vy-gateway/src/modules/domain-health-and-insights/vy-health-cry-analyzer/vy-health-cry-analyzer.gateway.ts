@@ -14,6 +14,11 @@ import {
   GetPersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -53,7 +58,7 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('health-cry-analyzer-create')
+  @SubscribeMessage(KT_CREATE_PERSON_ENTITY)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
     createPersonDto: CreatePersonDto,
@@ -64,13 +69,13 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
         createPersonDto,
         traceId,
       );
-      socket.emit('health-cry-analyzer-create-result', result);
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('health-cry-analyzer-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('health-cry-analyzer-update')
+  @SubscribeMessage(KT_UPDATE_PERSON_ENTITY)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
     updatePersonDto: UpdatePersonDto,
@@ -81,13 +86,13 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
         updatePersonDto,
         traceId,
       );
-      socket.emit('health-cry-analyzer-update-result', result);
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('health-cry-analyzer-update-error', e.message || 'Unknown error');
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('health-cry-analyzer-get')
+  @SubscribeMessage(KT_GET_PERSON_ENTITY)
   async handleGet(
     @ConnectedSocket() socket: Socket,
     getPersonDto: GetPersonDto,
@@ -95,13 +100,13 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('health-cry-analyzer-get');
     try {
       const result = await this.personBabyKafka.getPerson(getPersonDto, traceId);
-      socket.emit('health-cry-analyzer-get-result', result);
+      socket.emit(`${KT_GET_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('health-cry-analyzer-get-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('health-cry-analyzer-get-history')
+  @SubscribeMessage(KT_GET_HISTORY_PERSON_ENTITY)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
     getHistoryOfPersonDto: GetHistoryOfPersonDto,
@@ -112,16 +117,16 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
         getHistoryOfPersonDto,
         traceId,
       );
-      socket.emit('health-cry-analyzer-get-history-result', result);
+      socket.emit(`${KT_GET_HISTORY_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'health-cry-analyzer-get-history-error',
+        `${KT_GET_HISTORY_PERSON_ENTITY}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('health-cry-analyzer-get-many')
+  @SubscribeMessage(KT_GET_MANY_PERSONS)
   async handleGetMany(
     @ConnectedSocket() socket: Socket,
     getManyPersonsDto: GetManyPersonsDto,
@@ -132,10 +137,10 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
         getManyPersonsDto,
         traceId,
       );
-      socket.emit('health-cry-analyzer-get-many-result', result);
+      socket.emit(`${KT_GET_MANY_PERSONS}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'health-cry-analyzer-get-many-error',
+        `${KT_GET_MANY_PERSONS}-error`,
         e.message || 'Unknown error',
       );
     }
