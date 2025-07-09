@@ -56,7 +56,6 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-pe
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
@@ -129,6 +128,7 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/delete-payment-metho
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/capture-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/create-contact-stripe.dto";
 
 export * from "./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto";

@@ -19,7 +19,7 @@ import {
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
   CapturePaymentIntentDto,
-  CreateContactDto,
+  CreateContactStripe,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
@@ -232,7 +232,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_CONTACT)
   async handleCreateContact(
     @ConnectedSocket() socket: Socket,
-    createContactDto: CreateContactDto,
+    createContactDto: CreateContactStripe,
   ) {
     const traceId = generateTraceId('finance-payments-create-contact');
     try {

@@ -6,7 +6,7 @@ import {
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { SalesCommerceKafkaService } from './microservices/vy-sales-commerce-kafka.service';
+import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.service';
 import {
   generateTraceId,
   CreateCartDto,

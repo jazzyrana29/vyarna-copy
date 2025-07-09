@@ -1,9 +1,9 @@
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { CreateContactDto } from 'ez-utils';
+import { CreateContactStripe } from 'ez-utils';
 
 @Injectable()
 export class ValidateCreateContactDtoPipe implements PipeTransform {
-  transform(value: CreateContactDto, _metadata: ArgumentMetadata) {
+  transform(value: CreateContactStripe, _metadata: ArgumentMetadata) {
     const { firstName, lastName, email } = value as any;
     if (!firstName || !lastName || !email) {
       throw new BadRequestException('Missing required fields');
