@@ -17,6 +17,7 @@ import {
   CreateSubscriptionDto,
   GetSubscriptionDto,
   CancelSubscriptionDto,
+  CheckCouponEligibilityPayloadDto,
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
@@ -33,6 +34,7 @@ import {
   KT_CREATE_SUBSCRIPTION,
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
+  KT_CHECK_COUPON_ELIGIBILITY,
 } from 'ez-utils';
 import { ValidateCreateCartDtoPipe } from './pipes/validate-create-cart-dto.pipe';
 import { ValidateAddCartItemDtoPipe } from './pipes/validate-add-cart-item-dto.pipe';
@@ -47,6 +49,7 @@ import { ValidateCancelSubscriptionDtoPipe } from './pipes/validate-cancel-subsc
 import { ValidateGetProductsDtoPipe } from './pipes/validate-get-products-dto.pipe';
 import { ValidateGetProductVariantsDtoPipe } from './pipes/validate-get-product-variants-dto.pipe';
 import { ValidateGetCategoriesDtoPipe } from './pipes/validate-get-categories-dto.pipe';
+import { ValidateCheckCouponEligibilityDtoPipe } from './pipes/validate-check-coupon-eligibility-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
 @ApiTags('vy-sales-commerce')
@@ -204,5 +207,16 @@ export class SalesCommerceController {
     const traceId = generateTraceId('cancelSubscription');
     const data = await this.commerceKafka.cancelSubscription(cancelDto, traceId);
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription cancelled', traceId);
+  }
+
+  @Post(KT_CHECK_COUPON_ELIGIBILITY)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: CheckCouponEligibilityPayloadDto })
+  async checkCouponEligibility(
+    @Body(new ValidateCheckCouponEligibilityDtoPipe()) payload: CheckCouponEligibilityPayloadDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('checkCouponEligibility');
+    const data = await this.commerceKafka.checkCouponEligibility(payload, traceId);
+    return new ResponseDTO(HttpStatus.OK, data, 'Coupon eligibility', traceId);
   }
 }
