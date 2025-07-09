@@ -20,6 +20,19 @@ import {
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
+  KT_GET_PRODUCTS,
+  KT_GET_PRODUCT_VARIANTS,
+  KT_GET_CATEGORIES,
+  KT_CREATE_CART,
+  KT_ADD_CART_ITEM,
+  KT_REMOVE_CART_ITEM,
+  KT_APPLY_CART_PROMOTION,
+  KT_CREATE_ORDER,
+  KT_GET_ZTRACKING_ORDER,
+  KT_UPDATE_ORDER_SHIPPING,
+  KT_CREATE_SUBSCRIPTION,
+  KT_GET_SUBSCRIPTION,
+  KT_CANCEL_SUBSCRIPTION,
 } from 'ez-utils';
 import { ValidateCreateCartDtoPipe } from './pipes/validate-create-cart-dto.pipe';
 import { ValidateAddCartItemDtoPipe } from './pipes/validate-add-cart-item-dto.pipe';
@@ -50,7 +63,7 @@ export class SalesCommerceController {
     );
   }
 
-  @Post('products/get')
+  @Post(KT_GET_PRODUCTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetProductsDto })
   async getProducts(
@@ -61,7 +74,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Products retrieved', traceId);
   }
 
-  @Post('products/variants/get')
+  @Post(KT_GET_PRODUCT_VARIANTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetProductVariantsDto })
   async getProductVariants(
@@ -72,7 +85,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Variants retrieved', traceId);
   }
 
-  @Post('categories/get')
+  @Post(KT_GET_CATEGORIES)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetCategoriesDto })
   async getCategories(
@@ -83,7 +96,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Categories retrieved', traceId);
   }
 
-  @Post('carts/create')
+  @Post(KT_CREATE_CART)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateCartDto })
   async createCart(
@@ -94,7 +107,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Cart created', traceId);
   }
 
-  @Post('carts/items/add')
+  @Post(KT_ADD_CART_ITEM)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: AddCartItemDto })
   async addCartItem(
@@ -105,7 +118,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Item added', traceId);
   }
 
-  @Post('carts/items/remove')
+  @Post(KT_REMOVE_CART_ITEM)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: RemoveCartItemDto })
   async removeCartItem(
@@ -116,7 +129,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Item removed', traceId);
   }
 
-  @Post('carts/promotions/apply')
+  @Post(KT_APPLY_CART_PROMOTION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: ApplyCartPromotionDto })
   async applyPromotion(
@@ -127,7 +140,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Promotion applied', traceId);
   }
 
-  @Post('orders/create')
+  @Post(KT_CREATE_ORDER)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateOrderDto })
   async createOrder(
@@ -138,7 +151,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Order created', traceId);
   }
 
-  @Post('orders/get')
+  @Post(KT_GET_ZTRACKING_ORDER)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetZtrackingOrderDto })
   async getOrder(
@@ -149,7 +162,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Order retrieved', traceId);
   }
 
-  @Post('orders/shipping/update')
+  @Post(KT_UPDATE_ORDER_SHIPPING)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: UpdateOrderShippingDto })
   async updateShipping(
@@ -160,7 +173,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Shipping updated', traceId);
   }
 
-  @Post('subscriptions/create')
+  @Post(KT_CREATE_SUBSCRIPTION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateSubscriptionDto })
   async createSubscription(
@@ -171,7 +184,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription created', traceId);
   }
 
-  @Post('subscriptions/get')
+  @Post(KT_GET_SUBSCRIPTION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetSubscriptionDto })
   async getSubscription(
@@ -182,7 +195,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription retrieved', traceId);
   }
 
-  @Post('subscriptions/cancel')
+  @Post(KT_CANCEL_SUBSCRIPTION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CancelSubscriptionDto })
   async cancelSubscription(
