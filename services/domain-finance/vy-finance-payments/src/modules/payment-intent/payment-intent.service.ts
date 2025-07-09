@@ -54,11 +54,11 @@ export class PaymentIntentService {
   }
 
   async createPaymentIntent(
-    createDto: CreatePaymentIntentDto,
+    createPaymentIntentDto: CreatePaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto> {
     let entity = this.paymentRepo.create({
-      ...createDto,
+      ...createPaymentIntentDto,
       externalId: uuid(),
       status: 'REQUIRES_PAYMENT_METHOD',
     });
@@ -168,9 +168,10 @@ export class PaymentIntentService {
   }
 
   async getPaymentIntent(
-    { paymentIntentId }: GetPaymentIntentDto,
+    getPaymentIntentDto: GetPaymentIntentDto,
     traceId: string,
   ): Promise<PaymentIntentDto | null> {
+    const { paymentIntentId } = getPaymentIntentDto;
     const entity = await this.paymentRepo.findOne({
       where: { paymentIntentId },
     });
@@ -193,11 +194,11 @@ export class PaymentIntentService {
   }
 
   async getZtrackingPaymentIntent(
-    getDto: GetZtrackingPaymentIntentDto,
+    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
     traceId: string,
   ): Promise<ZtrackingPaymentIntentDto[]> {
     return this.ztrackingPaymentIntentService.getZtrackingForPaymentIntent(
-      getDto,
+      getZtrackingPaymentIntentDto,
       traceId,
     );
   }
@@ -231,7 +232,7 @@ export class PaymentIntentService {
 
     try {
       const stripeRefund = await this.stripeGateway.createRefund({
-        payment_intent: createRefundDto.paymentIntentId,
+        payment_intent: intent?.externalId || createRefundDto.paymentIntentId,
         amount: createRefundDto.amountCents,
         reason: createRefundDto.reason as any,
         metadata: createRefundDto.metadata as any,
@@ -287,9 +288,10 @@ export class PaymentIntentService {
   }
 
   async getRefund(
-    { refundId }: GetPaymentRefundDto,
+    getPaymentRefundDto: GetPaymentRefundDto,
     traceId: string,
   ): Promise<PaymentRefund | null> {
+    const { refundId } = getPaymentRefundDto;
     const entity = await this.refundRepo.findOne({ where: { refundId } });
     if (entity) {
       this.logger.info(
