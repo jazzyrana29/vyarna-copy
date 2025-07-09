@@ -14,6 +14,11 @@ import {
   IssueConsumerRewardDto,
   CreateAffiliateCommissionDto,
   CreateInternalChargeDto,
+  KT_CREATE_WALLET_ACCOUNT,
+  KT_SCHEDULE_PROVIDER_PAYOUT,
+  KT_ISSUE_CONSUMER_REWARD,
+  KT_CREATE_AFFILIATE_COMMISSION,
+  KT_CREATE_INTERNAL_CHARGE,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -53,7 +58,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('wallet-account-create')
+  @SubscribeMessage(KT_CREATE_WALLET_ACCOUNT)
   async handleCreateAccount(
     @ConnectedSocket() socket: Socket,
     createWalletAccountDto: CreateWalletAccountDto,
@@ -61,13 +66,13 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('wallet-account-create');
     try {
       const result = await this.walletKafka.createWalletAccount(createWalletAccountDto, traceId);
-      socket.emit('wallet-account-create-result', result);
+      socket.emit(`${KT_CREATE_WALLET_ACCOUNT}-result`, result);
     } catch (e: any) {
-      socket.emit('wallet-account-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_WALLET_ACCOUNT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('wallet-provider-payout-schedule')
+  @SubscribeMessage(KT_SCHEDULE_PROVIDER_PAYOUT)
   async handleSchedulePayout(
     @ConnectedSocket() socket: Socket,
     scheduleProviderPayoutDto: ScheduleProviderPayoutDto,
@@ -75,13 +80,13 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('wallet-provider-payout-schedule');
     try {
       const result = await this.walletKafka.scheduleProviderPayout(scheduleProviderPayoutDto, traceId);
-      socket.emit('wallet-provider-payout-schedule-result', result);
+      socket.emit(`${KT_SCHEDULE_PROVIDER_PAYOUT}-result`, result);
     } catch (e: any) {
-      socket.emit('wallet-provider-payout-schedule-error', e.message || 'Unknown error');
+      socket.emit(`${KT_SCHEDULE_PROVIDER_PAYOUT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('wallet-consumer-reward-issue')
+  @SubscribeMessage(KT_ISSUE_CONSUMER_REWARD)
   async handleIssueReward(
     @ConnectedSocket() socket: Socket,
     issueConsumerRewardDto: IssueConsumerRewardDto,
@@ -89,13 +94,13 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('wallet-consumer-reward-issue');
     try {
       const result = await this.walletKafka.issueConsumerReward(issueConsumerRewardDto, traceId);
-      socket.emit('wallet-consumer-reward-issue-result', result);
+      socket.emit(`${KT_ISSUE_CONSUMER_REWARD}-result`, result);
     } catch (e: any) {
-      socket.emit('wallet-consumer-reward-issue-error', e.message || 'Unknown error');
+      socket.emit(`${KT_ISSUE_CONSUMER_REWARD}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('wallet-affiliate-commission-create')
+  @SubscribeMessage(KT_CREATE_AFFILIATE_COMMISSION)
   async handleCreateCommission(
     @ConnectedSocket() socket: Socket,
     createAffiliateCommissionDto: CreateAffiliateCommissionDto,
@@ -103,13 +108,13 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('wallet-affiliate-commission-create');
     try {
       const result = await this.walletKafka.createAffiliateCommission(createAffiliateCommissionDto, traceId);
-      socket.emit('wallet-affiliate-commission-create-result', result);
+      socket.emit(`${KT_CREATE_AFFILIATE_COMMISSION}-result`, result);
     } catch (e: any) {
-      socket.emit('wallet-affiliate-commission-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_AFFILIATE_COMMISSION}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('wallet-internal-charge-create')
+  @SubscribeMessage(KT_CREATE_INTERNAL_CHARGE)
   async handleCreateCharge(
     @ConnectedSocket() socket: Socket,
     createInternalChargeDto: CreateInternalChargeDto,
@@ -117,9 +122,9 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('wallet-internal-charge-create');
     try {
       const result = await this.walletKafka.createInternalCharge(createInternalChargeDto, traceId);
-      socket.emit('wallet-internal-charge-create-result', result);
+      socket.emit(`${KT_CREATE_INTERNAL_CHARGE}-result`, result);
     } catch (e: any) {
-      socket.emit('wallet-internal-charge-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_INTERNAL_CHARGE}-error`, e.message || 'Unknown error');
     }
   }
 }

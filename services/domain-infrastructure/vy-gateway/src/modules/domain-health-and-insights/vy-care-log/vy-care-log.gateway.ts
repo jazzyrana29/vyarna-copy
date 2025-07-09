@@ -17,6 +17,14 @@ import {
   GetTemperatureMeasurementsDto,
   CreateSymptomReportDto,
   GetSymptomReportsDto,
+  KT_CREATE_DIAPER_CHANGE,
+  KT_GET_DIAPER_CHANGES,
+  KT_CREATE_MEDICATION_ADMINISTRATION,
+  KT_GET_MEDICATION_ADMINISTRATIONS,
+  KT_CREATE_TEMPERATURE_MEASUREMENT,
+  KT_GET_TEMPERATURE_MEASUREMENTS,
+  KT_CREATE_SYMPTOM_REPORT,
+  KT_GET_SYMPTOM_REPORTS,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -56,7 +64,7 @@ export class CareLogWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('care-log-create-diaper-change')
+  @SubscribeMessage(KT_CREATE_DIAPER_CHANGE)
   async createDiaperChange(
     @ConnectedSocket() socket: Socket,
     createDiaperChangeDto: CreateDiaperChangeDto,
@@ -67,13 +75,13 @@ export class CareLogWebsocket implements OnGatewayInit {
         createDiaperChangeDto,
         traceId,
       );
-      socket.emit('care-log-create-diaper-change-result', result);
+      socket.emit(`${KT_CREATE_DIAPER_CHANGE}-result`, result);
     } catch (e: any) {
-      socket.emit('care-log-create-diaper-change-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_DIAPER_CHANGE}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('care-log-get-diaper-changes')
+  @SubscribeMessage(KT_GET_DIAPER_CHANGES)
   async getDiaperChanges(
     @ConnectedSocket() socket: Socket,
     getDiaperChangesDto: GetDiaperChangesDto,
@@ -84,13 +92,13 @@ export class CareLogWebsocket implements OnGatewayInit {
         getDiaperChangesDto,
         traceId,
       );
-      socket.emit('care-log-get-diaper-changes-result', result);
+      socket.emit(`${KT_GET_DIAPER_CHANGES}-result`, result);
     } catch (e: any) {
-      socket.emit('care-log-get-diaper-changes-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_DIAPER_CHANGES}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('care-log-create-medication-administration')
+  @SubscribeMessage(KT_CREATE_MEDICATION_ADMINISTRATION)
   async createMedicationAdministration(
     @ConnectedSocket() socket: Socket,
     createMedicationAdministrationDto: CreateMedicationAdministrationDto,
@@ -101,16 +109,16 @@ export class CareLogWebsocket implements OnGatewayInit {
         createMedicationAdministrationDto,
         traceId,
       );
-      socket.emit('care-log-create-medication-administration-result', result);
+      socket.emit(`${KT_CREATE_MEDICATION_ADMINISTRATION}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'care-log-create-medication-administration-error',
+        `${KT_CREATE_MEDICATION_ADMINISTRATION}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('care-log-get-medication-administrations')
+  @SubscribeMessage(KT_GET_MEDICATION_ADMINISTRATIONS)
   async getMedicationAdministrations(
     @ConnectedSocket() socket: Socket,
     getMedicationAdministrationsDto: GetMedicationAdministrationsDto,
@@ -121,16 +129,16 @@ export class CareLogWebsocket implements OnGatewayInit {
         getMedicationAdministrationsDto,
         traceId,
       );
-      socket.emit('care-log-get-medication-administrations-result', result);
+      socket.emit(`${KT_GET_MEDICATION_ADMINISTRATIONS}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'care-log-get-medication-administrations-error',
+        `${KT_GET_MEDICATION_ADMINISTRATIONS}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('care-log-create-temperature-measurement')
+  @SubscribeMessage(KT_CREATE_TEMPERATURE_MEASUREMENT)
   async createTemperatureMeasurement(
     @ConnectedSocket() socket: Socket,
     createTemperatureMeasurementDto: CreateTemperatureMeasurementDto,
@@ -141,13 +149,13 @@ export class CareLogWebsocket implements OnGatewayInit {
         createTemperatureMeasurementDto,
         traceId,
       );
-      socket.emit('care-log-create-temperature-measurement-result', result);
+      socket.emit(`${KT_CREATE_TEMPERATURE_MEASUREMENT}-result`, result);
     } catch (e: any) {
-      socket.emit('care-log-create-temperature-measurement-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_TEMPERATURE_MEASUREMENT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('care-log-get-temperature-measurements')
+  @SubscribeMessage(KT_GET_TEMPERATURE_MEASUREMENTS)
   async getTemperatureMeasurements(
     @ConnectedSocket() socket: Socket,
     getTemperatureMeasurementsDto: GetTemperatureMeasurementsDto,
@@ -158,13 +166,13 @@ export class CareLogWebsocket implements OnGatewayInit {
         getTemperatureMeasurementsDto,
         traceId,
       );
-      socket.emit('care-log-get-temperature-measurements-result', result);
+      socket.emit(`${KT_GET_TEMPERATURE_MEASUREMENTS}-result`, result);
     } catch (e: any) {
-      socket.emit('care-log-get-temperature-measurements-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_TEMPERATURE_MEASUREMENTS}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('care-log-create-symptom-report')
+  @SubscribeMessage(KT_CREATE_SYMPTOM_REPORT)
   async createSymptomReport(
     @ConnectedSocket() socket: Socket,
     createSymptomReportDto: CreateSymptomReportDto,
@@ -175,13 +183,13 @@ export class CareLogWebsocket implements OnGatewayInit {
         createSymptomReportDto,
         traceId,
       );
-      socket.emit('care-log-create-symptom-report-result', result);
+      socket.emit(`${KT_CREATE_SYMPTOM_REPORT}-result`, result);
     } catch (e: any) {
-      socket.emit('care-log-create-symptom-report-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_SYMPTOM_REPORT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('care-log-get-symptom-reports')
+  @SubscribeMessage(KT_GET_SYMPTOM_REPORTS)
   async getSymptomReports(
     @ConnectedSocket() socket: Socket,
     getSymptomReportsDto: GetSymptomReportsDto,
@@ -192,9 +200,9 @@ export class CareLogWebsocket implements OnGatewayInit {
         getSymptomReportsDto,
         traceId,
       );
-      socket.emit('care-log-get-symptom-reports-result', result);
+      socket.emit(`${KT_GET_SYMPTOM_REPORTS}-result`, result);
     } catch (e: any) {
-      socket.emit('care-log-get-symptom-reports-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_SYMPTOM_REPORTS}-error`, e.message || 'Unknown error');
     }
   }
 }

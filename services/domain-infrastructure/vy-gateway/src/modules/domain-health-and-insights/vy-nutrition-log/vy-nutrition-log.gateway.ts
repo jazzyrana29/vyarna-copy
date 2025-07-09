@@ -12,6 +12,10 @@ import {
   StartNutritionSessionDto,
   GetNutritionSessionDto,
   NutritionEventDto,
+  KT_START_NUTRITION_SESSION,
+  KT_GET_NUTRITION_SESSION,
+  KT_END_NUTRITION_SESSION,
+  KT_LOG_NUTRITION_EVENT,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -51,7 +55,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('nutrition-log-start-session')
+  @SubscribeMessage(KT_START_NUTRITION_SESSION)
   async startSession(
     @ConnectedSocket() socket: Socket,
     startNutritionSessionDto: StartNutritionSessionDto,
@@ -62,13 +66,13 @@ export class NutritionLogWebsocket implements OnGatewayInit {
         startNutritionSessionDto,
         traceId,
       );
-      socket.emit('nutrition-log-start-session-result', result);
+      socket.emit(`${KT_START_NUTRITION_SESSION}-result`, result);
     } catch (e: any) {
-      socket.emit('nutrition-log-start-session-error', e.message || 'Unknown error');
+      socket.emit(`${KT_START_NUTRITION_SESSION}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('nutrition-log-log-event')
+  @SubscribeMessage(KT_LOG_NUTRITION_EVENT)
   async logEvent(
     @ConnectedSocket() socket: Socket,
     nutritionEventDto: NutritionEventDto,
@@ -79,13 +83,13 @@ export class NutritionLogWebsocket implements OnGatewayInit {
         nutritionEventDto,
         traceId,
       );
-      socket.emit('nutrition-log-log-event-result', result);
+      socket.emit(`${KT_LOG_NUTRITION_EVENT}-result`, result);
     } catch (e: any) {
-      socket.emit('nutrition-log-log-event-error', e.message || 'Unknown error');
+      socket.emit(`${KT_LOG_NUTRITION_EVENT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('nutrition-log-end-session')
+  @SubscribeMessage(KT_END_NUTRITION_SESSION)
   async endSession(
     @ConnectedSocket() socket: Socket,
     getNutritionSessionDto: GetNutritionSessionDto,
@@ -96,13 +100,13 @@ export class NutritionLogWebsocket implements OnGatewayInit {
         getNutritionSessionDto,
         traceId,
       );
-      socket.emit('nutrition-log-end-session-result', result);
+      socket.emit(`${KT_END_NUTRITION_SESSION}-result`, result);
     } catch (e: any) {
-      socket.emit('nutrition-log-end-session-error', e.message || 'Unknown error');
+      socket.emit(`${KT_END_NUTRITION_SESSION}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('nutrition-log-get-session')
+  @SubscribeMessage(KT_GET_NUTRITION_SESSION)
   async getSession(
     @ConnectedSocket() socket: Socket,
     getNutritionSessionDto: GetNutritionSessionDto,
@@ -113,9 +117,9 @@ export class NutritionLogWebsocket implements OnGatewayInit {
         getNutritionSessionDto,
         traceId,
       );
-      socket.emit('nutrition-log-get-session-result', result);
+      socket.emit(`${KT_GET_NUTRITION_SESSION}-result`, result);
     } catch (e: any) {
-      socket.emit('nutrition-log-get-session-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_NUTRITION_SESSION}-error`, e.message || 'Unknown error');
     }
   }
 }

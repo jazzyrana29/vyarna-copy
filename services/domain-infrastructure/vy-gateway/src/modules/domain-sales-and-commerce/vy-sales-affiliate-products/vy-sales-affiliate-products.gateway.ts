@@ -14,6 +14,11 @@ import {
   GetPersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -53,7 +58,7 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('sales-affiliate-products-create')
+  @SubscribeMessage(KT_CREATE_PERSON_ENTITY)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
     createPersonDto: CreatePersonDto,
@@ -64,13 +69,13 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
         createPersonDto,
         traceId,
       );
-      socket.emit('sales-affiliate-products-create-result', result);
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-affiliate-products-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-affiliate-products-update')
+  @SubscribeMessage(KT_UPDATE_PERSON_ENTITY)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
     updatePersonDto: UpdatePersonDto,
@@ -81,13 +86,13 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
         updatePersonDto,
         traceId,
       );
-      socket.emit('sales-affiliate-products-update-result', result);
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-affiliate-products-update-error', e.message || 'Unknown error');
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-affiliate-products-get')
+  @SubscribeMessage(KT_GET_PERSON_ENTITY)
   async handleGet(
     @ConnectedSocket() socket: Socket,
     getPersonDto: GetPersonDto,
@@ -95,13 +100,13 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
     const traceId = generateTraceId('sales-affiliate-products-get');
     try {
       const result = await this.personBabyKafka.getPerson(getPersonDto, traceId);
-      socket.emit('sales-affiliate-products-get-result', result);
+      socket.emit(`${KT_GET_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('sales-affiliate-products-get-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('sales-affiliate-products-get-history')
+  @SubscribeMessage(KT_GET_HISTORY_PERSON_ENTITY)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
     getHistoryOfPersonDto: GetHistoryOfPersonDto,
@@ -112,16 +117,16 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
         getHistoryOfPersonDto,
         traceId,
       );
-      socket.emit('sales-affiliate-products-get-history-result', result);
+      socket.emit(`${KT_GET_HISTORY_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'sales-affiliate-products-get-history-error',
+        `${KT_GET_HISTORY_PERSON_ENTITY}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('sales-affiliate-products-get-many')
+  @SubscribeMessage(KT_GET_MANY_PERSONS)
   async handleGetMany(
     @ConnectedSocket() socket: Socket,
     getManyPersonsDto: GetManyPersonsDto,
@@ -132,10 +137,10 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
         getManyPersonsDto,
         traceId,
       );
-      socket.emit('sales-affiliate-products-get-many-result', result);
+      socket.emit(`${KT_GET_MANY_PERSONS}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'sales-affiliate-products-get-many-error',
+        `${KT_GET_MANY_PERSONS}-error`,
         e.message || 'Unknown error',
       );
     }

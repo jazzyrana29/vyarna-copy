@@ -17,6 +17,14 @@ import {
   GetTeethingEventsDto,
   CreateDevelopmentMomentDto,
   GetDevelopmentMomentsDto,
+  KT_CREATE_GROWTH_MEASUREMENT,
+  KT_GET_GROWTH_MEASUREMENTS,
+  KT_CREATE_MILESTONE,
+  KT_GET_MILESTONES,
+  KT_CREATE_TEETHING_EVENT,
+  KT_GET_TEETHING_EVENTS,
+  KT_CREATE_DEVELOPMENT_MOMENT,
+  KT_GET_DEVELOPMENT_MOMENTS,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -56,7 +64,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('development-log-create-growth')
+  @SubscribeMessage(KT_CREATE_GROWTH_MEASUREMENT)
   async createGrowth(
     @ConnectedSocket() socket: Socket,
     createGrowthMeasurementDto: CreateGrowthMeasurementDto,
@@ -67,13 +75,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         createGrowthMeasurementDto,
         traceId,
       );
-      socket.emit('development-log-create-growth-result', result);
+      socket.emit(`${KT_CREATE_GROWTH_MEASUREMENT}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-create-growth-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_GROWTH_MEASUREMENT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-get-growth')
+  @SubscribeMessage(KT_GET_GROWTH_MEASUREMENTS)
   async getGrowth(
     @ConnectedSocket() socket: Socket,
     getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
@@ -84,13 +92,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         getGrowthMeasurementsDto,
         traceId,
       );
-      socket.emit('development-log-get-growth-result', result);
+      socket.emit(`${KT_GET_GROWTH_MEASUREMENTS}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-get-growth-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_GROWTH_MEASUREMENTS}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-create-milestone')
+  @SubscribeMessage(KT_CREATE_MILESTONE)
   async createMilestone(
     @ConnectedSocket() socket: Socket,
     createMilestoneDto: CreateMilestoneDto,
@@ -101,13 +109,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         createMilestoneDto,
         traceId,
       );
-      socket.emit('development-log-create-milestone-result', result);
+      socket.emit(`${KT_CREATE_MILESTONE}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-create-milestone-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_MILESTONE}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-get-milestones')
+  @SubscribeMessage(KT_GET_MILESTONES)
   async getMilestones(
     @ConnectedSocket() socket: Socket,
     getMilestonesDto: GetMilestonesDto,
@@ -118,13 +126,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         getMilestonesDto,
         traceId,
       );
-      socket.emit('development-log-get-milestones-result', result);
+      socket.emit(`${KT_GET_MILESTONES}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-get-milestones-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_MILESTONES}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-create-teething-event')
+  @SubscribeMessage(KT_CREATE_TEETHING_EVENT)
   async createTeethingEvent(
     @ConnectedSocket() socket: Socket,
     createTeethingEventDto: CreateTeethingEventDto,
@@ -135,13 +143,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         createTeethingEventDto,
         traceId,
       );
-      socket.emit('development-log-create-teething-event-result', result);
+      socket.emit(`${KT_CREATE_TEETHING_EVENT}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-create-teething-event-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_TEETHING_EVENT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-get-teething-events')
+  @SubscribeMessage(KT_GET_TEETHING_EVENTS)
   async getTeethingEvents(
     @ConnectedSocket() socket: Socket,
     getTeethingEventsDto: GetTeethingEventsDto,
@@ -152,13 +160,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         getTeethingEventsDto,
         traceId,
       );
-      socket.emit('development-log-get-teething-events-result', result);
+      socket.emit(`${KT_GET_TEETHING_EVENTS}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-get-teething-events-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_TEETHING_EVENTS}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-create-moment')
+  @SubscribeMessage(KT_CREATE_DEVELOPMENT_MOMENT)
   async createMoment(
     @ConnectedSocket() socket: Socket,
     createDevelopmentMomentDto: CreateDevelopmentMomentDto,
@@ -169,13 +177,13 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         createDevelopmentMomentDto,
         traceId,
       );
-      socket.emit('development-log-create-moment-result', result);
+      socket.emit(`${KT_CREATE_DEVELOPMENT_MOMENT}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-create-moment-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_DEVELOPMENT_MOMENT}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('development-log-get-moments')
+  @SubscribeMessage(KT_GET_DEVELOPMENT_MOMENTS)
   async getMoments(
     @ConnectedSocket() socket: Socket,
     getDevelopmentMomentsDto: GetDevelopmentMomentsDto,
@@ -186,9 +194,9 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
         getDevelopmentMomentsDto,
         traceId,
       );
-      socket.emit('development-log-get-moments-result', result);
+      socket.emit(`${KT_GET_DEVELOPMENT_MOMENTS}-result`, result);
     } catch (e: any) {
-      socket.emit('development-log-get-moments-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_DEVELOPMENT_MOMENTS}-error`, e.message || 'Unknown error');
     }
   }
 }
