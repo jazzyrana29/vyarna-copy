@@ -14,6 +14,7 @@ import {
   KT_CREATE_PAYMENT_METHOD,
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
+  KT_CREATE_CONTACT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -86,6 +87,18 @@ export class FinancePaymentsResponseController {
       `Kafka response for ${KT_CREATE_PAYMENT_METHOD} | key: ${key}`,
       '',
       'handleCreateMethod',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_CREATE_CONTACT + '-response')
+  handleCreateContact(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_CREATE_CONTACT} | key: ${key}`,
+      '',
+      'handleCreateContact',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
