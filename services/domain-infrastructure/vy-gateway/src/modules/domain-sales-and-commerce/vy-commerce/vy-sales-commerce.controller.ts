@@ -74,6 +74,7 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Products retrieved', traceId);
   }
 
+
   @Post(KT_GET_PRODUCT_VARIANTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetProductVariantsDto })
