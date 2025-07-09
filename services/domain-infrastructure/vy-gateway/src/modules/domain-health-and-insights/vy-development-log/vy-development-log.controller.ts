@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from '../../../dto/response.dto';
 import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
@@ -6,6 +6,7 @@ import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { DevelopmentLogKafkaService } from './microservices/vy-development-log-kafka.service';
 import {
+  generateTraceId,
   CreateGrowthMeasurementDto,
   GetGrowthMeasurementsDto,
   CreateMilestoneDto,
@@ -14,12 +15,23 @@ import {
   GetTeethingEventsDto,
   CreateDevelopmentMomentDto,
   GetDevelopmentMomentsDto,
+  KT_CREATE_GROWTH_MEASUREMENT,
+  KT_GET_GROWTH_MEASUREMENTS,
+  KT_CREATE_MILESTONE,
+  KT_GET_MILESTONES,
+  KT_CREATE_TEETHING_EVENT,
+  KT_GET_TEETHING_EVENTS,
+  KT_CREATE_DEVELOPMENT_MOMENT,
+  KT_GET_DEVELOPMENT_MOMENTS,
 } from 'ez-utils';
 import { ValidateCreateGrowthMeasurementDtoPipe } from './pipes/validate-create-growth-measurement-dto.pipe';
 import { ValidateCreateMilestoneDtoPipe } from './pipes/validate-create-milestone-dto.pipe';
 import { ValidateCreateTeethingEventDtoPipe } from './pipes/validate-create-teething-event-dto.pipe';
 import { ValidateCreateDevelopmentMomentDtoPipe } from './pipes/validate-create-development-moment-dto.pipe';
-import { generateTraceId } from 'ez-utils';
+import { ValidateGetGrowthMeasurementsDtoPipe } from './pipes/validate-get-growth-measurements-dto.pipe';
+import { ValidateGetMilestonesDtoPipe } from './pipes/validate-get-milestones-dto.pipe';
+import { ValidateGetTeethingEventsDtoPipe } from './pipes/validate-get-teething-events-dto.pipe';
+import { ValidateGetDevelopmentMomentsDtoPipe } from './pipes/validate-get-development-moments-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
 @ApiTags('vy-development-log')
@@ -36,7 +48,7 @@ export class DevelopmentLogController {
     );
   }
 
-  @Post('growth')
+  @Post(KT_CREATE_GROWTH_MEASUREMENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateGrowthMeasurementDto })
   async createGrowth(
@@ -53,9 +65,13 @@ export class DevelopmentLogController {
     );
   }
 
-  @Get('growth')
+  @Post(KT_GET_GROWTH_MEASUREMENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  async getGrowth(@Query() query: GetGrowthMeasurementsDto): Promise<ResponseDTO<any>> {
+  @ApiBody({ type: GetGrowthMeasurementsDto })
+  async getGrowth(
+    @Body(new ValidateGetGrowthMeasurementsDtoPipe())
+    query: GetGrowthMeasurementsDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getGrowth');
     this.logger.info('traceId generated successfully', traceId, 'getGrowth', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
@@ -66,7 +82,7 @@ export class DevelopmentLogController {
     );
   }
 
-  @Post('milestones')
+  @Post(KT_CREATE_MILESTONE)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateMilestoneDto })
   async createMilestone(
@@ -82,9 +98,12 @@ export class DevelopmentLogController {
     );
   }
 
-  @Get('milestones')
+  @Post(KT_GET_MILESTONES)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  async getMilestones(@Query() query: GetMilestonesDto): Promise<ResponseDTO<any>> {
+  @ApiBody({ type: GetMilestonesDto })
+  async getMilestones(
+    @Body(new ValidateGetMilestonesDtoPipe()) query: GetMilestonesDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMilestones');
     this.logger.info('traceId generated successfully', traceId, 'getMilestones', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
@@ -95,7 +114,7 @@ export class DevelopmentLogController {
     );
   }
 
-  @Post('teething')
+  @Post(KT_CREATE_TEETHING_EVENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateTeethingEventDto })
   async createTeethingEvent(
@@ -112,9 +131,12 @@ export class DevelopmentLogController {
     );
   }
 
-  @Get('teething')
+  @Post(KT_GET_TEETHING_EVENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  async getTeethingEvents(@Query() query: GetTeethingEventsDto): Promise<ResponseDTO<any>> {
+  @ApiBody({ type: GetTeethingEventsDto })
+  async getTeethingEvents(
+    @Body(new ValidateGetTeethingEventsDtoPipe()) query: GetTeethingEventsDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getTeethingEvents');
     this.logger.info('traceId generated successfully', traceId, 'getTeethingEvents', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
@@ -125,7 +147,7 @@ export class DevelopmentLogController {
     );
   }
 
-  @Post('moments')
+  @Post(KT_CREATE_DEVELOPMENT_MOMENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateDevelopmentMomentDto })
   async createMoment(
@@ -142,9 +164,12 @@ export class DevelopmentLogController {
     );
   }
 
-  @Get('moments')
+  @Post(KT_GET_DEVELOPMENT_MOMENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  async getMoments(@Query() query: GetDevelopmentMomentsDto): Promise<ResponseDTO<any>> {
+  @ApiBody({ type: GetDevelopmentMomentsDto })
+  async getMoments(
+    @Body(new ValidateGetDevelopmentMomentsDtoPipe()) query: GetDevelopmentMomentsDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMoments');
     this.logger.info('traceId generated successfully', traceId, 'getMoments', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
