@@ -1,3 +1,5 @@
+'use client';
+
 import { type FC, useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Email from '../components/Email';
@@ -5,13 +7,44 @@ import Footer from '../components/Footer';
 import Section from '../components/Section';
 import Cart from '../components/Cart';
 import ProductSelector from '../components/ProductSelector';
+import UserDetailsModal from '../components/UserDetailsModal';
 import { useCartStore } from '../store/cartStore';
+import { type UserDetails, useUserStore } from '../store/userStore';
 import { TagsEnum } from '../enums/tags.enum';
 import * as Animatable from 'react-native-animatable';
 
 const PreorderScreen: FC = () => {
   const [productSelectorVisible, setProductSelectorVisible] = useState(false);
-  const { isOpen, closeCart, getItemCount, getTotal } = useCartStore();
+  const [userDetailsModalVisible, setUserDetailsModalVisible] = useState(false);
+  const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(false);
+
+  const { isOpen, closeCart, getItemCount, getTotal, getTotalSavings } =
+    useCartStore();
+  const { userDetails, hasUserDetails, setUserDetails } = useUserStore();
+
+  const handlePreorderClick = () => {
+    if (!hasUserDetails()) {
+      setUserDetailsModalVisible(true);
+    } else {
+      setProductSelectorVisible(true);
+    }
+  };
+
+  const handleUserDetailsSubmit = async (details: UserDetails) => {
+    setIsLoadingUserDetails(true);
+    try {
+      // Simulate processing time
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setUserDetails(details);
+      setUserDetailsModalVisible(false);
+      setProductSelectorVisible(true);
+    } catch (error) {
+      console.error('Error saving user details:', error);
+    } finally {
+      setIsLoadingUserDetails(false);
+    }
+  };
 
   const handleBackToProducts = () => {
     setProductSelectorVisible(true);
@@ -43,10 +76,10 @@ const PreorderScreen: FC = () => {
               </Text>
               <TouchableOpacity
                 className="bg-[#7ecaf8] px-6 py-3 rounded-full mt-6"
-                onPress={() => setProductSelectorVisible(true)}
+                onPress={handlePreorderClick}
               >
                 <Text className="text-white font-bold text-base">
-                  Preorder Now
+                  {hasUserDetails() ? 'Shop Now' : 'Get Started'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -55,6 +88,18 @@ const PreorderScreen: FC = () => {
 
         {/* Spacer */}
         <View className="h-16 md:h-20" />
+
+        {/* User Status Display */}
+        {hasUserDetails() && (
+          <View className="mb-6 bg-green-50 px-4 py-3 rounded-lg">
+            <Text className="text-green-800 font-semibold">
+              Welcome back, {userDetails?.firstName}!
+            </Text>
+            <Text className="text-green-700 text-sm">
+              Checking for presale discounts with {userDetails?.email}
+            </Text>
+          </View>
+        )}
 
         {/* Cart Summary (if items in cart) */}
         {getItemCount() > 0 && (
@@ -67,6 +112,11 @@ const PreorderScreen: FC = () => {
                 <Text className="text-base text-neutralText">
                   Total: ${getTotal().toFixed(2)}
                 </Text>
+                {getTotalSavings() > 0 && (
+                  <Text className="text-sm text-green-600">
+                    You're saving ${getTotalSavings().toFixed(2)}!
+                  </Text>
+                )}
               </View>
               <TouchableOpacity
                 className="bg-primary px-4 py-2 rounded-lg"
@@ -113,9 +163,11 @@ const PreorderScreen: FC = () => {
           </Text>
           <TouchableOpacity
             className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => setProductSelectorVisible(true)}
+            onPress={handlePreorderClick}
           >
-            <Text className="text-white font-bold text-base">Preorder Now</Text>
+            <Text className="text-white font-bold text-base">
+              {hasUserDetails() ? 'Shop Now' : 'Start Your Order'}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -128,6 +180,14 @@ const PreorderScreen: FC = () => {
           />
         </View>
       </View>
+
+      {/* User Details Modal */}
+      <UserDetailsModal
+        visible={userDetailsModalVisible}
+        onClose={() => setUserDetailsModalVisible(false)}
+        onSubmit={handleUserDetailsSubmit}
+        isLoading={isLoadingUserDetails}
+      />
 
       {/* Product Selector Modal */}
       <ProductSelector

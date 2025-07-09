@@ -4,8 +4,12 @@ export interface CartItem {
   id: string;
   name: string;
   description: string;
-  price: number;
   originalPrice: number;
+  currentPrice: number; // After coupon application
+  stripePriceId?: string;
+  couponApplied: boolean;
+  couponId?: string;
+  savings?: number;
   image: any;
   quantity: number;
 }
@@ -16,8 +20,11 @@ interface CartStore {
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
+  updateItemPricing: (id: string, pricing: Partial<CartItem>) => void;
   resetCart: () => void;
   getTotal: () => number;
+  getOriginalTotal: () => number;
+  getTotalSavings: () => number;
   getItemCount: () => number;
   openCart: () => void;
   closeCart: () => void;
@@ -63,15 +70,34 @@ export const useCartStore = create<CartStore>((set, get) => ({
     });
   },
 
+  updateItemPricing: (id, pricing) => {
+    set({
+      items: get().items.map((item) =>
+        item.id === id ? { ...item, ...pricing } : item,
+      ),
+    });
+  },
+
   resetCart: () => {
     set({ items: [] });
   },
 
   getTotal: () => {
     return get().items.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + item.currentPrice * item.quantity,
       0,
     );
+  },
+
+  getOriginalTotal: () => {
+    return get().items.reduce(
+      (total, item) => total + item.originalPrice * item.quantity,
+      0,
+    );
+  },
+
+  getTotalSavings: () => {
+    return get().getOriginalTotal() - get().getTotal();
   },
 
   getItemCount: () => {
