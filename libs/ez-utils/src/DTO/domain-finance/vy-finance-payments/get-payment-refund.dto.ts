@@ -1,4 +1,8 @@
-import { PickType } from '@nestjs/swagger';
-import { RefundDto } from './refund.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsUUID } from 'class-validator';
 
-export class GetPaymentRefundDto extends PickType(RefundDto, ['refundId'] as const) {}
+export class GetPaymentRefundDto {
+  @ApiProperty({ description: 'Refund identifier' })
+  @IsUUID()
+  refundId: string;
+}
