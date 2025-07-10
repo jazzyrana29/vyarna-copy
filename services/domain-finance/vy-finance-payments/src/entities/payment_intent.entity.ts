@@ -23,6 +23,9 @@ export class PaymentIntent extends BaseEntity {
   @Column({ length: 3 })
   currency: string;
 
+  @Column({ length: 255, nullable: true })
+  customerExternalId?: string;
+
   @Column({ length: 30 })
   status:
     | 'REQUIRES_PAYMENT_METHOD'

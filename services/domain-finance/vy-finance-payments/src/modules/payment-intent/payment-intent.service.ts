@@ -57,26 +57,76 @@ export class PaymentIntentService {
     );
   }
 
+  private async calculateAmounts(
+    items: CreatePaymentIntentPayloadDto['items'],
+  ): Promise<{ originalAmount: number; currency: string }> {
+    let currency: string | undefined;
+    let originalAmount = 0;
+
+    for (const item of items) {
+      if (!item.stripePriceId) {
+        throw new Error(`Falta stripePriceId en el ítem ${item.id}`);
+      }
+      const price = await this.stripeGateway.retrievePrice(item.stripePriceId);
+      if (!currency) currency = price.currency;
+      if (price.currency !== currency) {
+        throw new Error('No se permiten divisas mixtas en un PaymentIntent');
+      }
+      originalAmount += (price.unit_amount ?? 0) * item.quantity;
+    }
+    return { originalAmount, currency: currency! };
+  }
+
+  private mapStripeStatus(apiStatus: Stripe.PaymentIntent.Status) {
+    const map: Record<string, PaymentIntent['status']> = {
+      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
+      requires_confirmation: 'REQUIRES_CONFIRMATION',
+      requires_action: 'REQUIRES_ACTION',
+      processing: 'PROCESSING',
+      succeeded: 'SUCCEEDED',
+      canceled: 'CANCELED',
+    };
+    return map[apiStatus] ?? 'REQUIRES_PAYMENT_METHOD';
+  }
+
   async createPaymentIntent(
     payload: CreatePaymentIntentPayloadDto,
     traceId: string,
   ): Promise<PaymentIntentCreatedDto> {
-    const originalAmount = payload.items.reduce(
-      (sum, i) => sum + i.quantity * 100,
-      0,
+    const { originalAmount, currency } = await this.calculateAmounts(
+      payload.items,
     );
     const appliedCoupons: any[] = [];
+
     const totalAmount = originalAmount;
 
+    const existing = await this.stripeGateway.findCustomerByEmail(
+      payload.customerDetails.email,
+    );
+    const customer =
+      existing ??
+      (await this.stripeGateway.createCustomer({
+        name: `${payload.customerDetails.firstName} ${payload.customerDetails.lastName}`,
+        email: payload.customerDetails.email,
+        address: {
+          line1: payload.customerDetails.address.street,
+          city: payload.customerDetails.address.city,
+          state: payload.customerDetails.address.state,
+          postal_code: payload.customerDetails.address.zip,
+          country: payload.customerDetails.address.country,
+        },
+        metadata: { source: 'my-backend' },
+      }));
+
     let entity = this.paymentRepo.create({
-      amountCents: totalAmount,
-      currency: 'usd',
-      metadata: { itemsCount: payload.items.length },
+      amountCents: originalAmount,
+      currency,
       externalId: uuid(),
+      customerExternalId: customer.id,
       status: 'REQUIRES_PAYMENT_METHOD',
+      metadata: { itemsCount: payload.items.length },
     });
 
-    // persist the intent first so we can reference it in attempts
     entity = await this.paymentRepo.save(entity);
 
     const attempt = await this.attemptRepo.save(
@@ -95,9 +145,11 @@ export class PaymentIntentService {
     try {
       const stripeIntent = await this.stripeGateway.createPaymentIntent(
         {
-          amount: entity.amountCents,
-          currency: entity.currency,
+          amount: originalAmount,
+          currency,
+          customer: customer.id,
           capture_method: 'manual',
+          automatic_payment_methods: { enabled: true },
           metadata: { localId: entity.paymentIntentId },
         },
         { idempotencyKey: payload.idempotencyKey },
@@ -106,15 +158,7 @@ export class PaymentIntentService {
       clientSecret = stripeIntent.client_secret || undefined;
 
       entity.externalId = stripeIntent.id;
-      const statusMap: Record<string, PaymentIntent['status']> = {
-        requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-        requires_confirmation: 'REQUIRES_CONFIRMATION',
-        requires_action: 'REQUIRES_ACTION',
-        processing: 'PROCESSING',
-        succeeded: 'SUCCEEDED',
-        canceled: 'CANCELED',
-      };
-      entity.status = statusMap[stripeIntent.status] || entity.status;
+      entity.status = this.mapStripeStatus(stripeIntent.status);
 
       await this.paymentRepo.save(entity);
       await this.attemptRepo.update(attempt.attemptId, {
@@ -339,7 +383,9 @@ export class PaymentIntentService {
     { paymentIntentId }: CapturePaymentIntentDto,
     traceId: string,
   ): Promise<void> {
-    const intent = await this.paymentRepo.findOne({ where: { paymentIntentId } });
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId },
+    });
 
     if (!intent) {
       this.logger.error(
@@ -355,7 +401,10 @@ export class PaymentIntentService {
       intent.externalId,
     );
 
-    const statusMap: Record<string, PaymentIntent['status'] | 'REQUIRES_CAPTURE'> = {
+    const statusMap: Record<
+      string,
+      PaymentIntent['status'] | 'REQUIRES_CAPTURE'
+    > = {
       requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
       requires_confirmation: 'REQUIRES_CONFIRMATION',
       requires_action: 'REQUIRES_ACTION',
@@ -399,7 +448,10 @@ export class PaymentIntentService {
     );
 
     try {
-      await this.confirmPaymentIntent({ paymentIntentId } as CapturePaymentIntentDto, traceId);
+      await this.confirmPaymentIntent(
+        { paymentIntentId } as CapturePaymentIntentDto,
+        traceId,
+      );
       const stripeIntent = await this.stripeGateway.capturePaymentIntent(
         intent.externalId,
       );
