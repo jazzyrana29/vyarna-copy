@@ -10,11 +10,11 @@ import {
   KT_CREATE_SLEEP_SESSION,
   KT_GET_SLEEP_SESSIONS,
   KT_GET_ZTRACKING_SLEEP_SESSION,
-  KT_SLEEP_EVENT_LOGGED,
-  KT_SLEEP_INTERRUPTED,
-  KT_SLEEP_ENVIRONMENT_RECORDED,
-  KT_SLEEP_RATED,
-  KT_SLEEP_SESSION_ENDED,
+  KT_LOG_SLEEP_EVENT,
+  KT_INTERRUPT_SLEEP,
+  KT_RECORD_SLEEP_ENVIRONMENT,
+  KT_RATE_SLEEP,
+  KT_END_SLEEP_SESSION,
   KT_GET_SLEEP_EVENTS,
   KT_GET_SLEEP_INTERRUPTION_REASONS,
   KT_GET_SLEEP_ENVIRONMENTS,
@@ -78,11 +78,11 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_SLEEP_EVENT_LOGGED + '-response')
+  @MessagePattern(KT_LOG_SLEEP_EVENT + '-response')
   handleEvent(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_SLEEP_EVENT_LOGGED} | key: ${key}`,
+      `Kafka response for ${KT_LOG_SLEEP_EVENT} | key: ${key}`,
       '',
       'handleEvent',
       LogStreamLevel.DebugLight,
@@ -90,11 +90,11 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_SLEEP_INTERRUPTED + '-response')
+  @MessagePattern(KT_INTERRUPT_SLEEP + '-response')
   handleInterruption(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_SLEEP_INTERRUPTED} | key: ${key}`,
+      `Kafka response for ${KT_INTERRUPT_SLEEP} | key: ${key}`,
       '',
       'handleInterruption',
       LogStreamLevel.DebugLight,
@@ -102,11 +102,11 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_SLEEP_ENVIRONMENT_RECORDED + '-response')
+  @MessagePattern(KT_RECORD_SLEEP_ENVIRONMENT + '-response')
   handleEnvironment(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_SLEEP_ENVIRONMENT_RECORDED} | key: ${key}`,
+      `Kafka response for ${KT_RECORD_SLEEP_ENVIRONMENT} | key: ${key}`,
       '',
       'handleEnvironment',
       LogStreamLevel.DebugLight,
@@ -114,11 +114,11 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_SLEEP_RATED + '-response')
+  @MessagePattern(KT_RATE_SLEEP + '-response')
   handleRating(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_SLEEP_RATED} | key: ${key}`,
+      `Kafka response for ${KT_RATE_SLEEP} | key: ${key}`,
       '',
       'handleRating',
       LogStreamLevel.DebugLight,
@@ -126,11 +126,11 @@ export class HealthSleepResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_SLEEP_SESSION_ENDED + '-response')
+  @MessagePattern(KT_END_SLEEP_SESSION + '-response')
   handleEnd(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_SLEEP_SESSION_ENDED} | key: ${key}`,
+      `Kafka response for ${KT_END_SLEEP_SESSION} | key: ${key}`,
       '',
       'handleEnd',
       LogStreamLevel.DebugLight,

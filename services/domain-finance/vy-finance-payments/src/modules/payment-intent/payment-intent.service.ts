@@ -120,7 +120,7 @@ export class PaymentIntentService {
       );
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_PAYMENT_INTENT_CREATED,
+        KT_CREATED_PAYMENT_INTENT,
         encodeKafkaMessage(PaymentIntentService.name, {
           paymentIntentId: entity.paymentIntentId,
           orderId: entity.orderId,
@@ -156,7 +156,7 @@ export class PaymentIntentService {
       });
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_PAYMENT_FAILED,
+        KT_FAILED_PAYMENT,
         encodeKafkaMessage(PaymentIntentService.name, {
           paymentIntentId: entity.paymentIntentId,
           errorCode: (error as any)?.code,
@@ -260,7 +260,7 @@ export class PaymentIntentService {
 
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_REFUND_CREATED,
+        KT_CREATED_REFUND,
         encodeKafkaMessage(PaymentIntentService.name, {
           refundId: refundEntity.refundId,
           paymentIntentId: refundEntity.paymentIntentId,
@@ -282,7 +282,7 @@ export class PaymentIntentService {
       );
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_REFUND_FAILED,
+        KT_FAILED_REFUND,
         encodeKafkaMessage(PaymentIntentService.name, {
           refundId: refundEntity.refundId,
           paymentIntentId: refundEntity.paymentIntentId,
@@ -407,7 +407,7 @@ export class PaymentIntentService {
 
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_PAYMENT_SUCCEEDED,
+        KT_SUCCEEDED_PAYMENT,
         encodeKafkaMessage(PaymentIntentService.name, {
           paymentIntentId: intent.paymentIntentId,
           orderId: intent.orderId,
@@ -426,7 +426,7 @@ export class PaymentIntentService {
       });
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_PAYMENT_FAILED,
+        KT_FAILED_PAYMENT,
         encodeKafkaMessage(PaymentIntentService.name, {
           paymentIntentId: intent.paymentIntentId,
           errorCode: (error as any)?.code,
@@ -530,7 +530,7 @@ export class PaymentIntentService {
         if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
           await new EzKafkaProducer().produce(
             process.env.KAFKA_BROKER as string,
-            KT_PAYMENT_SUCCEEDED,
+            KT_SUCCEEDED_PAYMENT,
             encodeKafkaMessage(PaymentIntentService.name, {
               paymentIntentId: updated.paymentIntentId,
               orderId: updated.orderId,
@@ -543,7 +543,7 @@ export class PaymentIntentService {
           const err = (pi as any).last_payment_error;
           await new EzKafkaProducer().produce(
             process.env.KAFKA_BROKER as string,
-            KT_PAYMENT_FAILED,
+            KT_FAILED_PAYMENT,
             encodeKafkaMessage(PaymentIntentService.name, {
               paymentIntentId: updated.paymentIntentId,
               errorCode: err?.code,
@@ -576,7 +576,7 @@ export class PaymentIntentService {
           if (updatedRefund && statusMap[refundObj.status] === 'SUCCEEDED') {
             await new EzKafkaProducer().produce(
               process.env.KAFKA_BROKER as string,
-              KT_REFUND_SUCCEEDED,
+              KT_REFUND_SUCCEEDED_PAYMENT,
               encodeKafkaMessage(PaymentIntentService.name, {
                 refundId: updatedRefund.refundId,
                 paymentIntentId: updatedRefund.paymentIntentId,

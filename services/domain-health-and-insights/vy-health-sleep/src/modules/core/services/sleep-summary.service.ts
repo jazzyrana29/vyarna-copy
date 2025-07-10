@@ -8,7 +8,7 @@ import {
   GetSleepSummaryDto,
   DeleteSleepSummaryDto,
   encodeKafkaMessage,
-  KT_SLEEP_SESSION_ENDED,
+  KT_END_SLEEP_SESSION,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
@@ -42,7 +42,7 @@ export class SleepSummaryService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_SLEEP_SESSION_ENDED,
+      KT_END_SLEEP_SESSION,
       encodeKafkaMessage(SleepSummaryService.name, {
         sessionId: entity.sessionId,
         summary: entity,

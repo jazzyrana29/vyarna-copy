@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
 import { CouponKafkaService } from './services/coupon-kafka.service';
 import { KT_CHECK_COUPON_ELIGIBILITY } from 'ez-utils';
-import { getLoggerConfig } from '../utils/common';
+import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Controller('commerce')
