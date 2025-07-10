@@ -20,7 +20,7 @@ import {
   CreateSubscriptionDto,
   GetSubscriptionDto,
   DeleteSubscriptionDto,
-  CheckCouponEligibilityPayloadDto,
+  ValidatePromotionCodeDto,
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
@@ -38,7 +38,7 @@ import {
   KT_CREATE_SUBSCRIPTION,
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
-  KT_CHECK_COUPON_ELIGIBILITY,
+  KT_VALIDATE_PROMOTION_CODE,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -299,17 +299,17 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
     }
   }
 
-  @SubscribeMessage(KT_CHECK_COUPON_ELIGIBILITY)
-  async checkCouponEligibility(
+  @SubscribeMessage(KT_VALIDATE_PROMOTION_CODE)
+  async validatePromotionCode(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() payload: CheckCouponEligibilityPayloadDto,
+    @MessageBody() payload: ValidatePromotionCodeDto,
   ) {
-    const traceId = generateTraceId('sales-commerce-check-coupon');
+    const traceId = generateTraceId('sales-commerce-validate-promo');
     try {
-      const result = await this.kafkaService.checkCouponEligibility(payload, traceId);
-      socket.emit(`${KT_CHECK_COUPON_ELIGIBILITY}-result`, result);
+      const result = await this.kafkaService.validatePromotionCode(payload, traceId);
+      socket.emit(`${KT_VALIDATE_PROMOTION_CODE}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_CHECK_COUPON_ELIGIBILITY}-error`, e.message || 'Unknown error');
+      socket.emit(`${KT_VALIDATE_PROMOTION_CODE}-error`, e.message || 'Unknown error');
     }
   }
 }

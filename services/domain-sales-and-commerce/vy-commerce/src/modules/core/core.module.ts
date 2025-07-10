@@ -6,23 +6,23 @@ import { OrderService } from './services/order.service';
 import { OrderKafkaService } from './services/order-kafka.service';
 import { ProductService } from './services/product.service';
 import { ZtrackingOrderService } from './services/ztracking-order.service';
-import { CouponService } from './services/coupon.service';
-import { CouponKafkaService } from './services/coupon-kafka.service';
+import { PromotionCodesService } from './services/promotion-codes.service';
+import { PromotionCodesKafkaService } from './services/promotion-codes-kafka.service';
 import { OrderController } from './order.controller';
-import { CouponController } from './coupon.controller';
+import { PromotionCodesController } from './promotion-codes.controller';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order, ZtrackingOrder])],
-  controllers: [OrderController, CouponController],
+  controllers: [OrderController, PromotionCodesController],
   providers: [
     OrderService,
     OrderKafkaService,
     ZtrackingOrderService,
     ProductService,
-    CouponService,
-    CouponKafkaService,
+    PromotionCodesService,
+    PromotionCodesKafkaService,
   ],
 })
 export class CoreModule {
