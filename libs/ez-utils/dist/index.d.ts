@@ -89,11 +89,11 @@ export * from "./src/DTO/domain-health-and-insights/vy-development-log/developme
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-development-moment.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-many-development-moments.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutrition-session.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/get-one-nutrition-session.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/ztracking-nutrition-session.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracking-nutrition-session.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/log-nutrition-event.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutrition-event.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-event.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto";
