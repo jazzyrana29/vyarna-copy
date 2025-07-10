@@ -7,7 +7,7 @@ import {
   KT_GET_DIAPER_CHANGES,
   KT_GET_ZTRACKING_DIAPER_CHANGE,
   CreateDiaperChangeDto,
-  GetDiaperChangesDto,
+  GetManyDiaperChangesDto,
   GetZtrackingDiaperChangeDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -52,7 +52,7 @@ export class DiaperChangeKafkaService {
       KT_GET_DIAPER_CHANGES,
       message,
       key,
-      async (value: GetDiaperChangesDto, traceId: string) =>
+      async (value: GetManyDiaperChangesDto, traceId: string) =>
         await this.diaperChangeService.getDiaperChanges(value, traceId),
     );
   }

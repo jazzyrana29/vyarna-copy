@@ -10,13 +10,13 @@ import { CareLogKafkaService } from './microservices/vy-care-log-kafka.service';
 import {
   generateTraceId,
   CreateDiaperChangeDto,
-  GetDiaperChangesDto,
+  GetManyDiaperChangesDto,
   CreateMedicationAdministrationDto,
-  GetMedicationAdministrationsDto,
+  GetManyMedicationAdministrationsDto,
   CreateTemperatureMeasurementDto,
-  GetTemperatureMeasurementsDto,
+  GetManyTemperatureMeasurementsDto,
   CreateSymptomReportDto,
-  GetSymptomReportsDto,
+  GetManySymptomReportsDto,
   KT_CREATE_DIAPER_CHANGE,
   KT_GET_DIAPER_CHANGES,
   KT_CREATE_MEDICATION_ADMINISTRATION,
@@ -84,7 +84,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_DIAPER_CHANGES)
   async getDiaperChanges(
     @ConnectedSocket() socket: Socket,
-    getDiaperChangesDto: GetDiaperChangesDto,
+    getDiaperChangesDto: GetManyDiaperChangesDto,
   ) {
     const traceId = generateTraceId('care-log-get-diaper-changes');
     try {
@@ -121,7 +121,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_MEDICATION_ADMINISTRATIONS)
   async getMedicationAdministrations(
     @ConnectedSocket() socket: Socket,
-    getMedicationAdministrationsDto: GetMedicationAdministrationsDto,
+    getMedicationAdministrationsDto: GetManyMedicationAdministrationsDto,
   ) {
     const traceId = generateTraceId('care-log-get-medication-administrations');
     try {
@@ -158,7 +158,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_TEMPERATURE_MEASUREMENTS)
   async getTemperatureMeasurements(
     @ConnectedSocket() socket: Socket,
-    getTemperatureMeasurementsDto: GetTemperatureMeasurementsDto,
+    getTemperatureMeasurementsDto: GetManyTemperatureMeasurementsDto,
   ) {
     const traceId = generateTraceId('care-log-get-temperature-measurements');
     try {
@@ -192,7 +192,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_SYMPTOM_REPORTS)
   async getSymptomReports(
     @ConnectedSocket() socket: Socket,
-    getSymptomReportsDto: GetSymptomReportsDto,
+    getSymptomReportsDto: GetManySymptomReportsDto,
   ) {
     const traceId = generateTraceId('care-log-get-symptom-reports');
     try {

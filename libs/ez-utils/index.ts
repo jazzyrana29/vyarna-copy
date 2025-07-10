@@ -74,19 +74,19 @@ export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/tags-resp
 /* ------------------------------------- domain-health-and-insights DTOs ------------------------------- */
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/diaper-change.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-diaper-change.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-diaper-changes.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-diaper-changes.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/ztracking-diaper-change.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-diaper-change.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/medication-administration.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-medication-administration.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-medication-administrations.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-medication-administrations.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/temperature-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-temperature-measurement.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-temperature-measurements.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-temperature-measurements.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/validate-care-event-time.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/symptom-report.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-symptom-report.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-symptom-reports.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-symptom-reports.dto";
 
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto";
