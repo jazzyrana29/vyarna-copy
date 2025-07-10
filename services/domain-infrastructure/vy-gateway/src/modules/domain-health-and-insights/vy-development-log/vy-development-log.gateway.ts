@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -67,7 +68,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_GROWTH_MEASUREMENT)
   async createGrowth(
     @ConnectedSocket() socket: Socket,
-    createGrowthMeasurementDto: CreateGrowthMeasurementDto,
+    @MessageBody() createGrowthMeasurementDto: CreateGrowthMeasurementDto,
   ) {
     const traceId = generateTraceId('development-log-create-growth');
     try {
@@ -84,7 +85,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_GROWTH_MEASUREMENTS)
   async getGrowth(
     @ConnectedSocket() socket: Socket,
-    getGrowthMeasurementsDto: GetManyGrowthMeasurementsDto,
+    @MessageBody() getGrowthMeasurementsDto: GetManyGrowthMeasurementsDto,
   ) {
     const traceId = generateTraceId('development-log-get-growth');
     try {
@@ -101,7 +102,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_MILESTONE)
   async createMilestone(
     @ConnectedSocket() socket: Socket,
-    createMilestoneDto: CreateMilestoneDto,
+    @MessageBody() createMilestoneDto: CreateMilestoneDto,
   ) {
     const traceId = generateTraceId('development-log-create-milestone');
     try {
@@ -118,7 +119,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_MILESTONES)
   async getMilestones(
     @ConnectedSocket() socket: Socket,
-    getMilestonesDto: GetManyMilestonesDto,
+    @MessageBody() getMilestonesDto: GetManyMilestonesDto,
   ) {
     const traceId = generateTraceId('development-log-get-milestones');
     try {
@@ -135,7 +136,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_TEETHING_EVENT)
   async createTeethingEvent(
     @ConnectedSocket() socket: Socket,
-    createTeethingEventDto: CreateTeethingEventDto,
+    @MessageBody() createTeethingEventDto: CreateTeethingEventDto,
   ) {
     const traceId = generateTraceId('development-log-create-teething-event');
     try {
@@ -152,7 +153,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_TEETHING_EVENTS)
   async getTeethingEvents(
     @ConnectedSocket() socket: Socket,
-    getTeethingEventsDto: GetManyTeethingEventsDto,
+    @MessageBody() getTeethingEventsDto: GetManyTeethingEventsDto,
   ) {
     const traceId = generateTraceId('development-log-get-teething-events');
     try {
@@ -169,7 +170,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_DEVELOPMENT_MOMENT)
   async createMoment(
     @ConnectedSocket() socket: Socket,
-    createDevelopmentMomentDto: CreateDevelopmentMomentDto,
+    @MessageBody() createDevelopmentMomentDto: CreateDevelopmentMomentDto,
   ) {
     const traceId = generateTraceId('development-log-create-moment');
     try {
@@ -186,7 +187,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_DEVELOPMENT_MOMENTS)
   async getMoments(
     @ConnectedSocket() socket: Socket,
-    getDevelopmentMomentsDto: GetManyDevelopmentMomentsDto,
+    @MessageBody() getDevelopmentMomentsDto: GetManyDevelopmentMomentsDto,
   ) {
     const traceId = generateTraceId('development-log-get-moments');
     try {

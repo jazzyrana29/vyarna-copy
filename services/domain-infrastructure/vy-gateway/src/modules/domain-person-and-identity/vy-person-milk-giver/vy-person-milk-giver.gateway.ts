@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -61,7 +62,7 @@ export class PersonMilkGiverWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_PERSON_ENTITY)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createPersonDto: CreatePersonDto,
+    @MessageBody() createPersonDto: CreatePersonDto,
   ) {
     const traceId = generateTraceId('person-milk-giver-create');
     try {
@@ -78,7 +79,7 @@ export class PersonMilkGiverWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_UPDATE_PERSON_ENTITY)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
-    updatePersonDto: UpdatePersonDto,
+    @MessageBody() updatePersonDto: UpdatePersonDto,
   ) {
     const traceId = generateTraceId('person-milk-giver-update');
     try {
@@ -95,7 +96,7 @@ export class PersonMilkGiverWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_PERSON_ENTITY)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getPersonDto: GetOnePersonDto,
+    @MessageBody() getPersonDto: GetOnePersonDto,
   ) {
     const traceId = generateTraceId('person-milk-giver-get');
     try {
@@ -109,7 +110,7 @@ export class PersonMilkGiverWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_HISTORY_PERSON_ENTITY)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
+    @MessageBody() getHistoryOfPersonDto: GetHistoryOfPersonDto,
   ) {
     const traceId = generateTraceId('person-milk-giver-get-history');
     try {
@@ -129,7 +130,7 @@ export class PersonMilkGiverWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_MANY_PERSONS)
   async handleGetMany(
     @ConnectedSocket() socket: Socket,
-    getManyPersonsDto: GetManyPersonsDto,
+    @MessageBody() getManyPersonsDto: GetManyPersonsDto,
   ) {
     const traceId = generateTraceId('person-milk-giver-get-many');
     try {

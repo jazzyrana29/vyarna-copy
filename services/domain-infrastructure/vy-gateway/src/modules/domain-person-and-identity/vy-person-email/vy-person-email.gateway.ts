@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -59,7 +60,7 @@ export class PersonEmailWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_EMAIL)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createEmailDto: CreateEmailDto,
+    @MessageBody() createEmailDto: CreateEmailDto,
   ) {
     const traceId = generateTraceId('person-email-create');
     try {
@@ -73,7 +74,7 @@ export class PersonEmailWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_UPDATE_EMAIL)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
-    updateEmailDto: UpdateEmailDto,
+    @MessageBody() updateEmailDto: UpdateEmailDto,
   ) {
     const traceId = generateTraceId('person-email-update');
     try {
@@ -87,7 +88,7 @@ export class PersonEmailWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_EMAIL)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getEmailDto: GetOneEmailDto,
+    @MessageBody() getEmailDto: GetOneEmailDto,
   ) {
     const traceId = generateTraceId('person-email-get');
     try {
@@ -101,7 +102,7 @@ export class PersonEmailWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_ZTRACKING_EMAIL)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
-    getDto: GetZtrackingEmailDto,
+    @MessageBody() getDto: GetZtrackingEmailDto,
   ) {
     const traceId = generateTraceId('person-email-get-history');
     try {

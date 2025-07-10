@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -58,7 +59,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_START_NUTRITION_SESSION)
   async startSession(
     @ConnectedSocket() socket: Socket,
-    startNutritionSessionDto: CreateNutritionSessionDto,
+    @MessageBody() startNutritionSessionDto: CreateNutritionSessionDto,
   ) {
     const traceId = generateTraceId('nutrition-log-start-session');
     try {
@@ -75,7 +76,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_LOG_NUTRITION_EVENT)
   async logEvent(
     @ConnectedSocket() socket: Socket,
-    nutritionEventDto: NutritionEventDto,
+    @MessageBody() nutritionEventDto: NutritionEventDto,
   ) {
     const traceId = generateTraceId('nutrition-log-log-event');
     try {
@@ -92,7 +93,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_END_NUTRITION_SESSION)
   async endSession(
     @ConnectedSocket() socket: Socket,
-    getNutritionSessionDto: GetOneNutritionSessionDto,
+    @MessageBody() getNutritionSessionDto: GetOneNutritionSessionDto,
   ) {
     const traceId = generateTraceId('nutrition-log-end-session');
     try {
@@ -109,7 +110,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_NUTRITION_SESSION)
   async getSession(
     @ConnectedSocket() socket: Socket,
-    getNutritionSessionDto: GetOneNutritionSessionDto,
+    @MessageBody() getNutritionSessionDto: GetOneNutritionSessionDto,
   ) {
     const traceId = generateTraceId('nutrition-log-get-session');
     try {
