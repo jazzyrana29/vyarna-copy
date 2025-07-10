@@ -2,7 +2,7 @@ import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
 import { IsUUID } from "class-validator";
 import { PersonDto } from "./person.dto";
 
-export class GetPersonDto extends PartialType(
+export class GetOnePersonDto extends PartialType(
   PickType(PersonDto, ["personId", "nameFirst", "isDeleted"] as const),
 ) {
   @ApiProperty({

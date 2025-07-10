@@ -11,7 +11,7 @@ import {
   generateTraceId,
   CreateEmailDto,
   UpdateEmailDto,
-  GetEmailDto,
+  GetOneEmailDto,
   GetZtrackingEmailDto,
   KT_CREATE_EMAIL,
   KT_UPDATE_EMAIL,
@@ -87,7 +87,7 @@ export class PersonEmailWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_EMAIL)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getEmailDto: GetEmailDto,
+    getEmailDto: GetOneEmailDto,
   ) {
     const traceId = generateTraceId('person-email-get');
     try {

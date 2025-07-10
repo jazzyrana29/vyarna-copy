@@ -6,7 +6,7 @@ import { ZtrackingEmailService } from './ztracking-email.service';
 import {
   CreateEmailDto,
   EmailDto,
-  GetEmailDto,
+  GetOneEmailDto,
   UpdateEmailDto,
   GetZtrackingEmailDto,
   ZtrackingEmailDto,
@@ -76,7 +76,7 @@ export class EmailService {
     return updated;
   }
 
-  async getEmail(getDto: GetEmailDto, traceId: string): Promise<EmailDto> {
+  async getEmail(getDto: GetOneEmailDto, traceId: string): Promise<EmailDto> {
     const entity = await this.emailRepo.findOne({ where: { emailId: getDto.emailId } });
     if (!entity) {
       throw new NotFoundException(`no email exists with id => ${getDto.emailId}`);
