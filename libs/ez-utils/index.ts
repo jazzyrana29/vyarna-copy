@@ -201,6 +201,7 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-subscripti
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-subscription.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cancel-subscription.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/product.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
 
