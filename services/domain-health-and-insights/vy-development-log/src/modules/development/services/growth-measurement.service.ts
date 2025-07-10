@@ -6,7 +6,7 @@ import { ZtrackingGrowthMeasurementService } from './ztracking-growth-measuremen
 import {
   CreateGrowthMeasurementDto,
   GrowthMeasurementDto,
-  GetGrowthMeasurementsDto,
+  GetManyGrowthMeasurementsDto,
   GetZtrackingGrowthMeasurementDto,
   ZtrackingGrowthMeasurementDto,
 } from 'ez-utils';
@@ -46,7 +46,7 @@ export class GrowthMeasurementService {
   }
 
   async getGrowthMeasurements(
-    getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
+    getGrowthMeasurementsDto: GetManyGrowthMeasurementsDto,
     traceId: string,
   ): Promise<GrowthMeasurementDto[]> {
     const { babyId } = getGrowthMeasurementsDto;

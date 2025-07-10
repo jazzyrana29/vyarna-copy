@@ -5,7 +5,7 @@ import {
   KT_CREATE_DEVELOPMENT_MOMENT,
   KT_GET_DEVELOPMENT_MOMENTS,
   CreateDevelopmentMomentDto,
-  GetDevelopmentMomentsDto,
+  GetManyDevelopmentMomentsDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -52,7 +52,7 @@ export class DevelopmentMomentKafkaService {
       message,
       key,
       async (
-        getDevelopmentMomentsDto: GetDevelopmentMomentsDto,
+        getDevelopmentMomentsDto: GetManyDevelopmentMomentsDto,
         traceId: string,
       ) =>
         await this.momentService.getDevelopmentMoments(

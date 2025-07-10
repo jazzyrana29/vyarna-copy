@@ -6,7 +6,7 @@ import {
   KT_GET_GROWTH_MEASUREMENTS,
   KT_GET_HISTORY_GROWTH_MEASUREMENT,
   CreateGrowthMeasurementDto,
-  GetGrowthMeasurementsDto,
+  GetManyGrowthMeasurementsDto,
   GetZtrackingGrowthMeasurementDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -55,7 +55,7 @@ export class GrowthMeasurementKafkaService {
       message,
       key,
       async (
-        getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
+        getGrowthMeasurementsDto: GetManyGrowthMeasurementsDto,
         traceId: string,
       ) =>
         await this.growthService.getGrowthMeasurements(

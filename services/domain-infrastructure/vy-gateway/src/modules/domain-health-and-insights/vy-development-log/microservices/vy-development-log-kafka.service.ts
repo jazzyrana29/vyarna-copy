@@ -4,15 +4,15 @@ import { getLoggerConfig } from '../../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import {
   CreateGrowthMeasurementDto,
-  GetGrowthMeasurementsDto,
+  GetManyGrowthMeasurementsDto,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
   CreateMilestoneDto,
-  GetMilestonesDto,
+  GetManyMilestonesDto,
   CreateTeethingEventDto,
-  GetTeethingEventsDto,
+  GetManyTeethingEventsDto,
   CreateDevelopmentMomentDto,
-  GetDevelopmentMomentsDto,
+  GetManyDevelopmentMomentsDto,
 } from 'ez-utils';
 import {
   KT_CREATE_MILESTONE,
@@ -54,7 +54,7 @@ export class DevelopmentLogKafkaService {
   }
 
   async getGrowth(
-    getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
+    getGrowthMeasurementsDto: GetManyGrowthMeasurementsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
@@ -74,7 +74,7 @@ export class DevelopmentLogKafkaService {
     );
   }
 
-  async getMilestones(getMilestonesDto: GetMilestonesDto, traceId: string) {
+  async getMilestones(getMilestonesDto: GetManyMilestonesDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_MILESTONES,
@@ -96,7 +96,7 @@ export class DevelopmentLogKafkaService {
   }
 
   async getTeethingEvents(
-    getTeethingEventsDto: GetTeethingEventsDto,
+    getTeethingEventsDto: GetManyTeethingEventsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
@@ -120,7 +120,7 @@ export class DevelopmentLogKafkaService {
   }
 
   async getDevelopmentMoments(
-    getDevelopmentMomentsDto: GetDevelopmentMomentsDto,
+    getDevelopmentMomentsDto: GetManyDevelopmentMomentsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
