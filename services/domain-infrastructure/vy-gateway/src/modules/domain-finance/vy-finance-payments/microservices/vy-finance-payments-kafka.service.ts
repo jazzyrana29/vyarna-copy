@@ -19,6 +19,7 @@ import {
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
+  ConfirmPaymentIntentDto,
   CapturePaymentIntentDto,
   StripeWebhookDto,
   RefundDto,
@@ -79,7 +80,7 @@ export class FinancePaymentsKafkaService {
   }
 
   async confirmPaymentIntent(
-    confirmDto: CapturePaymentIntentDto,
+    confirmDto: ConfirmPaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
