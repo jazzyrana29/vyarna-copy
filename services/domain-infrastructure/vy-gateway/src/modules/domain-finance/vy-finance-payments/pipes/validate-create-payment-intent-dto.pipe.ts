@@ -1,11 +1,11 @@
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { CreatePaymentIntentDto } from 'ez-utils';
+import { CreatePaymentIntentPayloadDto } from 'ez-utils';
 
 @Injectable()
 export class ValidateCreatePaymentIntentDtoPipe implements PipeTransform {
-  transform(value: CreatePaymentIntentDto, metadata: ArgumentMetadata) {
-    const { amountCents, currency, orderId, subscriptionId } = value as any;
-    if (!amountCents || !currency || (!orderId && !subscriptionId)) {
+  transform(value: CreatePaymentIntentPayloadDto, metadata: ArgumentMetadata) {
+    const { items, customerDetails } = value as any;
+    if (!Array.isArray(items) || items.length === 0 || !customerDetails) {
       throw new BadRequestException('Missing required fields');
     }
     return value;

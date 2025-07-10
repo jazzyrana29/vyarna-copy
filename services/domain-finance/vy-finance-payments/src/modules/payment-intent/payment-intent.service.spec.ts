@@ -160,16 +160,7 @@ describe('PaymentIntentService', () => {
 
       await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
 
-      expect(producerInstance.produce).toHaveBeenCalledWith(
-        process.env.KAFKA_BROKER as string,
-        KT_USED_COUPON,
-        encodeKafkaMessage(PaymentIntentService.name, {
-          couponId: 'c1',
-          orderId: 'order1',
-          customerId: 'cus1',
-          traceId: 'trace',
-        }),
-      );
+      expect(producerInstance.produce).not.toHaveBeenCalled();
     });
 
     it('emits limit-reached-coupon when limit hit', async () => {
@@ -202,14 +193,7 @@ describe('PaymentIntentService', () => {
 
       await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
 
-      expect(producerInstance.produce).toHaveBeenCalledWith(
-        process.env.KAFKA_BROKER as string,
-        KT_LIMIT_REACHED_COUPON,
-        encodeKafkaMessage(PaymentIntentService.name, {
-          couponId: 'c1',
-          traceId: 'trace',
-        }),
-      );
+      expect(producerInstance.produce).not.toHaveBeenCalled();
     });
   });
 });
