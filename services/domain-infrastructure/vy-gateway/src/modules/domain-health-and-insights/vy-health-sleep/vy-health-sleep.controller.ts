@@ -36,11 +36,11 @@ import {
   KT_CREATE_SLEEP_SESSION,
   KT_GET_SLEEP_SESSIONS,
   KT_GET_ZTRACKING_SLEEP_SESSION,
-  KT_SLEEP_EVENT_LOGGED,
-  KT_SLEEP_INTERRUPTED,
-  KT_SLEEP_ENVIRONMENT_RECORDED,
-  KT_SLEEP_RATED,
-  KT_SLEEP_SESSION_ENDED,
+  KT_LOG_SLEEP_EVENT,
+  KT_INTERRUPT_SLEEP,
+  KT_RECORD_SLEEP_ENVIRONMENT,
+  KT_RATE_SLEEP,
+  KT_END_SLEEP_SESSION,
   KT_GET_SLEEP_EVENTS,
   KT_GET_SLEEP_INTERRUPTION_REASONS,
   KT_GET_SLEEP_ENVIRONMENTS,
@@ -140,7 +140,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post(KT_SLEEP_EVENT_LOGGED)
+  @Post(KT_LOG_SLEEP_EVENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepEventDto })
   async logEvent(
@@ -161,7 +161,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post(KT_SLEEP_INTERRUPTED)
+  @Post(KT_INTERRUPT_SLEEP)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepInterruptionReasonDto })
   async logInterruption(
@@ -182,7 +182,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post(KT_SLEEP_ENVIRONMENT_RECORDED)
+  @Post(KT_RECORD_SLEEP_ENVIRONMENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepEnvironmentDto })
   async logEnvironment(
@@ -203,7 +203,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post(KT_SLEEP_RATED)
+  @Post(KT_RATE_SLEEP)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: SleepRatingDto })
   async rateSleep(
@@ -224,7 +224,7 @@ export class HealthSleepController {
     );
   }
 
-  @Post(KT_SLEEP_SESSION_ENDED)
+  @Post(KT_END_SLEEP_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: DeleteSleepSessionDto })
   async endSession(

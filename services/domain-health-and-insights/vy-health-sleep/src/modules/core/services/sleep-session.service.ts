@@ -12,7 +12,7 @@ import {
   DeleteSleepSessionDto,
   ZtrackingSleepSessionDto,
   encodeKafkaMessage,
-  KT_SLEEP_SESSION_STARTED,
+  KT_START_SLEEP_SESSION,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -54,7 +54,7 @@ export class SleepSessionService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_SLEEP_SESSION_STARTED,
+      KT_START_SLEEP_SESSION,
       encodeKafkaMessage(SleepSessionService.name, {
         sessionId: entity.sessionId,
         babyId: entity.babyId,

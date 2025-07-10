@@ -8,7 +8,7 @@ import {
   GetSleepInterruptionReasonsDto,
   DeleteSleepInterruptionReasonDto,
   encodeKafkaMessage,
-  KT_SLEEP_INTERRUPTED,
+  KT_INTERRUPT_SLEEP,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
@@ -42,7 +42,7 @@ export class SleepInterruptionService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_SLEEP_INTERRUPTED,
+      KT_INTERRUPT_SLEEP,
       encodeKafkaMessage(SleepInterruptionService.name, {
         sessionId: entity.sessionId,
         reasonId: entity.reasonId,
