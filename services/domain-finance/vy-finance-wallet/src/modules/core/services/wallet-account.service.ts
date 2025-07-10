@@ -5,7 +5,7 @@ import { WalletAccount } from '../../../entities/wallet_account.entity';
 import { ZtrackingWalletAccountService } from './ztracking-wallet-account.service';
 import {
   CreateWalletAccountDto,
-  GetWalletAccountDto,
+  GetOneWalletAccountDto,
   GetZtrackingWalletAccountDto,
   WalletAccountDto,
   ZtrackingWalletAccountDto,
@@ -67,7 +67,7 @@ export class WalletAccountService {
   }
 
   async getWalletAccount(
-    { accountId }: GetWalletAccountDto,
+    { accountId }: GetOneWalletAccountDto,
     traceId: string,
   ): Promise<WalletAccountDto | null> {
     const entity = await this.walletRepo.findOne({ where: { accountId } });
