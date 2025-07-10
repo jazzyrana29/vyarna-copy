@@ -6,7 +6,9 @@ import { LogStreamLevel } from 'ez-logger';
 @Injectable()
 export class StripeGatewayService {
   private logger = getLoggerConfig(StripeGatewayService.name);
-  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+    apiVersion: '2025-04-30',
+  });
 
   constructor() {
     this.logger.debug(
@@ -28,6 +30,16 @@ export class StripeGatewayService {
       LogStreamLevel.DebugLight,
     );
     return this.stripe.paymentIntents.create(params, options);
+  }
+
+  async retrievePaymentIntent(id: string): Promise<Stripe.PaymentIntent> {
+    this.logger.debug(
+      `Retrieving Stripe PaymentIntent ${id}`,
+      '',
+      'retrievePaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.paymentIntents.retrieve(id);
   }
 
   async capturePaymentIntent(paymentIntentId: string) {
@@ -60,6 +72,40 @@ export class StripeGatewayService {
     return this.stripe.refunds.create(params);
   }
 
+  async findCustomerByEmail(email: string): Promise<Stripe.Customer | null> {
+    if (typeof this.stripe.customers.search === 'function') {
+      const res = await this.stripe.customers.search({
+        query: `email:'${email.replace("'", "\\'")}'`,
+        limit: 1,
+      });
+      return res.data[0] ?? null;
+    }
+    const list = await this.stripe.customers.list({ email, limit: 1 });
+    return list.data[0] ?? null;
+  }
+
+  async createCustomer(
+    params: Stripe.CustomerCreateParams,
+  ): Promise<Stripe.Customer> {
+    this.logger.debug(
+      'Creating Stripe customer',
+      '',
+      'createCustomer',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.customers.create(params);
+  }
+
+  async retrievePrice(id: string): Promise<Stripe.Price> {
+    this.logger.debug(
+      `Retrieving Stripe Price ${id}`,
+      '',
+      'retrievePrice',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.prices.retrieve(id);
+  }
+
   async createContact(
     params: Stripe.CustomerCreateParams,
   ): Promise<Stripe.Customer> {
@@ -83,7 +129,9 @@ export class StripeGatewayService {
       'attachPaymentMethod',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentMethods.attach(paymentMethodId, { customer: customerId });
+    return this.stripe.paymentMethods.attach(paymentMethodId, {
+      customer: customerId,
+    });
   }
 
   constructWebhookEvent(
