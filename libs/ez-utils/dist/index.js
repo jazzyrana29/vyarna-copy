@@ -105,11 +105,11 @@ __exportStar(require("./src/DTO/domain-health-and-insights/vy-development-log/de
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-development-log/create-development-moment.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-development-log/get-development-moments.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto"), exports);
-__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto"), exports);
-__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutrition-session.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/get-one-nutrition-session.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/ztracking-nutrition-session.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracking-nutrition-session.dto"), exports);
-__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/log-nutrition-event.dto"), exports);
+__exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutrition-event.dto"), exports);
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-event.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto"), exports);

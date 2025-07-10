@@ -9,11 +9,11 @@ import { PumpingEvent } from '../../../entities/pumping_event.entity';
 import { SessionSummary } from '../../../entities/session_summary.entity';
 import { ZtrackingSessionSummary } from '../../../entities/ztracking_session_summary.entity';
 import {
-  StartNutritionSessionDto,
+  CreateNutritionSessionDto,
   NutritionSessionDto,
-  GetNutritionSessionDto,
+  GetOneNutritionSessionDto,
   GetZtrackingNutritionSessionDto,
-  LogNutritionEventDto,
+  CreateNutritionEventDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -67,7 +67,7 @@ export class NutritionSessionService {
   }
 
   async startNutritionSession(
-    startNutritionSessionDto: StartNutritionSessionDto,
+    startNutritionSessionDto: CreateNutritionSessionDto,
     traceId: string,
   ): Promise<NutritionSessionDto> {
     await this.personClient.validatePerson(
@@ -110,7 +110,7 @@ export class NutritionSessionService {
   }
 
   async getNutritionSession(
-    getNutritionSessionDto: GetNutritionSessionDto,
+    getNutritionSessionDto: GetOneNutritionSessionDto,
     traceId: string,
   ): Promise<NutritionSessionDto | null> {
     const { sessionId } = getNutritionSessionDto;
@@ -141,7 +141,7 @@ export class NutritionSessionService {
   }
 
   async logEvent(
-    dto: LogNutritionEventDto,
+    dto: CreateNutritionEventDto,
     traceId: string,
   ): Promise<any> {
     const { sessionId, eventType, payload } = dto;

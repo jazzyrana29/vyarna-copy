@@ -9,8 +9,8 @@ import { Server, Socket } from 'socket.io';
 import { NutritionLogKafkaService } from './microservices/vy-nutrition-log-kafka.service';
 import {
   generateTraceId,
-  StartNutritionSessionDto,
-  GetNutritionSessionDto,
+  CreateNutritionSessionDto,
+  GetOneNutritionSessionDto,
   NutritionEventDto,
   KT_START_NUTRITION_SESSION,
   KT_GET_NUTRITION_SESSION,
@@ -58,7 +58,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_START_NUTRITION_SESSION)
   async startSession(
     @ConnectedSocket() socket: Socket,
-    startNutritionSessionDto: StartNutritionSessionDto,
+    startNutritionSessionDto: CreateNutritionSessionDto,
   ) {
     const traceId = generateTraceId('nutrition-log-start-session');
     try {
@@ -92,7 +92,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_END_NUTRITION_SESSION)
   async endSession(
     @ConnectedSocket() socket: Socket,
-    getNutritionSessionDto: GetNutritionSessionDto,
+    getNutritionSessionDto: GetOneNutritionSessionDto,
   ) {
     const traceId = generateTraceId('nutrition-log-end-session');
     try {
@@ -109,7 +109,7 @@ export class NutritionLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_NUTRITION_SESSION)
   async getSession(
     @ConnectedSocket() socket: Socket,
-    getNutritionSessionDto: GetNutritionSessionDto,
+    getNutritionSessionDto: GetOneNutritionSessionDto,
   ) {
     const traceId = generateTraceId('nutrition-log-get-session');
     try {

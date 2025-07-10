@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsString, IsOptional, IsObject } from 'class-validator';
 
-export class LogNutritionEventDto {
+export class CreateNutritionEventDto {
   @ApiProperty({ description: 'Session identifier' })
   @IsUUID()
   sessionId: string;
