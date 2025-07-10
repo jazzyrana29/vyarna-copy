@@ -22,6 +22,18 @@ __decorate([
     __metadata("design:type", String)
 ], GetProductsDto.prototype, "categoryId", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ format: 'uuid' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], GetProductsDto.prototype, "productId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetProductsDto.prototype, "name", void 0);
+__decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
