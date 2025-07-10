@@ -70,7 +70,9 @@ __decorate([
     __metadata("design:type", Number)
 ], PaymentIntentCreatedDto.prototype, "originalAmount", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Unit for amount values, e.g. cents' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Unit for amount values, e.g. cents',
+    }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], PaymentIntentCreatedDto.prototype, "amountUnit", void 0);
