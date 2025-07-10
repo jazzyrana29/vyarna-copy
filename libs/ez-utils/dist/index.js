@@ -189,13 +189,13 @@ __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-orders
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto"), exports);
-__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/add-cart-item.dto"), exports);
-__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/remove-cart-item.dto"), exports);
+__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart-item.dto"), exports);
+__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/delete-cart-item.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/apply-cart-promotion.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/update-order-shipping.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/create-subscription.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-subscription.dto"), exports);
-__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/cancel-subscription.dto"), exports);
+__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/delete-subscription.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto"), exports);
