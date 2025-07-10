@@ -27,7 +27,7 @@ import {
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
-  CreateContactStripe,
+  CreateStripeContactDto,
   RetryPaymentAttemptDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
@@ -198,9 +198,9 @@ export class FinancePaymentsController {
 
   @Post(KT_CREATE_CONTACT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CreateContactStripe })
+  @ApiBody({ type: CreateStripeContactDto })
   async createContact(
-    @Body(new ValidateCreateContactDtoPipe()) createContactDto: CreateContactStripe,
+    @Body(new ValidateCreateContactDtoPipe()) createContactDto: CreateStripeContactDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createContact');
     this.logger.info(

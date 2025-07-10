@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload, Ctx, KafkaContext } from '@nestjs/microservices';
 import {
-  KT_PAYMENT_SUCCEEDED,
-  KT_PAYMENT_FAILED,
+  KT_SUCCEEDED_PAYMENT,
+  KT_FAILED_PAYMENT,
 } from 'ez-utils';
 import { FinancePaymentsWebsocket } from './vy-finance-payments.gateway';
 import { getLoggerConfig } from '../../../utils/common';
@@ -21,13 +21,13 @@ export class FinancePaymentsEventsController {
     );
   }
 
-  @MessagePattern(KT_PAYMENT_SUCCEEDED)
+  @MessagePattern(KT_SUCCEEDED_PAYMENT)
   handleSucceeded(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     const { paymentIntentId, orderId, subscriptionId } = message;
     const traceId = message.traceId;
     this.logger.debug(
-      `Kafka event ${KT_PAYMENT_SUCCEEDED} | key: ${key}`,
+      `Kafka event ${KT_SUCCEEDED_PAYMENT} | key: ${key}`,
       traceId,
       'handleSucceeded',
       LogStreamLevel.DebugLight,
@@ -45,13 +45,13 @@ export class FinancePaymentsEventsController {
     }
   }
 
-  @MessagePattern(KT_PAYMENT_FAILED)
+  @MessagePattern(KT_FAILED_PAYMENT)
   handleFailed(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     const { paymentIntentId, errorCode, errorMessage } = message;
     const traceId = message.traceId;
     this.logger.debug(
-      `Kafka event ${KT_PAYMENT_FAILED} | key: ${key}`,
+      `Kafka event ${KT_FAILED_PAYMENT} | key: ${key}`,
       traceId,
       'handleFailed',
       LogStreamLevel.DebugLight,

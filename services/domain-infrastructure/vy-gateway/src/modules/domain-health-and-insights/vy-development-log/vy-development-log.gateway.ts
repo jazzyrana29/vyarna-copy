@@ -10,13 +10,13 @@ import { DevelopmentLogKafkaService } from './microservices/vy-development-log-k
 import {
   generateTraceId,
   CreateGrowthMeasurementDto,
-  GetGrowthMeasurementsDto,
+  GetManyGrowthMeasurementsDto,
   CreateMilestoneDto,
-  GetMilestonesDto,
+  GetManyMilestonesDto,
   CreateTeethingEventDto,
-  GetTeethingEventsDto,
+  GetManyTeethingEventsDto,
   CreateDevelopmentMomentDto,
-  GetDevelopmentMomentsDto,
+  GetManyDevelopmentMomentsDto,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
   KT_CREATE_MILESTONE,
@@ -84,7 +84,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_GROWTH_MEASUREMENTS)
   async getGrowth(
     @ConnectedSocket() socket: Socket,
-    getGrowthMeasurementsDto: GetGrowthMeasurementsDto,
+    getGrowthMeasurementsDto: GetManyGrowthMeasurementsDto,
   ) {
     const traceId = generateTraceId('development-log-get-growth');
     try {
@@ -118,7 +118,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_MILESTONES)
   async getMilestones(
     @ConnectedSocket() socket: Socket,
-    getMilestonesDto: GetMilestonesDto,
+    getMilestonesDto: GetManyMilestonesDto,
   ) {
     const traceId = generateTraceId('development-log-get-milestones');
     try {
@@ -152,7 +152,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_TEETHING_EVENTS)
   async getTeethingEvents(
     @ConnectedSocket() socket: Socket,
-    getTeethingEventsDto: GetTeethingEventsDto,
+    getTeethingEventsDto: GetManyTeethingEventsDto,
   ) {
     const traceId = generateTraceId('development-log-get-teething-events');
     try {
@@ -186,7 +186,7 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_DEVELOPMENT_MOMENTS)
   async getMoments(
     @ConnectedSocket() socket: Socket,
-    getDevelopmentMomentsDto: GetDevelopmentMomentsDto,
+    getDevelopmentMomentsDto: GetManyDevelopmentMomentsDto,
   ) {
     const traceId = generateTraceId('development-log-get-moments');
     try {

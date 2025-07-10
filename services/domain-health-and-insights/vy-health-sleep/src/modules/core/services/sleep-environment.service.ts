@@ -8,7 +8,7 @@ import {
   GetSleepEnvironmentsDto,
   DeleteSleepEnvironmentDto,
   encodeKafkaMessage,
-  KT_SLEEP_ENVIRONMENT_RECORDED,
+  KT_RECORD_SLEEP_ENVIRONMENT,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
@@ -42,7 +42,7 @@ export class SleepEnvironmentService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_SLEEP_ENVIRONMENT_RECORDED,
+      KT_RECORD_SLEEP_ENVIRONMENT,
       encodeKafkaMessage(SleepEnvironmentService.name, {
         envId: entity.envId,
         sessionId: entity.sessionId,

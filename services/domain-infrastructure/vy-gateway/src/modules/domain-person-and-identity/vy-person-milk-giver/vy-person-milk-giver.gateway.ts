@@ -11,7 +11,7 @@ import {
   generateTraceId,
   CreatePersonDto,
   UpdatePersonDto,
-  GetPersonDto,
+  GetOnePersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
   KT_CREATE_PERSON_ENTITY,
@@ -95,7 +95,7 @@ export class PersonMilkGiverWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_PERSON_ENTITY)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getPersonDto: GetPersonDto,
+    getPersonDto: GetOnePersonDto,
   ) {
     const traceId = generateTraceId('person-milk-giver-get');
     try {

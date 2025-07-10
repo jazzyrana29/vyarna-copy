@@ -7,7 +7,7 @@ import {
   CreatePersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
-  GetPersonDto,
+  GetOnePersonDto,
   KafkaMessageResponderService,
   KT_CREATE_PERSON_ENTITY,
   KT_GET_HISTORY_PERSON_ENTITY,
@@ -68,7 +68,7 @@ export class PersonKafkaService {
       KT_GET_PERSON_ENTITY,
       message,
       key,
-      async (value: GetPersonDto, traceId: string) =>
+      async (value: GetOnePersonDto, traceId: string) =>
         await this.personService.findPerson(value, traceId),
     );
   }

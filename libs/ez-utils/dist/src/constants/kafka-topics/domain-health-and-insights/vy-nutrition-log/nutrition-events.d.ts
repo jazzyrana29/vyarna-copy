@@ -1,3 +1,3 @@
-export declare const KT_NUTRITION_SESSION_CREATED = "nutrition-session-created";
-export declare const KT_NUTRITION_EVENT_LOGGED = "nutrition-event-logged";
-export declare const KT_NUTRITION_SESSION_ENDED = "nutrition-session-ended";
+export declare const KT_CREATED_NUTRITION_SESSION = "created-nutrition-session";
+export declare const KT_LOGGED_NUTRITION_EVENT = "logged-nutrition-event";
+export declare const KT_ENDED_NUTRITION_SESSION = "ended-nutrition-session";

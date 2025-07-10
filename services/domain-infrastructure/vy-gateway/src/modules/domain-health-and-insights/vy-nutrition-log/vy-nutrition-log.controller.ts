@@ -12,8 +12,8 @@ import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { NutritionLogKafkaService } from './microservices/vy-nutrition-log-kafka.service';
 import {
-  StartNutritionSessionDto,
-  GetNutritionSessionDto,
+  CreateNutritionSessionDto,
+  GetOneNutritionSessionDto,
   KT_START_NUTRITION_SESSION,
   KT_LOG_NUTRITION_EVENT,
   KT_END_NUTRITION_SESSION,
@@ -41,10 +41,10 @@ export class NutritionLogController {
 
   @Post(KT_START_NUTRITION_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: StartNutritionSessionDto })
+  @ApiBody({ type: CreateNutritionSessionDto })
   async startSession(
     @Body(new ValidateStartNutritionSessionDtoPipe())
-    dto: StartNutritionSessionDto,
+    dto: CreateNutritionSessionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('startNutritionSession');
     this.logger.info(
@@ -84,8 +84,8 @@ export class NutritionLogController {
 
   @Post(KT_END_NUTRITION_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetNutritionSessionDto })
-  async endSession(@Body() dto: GetNutritionSessionDto): Promise<ResponseDTO<any>> {
+  @ApiBody({ type: GetOneNutritionSessionDto })
+  async endSession(@Body() dto: GetOneNutritionSessionDto): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('endNutritionSession');
     this.logger.info(
       'traceId generated successfully',
@@ -103,8 +103,8 @@ export class NutritionLogController {
 
   @Post(KT_GET_NUTRITION_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetNutritionSessionDto })
-  async getSession(@Body() dto: GetNutritionSessionDto): Promise<ResponseDTO<any>> {
+  @ApiBody({ type: GetOneNutritionSessionDto })
+  async getSession(@Body() dto: GetOneNutritionSessionDto): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getNutritionSession');
     this.logger.info(
       'traceId generated successfully',

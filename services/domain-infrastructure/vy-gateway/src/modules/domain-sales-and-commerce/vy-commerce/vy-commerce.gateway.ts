@@ -10,15 +10,15 @@ import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.ser
 import {
   generateTraceId,
   CreateCartDto,
-  AddCartItemDto,
-  RemoveCartItemDto,
+  CreateCartItemDto,
+  DeleteCartItemDto,
   ApplyCartPromotionDto,
   CreateOrderDto,
   GetZtrackingOrderDto,
   UpdateOrderShippingDto,
   CreateSubscriptionDto,
   GetSubscriptionDto,
-  CancelSubscriptionDto,
+  DeleteSubscriptionDto,
   CheckCouponEligibilityPayloadDto,
   GetProductsDto,
   GetProductVariantsDto,
@@ -148,7 +148,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_ADD_CART_ITEM)
   async addCartItem(
     @ConnectedSocket() socket: Socket,
-    addCartItemDto: AddCartItemDto,
+    addCartItemDto: CreateCartItemDto,
   ) {
     const traceId = generateTraceId('sales-commerce-add-cart-item');
     try {
@@ -165,7 +165,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_REMOVE_CART_ITEM)
   async removeCartItem(
     @ConnectedSocket() socket: Socket,
-    removeCartItemDto: RemoveCartItemDto,
+    removeCartItemDto: DeleteCartItemDto,
   ) {
     const traceId = generateTraceId('sales-commerce-remove-cart-item');
     try {
@@ -284,7 +284,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CANCEL_SUBSCRIPTION)
   async cancelSubscription(
     @ConnectedSocket() socket: Socket,
-    cancelSubscriptionDto: CancelSubscriptionDto,
+    cancelSubscriptionDto: DeleteSubscriptionDto,
   ) {
     const traceId = generateTraceId('sales-commerce-cancel-subscription');
     try {

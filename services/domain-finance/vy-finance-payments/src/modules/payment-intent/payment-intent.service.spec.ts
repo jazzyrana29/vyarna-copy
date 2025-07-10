@@ -7,8 +7,8 @@ import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
 import {
   CreateRefundDto,
-  KT_COUPON_USED,
-  KT_COUPON_LIMIT_REACHED,
+  KT_USED_COUPON,
+  KT_LIMIT_REACHED_COUPON,
   encodeKafkaMessage,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
@@ -128,7 +128,7 @@ describe('PaymentIntentService', () => {
   });
 
   describe('handleStripeWebhook', () => {
-    it('emits coupon-used on checkout.session.completed with discount', async () => {
+    it('emits used-coupon on checkout.session.completed with discount', async () => {
       const paymentRepo = {
         findOne: jest.fn().mockResolvedValue({ orderId: 'order1' }),
       } as unknown as Repository<PaymentIntent>;
@@ -162,7 +162,7 @@ describe('PaymentIntentService', () => {
 
       expect(producerInstance.produce).toHaveBeenCalledWith(
         process.env.KAFKA_BROKER as string,
-        KT_COUPON_USED,
+        KT_USED_COUPON,
         encodeKafkaMessage(PaymentIntentService.name, {
           couponId: 'c1',
           orderId: 'order1',
@@ -172,7 +172,7 @@ describe('PaymentIntentService', () => {
       );
     });
 
-    it('emits coupon-limit-reached when limit hit', async () => {
+    it('emits limit-reached-coupon when limit hit', async () => {
       const paymentRepo = {} as unknown as Repository<PaymentIntent>;
       const refundRepo = {} as unknown as Repository<PaymentRefund>;
       const attemptRepo = {} as unknown as Repository<PaymentAttempt>;
@@ -204,7 +204,7 @@ describe('PaymentIntentService', () => {
 
       expect(producerInstance.produce).toHaveBeenCalledWith(
         process.env.KAFKA_BROKER as string,
-        KT_COUPON_LIMIT_REACHED,
+        KT_LIMIT_REACHED_COUPON,
         encodeKafkaMessage(PaymentIntentService.name, {
           couponId: 'c1',
           traceId: 'trace',

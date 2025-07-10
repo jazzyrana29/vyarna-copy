@@ -9,7 +9,7 @@ import {
   generateTraceId,
   CreateEmailDto,
   UpdateEmailDto,
-  GetEmailDto,
+  GetOneEmailDto,
   GetZtrackingEmailDto,
   KT_CREATE_EMAIL,
   KT_UPDATE_EMAIL,
@@ -18,7 +18,7 @@ import {
 } from 'ez-utils';
 import { ValidateCreateEmailDtoPipe } from './pipes/validate-create-email-dto.pipe';
 import { ValidateUpdateEmailDtoPipe } from './pipes/validate-update-email-dto.pipe';
-import { ValidateGetEmailDtoPipe } from './pipes/validate-get-email-dto.pipe';
+import { ValidateGetOneEmailDtoPipe } from './pipes/validate-get-email-dto.pipe';
 import { ValidateGetZtrackingEmailDtoPipe } from './pipes/validate-get-ztracking-email-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
@@ -70,9 +70,9 @@ export class PersonEmailController {
 
   @Post(KT_GET_EMAIL)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetEmailDto })
+  @ApiBody({ type: GetOneEmailDto })
   async getEmail(
-    @Body(new ValidateGetEmailDtoPipe()) getEmailDto: GetEmailDto,
+    @Body(new ValidateGetOneEmailDtoPipe()) getEmailDto: GetOneEmailDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getEmail');
     this.logger.info('traceId generated successfully', traceId, 'getEmail', LogStreamLevel.ProdStandard);

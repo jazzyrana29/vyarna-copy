@@ -5,7 +5,7 @@ import {
   KT_CREATE_TEETHING_EVENT,
   KT_GET_TEETHING_EVENTS,
   CreateTeethingEventDto,
-  GetTeethingEventsDto,
+  GetManyTeethingEventsDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -52,7 +52,7 @@ export class TeethingEventKafkaService {
       message,
       key,
       async (
-        getTeethingEventsDto: GetTeethingEventsDto,
+        getTeethingEventsDto: GetManyTeethingEventsDto,
         traceId: string,
       ) =>
         await this.teethingEventService.getTeethingEvents(

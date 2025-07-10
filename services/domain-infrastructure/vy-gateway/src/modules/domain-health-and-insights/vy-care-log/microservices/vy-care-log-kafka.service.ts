@@ -4,13 +4,13 @@ import { getLoggerConfig } from '../../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import {
   CreateDiaperChangeDto,
-  GetDiaperChangesDto,
+  GetManyDiaperChangesDto,
   CreateMedicationAdministrationDto,
-  GetMedicationAdministrationsDto,
+  GetManyMedicationAdministrationsDto,
   CreateTemperatureMeasurementDto,
-  GetTemperatureMeasurementsDto,
+  GetManyTemperatureMeasurementsDto,
   CreateSymptomReportDto,
-  GetSymptomReportsDto,
+  GetManySymptomReportsDto,
   KT_CREATE_DIAPER_CHANGE,
   KT_GET_DIAPER_CHANGES,
   KT_CREATE_MEDICATION_ADMINISTRATION,
@@ -48,7 +48,7 @@ export class CareLogKafkaService {
   }
 
   async getDiaperChanges(
-    getDiaperChangesDto: GetDiaperChangesDto,
+    getDiaperChangesDto: GetManyDiaperChangesDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
@@ -72,7 +72,7 @@ export class CareLogKafkaService {
   }
 
   async getMedicationAdministrations(
-    getMedicationAdministrationsDto: GetMedicationAdministrationsDto,
+    getMedicationAdministrationsDto: GetManyMedicationAdministrationsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
@@ -96,7 +96,7 @@ export class CareLogKafkaService {
   }
 
   async getTemperatureMeasurements(
-    getTemperatureMeasurementsDto: GetTemperatureMeasurementsDto,
+    getTemperatureMeasurementsDto: GetManyTemperatureMeasurementsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
@@ -120,7 +120,7 @@ export class CareLogKafkaService {
   }
 
   async getSymptomReports(
-    getSymptomReportsDto: GetSymptomReportsDto,
+    getSymptomReportsDto: GetManySymptomReportsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(

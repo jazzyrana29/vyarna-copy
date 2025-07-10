@@ -6,7 +6,7 @@ import { ZtrackingDevelopmentMomentService } from './ztracking-development-momen
 import {
   CreateDevelopmentMomentDto,
   DevelopmentMomentDto,
-  GetDevelopmentMomentsDto,
+  GetManyDevelopmentMomentsDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -47,7 +47,7 @@ export class DevelopmentMomentService {
   }
 
   async getDevelopmentMoments(
-    getDevelopmentMomentsDto: GetDevelopmentMomentsDto,
+    getDevelopmentMomentsDto: GetManyDevelopmentMomentsDto,
     traceId: string,
   ): Promise<DevelopmentMomentDto[]> {
     const { babyId } = getDevelopmentMomentsDto;

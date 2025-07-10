@@ -1,11 +1,10 @@
-export const KT_WALLET_ORDER_PAID = "order-paid";
-export const KT_WALLET_SUBSCRIPTION_RENEWED = "subscription-renewed";
-export const KT_WALLET_REFUND_SUCCEEDED = "refund-succeeded-wallet";
-export const KT_WALLET_AFFILIATE_COMMISSION_CREATED =
-  "affiliate-commission-created";
-export const KT_WALLET_ACCOUNT_CREATED = "wallet-account-created";
-export const KT_TRANSACTION_RECORDED = "transaction-recorded";
-export const KT_PROVIDER_PAYOUT_SCHEDULED = "provider-payout-scheduled";
-export const KT_PROVIDER_PAYOUT_PAID = "provider-payout-paid";
-export const KT_CONSUMER_REWARD_ISSUED = "consumer-reward-issued";
-export const KT_CONSUMER_REWARD_REDEEMED = "consumer-reward-redeemed";
+export const KT_PAID_ORDER = "paid-order";
+export const KT_RENEWED_SUBSCRIPTION = "renewed-subscription";
+export const KT_REFUND_SUCCEEDED_WALLET = "refund-succeeded-wallet";
+export const KT_CREATED_AFFILIATE_COMMISSION = "created-affiliate-commission";
+export const KT_CREATED_WALLET_ACCOUNT = "created-wallet-account";
+export const KT_RECORDED_TRANSACTION = "recorded-transaction";
+export const KT_SCHEDULED_PROVIDER_PAYOUT = "scheduled-provider-payout";
+export const KT_PAID_PROVIDER_PAYOUT = "paid-provider-payout";
+export const KT_ISSUED_CONSUMER_REWARD = "issued-consumer-reward";
+export const KT_REDEEMED_CONSUMER_REWARD = "redeemed-consumer-reward";

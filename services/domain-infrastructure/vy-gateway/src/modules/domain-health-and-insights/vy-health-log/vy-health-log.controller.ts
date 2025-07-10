@@ -8,14 +8,14 @@ import { getLoggerConfig } from '../../../utils/common';
 import { HealthLogKafkaService } from './microservices/vy-health-log-kafka.service';
 import { ValidateCreatePersonDtoPipe } from './pipes/validate-create-person-dto.pipe';
 import { ValidateUpdatePersonDtoPipe } from './pipes/validate-update-person-dto.pipe';
-import { ValidateGetPersonDtoPipe } from './pipes/validate-get-person-dto.pipe';
+import { ValidateGetOnePersonDtoPipe } from './pipes/validate-get-person-dto.pipe';
 import { ValidateGetHistoryPersonDtoPipe } from './pipes/validate-get-history-person-dto.pipe';
 import { ValidateGetManyPersonsDtoPipe } from './pipes/validate-get-many-persons-dto.pipe';
 import {
   generateTraceId,
   CreatePersonDto,
   UpdatePersonDto,
-  GetPersonDto,
+  GetOnePersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
   KT_CREATE_PERSON_ENTITY,
@@ -86,9 +86,9 @@ export class HealthLogController {
 
   @Post(KT_GET_PERSON_ENTITY)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetPersonDto })
+  @ApiBody({ type: GetOnePersonDto })
   async getPerson(
-    @Body(new ValidateGetPersonDtoPipe()) getPersonDto: GetPersonDto,
+    @Body(new ValidateGetOnePersonDtoPipe()) getPersonDto: GetOnePersonDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getPerson');
     this.logger.info(

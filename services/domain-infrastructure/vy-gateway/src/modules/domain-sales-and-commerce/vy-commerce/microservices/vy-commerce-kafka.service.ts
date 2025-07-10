@@ -19,8 +19,8 @@ import {
   KT_CANCEL_SUBSCRIPTION,
   KT_CHECK_COUPON_ELIGIBILITY,
   CreateCartDto,
-  AddCartItemDto,
-  RemoveCartItemDto,
+  CreateCartItemDto,
+  DeleteCartItemDto,
   ApplyCartPromotionDto,
   CreateOrderDto,
   GetOrdersDto,
@@ -28,7 +28,7 @@ import {
   UpdateOrderShippingDto,
   CreateSubscriptionDto,
   GetSubscriptionDto,
-  CancelSubscriptionDto,
+  DeleteSubscriptionDto,
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
@@ -85,7 +85,7 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async addCartItem(addDto: AddCartItemDto, traceId: string) {
+  async addCartItem(addDto: CreateCartItemDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_ADD_CART_ITEM,
@@ -94,7 +94,7 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async removeCartItem(removeDto: RemoveCartItemDto, traceId: string) {
+  async removeCartItem(removeDto: DeleteCartItemDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_REMOVE_CART_ITEM,
@@ -166,7 +166,7 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async cancelSubscription(cancelDto: CancelSubscriptionDto, traceId: string) {
+  async cancelSubscription(cancelDto: DeleteSubscriptionDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CANCEL_SUBSCRIPTION,

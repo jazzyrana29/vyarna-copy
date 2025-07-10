@@ -9,11 +9,11 @@ import { PumpingEvent } from '../../../entities/pumping_event.entity';
 import { SessionSummary } from '../../../entities/session_summary.entity';
 import { ZtrackingSessionSummary } from '../../../entities/ztracking_session_summary.entity';
 import {
-  StartNutritionSessionDto,
+  CreateNutritionSessionDto,
   NutritionSessionDto,
-  GetNutritionSessionDto,
+  GetOneNutritionSessionDto,
   GetZtrackingNutritionSessionDto,
-  LogNutritionEventDto,
+  CreateNutritionEventDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -30,9 +30,9 @@ import {
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   encodeKafkaMessage,
-  KT_NUTRITION_SESSION_CREATED,
-  KT_NUTRITION_EVENT_LOGGED,
-  KT_NUTRITION_SESSION_ENDED,
+  KT_CREATED_NUTRITION_SESSION,
+  KT_LOGGED_NUTRITION_EVENT,
+  KT_ENDED_NUTRITION_SESSION,
 } from 'ez-utils';
 import { PersonIdentityClientService } from './person-identity-client.service';
 
@@ -67,7 +67,7 @@ export class NutritionSessionService {
   }
 
   async startNutritionSession(
-    startNutritionSessionDto: StartNutritionSessionDto,
+    startNutritionSessionDto: CreateNutritionSessionDto,
     traceId: string,
   ): Promise<NutritionSessionDto> {
     await this.personClient.validatePerson(
@@ -90,7 +90,7 @@ export class NutritionSessionService {
     );
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_NUTRITION_SESSION_CREATED,
+      KT_CREATED_NUTRITION_SESSION,
       encodeKafkaMessage(NutritionSessionService.name, {
         sessionId: entity.sessionId,
         milkGiverId: entity.milkGiverId,
@@ -110,7 +110,7 @@ export class NutritionSessionService {
   }
 
   async getNutritionSession(
-    getNutritionSessionDto: GetNutritionSessionDto,
+    getNutritionSessionDto: GetOneNutritionSessionDto,
     traceId: string,
   ): Promise<NutritionSessionDto | null> {
     const { sessionId } = getNutritionSessionDto;
@@ -141,7 +141,7 @@ export class NutritionSessionService {
   }
 
   async logEvent(
-    dto: LogNutritionEventDto,
+    dto: CreateNutritionEventDto,
     traceId: string,
   ): Promise<any> {
     const { sessionId, eventType, payload } = dto;
@@ -175,7 +175,7 @@ export class NutritionSessionService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_NUTRITION_EVENT_LOGGED,
+      KT_LOGGED_NUTRITION_EVENT,
       encodeKafkaMessage(NutritionSessionService.name, {
         sessionId,
         eventId: entity.eventId,
@@ -241,7 +241,7 @@ export class NutritionSessionService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_NUTRITION_SESSION_ENDED,
+      KT_ENDED_NUTRITION_SESSION,
       encodeKafkaMessage(NutritionSessionService.name, {
         sessionId,
         summary,

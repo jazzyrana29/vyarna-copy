@@ -48,7 +48,7 @@ export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerc
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-person.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-person.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-history-of-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/paginated-persons-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-many-persons.dto";
@@ -57,7 +57,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/document.dto";
@@ -65,50 +65,50 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/identity-
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/review-identity-verification.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
-export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/add-tag-to-contact.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/subscribe-contact-to-list.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/lists-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/tags-response.dto";
 /* ------------------------------------- domain-health-and-insights DTOs ------------------------------- */
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/diaper-change.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-diaper-change.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-diaper-changes.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-diaper-changes.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/ztracking-diaper-change.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-diaper-change.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/medication-administration.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-medication-administration.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-medication-administrations.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-medication-administrations.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/temperature-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-temperature-measurement.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-temperature-measurements.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-temperature-measurements.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/validate-care-event-time.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/symptom-report.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-symptom-report.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-symptom-reports.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-symptom-reports.dto";
 
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-growth-measurements.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-many-growth-measurements.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/ztracking-growth-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-ztracking-growth-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/milestone.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-milestone.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-milestones.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-many-milestones.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/teething-event.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-teething-event.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-teething-events.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-many-teething-events.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/development-moment.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-development-moment.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-development-moments.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-development-log/get-many-development-moments.dto";
 
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-session.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/start-nutrition-session.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/get-nutrition-session.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutrition-session.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/get-one-nutrition-session.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/ztracking-nutrition-session.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/get-ztracking-nutrition-session.dto";
-export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/log-nutrition-event.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutrition-event.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-event.dto";
 
 /* ------------------------------------- domain-finance DTOs -------------------------*/
@@ -128,11 +128,11 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/delete-payment-metho
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/capture-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto";
-export * from "./src/DTO/domain-finance/vy-finance-payments/create-contact-stripe.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto";
 
 export * from "./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto";
-export * from "./src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto";
+export * from "./src/DTO/domain-finance/vy-finance-wallet/get-one-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/ztracking-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/get-ztracking-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/ledger-transaction.dto";
@@ -193,13 +193,13 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-orders.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto";
-export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/add-cart-item.dto";
-export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/remove-cart-item.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart-item.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/delete-cart-item.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/apply-cart-promotion.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/update-order-shipping.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-subscription.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-subscription.dto";
-export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cancel-subscription.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/delete-subscription.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-products.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/product.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto";
