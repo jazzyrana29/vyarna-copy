@@ -24,8 +24,8 @@ import {
   KT_REFUND_CREATED,
   KT_REFUND_SUCCEEDED,
   KT_REFUND_FAILED,
-  KT_COUPON_USED,
-  KT_COUPON_LIMIT_REACHED,
+  KT_USED_COUPON,
+  KT_LIMIT_REACHED_COUPON,
   encodeKafkaMessage,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
@@ -602,7 +602,7 @@ export class PaymentIntentService {
           }
           await new EzKafkaProducer().produce(
             process.env.KAFKA_BROKER as string,
-            KT_COUPON_USED,
+            KT_USED_COUPON,
             encodeKafkaMessage(PaymentIntentService.name, {
               couponId: couponId || promotionId,
               orderId,
@@ -623,7 +623,7 @@ export class PaymentIntentService {
         if (max && times >= max) {
           await new EzKafkaProducer().produce(
             process.env.KAFKA_BROKER as string,
-            KT_COUPON_LIMIT_REACHED,
+            KT_LIMIT_REACHED_COUPON,
             encodeKafkaMessage(PaymentIntentService.name, {
               couponId: obj.id,
               traceId,
