@@ -10,4 +10,5 @@ export declare class PaymentIntentCreatedDto {
     appliedCoupons: AppliedCouponDto[];
     totalAmount: number;
     originalAmount: number;
+    amountUnit: string;
 }

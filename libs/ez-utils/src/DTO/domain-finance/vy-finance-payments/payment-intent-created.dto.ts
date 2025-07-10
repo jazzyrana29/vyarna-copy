@@ -45,4 +45,10 @@ export class PaymentIntentCreatedDto {
   @ApiProperty({ description: 'Original amount before discounts (in cents)' })
   @IsInt()
   originalAmount: number;
+
+  @ApiProperty({
+    description: 'Unit for amount values, e.g. cents',
+  })
+  @IsString()
+  amountUnit: string;
 }

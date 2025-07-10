@@ -65,12 +65,12 @@ export class PaymentIntentService {
 
     for (const item of items) {
       if (!item.stripePriceId) {
-        throw new Error(`Falta stripePriceId en el ítem ${item.id}`);
+        throw new Error(`Missing stripePriceId on item ${item.id}`);
       }
       const price = await this.stripeGateway.retrievePrice(item.stripePriceId);
       if (!currency) currency = price.currency;
       if (price.currency !== currency) {
-        throw new Error('No se permiten divisas mixtas en un PaymentIntent');
+        throw new Error('Mixed currencies are not allowed in a PaymentIntent');
       }
       originalAmount += (price.unit_amount ?? 0) * item.quantity;
     }
@@ -87,6 +87,16 @@ export class PaymentIntentService {
       canceled: 'CANCELED',
     };
     return map[apiStatus] ?? 'REQUIRES_PAYMENT_METHOD';
+  }
+
+  private getAmountUnit(currency: string): string {
+    const units: Record<string, string> = {
+      jpy: 'yen',
+      usd: 'cents',
+      eur: 'cents',
+      gbp: 'pence',
+    };
+    return units[currency.toLowerCase()] || 'cents';
   }
 
   async createPaymentIntent(
@@ -232,6 +242,7 @@ export class PaymentIntentService {
       appliedCoupons: appliedCoupons as any,
       totalAmount,
       originalAmount,
+      amountUnit: this.getAmountUnit(currency),
     } as PaymentIntentCreatedDto;
   }
 
