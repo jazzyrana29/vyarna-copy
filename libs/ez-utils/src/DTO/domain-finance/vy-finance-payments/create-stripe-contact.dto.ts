@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-export class CreateContactStripe {
+export class CreateStripeContactDto {
   @ApiProperty()
   @IsString()
   firstName: string;
