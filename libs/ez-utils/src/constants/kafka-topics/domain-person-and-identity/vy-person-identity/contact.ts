@@ -1,1 +1,1 @@
-export const KT_CREATE_CONTACT = 'create-contact';
+export const KT_CREATE_CONTACT = "create-contact";
