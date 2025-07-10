@@ -98,6 +98,11 @@ export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/create-nutr
 export * from "./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-event.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/item.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/address.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/customer-details.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/create-payment-intent-payload.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/payment-intent-created.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto";

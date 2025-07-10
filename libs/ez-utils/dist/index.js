@@ -114,6 +114,11 @@ __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/crea
 __exportStar(require("./src/DTO/domain-health-and-insights/vy-nutrition-log/nutrition-event.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/item.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/address.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/customer-details.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-payment-intent-payload.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-intent-created.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto"), exports);

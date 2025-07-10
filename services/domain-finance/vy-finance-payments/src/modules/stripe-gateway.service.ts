@@ -6,9 +6,7 @@ import { LogStreamLevel } from 'ez-logger';
 @Injectable()
 export class StripeGatewayService {
   private logger = getLoggerConfig(StripeGatewayService.name);
-  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: '2025-04-30',
-  });
+  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
   constructor() {
     this.logger.debug(
