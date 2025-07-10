@@ -20,10 +20,12 @@ import {
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
   CapturePaymentIntentDto,
+  ConfirmPaymentIntentDto,
   CreateStripeContactDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
   KT_GET_REFUND,
@@ -158,6 +160,26 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
     } catch (e: any) {
       socket.emit(
         `${KT_GET_ZTRACKING_PAYMENT_INTENT}-error`,
+        e.message || 'Unknown error',
+      );
+    }
+  }
+
+  @SubscribeMessage(KT_CONFIRM_PAYMENT_INTENT)
+  async handleConfirm(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() confirmDto: ConfirmPaymentIntentDto,
+  ) {
+    const traceId = generateTraceId('finance-payments-confirm-intent');
+    try {
+      const result = await this.paymentsKafka.confirmPaymentIntent(
+        confirmDto,
+        traceId,
+      );
+      socket.emit(`${KT_CONFIRM_PAYMENT_INTENT}-result`, result);
+    } catch (e: any) {
+      socket.emit(
+        `${KT_CONFIRM_PAYMENT_INTENT}-error`,
         e.message || 'Unknown error',
       );
     }

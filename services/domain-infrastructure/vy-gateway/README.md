@@ -94,3 +94,19 @@ socket.emit('register-user', '123');
 ```
 
 Only the initiating user will receive status updates for their payment intents.
+
+## Kafka Event Flow
+
+Each WebSocket event corresponds to a Kafka topic. The main topics are:
+
+- `create-payment-intent`
+- `get-payment-intent`
+- `get-ztracking-payment-intent`
+- `confirm-payment-intent`
+- `capture-payment-intent`
+- `create-refund`
+- `get-refund`
+- `process-stripe-webhook`
+- `create-payment-method`
+- `list-payment-methods`
+- `delete-payment-method`
