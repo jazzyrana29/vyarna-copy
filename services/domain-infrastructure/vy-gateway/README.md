@@ -76,3 +76,21 @@ The gateway sends the request over Kafka and returns the microservice response.
 Each controller under `src/modules` communicates with its corresponding
 microservice via Kafka. This gateway is effectively the public API layer while
 the domain services remain decoupled and headless.
+
+## WebSocket Usage
+
+Clients connect to the `finance-payments` namespace to receive payment updates.
+Identify the user through a `userId` query parameter during the Socket.IO
+handshake or by emitting a `register-user` event right after connecting. The
+socket joins a room matching that `userId` and all `payment-status-update`
+events are delivered only to that room.
+
+```ts
+// using query parameter
+const socket = io('/finance-payments', { query: { userId: '123' } });
+
+// or after connection
+socket.emit('register-user', '123');
+```
+
+Only the initiating user will receive status updates for their payment intents.

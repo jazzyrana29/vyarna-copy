@@ -32,12 +32,17 @@ export class FinancePaymentsEventsController {
       'handleSucceeded',
       LogStreamLevel.DebugLight,
     );
-    this.websocket.server.emit('payment-status-update', {
-      paymentIntentId,
-      orderId,
-      subscriptionId,
-      status: 'succeeded',
-    });
+    const userId = this.websocket.getUserForIntent(paymentIntentId);
+    if (userId) {
+      this.websocket.server
+        .to(userId)
+        .emit('payment-status-update', {
+          paymentIntentId,
+          orderId,
+          subscriptionId,
+          status: 'succeeded',
+        });
+    }
   }
 
   @MessagePattern(KT_PAYMENT_FAILED)
@@ -51,11 +56,16 @@ export class FinancePaymentsEventsController {
       'handleFailed',
       LogStreamLevel.DebugLight,
     );
-    this.websocket.server.emit('payment-status-update', {
-      paymentIntentId,
-      status: 'failed',
-      errorCode,
-      errorMessage,
-    });
+    const userId = this.websocket.getUserForIntent(paymentIntentId);
+    if (userId) {
+      this.websocket.server
+        .to(userId)
+        .emit('payment-status-update', {
+          paymentIntentId,
+          status: 'failed',
+          errorCode,
+          errorMessage,
+        });
+    }
   }
 }
