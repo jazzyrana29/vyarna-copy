@@ -24,6 +24,7 @@ export class ProductService {
   ): Promise<ProductDto[]> {
     const params: Stripe.ProductListParams = {};
     if (typeof getDto.active === 'boolean') params.active = getDto.active;
+    if (getDto.productId) params.ids = [getDto.productId];
     const result = await this.stripe.products.list(params);
     this.logger.info(
       `Retrieved ${result.data.length} products`,
@@ -31,7 +32,14 @@ export class ProductService {
       'getProducts',
       LogStreamLevel.DebugLight,
     );
-    return result.data.map((p) => ({
+    let products = result.data;
+    if (getDto.name) {
+      const nameLower = getDto.name.toLowerCase();
+      products = products.filter((p) =>
+        p.name.toLowerCase().includes(nameLower),
+      );
+    }
+    return products.map((p) => ({
       productId: p.id,
       name: p.name,
       description: p.description || undefined,
