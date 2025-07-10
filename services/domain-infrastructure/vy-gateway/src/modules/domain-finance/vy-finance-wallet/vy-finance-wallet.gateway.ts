@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -61,7 +62,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_WALLET_ACCOUNT)
   async handleCreateAccount(
     @ConnectedSocket() socket: Socket,
-    createWalletAccountDto: CreateWalletAccountDto,
+    @MessageBody() createWalletAccountDto: CreateWalletAccountDto,
   ) {
     const traceId = generateTraceId('wallet-account-create');
     try {
@@ -75,7 +76,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_SCHEDULE_PROVIDER_PAYOUT)
   async handleSchedulePayout(
     @ConnectedSocket() socket: Socket,
-    scheduleProviderPayoutDto: ScheduleProviderPayoutDto,
+    @MessageBody() scheduleProviderPayoutDto: ScheduleProviderPayoutDto,
   ) {
     const traceId = generateTraceId('wallet-provider-payout-schedule');
     try {
@@ -89,7 +90,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_ISSUE_CONSUMER_REWARD)
   async handleIssueReward(
     @ConnectedSocket() socket: Socket,
-    issueConsumerRewardDto: IssueConsumerRewardDto,
+    @MessageBody() issueConsumerRewardDto: IssueConsumerRewardDto,
   ) {
     const traceId = generateTraceId('wallet-consumer-reward-issue');
     try {
@@ -103,7 +104,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_AFFILIATE_COMMISSION)
   async handleCreateCommission(
     @ConnectedSocket() socket: Socket,
-    createAffiliateCommissionDto: CreateAffiliateCommissionDto,
+    @MessageBody() createAffiliateCommissionDto: CreateAffiliateCommissionDto,
   ) {
     const traceId = generateTraceId('wallet-affiliate-commission-create');
     try {
@@ -117,7 +118,7 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_INTERNAL_CHARGE)
   async handleCreateCharge(
     @ConnectedSocket() socket: Socket,
-    createInternalChargeDto: CreateInternalChargeDto,
+    @MessageBody() createInternalChargeDto: CreateInternalChargeDto,
   ) {
     const traceId = generateTraceId('wallet-internal-charge-create');
     try {

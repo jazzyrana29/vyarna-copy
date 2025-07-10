@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -67,7 +68,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_DIAPER_CHANGE)
   async createDiaperChange(
     @ConnectedSocket() socket: Socket,
-    createDiaperChangeDto: CreateDiaperChangeDto,
+    @MessageBody() createDiaperChangeDto: CreateDiaperChangeDto,
   ) {
     const traceId = generateTraceId('care-log-create-diaper-change');
     try {
@@ -84,7 +85,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_DIAPER_CHANGES)
   async getDiaperChanges(
     @ConnectedSocket() socket: Socket,
-    getDiaperChangesDto: GetManyDiaperChangesDto,
+    @MessageBody() getDiaperChangesDto: GetManyDiaperChangesDto,
   ) {
     const traceId = generateTraceId('care-log-get-diaper-changes');
     try {
@@ -101,7 +102,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_MEDICATION_ADMINISTRATION)
   async createMedicationAdministration(
     @ConnectedSocket() socket: Socket,
-    createMedicationAdministrationDto: CreateMedicationAdministrationDto,
+    @MessageBody() createMedicationAdministrationDto: CreateMedicationAdministrationDto,
   ) {
     const traceId = generateTraceId('care-log-create-medication-administration');
     try {
@@ -121,7 +122,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_MEDICATION_ADMINISTRATIONS)
   async getMedicationAdministrations(
     @ConnectedSocket() socket: Socket,
-    getMedicationAdministrationsDto: GetManyMedicationAdministrationsDto,
+    @MessageBody() getMedicationAdministrationsDto: GetManyMedicationAdministrationsDto,
   ) {
     const traceId = generateTraceId('care-log-get-medication-administrations');
     try {
@@ -141,7 +142,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_TEMPERATURE_MEASUREMENT)
   async createTemperatureMeasurement(
     @ConnectedSocket() socket: Socket,
-    createTemperatureMeasurementDto: CreateTemperatureMeasurementDto,
+    @MessageBody() createTemperatureMeasurementDto: CreateTemperatureMeasurementDto,
   ) {
     const traceId = generateTraceId('care-log-create-temperature-measurement');
     try {
@@ -158,7 +159,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_TEMPERATURE_MEASUREMENTS)
   async getTemperatureMeasurements(
     @ConnectedSocket() socket: Socket,
-    getTemperatureMeasurementsDto: GetManyTemperatureMeasurementsDto,
+    @MessageBody() getTemperatureMeasurementsDto: GetManyTemperatureMeasurementsDto,
   ) {
     const traceId = generateTraceId('care-log-get-temperature-measurements');
     try {
@@ -175,7 +176,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_SYMPTOM_REPORT)
   async createSymptomReport(
     @ConnectedSocket() socket: Socket,
-    createSymptomReportDto: CreateSymptomReportDto,
+    @MessageBody() createSymptomReportDto: CreateSymptomReportDto,
   ) {
     const traceId = generateTraceId('care-log-create-symptom-report');
     try {
@@ -192,7 +193,7 @@ export class CareLogWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_SYMPTOM_REPORTS)
   async getSymptomReports(
     @ConnectedSocket() socket: Socket,
-    getSymptomReportsDto: GetManySymptomReportsDto,
+    @MessageBody() getSymptomReportsDto: GetManySymptomReportsDto,
   ) {
     const traceId = generateTraceId('care-log-get-symptom-reports');
     try {

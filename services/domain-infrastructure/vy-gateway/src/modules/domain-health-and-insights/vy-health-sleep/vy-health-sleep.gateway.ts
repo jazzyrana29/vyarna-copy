@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -55,7 +56,7 @@ export class HealthSleepWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_SLEEP_SESSION)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createSleepSessionDto: CreateSleepSessionDto,
+    @MessageBody() createSleepSessionDto: CreateSleepSessionDto,
   ) {
     const traceId = generateTraceId('sleep-create');
     try {
@@ -72,7 +73,7 @@ export class HealthSleepWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_LOG_SLEEP_EVENT)
   async handleEvent(
     @ConnectedSocket() socket: Socket,
-    sleepEventData: { sessionId: string; event: SleepEventDto },
+    @MessageBody() sleepEventData: { sessionId: string; event: SleepEventDto },
   ) {
     const traceId = generateTraceId('sleep-event');
     try {
