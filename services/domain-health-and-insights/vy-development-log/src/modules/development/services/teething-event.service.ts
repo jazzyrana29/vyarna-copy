@@ -6,7 +6,7 @@ import { ZtrackingTeethingEventService } from './ztracking-teething-event.servic
 import {
   CreateTeethingEventDto,
   TeethingEventDto,
-  GetTeethingEventsDto,
+  GetManyTeethingEventsDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -47,7 +47,7 @@ export class TeethingEventService {
   }
 
   async getTeethingEvents(
-    getTeethingEventsDto: GetTeethingEventsDto,
+    getTeethingEventsDto: GetManyTeethingEventsDto,
     traceId: string,
   ): Promise<TeethingEventDto[]> {
     const { babyId } = getTeethingEventsDto;

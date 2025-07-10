@@ -5,7 +5,7 @@ import {
   KT_CREATE_MILESTONE,
   KT_GET_MILESTONES,
   CreateMilestoneDto,
-  GetMilestonesDto,
+  GetManyMilestonesDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -52,7 +52,7 @@ export class MilestoneKafkaService {
       message,
       key,
       async (
-        getMilestonesDto: GetMilestonesDto,
+        getMilestonesDto: GetManyMilestonesDto,
         traceId: string,
       ) =>
         await this.milestoneService.getMilestones(

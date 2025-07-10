@@ -8,13 +8,13 @@ import { DevelopmentLogKafkaService } from './microservices/vy-development-log-k
 import {
   generateTraceId,
   CreateGrowthMeasurementDto,
-  GetGrowthMeasurementsDto,
+  GetManyGrowthMeasurementsDto,
   CreateMilestoneDto,
-  GetMilestonesDto,
+  GetManyMilestonesDto,
   CreateTeethingEventDto,
-  GetTeethingEventsDto,
+  GetManyTeethingEventsDto,
   CreateDevelopmentMomentDto,
-  GetDevelopmentMomentsDto,
+  GetManyDevelopmentMomentsDto,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
   KT_CREATE_MILESTONE,
@@ -67,10 +67,10 @@ export class DevelopmentLogController {
 
   @Post(KT_GET_GROWTH_MEASUREMENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetGrowthMeasurementsDto })
+  @ApiBody({ type: GetManyGrowthMeasurementsDto })
   async getGrowth(
     @Body(new ValidateGetGrowthMeasurementsDtoPipe())
-    query: GetGrowthMeasurementsDto,
+    query: GetManyGrowthMeasurementsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getGrowth');
     this.logger.info('traceId generated successfully', traceId, 'getGrowth', LogStreamLevel.ProdStandard);
@@ -100,9 +100,9 @@ export class DevelopmentLogController {
 
   @Post(KT_GET_MILESTONES)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetMilestonesDto })
+  @ApiBody({ type: GetManyMilestonesDto })
   async getMilestones(
-    @Body(new ValidateGetMilestonesDtoPipe()) query: GetMilestonesDto,
+    @Body(new ValidateGetMilestonesDtoPipe()) query: GetManyMilestonesDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMilestones');
     this.logger.info('traceId generated successfully', traceId, 'getMilestones', LogStreamLevel.ProdStandard);
@@ -133,9 +133,9 @@ export class DevelopmentLogController {
 
   @Post(KT_GET_TEETHING_EVENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetTeethingEventsDto })
+  @ApiBody({ type: GetManyTeethingEventsDto })
   async getTeethingEvents(
-    @Body(new ValidateGetTeethingEventsDtoPipe()) query: GetTeethingEventsDto,
+    @Body(new ValidateGetTeethingEventsDtoPipe()) query: GetManyTeethingEventsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getTeethingEvents');
     this.logger.info('traceId generated successfully', traceId, 'getTeethingEvents', LogStreamLevel.ProdStandard);
@@ -166,9 +166,9 @@ export class DevelopmentLogController {
 
   @Post(KT_GET_DEVELOPMENT_MOMENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetDevelopmentMomentsDto })
+  @ApiBody({ type: GetManyDevelopmentMomentsDto })
   async getMoments(
-    @Body(new ValidateGetDevelopmentMomentsDtoPipe()) query: GetDevelopmentMomentsDto,
+    @Body(new ValidateGetDevelopmentMomentsDtoPipe()) query: GetManyDevelopmentMomentsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMoments');
     this.logger.info('traceId generated successfully', traceId, 'getMoments', LogStreamLevel.ProdStandard);
