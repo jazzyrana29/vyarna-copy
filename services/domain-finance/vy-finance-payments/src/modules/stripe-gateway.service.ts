@@ -17,14 +17,17 @@ export class StripeGatewayService {
     );
   }
 
-  async createPaymentIntent(params: Stripe.PaymentIntentCreateParams) {
+  async createPaymentIntent(
+    params: Stripe.PaymentIntentCreateParams,
+    options?: Stripe.RequestOptions,
+  ) {
     this.logger.debug(
       `Creating Stripe PaymentIntent`,
       '',
       'createPaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentIntents.create(params);
+    return this.stripe.paymentIntents.create(params, options);
   }
 
   async capturePaymentIntent(paymentIntentId: string) {
