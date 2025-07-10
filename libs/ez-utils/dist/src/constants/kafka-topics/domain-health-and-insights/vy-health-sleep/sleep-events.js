@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KT_SLEEP_SESSION_ENDED = exports.KT_SLEEP_RATED = exports.KT_SLEEP_ENVIRONMENT_RECORDED = exports.KT_SLEEP_INTERRUPTED = exports.KT_SLEEP_EVENT_LOGGED = exports.KT_SLEEP_SESSION_STARTED = void 0;
-exports.KT_SLEEP_SESSION_STARTED = 'sleep-session-started';
-exports.KT_SLEEP_EVENT_LOGGED = 'sleep-event-logged';
-exports.KT_SLEEP_INTERRUPTED = 'sleep-interrupted';
-exports.KT_SLEEP_ENVIRONMENT_RECORDED = 'sleep-environment-recorded';
-exports.KT_SLEEP_RATED = 'sleep-rated';
-exports.KT_SLEEP_SESSION_ENDED = 'sleep-session-ended';
+exports.KT_END_SLEEP_SESSION = exports.KT_RATE_SLEEP = exports.KT_RECORD_SLEEP_ENVIRONMENT = exports.KT_INTERRUPT_SLEEP = exports.KT_LOG_SLEEP_EVENT = exports.KT_START_SLEEP_SESSION = void 0;
+exports.KT_START_SLEEP_SESSION = 'start-sleep-session';
+exports.KT_LOG_SLEEP_EVENT = 'log-sleep-event';
+exports.KT_INTERRUPT_SLEEP = 'interrupt-sleep';
+exports.KT_RECORD_SLEEP_ENVIRONMENT = 'record-sleep-environment';
+exports.KT_RATE_SLEEP = 'rate-sleep';
+exports.KT_END_SLEEP_SESSION = 'end-sleep-session';
 //# sourceMappingURL=sleep-events.js.map

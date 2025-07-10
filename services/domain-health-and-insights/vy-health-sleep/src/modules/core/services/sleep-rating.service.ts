@@ -8,7 +8,7 @@ import {
   GetSleepRatingsDto,
   DeleteSleepRatingDto,
   encodeKafkaMessage,
-  KT_SLEEP_RATED,
+  KT_RATE_SLEEP,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
@@ -42,7 +42,7 @@ export class SleepRatingService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_SLEEP_RATED,
+      KT_RATE_SLEEP,
       encodeKafkaMessage(SleepRatingService.name, {
         ratingId: entity.ratingId,
         sessionId: entity.sessionId,

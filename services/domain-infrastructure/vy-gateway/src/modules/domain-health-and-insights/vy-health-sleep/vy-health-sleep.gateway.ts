@@ -12,7 +12,7 @@ import {
   CreateSleepSessionDto,
   SleepEventDto,
   KT_CREATE_SLEEP_SESSION,
-  KT_SLEEP_EVENT_LOGGED,
+  KT_LOG_SLEEP_EVENT,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -69,7 +69,7 @@ export class HealthSleepWebsocket implements OnGatewayInit {
     }
   }
 
-  @SubscribeMessage(KT_SLEEP_EVENT_LOGGED)
+  @SubscribeMessage(KT_LOG_SLEEP_EVENT)
   async handleEvent(
     @ConnectedSocket() socket: Socket,
     sleepEventData: { sessionId: string; event: SleepEventDto },
@@ -81,9 +81,9 @@ export class HealthSleepWebsocket implements OnGatewayInit {
         sessionId: sleepEventData.sessionId,
       } as any;
       const result = await this.kafkaService.logSleepEvent(dto, traceId);
-      socket.emit(`${KT_SLEEP_EVENT_LOGGED}-result`, result);
+      socket.emit(`${KT_LOG_SLEEP_EVENT}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_SLEEP_EVENT_LOGGED}-error`, e.message || 'Unknown error');
+      socket.emit(`${KT_LOG_SLEEP_EVENT}-error`, e.message || 'Unknown error');
     }
   }
 }
