@@ -39,4 +39,9 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], GetProductsDto.prototype, "active", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], GetProductsDto.prototype, "limit", void 0);
 //# sourceMappingURL=get-products.dto.js.map

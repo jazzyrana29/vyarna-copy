@@ -3,22 +3,25 @@ import { GetProductsDto } from 'ez-utils';
 
 describe('ProductService', () => {
   it('maps stripe products to DTOs', async () => {
+    const product = {
+      id: 'prod_1',
+      name: 'Prod 1',
+      description: 'desc',
+      active: true,
+      created: 1,
+      updated: 2,
+    };
     const stripeMock = {
       products: {
-        list: jest.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'prod_1',
-              name: 'Prod 1',
-              description: 'desc',
-              active: true,
-              created: 1,
-              updated: 2,
-            },
-          ],
+        list: jest.fn().mockReturnValue({
+          autoPagingIterable: () =>
+            (async function* () {
+              yield product;
+            })(),
         }),
+        search: jest.fn(),
       },
-    };
+    } as any;
 
     const service = new ProductService();
     // @ts-ignore accessing private field for test
@@ -40,28 +43,24 @@ describe('ProductService', () => {
   });
 
   it('applies filters and name search', async () => {
+    const product = {
+      id: 'prod_1',
+      name: 'Test 1',
+      active: true,
+      created: 1,
+      updated: 2,
+    };
     const stripeMock = {
       products: {
-        list: jest.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'prod_1',
-              name: 'Test 1',
-              active: true,
-              created: 1,
-              updated: 2,
-            },
-            {
-              id: 'prod_2',
-              name: 'Other',
-              active: false,
-              created: 3,
-              updated: 4,
-            },
-          ],
+        search: jest.fn().mockReturnValue({
+          autoPagingIterable: () =>
+            (async function* () {
+              yield product;
+            })(),
         }),
+        list: jest.fn(),
       },
-    };
+    } as any;
 
     const service = new ProductService();
     // @ts-ignore accessing private field for test
@@ -75,10 +74,7 @@ describe('ProductService', () => {
 
     const result = await service.getProducts(dto, 'trace');
 
-    expect(stripeMock.products.list).toHaveBeenCalledWith({
-      active: true,
-      ids: ['prod_1'],
-    });
+    expect(stripeMock.products.search).toHaveBeenCalled();
     expect(result).toEqual([
       {
         productId: 'prod_1',

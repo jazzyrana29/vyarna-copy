@@ -3,4 +3,5 @@ export declare class GetProductsDto {
     productId?: string;
     name?: string;
     active?: boolean;
+    limit?: number;
 }
