@@ -41,6 +41,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @WebSocketServer()
   server: Server;
   private logger = getLoggerConfig(FinancePaymentsWebsocket.name);
+  private intentUserMap = new Map<string, string>();
 
   constructor(private readonly paymentsKafka: FinancePaymentsKafkaService) {}
 
@@ -53,6 +54,10 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
     );
   }
 
+  getUserForIntent(intentId: string): string | undefined {
+    return this.intentUserMap.get(intentId);
+  }
+
   handleConnection(socket: Socket) {
     this.logger.debug(
       `Client connected: ${socket.id}`,
@@ -60,6 +65,18 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
       'handleConnection',
       LogStreamLevel.DebugLight,
     );
+    const queryUser = socket.handshake.query['userId'];
+    if (typeof queryUser === 'string' && queryUser) {
+      socket.join(queryUser);
+      (socket.data as any).userId = queryUser;
+    } else {
+      socket.on('register-user', (id: string) => {
+        if (typeof id === 'string' && id) {
+          socket.join(id);
+          (socket.data as any).userId = id;
+        }
+      });
+    }
   }
 
   handleDisconnect(socket: Socket) {
@@ -69,6 +86,14 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
       'handleDisconnect',
       LogStreamLevel.DebugLight,
     );
+    const userId = (socket.data as any).userId;
+    if (userId) {
+      for (const [intentId, uid] of this.intentUserMap.entries()) {
+        if (uid === userId) {
+          this.intentUserMap.delete(intentId);
+        }
+      }
+    }
   }
 
   @SubscribeMessage(KT_CREATE_PAYMENT_INTENT)
@@ -83,6 +108,12 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         traceId,
       );
       socket.emit(`${KT_CREATE_PAYMENT_INTENT}-result`, result);
+      if (result?.paymentIntentId && (socket.data as any).userId) {
+        this.intentUserMap.set(
+          result.paymentIntentId,
+          (socket.data as any).userId as string,
+        );
+      }
     } catch (e: any) {
       socket.emit(
         `${KT_CREATE_PAYMENT_INTENT}-error`,

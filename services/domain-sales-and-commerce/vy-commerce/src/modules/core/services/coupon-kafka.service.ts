@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { KafkaMessageResponderService } from 'ez-utils';
 import { CheckCouponEligibilityPayloadDto, KT_CHECK_COUPON_ELIGIBILITY } from 'ez-utils';
 import { CouponService } from './coupon.service';
-import { getLoggerConfig } from '../../utils/common';
+import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()

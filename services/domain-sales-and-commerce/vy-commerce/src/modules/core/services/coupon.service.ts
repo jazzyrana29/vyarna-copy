@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { getLoggerConfig } from '../../utils/common';
+import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { CheckCouponEligibilityPayloadDto, CheckCouponEligibilityResponseDto } from 'ez-utils';
 
@@ -35,7 +35,9 @@ export class CouponService {
       return { eligible: false, reason: 'Coupon not found' };
     }
 
-    const coupon = await this.stripe.coupons.retrieve(promo.coupon as string);
+    const couponId =
+      typeof promo.coupon === 'string' ? promo.coupon : promo.coupon.id;
+    const coupon = await this.stripe.coupons.retrieve(couponId);
     const now = Math.floor(Date.now() / 1000);
     if (coupon.redeem_by && coupon.redeem_by < now) {
       return { eligible: false, reason: 'Coupon expired' };
