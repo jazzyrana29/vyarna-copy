@@ -6,7 +6,7 @@ import { ZtrackingDiaperChangeService } from './ztracking-diaper-change.service'
 import {
   CreateDiaperChangeDto,
   DiaperChangeDto,
-  GetDiaperChangesDto,
+  GetManyDiaperChangesDto,
   GetZtrackingDiaperChangeDto,
   ZtrackingDiaperChangeDto,
   ValidateCareEventTimeDto,
@@ -74,7 +74,7 @@ export class DiaperChangeService {
   }
 
   async getDiaperChanges(
-    getDiaperChangesDto: GetDiaperChangesDto,
+    getDiaperChangesDto: GetManyDiaperChangesDto,
     traceId: string,
   ): Promise<DiaperChangeDto[]> {
     const { babyId } = getDiaperChangesDto;

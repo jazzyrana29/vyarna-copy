@@ -7,13 +7,13 @@ import { getLoggerConfig } from '../../../utils/common';
 import { CareLogKafkaService } from './microservices/vy-care-log-kafka.service';
 import {
   CreateDiaperChangeDto,
-  GetDiaperChangesDto,
+  GetManyDiaperChangesDto,
   CreateMedicationAdministrationDto,
-  GetMedicationAdministrationsDto,
+  GetManyMedicationAdministrationsDto,
   CreateTemperatureMeasurementDto,
-  GetTemperatureMeasurementsDto,
+  GetManyTemperatureMeasurementsDto,
   CreateSymptomReportDto,
-  GetSymptomReportsDto,
+  GetManySymptomReportsDto,
   generateTraceId,
   KT_CREATE_DIAPER_CHANGE,
   KT_GET_DIAPER_CHANGES,
@@ -66,9 +66,9 @@ export class CareLogController {
 
   @Post(KT_GET_DIAPER_CHANGES)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetDiaperChangesDto })
+  @ApiBody({ type: GetManyDiaperChangesDto })
   async getDiaperChanges(
-    @Body() getDiaperChangesDto: GetDiaperChangesDto,
+    @Body() getDiaperChangesDto: GetManyDiaperChangesDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getDiaperChanges');
     this.logger.info('traceId generated successfully', traceId, 'getDiaperChanges', LogStreamLevel.ProdStandard);
@@ -102,9 +102,9 @@ export class CareLogController {
 
   @Post(KT_GET_MEDICATION_ADMINISTRATIONS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetMedicationAdministrationsDto })
+  @ApiBody({ type: GetManyMedicationAdministrationsDto })
   async getMedicationAdministrations(
-    @Body() getMedicationAdministrationsDto: GetMedicationAdministrationsDto,
+    @Body() getMedicationAdministrationsDto: GetManyMedicationAdministrationsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMedicationAdministrations');
     this.logger.info('traceId generated successfully', traceId, 'getMedicationAdministrations', LogStreamLevel.ProdStandard);
@@ -141,9 +141,9 @@ export class CareLogController {
 
   @Post(KT_GET_TEMPERATURE_MEASUREMENTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetTemperatureMeasurementsDto })
+  @ApiBody({ type: GetManyTemperatureMeasurementsDto })
   async getTemperatureMeasurements(
-    @Body() getTemperatureMeasurementsDto: GetTemperatureMeasurementsDto,
+    @Body() getTemperatureMeasurementsDto: GetManyTemperatureMeasurementsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getTemperatureMeasurements');
     this.logger.info('traceId generated successfully', traceId, 'getTemperatureMeasurements', LogStreamLevel.ProdStandard);
@@ -180,9 +180,9 @@ export class CareLogController {
 
   @Post(KT_GET_SYMPTOM_REPORTS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: GetSymptomReportsDto })
+  @ApiBody({ type: GetManySymptomReportsDto })
   async getSymptomReports(
-    @Body() getSymptomReportsDto: GetSymptomReportsDto,
+    @Body() getSymptomReportsDto: GetManySymptomReportsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSymptomReports');
     this.logger.info('traceId generated successfully', traceId, 'getSymptomReports', LogStreamLevel.ProdStandard);
