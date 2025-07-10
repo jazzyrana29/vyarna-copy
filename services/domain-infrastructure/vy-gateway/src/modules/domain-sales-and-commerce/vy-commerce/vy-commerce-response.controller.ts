@@ -16,7 +16,7 @@ import {
   KT_CREATE_SUBSCRIPTION,
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
-  KT_CHECK_COUPON_ELIGIBILITY,
+  KT_VALIDATE_PROMOTION_CODE,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -202,13 +202,13 @@ export class SalesCommerceResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
-  @MessagePattern(KT_CHECK_COUPON_ELIGIBILITY + '-response')
-  handleCheckCoupon(@Payload() message: any, @Ctx() context: KafkaContext) {
+  @MessagePattern(KT_VALIDATE_PROMOTION_CODE + '-response')
+  handleValidatePromotionCode(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     this.logger.debug(
-      `Kafka response for ${KT_CHECK_COUPON_ELIGIBILITY} | key: ${key}`,
+      `Kafka response for ${KT_VALIDATE_PROMOTION_CODE} | key: ${key}`,
       '',
-      'handleCheckCoupon',
+      'handleValidatePromotionCode',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);

@@ -17,7 +17,7 @@ import {
   KT_CREATE_SUBSCRIPTION,
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
-  KT_CHECK_COUPON_ELIGIBILITY,
+  KT_VALIDATE_PROMOTION_CODE,
   CreateCartDto,
   CreateCartItemDto,
   DeleteCartItemDto,
@@ -32,7 +32,7 @@ import {
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
-  CheckCouponEligibilityPayloadDto,
+  ValidatePromotionCodeDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -179,13 +179,13 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async checkCouponEligibility(
-    payload: CheckCouponEligibilityPayloadDto,
+  async validatePromotionCode(
+    payload: ValidatePromotionCodeDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_CHECK_COUPON_ELIGIBILITY,
+      KT_VALIDATE_PROMOTION_CODE,
       payload,
       traceId,
     );

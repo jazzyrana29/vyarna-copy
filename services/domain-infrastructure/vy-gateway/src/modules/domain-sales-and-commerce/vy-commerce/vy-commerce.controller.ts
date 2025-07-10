@@ -17,7 +17,7 @@ import {
   CreateSubscriptionDto,
   GetSubscriptionDto,
   DeleteSubscriptionDto,
-  CheckCouponEligibilityPayloadDto,
+  ValidatePromotionCodeDto,
   GetProductsDto,
   GetProductVariantsDto,
   GetCategoriesDto,
@@ -34,7 +34,7 @@ import {
   KT_CREATE_SUBSCRIPTION,
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
-  KT_CHECK_COUPON_ELIGIBILITY,
+  KT_VALIDATE_PROMOTION_CODE,
 } from 'ez-utils';
 import { ValidateCreateCartDtoPipe } from './pipes/validate-create-cart-dto.pipe';
 import { ValidateAddCartItemDtoPipe } from './pipes/validate-add-cart-item-dto.pipe';
@@ -49,7 +49,7 @@ import { ValidateCancelSubscriptionDtoPipe } from './pipes/validate-cancel-subsc
 import { ValidateGetProductsDtoPipe } from './pipes/validate-get-products-dto.pipe';
 import { ValidateGetProductVariantsDtoPipe } from './pipes/validate-get-product-variants-dto.pipe';
 import { ValidateGetCategoriesDtoPipe } from './pipes/validate-get-categories-dto.pipe';
-import { ValidateCheckCouponEligibilityDtoPipe } from './pipes/validate-check-coupon-eligibility-dto.pipe';
+import { ValidatePromotionCodeDtoPipe } from './pipes/validate-promotion-code-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
 @ApiTags('vy-commerce')
@@ -210,14 +210,14 @@ export class SalesCommerceController {
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription cancelled', traceId);
   }
 
-  @Post(KT_CHECK_COUPON_ELIGIBILITY)
+  @Post(KT_VALIDATE_PROMOTION_CODE)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CheckCouponEligibilityPayloadDto })
-  async checkCouponEligibility(
-    @Body(new ValidateCheckCouponEligibilityDtoPipe()) payload: CheckCouponEligibilityPayloadDto,
+  @ApiBody({ type: ValidatePromotionCodeDto })
+  async validatePromotionCode(
+    @Body(new ValidatePromotionCodeDtoPipe()) payload: ValidatePromotionCodeDto,
   ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('checkCouponEligibility');
-    const data = await this.commerceKafka.checkCouponEligibility(payload, traceId);
-    return new ResponseDTO(HttpStatus.OK, data, 'Coupon eligibility', traceId);
+    const traceId = generateTraceId('validatePromotionCode');
+    const data = await this.commerceKafka.validatePromotionCode(payload, traceId);
+    return new ResponseDTO(HttpStatus.OK, data, 'Promotion code validation', traceId);
   }
 }
