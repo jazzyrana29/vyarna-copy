@@ -30,9 +30,9 @@ import {
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   encodeKafkaMessage,
-  KT_NUTRITION_SESSION_CREATED,
-  KT_NUTRITION_EVENT_LOGGED,
-  KT_NUTRITION_SESSION_ENDED,
+  KT_CREATED_NUTRITION_SESSION,
+  KT_LOGGED_NUTRITION_EVENT,
+  KT_ENDED_NUTRITION_SESSION,
 } from 'ez-utils';
 import { PersonIdentityClientService } from './person-identity-client.service';
 
@@ -90,7 +90,7 @@ export class NutritionSessionService {
     );
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_NUTRITION_SESSION_CREATED,
+      KT_CREATED_NUTRITION_SESSION,
       encodeKafkaMessage(NutritionSessionService.name, {
         sessionId: entity.sessionId,
         milkGiverId: entity.milkGiverId,
@@ -175,7 +175,7 @@ export class NutritionSessionService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_NUTRITION_EVENT_LOGGED,
+      KT_LOGGED_NUTRITION_EVENT,
       encodeKafkaMessage(NutritionSessionService.name, {
         sessionId,
         eventId: entity.eventId,
@@ -241,7 +241,7 @@ export class NutritionSessionService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_NUTRITION_SESSION_ENDED,
+      KT_ENDED_NUTRITION_SESSION,
       encodeKafkaMessage(NutritionSessionService.name, {
         sessionId,
         summary,
