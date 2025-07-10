@@ -10,7 +10,7 @@ import {
   WalletAccountDto,
   ZtrackingWalletAccountDto,
   encodeKafkaMessage,
-  KT_WALLET_ACCOUNT_CREATED,
+  KT_CREATED_WALLET_ACCOUNT,
 } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { getLoggerConfig } from '../../../utils/common';
@@ -51,7 +51,7 @@ export class WalletAccountService {
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_WALLET_ACCOUNT_CREATED,
+      KT_CREATED_WALLET_ACCOUNT,
       encodeKafkaMessage(WalletAccountService.name, {
         accountId: entity.accountId,
         traceId,

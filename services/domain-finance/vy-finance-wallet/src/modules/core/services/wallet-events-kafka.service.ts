@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { LedgerService } from './ledger.service';
 import { AffiliateCommissionService } from './affiliate-commission.service';
 import {
-  KT_WALLET_ORDER_PAID,
-  KT_WALLET_SUBSCRIPTION_RENEWED,
-  KT_WALLET_REFUND_SUCCEEDED,
-  KT_WALLET_AFFILIATE_COMMISSION_CREATED,
+  KT_PAID_ORDER,
+  KT_RENEWED_SUBSCRIPTION,
+  KT_REFUND_SUCCEEDED_WALLET,
+  KT_CREATED_AFFILIATE_COMMISSION,
   RecordTransactionDto,
   CreateAffiliateCommissionDto,
 } from 'ez-utils';

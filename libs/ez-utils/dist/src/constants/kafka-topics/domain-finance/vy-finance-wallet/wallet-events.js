@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KT_CONSUMER_REWARD_REDEEMED = exports.KT_CONSUMER_REWARD_ISSUED = exports.KT_PROVIDER_PAYOUT_PAID = exports.KT_PROVIDER_PAYOUT_SCHEDULED = exports.KT_TRANSACTION_RECORDED = exports.KT_WALLET_ACCOUNT_CREATED = exports.KT_WALLET_AFFILIATE_COMMISSION_CREATED = exports.KT_WALLET_REFUND_SUCCEEDED = exports.KT_WALLET_SUBSCRIPTION_RENEWED = exports.KT_WALLET_ORDER_PAID = void 0;
-exports.KT_WALLET_ORDER_PAID = "order-paid";
-exports.KT_WALLET_SUBSCRIPTION_RENEWED = "subscription-renewed";
-exports.KT_WALLET_REFUND_SUCCEEDED = "refund-succeeded-wallet";
-exports.KT_WALLET_AFFILIATE_COMMISSION_CREATED = "affiliate-commission-created";
-exports.KT_WALLET_ACCOUNT_CREATED = "wallet-account-created";
-exports.KT_TRANSACTION_RECORDED = "transaction-recorded";
-exports.KT_PROVIDER_PAYOUT_SCHEDULED = "provider-payout-scheduled";
-exports.KT_PROVIDER_PAYOUT_PAID = "provider-payout-paid";
-exports.KT_CONSUMER_REWARD_ISSUED = "consumer-reward-issued";
-exports.KT_CONSUMER_REWARD_REDEEMED = "consumer-reward-redeemed";
+exports.KT_CONSUMER_REWARD_REDEEMED = exports.KT_ISSUED_CONSUMER_REWARD = exports.KT_PAID_PROVIDER_PAYOUT = exports.KT_SCHEDULED_PROVIDER_PAYOUT = exports.KT_RECORDED_TRANSACTION = exports.KT_CREATED_WALLET_ACCOUNT = exports.KT_CREATED_AFFILIATE_COMMISSION = exports.KT_REFUND_SUCCEEDED_WALLET = exports.KT_RENEWED_SUBSCRIPTION = exports.KT_PAID_ORDER = void 0;
+exports.KT_PAID_ORDER = "paid-order";
+exports.KT_RENEWED_SUBSCRIPTION = "renewed-subscription";
+exports.KT_REFUND_SUCCEEDED_WALLET = "refund-succeeded-wallet";
+exports.KT_CREATED_AFFILIATE_COMMISSION = "created-affiliate-commission";
+exports.KT_CREATED_WALLET_ACCOUNT = "created-wallet-account";
+exports.KT_RECORDED_TRANSACTION = "recorded-transaction";
+exports.KT_SCHEDULED_PROVIDER_PAYOUT = "scheduled-provider-payout";
+exports.KT_PAID_PROVIDER_PAYOUT = "paid-provider-payout";
+exports.KT_ISSUED_CONSUMER_REWARD = "issued-consumer-reward";
+exports.KT_CONSUMER_REWARD_REDEEMED = "redeemed-consumer-reward";
 //# sourceMappingURL=wallet-events.js.map
