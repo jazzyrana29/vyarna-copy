@@ -1,4 +1,4 @@
-export class AddTagToContactDto {
+export class CreateContactTagDto {
   contact: string;
   tag: string;
 }

@@ -4,9 +4,9 @@ import {
   CreateContactDto,
   ContactResponseDto,
   ListsResponseDto,
-  SubscribeContactToListDto,
+  CreateContactListDto,
   TagsResponseDto,
-  AddTagToContactDto,
+  CreateContactTagDto,
 } from "ez-utils";
 
 @Injectable()
@@ -35,7 +35,7 @@ export class ActiveCampaignService {
     }
   }
 
-  async subscribeContactToList(contactList: SubscribeContactToListDto): Promise<ListsResponseDto> {
+  async subscribeContactToList(contactList: CreateContactListDto): Promise<ListsResponseDto> {
     try {
       const response = await this.getClient().post("/contactLists", { contactList });
       return response.data;
@@ -57,7 +57,7 @@ export class ActiveCampaignService {
     }
   }
 
-  async addTagToContact(contactTag: AddTagToContactDto): Promise<any> {
+  async addTagToContact(contactTag: CreateContactTagDto): Promise<any> {
     try {
       const response = await this.getClient().post("/contactTags", { contactTag });
       return response.data;
