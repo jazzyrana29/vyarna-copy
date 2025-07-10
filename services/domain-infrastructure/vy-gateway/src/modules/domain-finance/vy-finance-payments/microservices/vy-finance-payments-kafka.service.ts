@@ -19,6 +19,7 @@ import {
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
+  ConfirmPaymentIntentDto,
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
   StripeWebhookDto,

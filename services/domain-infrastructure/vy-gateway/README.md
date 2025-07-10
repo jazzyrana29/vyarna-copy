@@ -43,6 +43,7 @@ Kafka topic:
 | `POST` | `/payment-intents` | Create a new payment intent. |
 | `POST` | `/payment-intents/get` | Retrieve a payment intent by id. |
 | `POST` | `/payment-intents/ztracking` | Get ztracking information for an intent. |
+| `POST` | `/payment-intents/confirm` | Confirm an existing payment intent. |
 | `POST` | `/refunds` | Issue a refund for a payment intent. |
 | `POST` | `/payment-refunds/get` | Get a refund record. |
 | `POST` | `/payment-methods` | Vault a payment method. |

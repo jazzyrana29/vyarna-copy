@@ -23,6 +23,7 @@ import {
   CreateRefundDto,
   GetPaymentRefundDto,
   RefundDto,
+  ConfirmPaymentIntentDto,
   CapturePaymentIntentDto,
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
@@ -32,6 +33,7 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
   KT_GET_REFUND,
@@ -104,6 +106,18 @@ export class FinancePaymentsController {
       'Ztracking retrieved',
       traceId,
     );
+  }
+
+  @Post(KT_CONFIRM_PAYMENT_INTENT)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: ConfirmPaymentIntentDto })
+  async confirmPaymentIntent(
+    @Body(new ValidateCapturePaymentIntentDtoPipe()) confirmDto: ConfirmPaymentIntentDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('confirmPaymentIntent');
+    this.logger.info('traceId generated successfully', traceId, 'confirmPaymentIntent', LogStreamLevel.ProdStandard);
+    await this.paymentsKafkaService.confirmPaymentIntent(confirmDto, traceId);
+    return new ResponseDTO(HttpStatus.OK, null, 'Payment intent confirmed', traceId);
   }
 
   @Post(KT_CAPTURE_PAYMENT_INTENT)
