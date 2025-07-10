@@ -201,6 +201,5 @@ __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-produc
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/product.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto"), exports);
-__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/check-coupon-eligibility-payload.dto"), exports);
-__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/check-coupon-eligibility-response.dto"), exports);
+__exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto"), exports);
 //# sourceMappingURL=index.js.map

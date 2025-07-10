@@ -22,13 +22,11 @@ export class PromotionCodesService {
   }
 
   async validatePromotionCode(
-    dto: ValidatePromotionCodeDto,
+    validatePromotionCodeDto: ValidatePromotionCodeDto,
     traceId: string,
   ): Promise<ValidatePromotionCodeResponseDto> {
-    const { code, customerId, cartTotal } = dto;
-    if (!code) {
-      throw new BadRequestException('Promotion code is required');
-    }
+    const { code, cartTotal } = validatePromotionCodeDto;
+    if (!code) throw new BadRequestException('Promotion code is required');
 
     const { data } = await this.stripe.promotionCodes.list({
       code,
@@ -44,43 +42,32 @@ export class PromotionCodesService {
     if (promo.expires_at && promo.expires_at < now) {
       return { eligible: false, reason: 'Code expired' };
     }
-    if (promo.max_redemptions && promo.times_redeemed >= promo.max_redemptions) {
+    if (
+      promo.max_redemptions &&
+      promo.times_redeemed >= promo.max_redemptions
+    ) {
       return { eligible: false, reason: 'Redemption limit reached' };
     }
 
-    const r = promo.restrictions;
-    if (r.first_time_transaction && !customerId) {
-      return {
-        eligible: false,
-        reason: 'Customer ID required for first-time purchase',
-      };
-    }
-    if (r.first_time_transaction) {
-      const hasPaid = await this.customerHasPaidBefore(customerId!);
-      if (hasPaid) {
-        return { eligible: false, reason: 'Only valid on first purchase' };
-      }
-    }
-    if (r.minimum_amount && cartTotal! < r.minimum_amount) {
+    const { restrictions: r } = promo;
+    if (
+      r.minimum_amount &&
+      cartTotal !== undefined &&
+      cartTotal < r.minimum_amount
+    ) {
       return {
         eligible: false,
         reason: `Minimum purchase of ${r.minimum_amount} required`,
       };
     }
-    if (r.customer && r.customer !== customerId) {
-      return { eligible: false, reason: 'Code not valid for this customer' };
-    }
 
-    const couponId = typeof promo.coupon === 'string' ? promo.coupon : promo.coupon.id;
+    const couponId =
+      typeof promo.coupon === 'string' ? promo.coupon : promo.coupon.id;
     const coupon = await this.stripe.coupons.retrieve(couponId);
 
     const resp: ValidatePromotionCodeResponseDto = { eligible: true };
-    if ((coupon as any).amount_off) resp.discountAmount = (coupon as any).amount_off as number;
-    if ((coupon as any).percent_off) resp.percentOff = (coupon as any).percent_off as number;
+    if (coupon.amount_off) resp.discountAmount = coupon.amount_off;
+    if (coupon.percent_off) resp.percentOff = coupon.percent_off;
     return resp;
-  }
-
-  private async customerHasPaidBefore(_customerId: string): Promise<boolean> {
-    return false;
   }
 }
