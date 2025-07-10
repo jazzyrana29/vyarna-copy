@@ -8,15 +8,15 @@ import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.ser
 import {
   generateTraceId,
   CreateCartDto,
-  AddCartItemDto,
-  RemoveCartItemDto,
+  CreateCartItemDto,
+  DeleteCartItemDto,
   ApplyCartPromotionDto,
   CreateOrderDto,
   GetZtrackingOrderDto,
   UpdateOrderShippingDto,
   CreateSubscriptionDto,
   GetSubscriptionDto,
-  CancelSubscriptionDto,
+  DeleteSubscriptionDto,
   CheckCouponEligibilityPayloadDto,
   GetProductsDto,
   GetProductVariantsDto,
@@ -113,9 +113,9 @@ export class SalesCommerceController {
 
   @Post(KT_ADD_CART_ITEM)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: AddCartItemDto })
+  @ApiBody({ type: CreateCartItemDto })
   async addCartItem(
-    @Body(new ValidateAddCartItemDtoPipe()) addDto: AddCartItemDto,
+    @Body(new ValidateAddCartItemDtoPipe()) addDto: CreateCartItemDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('addCartItem');
     const data = await this.commerceKafka.addCartItem(addDto, traceId);
@@ -124,9 +124,9 @@ export class SalesCommerceController {
 
   @Post(KT_REMOVE_CART_ITEM)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: RemoveCartItemDto })
+  @ApiBody({ type: DeleteCartItemDto })
   async removeCartItem(
-    @Body(new ValidateRemoveCartItemDtoPipe()) removeDto: RemoveCartItemDto,
+    @Body(new ValidateRemoveCartItemDtoPipe()) removeDto: DeleteCartItemDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('removeCartItem');
     const data = await this.commerceKafka.removeCartItem(removeDto, traceId);
@@ -201,9 +201,9 @@ export class SalesCommerceController {
 
   @Post(KT_CANCEL_SUBSCRIPTION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CancelSubscriptionDto })
+  @ApiBody({ type: DeleteSubscriptionDto })
   async cancelSubscription(
-    @Body(new ValidateCancelSubscriptionDtoPipe()) cancelDto: CancelSubscriptionDto,
+    @Body(new ValidateCancelSubscriptionDtoPipe()) cancelDto: DeleteSubscriptionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('cancelSubscription');
     const data = await this.commerceKafka.cancelSubscription(cancelDto, traceId);
