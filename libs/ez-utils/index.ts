@@ -132,7 +132,7 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/create-stripe-contac
 
 export * from "./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto";
-export * from "./src/DTO/domain-finance/vy-finance-wallet/get-wallet-account.dto";
+export * from "./src/DTO/domain-finance/vy-finance-wallet/get-one-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/ztracking-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/get-ztracking-wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/ledger-transaction.dto";
