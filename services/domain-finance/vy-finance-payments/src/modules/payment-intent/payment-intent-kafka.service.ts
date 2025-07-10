@@ -12,7 +12,7 @@ import {
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
   KT_RETRY_PAYMENT_ATTEMPT,
-  CreatePaymentIntentDto,
+  CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
@@ -49,7 +49,7 @@ export class PaymentIntentKafkaService {
       KT_CREATE_PAYMENT_INTENT,
       message,
       key,
-      async (value: CreatePaymentIntentDto, traceId: string) =>
+      async (value: CreatePaymentIntentPayloadDto, traceId: string) =>
         await this.paymentIntentService.createPaymentIntent(value, traceId),
     );
   }

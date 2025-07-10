@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload, Ctx, KafkaContext } from '@nestjs/microservices';
+import { Payload, Ctx, KafkaContext } from '@nestjs/microservices';
 import {
   KT_SUCCEEDED_PAYMENT,
   KT_FAILED_PAYMENT,
@@ -21,7 +21,7 @@ export class FinancePaymentsEventsController {
     );
   }
 
-  @MessagePattern(KT_SUCCEEDED_PAYMENT)
+  // @MessagePattern(KT_SUCCEEDED_PAYMENT)
   handleSucceeded(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     const { paymentIntentId, orderId, subscriptionId } = message;
@@ -45,7 +45,7 @@ export class FinancePaymentsEventsController {
     }
   }
 
-  @MessagePattern(KT_FAILED_PAYMENT)
+  // @MessagePattern(KT_FAILED_PAYMENT)
   handleFailed(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     const { paymentIntentId, errorCode, errorMessage } = message;

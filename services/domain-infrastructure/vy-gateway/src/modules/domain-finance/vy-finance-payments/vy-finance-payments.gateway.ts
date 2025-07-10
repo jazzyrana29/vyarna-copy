@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io';
 import { FinancePaymentsKafkaService } from './microservices/vy-finance-payments-kafka.service';
 import {
   generateTraceId,
-  CreatePaymentIntentDto,
+  CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
@@ -100,7 +100,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_PAYMENT_INTENT)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() createPaymentIntentDto: CreatePaymentIntentDto,
+    @MessageBody() createPaymentIntentDto: CreatePaymentIntentPayloadDto,
   ) {
     const traceId = generateTraceId('finance-payments-create-intent');
     try {

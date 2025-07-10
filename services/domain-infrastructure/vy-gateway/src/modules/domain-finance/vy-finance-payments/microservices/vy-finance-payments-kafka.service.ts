@@ -14,7 +14,7 @@ import {
   KT_CREATE_PAYMENT_METHOD,
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
-  CreatePaymentIntentDto,
+  CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
@@ -46,7 +46,7 @@ export class FinancePaymentsKafkaService {
   }
 
   async createPaymentIntent(
-    createDto: CreatePaymentIntentDto,
+    createDto: CreatePaymentIntentPayloadDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(

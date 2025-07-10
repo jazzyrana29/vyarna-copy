@@ -17,7 +17,7 @@ import { ValidateCapturePaymentIntentDtoPipe } from './pipes/validate-capture-pa
 import { ValidateCreateContactDtoPipe } from './pipes/validate-create-contact-dto.pipe';
 import {
   generateTraceId,
-  CreatePaymentIntentDto,
+  CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
@@ -59,10 +59,10 @@ export class FinancePaymentsController {
 
   @Post(KT_CREATE_PAYMENT_INTENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CreatePaymentIntentDto })
+  @ApiBody({ type: CreatePaymentIntentPayloadDto })
   async createPaymentIntent(
     @Body(new ValidateCreatePaymentIntentDtoPipe())
-    createDto: CreatePaymentIntentDto,
+    createDto: CreatePaymentIntentPayloadDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createPaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'createPaymentIntent', LogStreamLevel.ProdStandard);
