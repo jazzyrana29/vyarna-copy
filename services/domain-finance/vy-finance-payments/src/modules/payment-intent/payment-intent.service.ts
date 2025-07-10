@@ -13,6 +13,7 @@ import {
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   PaymentIntentCreatedDto,
+  PaymentIntentDto,
   ZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
