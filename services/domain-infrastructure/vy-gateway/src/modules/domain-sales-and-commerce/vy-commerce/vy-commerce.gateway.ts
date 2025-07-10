@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -80,7 +81,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_PRODUCTS)
   async getProducts(
     @ConnectedSocket() socket: Socket,
-    getProductsDto: GetProductsDto,
+    @MessageBody() getProductsDto: GetProductsDto,
   ) {
     const traceId = generateTraceId('sales-commerce-get-products');
     try {
@@ -97,7 +98,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_PRODUCT_VARIANTS)
   async getProductVariants(
     @ConnectedSocket() socket: Socket,
-    getProductVariantsDto: GetProductVariantsDto,
+    @MessageBody() getProductVariantsDto: GetProductVariantsDto,
   ) {
     const traceId = generateTraceId('sales-commerce-get-product-variants');
     try {
@@ -114,7 +115,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_CATEGORIES)
   async getCategories(
     @ConnectedSocket() socket: Socket,
-    getCategoriesDto: GetCategoriesDto,
+    @MessageBody() getCategoriesDto: GetCategoriesDto,
   ) {
     const traceId = generateTraceId('sales-commerce-get-categories');
     try {
@@ -131,7 +132,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_CART)
   async createCart(
     @ConnectedSocket() socket: Socket,
-    createCartDto: CreateCartDto,
+    @MessageBody() createCartDto: CreateCartDto,
   ) {
     const traceId = generateTraceId('sales-commerce-create-cart');
     try {
@@ -148,7 +149,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_ADD_CART_ITEM)
   async addCartItem(
     @ConnectedSocket() socket: Socket,
-    addCartItemDto: CreateCartItemDto,
+    @MessageBody() addCartItemDto: CreateCartItemDto,
   ) {
     const traceId = generateTraceId('sales-commerce-add-cart-item');
     try {
@@ -165,7 +166,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_REMOVE_CART_ITEM)
   async removeCartItem(
     @ConnectedSocket() socket: Socket,
-    removeCartItemDto: DeleteCartItemDto,
+    @MessageBody() removeCartItemDto: DeleteCartItemDto,
   ) {
     const traceId = generateTraceId('sales-commerce-remove-cart-item');
     try {
@@ -182,7 +183,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_APPLY_CART_PROMOTION)
   async applyPromotion(
     @ConnectedSocket() socket: Socket,
-    applyCartPromotionDto: ApplyCartPromotionDto,
+    @MessageBody() applyCartPromotionDto: ApplyCartPromotionDto,
   ) {
     const traceId = generateTraceId('sales-commerce-apply-cart-promotion');
     try {
@@ -199,7 +200,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_ORDER)
   async createOrder(
     @ConnectedSocket() socket: Socket,
-    createOrderDto: CreateOrderDto,
+    @MessageBody() createOrderDto: CreateOrderDto,
   ) {
     const traceId = generateTraceId('sales-commerce-create-order');
     try {
@@ -216,7 +217,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_ZTRACKING_ORDER)
   async getOrder(
     @ConnectedSocket() socket: Socket,
-    getZtrackingOrderDto: GetZtrackingOrderDto,
+    @MessageBody() getZtrackingOrderDto: GetZtrackingOrderDto,
   ) {
     const traceId = generateTraceId('sales-commerce-get-order');
     try {
@@ -233,7 +234,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_UPDATE_ORDER_SHIPPING)
   async updateShipping(
     @ConnectedSocket() socket: Socket,
-    updateOrderShippingDto: UpdateOrderShippingDto,
+    @MessageBody() updateOrderShippingDto: UpdateOrderShippingDto,
   ) {
     const traceId = generateTraceId('sales-commerce-update-order-shipping');
     try {
@@ -250,7 +251,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_SUBSCRIPTION)
   async createSubscription(
     @ConnectedSocket() socket: Socket,
-    createSubscriptionDto: CreateSubscriptionDto,
+    @MessageBody() createSubscriptionDto: CreateSubscriptionDto,
   ) {
     const traceId = generateTraceId('sales-commerce-create-subscription');
     try {
@@ -267,7 +268,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_SUBSCRIPTION)
   async getSubscription(
     @ConnectedSocket() socket: Socket,
-    getSubscriptionDto: GetSubscriptionDto,
+    @MessageBody() getSubscriptionDto: GetSubscriptionDto,
   ) {
     const traceId = generateTraceId('sales-commerce-get-subscription');
     try {
@@ -284,7 +285,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CANCEL_SUBSCRIPTION)
   async cancelSubscription(
     @ConnectedSocket() socket: Socket,
-    cancelSubscriptionDto: DeleteSubscriptionDto,
+    @MessageBody() cancelSubscriptionDto: DeleteSubscriptionDto,
   ) {
     const traceId = generateTraceId('sales-commerce-cancel-subscription');
     try {
@@ -301,7 +302,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CHECK_COUPON_ELIGIBILITY)
   async checkCouponEligibility(
     @ConnectedSocket() socket: Socket,
-    payload: CheckCouponEligibilityPayloadDto,
+    @MessageBody() payload: CheckCouponEligibilityPayloadDto,
   ) {
     const traceId = generateTraceId('sales-commerce-check-coupon');
     try {

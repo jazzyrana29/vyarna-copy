@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -99,7 +100,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_PAYMENT_INTENT)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createPaymentIntentDto: CreatePaymentIntentDto,
+    @MessageBody() createPaymentIntentDto: CreatePaymentIntentDto,
   ) {
     const traceId = generateTraceId('finance-payments-create-intent');
     try {
@@ -125,7 +126,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_PAYMENT_INTENT)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getPaymentIntentDto: GetPaymentIntentDto,
+    @MessageBody() getPaymentIntentDto: GetPaymentIntentDto,
   ) {
     const traceId = generateTraceId('finance-payments-get-intent');
     try {
@@ -145,7 +146,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_ZTRACKING_PAYMENT_INTENT)
   async handleZtracking(
     @ConnectedSocket() socket: Socket,
-    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
+    @MessageBody() getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
   ) {
     const traceId = generateTraceId('finance-payments-get-ztracking-intent');
     try {
@@ -165,7 +166,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CAPTURE_PAYMENT_INTENT)
   async handleCapture(
     @ConnectedSocket() socket: Socket,
-    capturePaymentIntentDto: CapturePaymentIntentDto,
+    @MessageBody() capturePaymentIntentDto: CapturePaymentIntentDto,
   ) {
     const traceId = generateTraceId('finance-payments-capture-intent');
     try {
@@ -183,7 +184,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_REFUND)
   async handleCreateRefund(
     @ConnectedSocket() socket: Socket,
-    createRefundDto: CreateRefundDto,
+    @MessageBody() createRefundDto: CreateRefundDto,
   ) {
     const traceId = generateTraceId('finance-payments-create-refund');
     try {
@@ -203,7 +204,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_REFUND)
   async handleGetRefund(
     @ConnectedSocket() socket: Socket,
-    getPaymentRefundDto: GetPaymentRefundDto,
+    @MessageBody() getPaymentRefundDto: GetPaymentRefundDto,
   ) {
     const traceId = generateTraceId('finance-payments-get-refund');
     try {
@@ -223,7 +224,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_RETRY_PAYMENT_ATTEMPT)
   async handleRetryAttempt(
     @ConnectedSocket() socket: Socket,
-    retryPaymentAttemptDto: RetryPaymentAttemptDto,
+    @MessageBody() retryPaymentAttemptDto: RetryPaymentAttemptDto,
   ) {
     const traceId = generateTraceId('finance-payments-retry-attempt');
     try {
@@ -243,7 +244,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_PAYMENT_METHOD)
   async handleCreateMethod(
     @ConnectedSocket() socket: Socket,
-    createPaymentMethodDto: CreatePaymentMethodDto,
+    @MessageBody() createPaymentMethodDto: CreatePaymentMethodDto,
   ) {
     const traceId = generateTraceId('finance-payments-create-method');
     try {
@@ -263,7 +264,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_CONTACT)
   async handleCreateContact(
     @ConnectedSocket() socket: Socket,
-    createContactDto: CreateStripeContactDto,
+    @MessageBody() createContactDto: CreateStripeContactDto,
   ) {
     const traceId = generateTraceId('finance-payments-create-contact');
     try {
@@ -280,7 +281,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_LIST_PAYMENT_METHODS)
   async handleListMethods(
     @ConnectedSocket() socket: Socket,
-    getPaymentMethodsDto: GetPaymentMethodsDto,
+    @MessageBody() getPaymentMethodsDto: GetPaymentMethodsDto,
   ) {
     const traceId = generateTraceId('finance-payments-list-methods');
     try {
@@ -300,7 +301,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_DELETE_PAYMENT_METHOD)
   async handleDeleteMethod(
     @ConnectedSocket() socket: Socket,
-    deletePaymentMethodDto: DeletePaymentMethodDto,
+    @MessageBody() deletePaymentMethodDto: DeletePaymentMethodDto,
   ) {
     const traceId = generateTraceId('finance-payments-delete-method');
     try {
