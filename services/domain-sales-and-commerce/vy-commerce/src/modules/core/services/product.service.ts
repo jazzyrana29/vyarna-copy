@@ -23,46 +23,53 @@ export class ProductService {
     getDto: GetProductsDto,
     traceId: string,
   ): Promise<ProductDto[]> {
-    const limit = getDto.limit ?? this.defaultLimit;
-    const hasFilters =
-      getDto.name !== undefined ||
-      getDto.productId !== undefined ||
-      typeof getDto.active === 'boolean';
+    const { productId, name, active, limit: dtoLimit } = getDto;
+    const requestedLimit = dtoLimit ?? this.defaultLimit;
+    let stripeProducts: Stripe.Product[] = [];
 
-    const products: Stripe.Product[] = [];
-    if (hasFilters) {
-      const clauses: string[] = [];
-      if (typeof getDto.active === 'boolean')
-        clauses.push(`active:'${getDto.active}'`);
-      if (getDto.productId) clauses.push(`id:'${getDto.productId}'`);
-      if (getDto.name) clauses.push(`name:'${getDto.name}*'`);
-      const query = clauses.join(' AND ');
-      const iterator = this.stripe.products
-        .search({ query, limit })
-        .autoPagingIterable();
-      for await (const p of iterator) {
-        products.push(p as Stripe.Product);
+    if (productId) {
+      // Lookup exact ID
+      try {
+        const prod = await this.stripe.products.retrieve(productId);
+        stripeProducts = [prod];
+      } catch {
+        stripeProducts = [];
       }
+    } else if (typeof active === 'boolean' || name) {
+      // Search con filtros
+      const clauses = [
+        typeof active === 'boolean' ? `active:"${active}"` : null,
+        name ? `name~"${name}"` : null,
+      ]
+        .filter(Boolean)
+        .join(' AND ');
+      // Opción directa con .data
+      const searchRes = await this.stripe.products.search({
+        query: clauses,
+        limit: requestedLimit,
+      });
+      stripeProducts = searchRes.data;
     } else {
-      const iterator = this.stripe.products
-        .list({ limit })
-        .autoPagingIterable();
-      for await (const p of iterator) {
-        products.push(p as Stripe.Product);
-      }
+      // Listado sin filtros
+      const listRes = await this.stripe.products.list({
+        limit: requestedLimit,
+      });
+      stripeProducts = listRes.data;
     }
 
     this.logger.info(
-      `Retrieved ${products.length} products`,
+      `Retrieved ${stripeProducts.length} products`,
       traceId,
       'getProducts',
       LogStreamLevel.DebugLight,
     );
 
-    return products.map((p) => ({
+    return stripeProducts.map((p) => ({
       productId: p.id,
       name: p.name,
-      description: p.description || undefined,
+      description: p.description ?? undefined,
+      url: p.url ?? undefined,
+      images: p.images ?? [],
       active: p.active,
       createdAt: new Date((p.created ?? 0) * 1000),
       updatedAt: p.updated ? new Date((p.updated as number) * 1000) : undefined,

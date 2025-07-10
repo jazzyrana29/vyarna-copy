@@ -50,6 +50,7 @@ export class SalesCommerceKafkaService {
   }
 
   async getProducts(getDto: GetProductsDto, traceId: string) {
+    console.log('getDto', getDto);
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PRODUCTS,
@@ -139,7 +140,10 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async updateOrderShipping(updateDto: UpdateOrderShippingDto, traceId: string) {
+  async updateOrderShipping(
+    updateDto: UpdateOrderShippingDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_UPDATE_ORDER_SHIPPING,
@@ -175,7 +179,10 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async checkCouponEligibility(payload: CheckCouponEligibilityPayloadDto, traceId: string) {
+  async checkCouponEligibility(
+    payload: CheckCouponEligibilityPayloadDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CHECK_COUPON_ELIGIBILITY,
