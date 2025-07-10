@@ -7,7 +7,7 @@ import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   encodeKafkaMessage,
   CreateAffiliateCommissionDto,
-  KT_WALLET_AFFILIATE_COMMISSION_CREATED,
+  KT_CREATED_AFFILIATE_COMMISSION,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -57,7 +57,7 @@ export class AffiliateCommissionService {
     });
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_WALLET_AFFILIATE_COMMISSION_CREATED,
+      KT_CREATED_AFFILIATE_COMMISSION,
       encodeKafkaMessage(AffiliateCommissionService.name, { commissionId: commission!.commissionId, traceId }),
     );
     this.logger.info('Affiliate commission created', traceId, 'createCommission', LogStreamLevel.ProdStandard);

@@ -7,8 +7,8 @@ import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   encodeKafkaMessage,
   IssueConsumerRewardDto,
-  KT_CONSUMER_REWARD_ISSUED,
-  KT_CONSUMER_REWARD_REDEEMED,
+  KT_ISSUED_CONSUMER_REWARD,
+  KT_REDEEMED_CONSUMER_REWARD,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -58,7 +58,7 @@ export class ConsumerRewardService {
     });
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_CONSUMER_REWARD_ISSUED,
+      KT_ISSUED_CONSUMER_REWARD,
       encodeKafkaMessage(ConsumerRewardService.name, { rewardId: reward!.rewardId, traceId }),
     );
     this.logger.info('Consumer reward issued', traceId, 'issueReward', LogStreamLevel.ProdStandard);
@@ -85,7 +85,7 @@ export class ConsumerRewardService {
     });
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      KT_CONSUMER_REWARD_REDEEMED,
+      KT_REDEEMED_CONSUMER_REWARD,
       encodeKafkaMessage(ConsumerRewardService.name, { rewardId, traceId }),
     );
     this.logger.info('Consumer reward redeemed', traceId, 'redeemReward', LogStreamLevel.ProdStandard);

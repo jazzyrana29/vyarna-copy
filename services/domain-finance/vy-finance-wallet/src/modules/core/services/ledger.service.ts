@@ -7,7 +7,7 @@ import { EzKafkaProducer } from 'ez-kafka-producer';
 import {
   encodeKafkaMessage,
   RecordTransactionDto,
-  KT_TRANSACTION_RECORDED,
+  KT_RECORDED_TRANSACTION,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -52,7 +52,7 @@ export class LedgerService {
       const saved = await manager.save(LedgerTransaction, tx);
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
-        KT_TRANSACTION_RECORDED,
+        KT_RECORDED_TRANSACTION,
         encodeKafkaMessage(LedgerService.name, { transactionId: saved.transactionId, traceId }),
       );
       this.logger.info('Ledger transaction recorded', traceId, 'recordTransaction', LogStreamLevel.ProdStandard);
