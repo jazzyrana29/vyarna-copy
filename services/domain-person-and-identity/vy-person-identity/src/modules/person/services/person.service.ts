@@ -15,7 +15,7 @@ import { Person } from "../../../entities/person.entity";
 import {
   CreatePersonDto,
   GetManyPersonsDto,
-  GetPersonDto,
+  GetOnePersonDto,
   PersonDto,
   PaginatedPersonsResponseDto,
   UpdatePersonDto,
@@ -187,7 +187,7 @@ export class PersonService {
   }
 
   async findPerson(
-    { personId = "", nameFirst = "", isDeleted = false }: GetPersonDto,
+    { personId = "", nameFirst = "", isDeleted = false }: GetOnePersonDto,
     traceId: string,
   ): Promise<Person> {
     if (!personId && !nameFirst) {

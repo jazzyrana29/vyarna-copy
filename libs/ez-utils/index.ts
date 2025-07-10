@@ -48,7 +48,7 @@ export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerc
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-person.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-person.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-history-of-person.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/paginated-persons-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-many-persons.dto";
@@ -57,7 +57,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-email.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/document.dto";

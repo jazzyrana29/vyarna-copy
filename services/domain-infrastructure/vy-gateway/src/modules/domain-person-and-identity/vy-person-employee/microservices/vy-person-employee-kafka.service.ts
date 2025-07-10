@@ -10,7 +10,7 @@ import {
   KT_GET_MANY_PERSONS,
   CreatePersonDto,
   UpdatePersonDto,
-  GetPersonDto,
+  GetOnePersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
 } from 'ez-utils';
@@ -47,7 +47,7 @@ export class PersonEmployeeKafkaService {
     );
   }
 
-  async getPerson(getPersonDto: GetPersonDto, traceId: string) {
+  async getPerson(getPersonDto: GetOnePersonDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PERSON_ENTITY,

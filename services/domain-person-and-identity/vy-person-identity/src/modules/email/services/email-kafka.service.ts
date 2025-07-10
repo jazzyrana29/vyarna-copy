@@ -8,7 +8,7 @@ import {
   KT_GET_ZTRACKING_EMAIL,
   CreateEmailDto,
   UpdateEmailDto,
-  GetEmailDto,
+  GetOneEmailDto,
   GetZtrackingEmailDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -60,7 +60,7 @@ export class EmailKafkaService {
       KT_GET_EMAIL,
       message,
       key,
-      async (value: GetEmailDto, traceId: string) =>
+      async (value: GetOneEmailDto, traceId: string) =>
         await this.emailService.getEmail(value, traceId),
     );
   }
