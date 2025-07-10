@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -11,8 +12,12 @@ import {
   generateTraceId,
   CreateEmailDto,
   UpdateEmailDto,
-  GetEmailDto,
+  GetOneEmailDto,
   GetZtrackingEmailDto,
+  KT_CREATE_EMAIL,
+  KT_UPDATE_EMAIL,
+  KT_GET_EMAIL,
+  KT_GET_ZTRACKING_EMAIL,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -52,59 +57,59 @@ export class PersonEmailWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('person-email-create')
+  @SubscribeMessage(KT_CREATE_EMAIL)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createEmailDto: CreateEmailDto,
+    @MessageBody() createEmailDto: CreateEmailDto,
   ) {
     const traceId = generateTraceId('person-email-create');
     try {
       const result = await this.emailKafka.createEmail(createEmailDto, traceId);
-      socket.emit('person-email-create-result', result);
+      socket.emit(`${KT_CREATE_EMAIL}-result`, result);
     } catch (e: any) {
-      socket.emit('person-email-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_EMAIL}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('person-email-update')
+  @SubscribeMessage(KT_UPDATE_EMAIL)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
-    updateEmailDto: UpdateEmailDto,
+    @MessageBody() updateEmailDto: UpdateEmailDto,
   ) {
     const traceId = generateTraceId('person-email-update');
     try {
       const result = await this.emailKafka.updateEmail(updateEmailDto, traceId);
-      socket.emit('person-email-update-result', result);
+      socket.emit(`${KT_UPDATE_EMAIL}-result`, result);
     } catch (e: any) {
-      socket.emit('person-email-update-error', e.message || 'Unknown error');
+      socket.emit(`${KT_UPDATE_EMAIL}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('person-email-get')
+  @SubscribeMessage(KT_GET_EMAIL)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getEmailDto: GetEmailDto,
+    @MessageBody() getEmailDto: GetOneEmailDto,
   ) {
     const traceId = generateTraceId('person-email-get');
     try {
       const result = await this.emailKafka.getEmail(getEmailDto, traceId);
-      socket.emit('person-email-get-result', result);
+      socket.emit(`${KT_GET_EMAIL}-result`, result);
     } catch (e: any) {
-      socket.emit('person-email-get-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_EMAIL}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('person-email-get-history')
+  @SubscribeMessage(KT_GET_ZTRACKING_EMAIL)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
-    getDto: GetZtrackingEmailDto,
+    @MessageBody() getDto: GetZtrackingEmailDto,
   ) {
     const traceId = generateTraceId('person-email-get-history');
     try {
       const result = await this.emailKafka.getHistory(getDto, traceId);
-      socket.emit('person-email-get-history-result', result);
+      socket.emit(`${KT_GET_ZTRACKING_EMAIL}-result`, result);
     } catch (e: any) {
-      socket.emit('person-email-get-history-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_ZTRACKING_EMAIL}-error`, e.message || 'Unknown error');
     }
   }
 }

@@ -1,4 +1,8 @@
-import { PickType } from '@nestjs/swagger';
-import { PaymentAttemptDto } from './payment-attempt.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsUUID } from 'class-validator';
 
-export class RetryPaymentAttemptDto extends PickType(PaymentAttemptDto, ['attemptId'] as const) {}
+export class RetryPaymentAttemptDto {
+  @ApiProperty({ description: 'Attempt identifier' })
+  @IsUUID()
+  attemptId: string;
+}

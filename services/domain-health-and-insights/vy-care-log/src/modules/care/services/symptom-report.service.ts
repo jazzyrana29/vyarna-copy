@@ -5,7 +5,7 @@ import { SymptomReport } from '../../../entities/symptom_report.entity';
 import { ZtrackingSymptomReportService } from './ztracking-symptom-report.service';
 import {
   CreateSymptomReportDto,
-  GetSymptomReportsDto,
+  GetManySymptomReportsDto,
   SymptomReportDto,
   ValidateCareEventTimeDto,
 } from 'ez-utils';
@@ -70,7 +70,7 @@ export class SymptomReportService {
   }
 
   async getSymptomReports(
-    getSymptomReportsDto: GetSymptomReportsDto,
+    getSymptomReportsDto: GetManySymptomReportsDto,
     traceId: string,
   ): Promise<SymptomReportDto[]> {
     const { babyId } = getSymptomReportsDto;

@@ -88,4 +88,5 @@ export class PersonIdentityResponseController {
     );
     this.kafkaResponder.handleIncomingMessage(message);
   }
+
 }

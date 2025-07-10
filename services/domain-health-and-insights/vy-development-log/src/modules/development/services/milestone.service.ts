@@ -6,7 +6,7 @@ import { ZtrackingMilestoneService } from './ztracking-milestone.service';
 import {
   CreateMilestoneDto,
   MilestoneDto,
-  GetMilestonesDto,
+  GetManyMilestonesDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -50,7 +50,7 @@ export class MilestoneService {
   }
 
   async getMilestones(
-    getMilestonesDto: GetMilestonesDto,
+    getMilestonesDto: GetManyMilestonesDto,
     traceId: string,
   ): Promise<MilestoneDto[]> {
     const { babyId } = getMilestonesDto;

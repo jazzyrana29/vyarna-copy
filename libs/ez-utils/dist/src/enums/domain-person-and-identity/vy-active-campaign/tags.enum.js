@@ -36,5 +36,8 @@ var TagsEnum;
     TagsEnum["SIGNUP_FAQ_TOP"] = "signup--faq-top";
     TagsEnum["SIGNUP_FAQ_MIDDLE"] = "signup--faq-middle";
     TagsEnum["SIGNUP_FAQ_BOTTOM"] = "signup--faq-bottom";
+    TagsEnum["SIGNUP_PREORDER_TOP"] = "signup--preorder-top";
+    TagsEnum["SIGNUP_PREORDER_MIDDLE"] = "signup--preorder-middle";
+    TagsEnum["SIGNUP_PREORDER_BOTTOM"] = "signup--preorder-bottom";
 })(TagsEnum || (exports.TagsEnum = TagsEnum = {}));
 //# sourceMappingURL=tags.enum.js.map

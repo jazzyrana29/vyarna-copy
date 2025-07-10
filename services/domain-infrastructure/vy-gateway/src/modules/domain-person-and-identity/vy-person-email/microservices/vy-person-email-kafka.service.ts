@@ -9,7 +9,7 @@ import {
   KT_GET_ZTRACKING_EMAIL,
   CreateEmailDto,
   UpdateEmailDto,
-  GetEmailDto,
+  GetOneEmailDto,
   GetZtrackingEmailDto,
 } from 'ez-utils';
 
@@ -45,7 +45,7 @@ export class PersonEmailKafkaService {
     );
   }
 
-  async getEmail(getEmailDto: GetEmailDto, traceId: string) {
+  async getEmail(getEmailDto: GetOneEmailDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_EMAIL,

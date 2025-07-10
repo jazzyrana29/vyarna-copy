@@ -69,11 +69,14 @@ service:
 | ------ | ---- | ----------- |
 | `POST` | `/payment-intents` | Create a new payment intent. |
 | `GET` | `/payment-intents/{id}` | Retrieve an intent by id. |
+| `POST` | `/payment-intents/{id}/capture` | Confirm then capture an intent. |
 | `POST` | `/refunds` | Issue a refund for a payment intent. |
 | `GET` | `/refunds/{id}` | Get a refund record. |
 | `POST` | `/payment-methods` | Vault a payment method. |
 | `GET` | `/payment-methods` | List vaulted methods for a customer. |
 | `DELETE` | `/payment-methods/{id}` | Remove a vaulted method. |
+
+The `/payment-intents/{id}/capture` endpoint will automatically confirm the intent with Stripe before capturing the funds.
 
 ## Kafka Event Flow
 
@@ -84,6 +87,8 @@ main topics are:
 - `create-payment-intent`
 - `get-payment-intent`
 - `get-ztracking-payment-intent`
+- `confirm-payment-intent`
+- `capture-payment-intent`
 - `create-refund`
 - `get-refund`
 - `process-stripe-webhook`

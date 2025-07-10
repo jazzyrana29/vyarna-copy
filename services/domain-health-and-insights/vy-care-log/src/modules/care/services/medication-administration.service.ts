@@ -5,7 +5,7 @@ import { MedicationAdministration } from '../../../entities/medication_administr
 import { ZtrackingMedicationAdministrationService } from './ztracking-medication-administration.service';
 import {
   CreateMedicationAdministrationDto,
-  GetMedicationAdministrationsDto,
+  GetManyMedicationAdministrationsDto,
   MedicationAdministrationDto,
   ValidateCareEventTimeDto,
 } from 'ez-utils';
@@ -70,7 +70,7 @@ export class MedicationAdministrationService {
   }
 
   async getMedicationAdministrations(
-    getMedicationAdministrationsDto: GetMedicationAdministrationsDto,
+    getMedicationAdministrationsDto: GetManyMedicationAdministrationsDto,
     traceId: string,
   ): Promise<MedicationAdministrationDto[]> {
     const { babyId } = getMedicationAdministrationsDto;

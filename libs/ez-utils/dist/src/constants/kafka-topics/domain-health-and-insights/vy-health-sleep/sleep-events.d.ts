@@ -1,6 +1,6 @@
-export declare const KT_SLEEP_SESSION_STARTED = "sleep-session-started";
-export declare const KT_SLEEP_EVENT_LOGGED = "sleep-event-logged";
-export declare const KT_SLEEP_INTERRUPTED = "sleep-interrupted";
-export declare const KT_SLEEP_ENVIRONMENT_RECORDED = "sleep-environment-recorded";
-export declare const KT_SLEEP_RATED = "sleep-rated";
-export declare const KT_SLEEP_SESSION_ENDED = "sleep-session-ended";
+export declare const KT_START_SLEEP_SESSION = "start-sleep-session";
+export declare const KT_LOG_SLEEP_EVENT = "log-sleep-event";
+export declare const KT_INTERRUPT_SLEEP = "interrupt-sleep";
+export declare const KT_RECORD_SLEEP_ENVIRONMENT = "record-sleep-environment";
+export declare const KT_RATE_SLEEP = "rate-sleep";
+export declare const KT_END_SLEEP_SESSION = "end-sleep-session";

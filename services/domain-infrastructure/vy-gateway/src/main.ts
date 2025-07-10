@@ -26,7 +26,7 @@ async function bootstrap(): Promise<void> {
   });
 
   app.use(
-    '/vy-finance-payments/webhooks/stripe',
+    '/vy-finance-payments/webhooks/process-stripe-webhook',
     bodyParser.raw({ type: 'application/json' }),
   );
 

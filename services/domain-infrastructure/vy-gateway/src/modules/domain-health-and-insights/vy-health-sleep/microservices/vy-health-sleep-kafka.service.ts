@@ -23,11 +23,11 @@ import {
   KT_CREATE_SLEEP_SESSION,
   KT_GET_SLEEP_SESSIONS,
   KT_GET_ZTRACKING_SLEEP_SESSION,
-  KT_SLEEP_EVENT_LOGGED,
-  KT_SLEEP_INTERRUPTED,
-  KT_SLEEP_ENVIRONMENT_RECORDED,
-  KT_SLEEP_RATED,
-  KT_SLEEP_SESSION_ENDED,
+  KT_LOG_SLEEP_EVENT,
+  KT_INTERRUPT_SLEEP,
+  KT_RECORD_SLEEP_ENVIRONMENT,
+  KT_RATE_SLEEP,
+  KT_END_SLEEP_SESSION,
   KT_GET_SLEEP_EVENTS,
   KT_GET_SLEEP_INTERRUPTION_REASONS,
   KT_GET_SLEEP_ENVIRONMENTS,
@@ -93,7 +93,7 @@ export class HealthSleepKafkaService {
   async logSleepEvent(sleepEventDto: SleepEventDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_SLEEP_EVENT_LOGGED,
+      KT_LOG_SLEEP_EVENT,
       sleepEventDto,
       traceId,
     );
@@ -105,7 +105,7 @@ export class HealthSleepKafkaService {
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_SLEEP_INTERRUPTED,
+      KT_INTERRUPT_SLEEP,
       interruptionDto,
       traceId,
     );
@@ -114,7 +114,7 @@ export class HealthSleepKafkaService {
   async logSleepEnvironment(envDto: SleepEnvironmentDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_SLEEP_ENVIRONMENT_RECORDED,
+      KT_RECORD_SLEEP_ENVIRONMENT,
       envDto,
       traceId,
     );
@@ -123,7 +123,7 @@ export class HealthSleepKafkaService {
   async logSleepRating(ratingDto: SleepRatingDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_SLEEP_RATED,
+      KT_RATE_SLEEP,
       ratingDto,
       traceId,
     );
@@ -132,7 +132,7 @@ export class HealthSleepKafkaService {
   async endSleepSession(sessionId: string, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
-      KT_SLEEP_SESSION_ENDED,
+      KT_END_SLEEP_SESSION,
       { sessionId },
       traceId,
     );

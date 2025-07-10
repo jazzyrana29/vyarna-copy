@@ -31,5 +31,8 @@ export declare enum TagsEnum {
     SIGNUP_CONTACT_BOTTOM = "signup--contact-bottom",
     SIGNUP_FAQ_TOP = "signup--faq-top",
     SIGNUP_FAQ_MIDDLE = "signup--faq-middle",
-    SIGNUP_FAQ_BOTTOM = "signup--faq-bottom"
+    SIGNUP_FAQ_BOTTOM = "signup--faq-bottom",
+    SIGNUP_PREORDER_TOP = "signup--preorder-top",
+    SIGNUP_PREORDER_MIDDLE = "signup--preorder-middle",
+    SIGNUP_PREORDER_BOTTOM = "signup--preorder-bottom"
 }

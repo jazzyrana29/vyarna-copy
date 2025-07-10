@@ -5,7 +5,7 @@ import { TemperatureMeasurement } from '../../../entities/temperature_measuremen
 import { ZtrackingTemperatureMeasurementService } from './ztracking-temperature-measurement.service';
 import {
   CreateTemperatureMeasurementDto,
-  GetTemperatureMeasurementsDto,
+  GetManyTemperatureMeasurementsDto,
   TemperatureMeasurementDto,
   ValidateCareEventTimeDto,
 } from 'ez-utils';
@@ -70,7 +70,7 @@ export class TemperatureMeasurementService {
   }
 
   async getTemperatureMeasurements(
-    getTemperatureMeasurementsDto: GetTemperatureMeasurementsDto,
+    getTemperatureMeasurementsDto: GetManyTemperatureMeasurementsDto,
     traceId: string,
   ): Promise<TemperatureMeasurementDto[]> {
     const { babyId } = getTemperatureMeasurementsDto;

@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-/src/migrations/
+# allow migrations to be version controlled
 /src/migration/
 
 package-lock.json

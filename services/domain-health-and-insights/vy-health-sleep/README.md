@@ -60,12 +60,12 @@ The service consumes and produces the following topics via Kafka:
 - `create-sleep-session`
 - `get-sleep-sessions`
 - `get-ztracking-sleep-session`
-- `sleep-session-started`
-- `sleep-event-logged`
-- `sleep-interrupted`
-- `sleep-environment-recorded`
-- `sleep-rated`
-- `sleep-session-ended`
+- `start-sleep-session`
+- `log-sleep-event`
+- `interrupt-sleep`
+- `record-sleep-environment`
+- `rate-sleep`
+- `end-sleep-session`
 
 ## Gateway Integration
 

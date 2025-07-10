@@ -6,22 +6,27 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CONFIRM_PAYMENT_INTENT,
+  KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
   KT_CREATE_PAYMENT_METHOD,
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
-  CreatePaymentIntentDto,
+  CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
+  CapturePaymentIntentDto,
   StripeWebhookDto,
   RefundDto,
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
+  KT_CREATE_CONTACT,
+  CreateStripeContactDto,
   KT_RETRY_PAYMENT_ATTEMPT,
   RetryPaymentAttemptDto,
 } from 'ez-utils';
@@ -41,7 +46,7 @@ export class FinancePaymentsKafkaService {
   }
 
   async createPaymentIntent(
-    createDto: CreatePaymentIntentDto,
+    createDto: CreatePaymentIntentPayloadDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
@@ -69,6 +74,30 @@ export class FinancePaymentsKafkaService {
       this.serviceName,
       KT_GET_ZTRACKING_PAYMENT_INTENT,
       getDto,
+      traceId,
+    );
+  }
+
+  async confirmPaymentIntent(
+    confirmDto: CapturePaymentIntentDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CONFIRM_PAYMENT_INTENT,
+      confirmDto,
+      traceId,
+    );
+  }
+
+  async capturePaymentIntent(
+    captureDto: CapturePaymentIntentDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CAPTURE_PAYMENT_INTENT,
+      captureDto,
       traceId,
     );
   }
@@ -138,6 +167,15 @@ export class FinancePaymentsKafkaService {
       this.serviceName,
       KT_DELETE_PAYMENT_METHOD,
       deletePaymentMethodDto,
+      traceId,
+    );
+  }
+
+  async createContact(createContactDto: CreateStripeContactDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_CREATE_CONTACT,
+      createContactDto,
       traceId,
     );
   }

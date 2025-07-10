@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   ConnectedSocket,
+  MessageBody,
   OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -11,9 +12,14 @@ import {
   generateTraceId,
   CreatePersonDto,
   UpdatePersonDto,
-  GetPersonDto,
+  GetOnePersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
+  KT_CREATE_PERSON_ENTITY,
+  KT_UPDATE_PERSON_ENTITY,
+  KT_GET_PERSON_ENTITY,
+  KT_GET_HISTORY_PERSON_ENTITY,
+  KT_GET_MANY_PERSONS,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -53,10 +59,10 @@ export class EmotionalEngagementWebsocket implements OnGatewayInit {
     );
   }
 
-  @SubscribeMessage('emotional-engagement-create')
+  @SubscribeMessage(KT_CREATE_PERSON_ENTITY)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    createPersonDto: CreatePersonDto,
+    @MessageBody() createPersonDto: CreatePersonDto,
   ) {
     const traceId = generateTraceId('emotional-engagement-create');
     try {
@@ -64,16 +70,16 @@ export class EmotionalEngagementWebsocket implements OnGatewayInit {
         createPersonDto,
         traceId,
       );
-      socket.emit('emotional-engagement-create-result', result);
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('emotional-engagement-create-error', e.message || 'Unknown error');
+      socket.emit(`${KT_CREATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('emotional-engagement-update')
+  @SubscribeMessage(KT_UPDATE_PERSON_ENTITY)
   async handleUpdate(
     @ConnectedSocket() socket: Socket,
-    updatePersonDto: UpdatePersonDto,
+    @MessageBody() updatePersonDto: UpdatePersonDto,
   ) {
     const traceId = generateTraceId('emotional-engagement-update');
     try {
@@ -81,30 +87,30 @@ export class EmotionalEngagementWebsocket implements OnGatewayInit {
         updatePersonDto,
         traceId,
       );
-      socket.emit('emotional-engagement-update-result', result);
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('emotional-engagement-update-error', e.message || 'Unknown error');
+      socket.emit(`${KT_UPDATE_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('emotional-engagement-get')
+  @SubscribeMessage(KT_GET_PERSON_ENTITY)
   async handleGet(
     @ConnectedSocket() socket: Socket,
-    getPersonDto: GetPersonDto,
+    @MessageBody() getPersonDto: GetOnePersonDto,
   ) {
     const traceId = generateTraceId('emotional-engagement-get');
     try {
       const result = await this.personBabyKafka.getPerson(getPersonDto, traceId);
-      socket.emit('emotional-engagement-get-result', result);
+      socket.emit(`${KT_GET_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
-      socket.emit('emotional-engagement-get-error', e.message || 'Unknown error');
+      socket.emit(`${KT_GET_PERSON_ENTITY}-error`, e.message || 'Unknown error');
     }
   }
 
-  @SubscribeMessage('emotional-engagement-get-history')
+  @SubscribeMessage(KT_GET_HISTORY_PERSON_ENTITY)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
-    getHistoryOfPersonDto: GetHistoryOfPersonDto,
+    @MessageBody() getHistoryOfPersonDto: GetHistoryOfPersonDto,
   ) {
     const traceId = generateTraceId('emotional-engagement-get-history');
     try {
@@ -112,19 +118,19 @@ export class EmotionalEngagementWebsocket implements OnGatewayInit {
         getHistoryOfPersonDto,
         traceId,
       );
-      socket.emit('emotional-engagement-get-history-result', result);
+      socket.emit(`${KT_GET_HISTORY_PERSON_ENTITY}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'emotional-engagement-get-history-error',
+        `${KT_GET_HISTORY_PERSON_ENTITY}-error`,
         e.message || 'Unknown error',
       );
     }
   }
 
-  @SubscribeMessage('emotional-engagement-get-many')
+  @SubscribeMessage(KT_GET_MANY_PERSONS)
   async handleGetMany(
     @ConnectedSocket() socket: Socket,
-    getManyPersonsDto: GetManyPersonsDto,
+    @MessageBody() getManyPersonsDto: GetManyPersonsDto,
   ) {
     const traceId = generateTraceId('emotional-engagement-get-many');
     try {
@@ -132,10 +138,10 @@ export class EmotionalEngagementWebsocket implements OnGatewayInit {
         getManyPersonsDto,
         traceId,
       );
-      socket.emit('emotional-engagement-get-many-result', result);
+      socket.emit(`${KT_GET_MANY_PERSONS}-result`, result);
     } catch (e: any) {
       socket.emit(
-        'emotional-engagement-get-many-error',
+        `${KT_GET_MANY_PERSONS}-error`,
         e.message || 'Unknown error',
       );
     }

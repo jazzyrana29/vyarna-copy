@@ -1,6 +1,8 @@
-import { PickType } from '@nestjs/swagger';
-import { PaymentIntentDto } from './payment-intent.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsUUID } from 'class-validator';
 
-export class GetPaymentIntentDto extends PickType(PaymentIntentDto, [
-  'paymentIntentId',
-] as const) {}
+export class GetPaymentIntentDto {
+  @ApiProperty({ description: 'Unique identifier for the payment intent' })
+  @IsUUID()
+  paymentIntentId: string;
+}

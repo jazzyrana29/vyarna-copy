@@ -16,15 +16,32 @@ class GetProductsDto {
 }
 exports.GetProductsDto = GetProductsDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ format: 'uuid' }),
+    (0, swagger_1.ApiPropertyOptional)({ format: "uuid" }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], GetProductsDto.prototype, "categoryId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ format: "uuid" }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], GetProductsDto.prototype, "productId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetProductsDto.prototype, "name", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], GetProductsDto.prototype, "active", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], GetProductsDto.prototype, "limit", void 0);
 //# sourceMappingURL=get-products.dto.js.map

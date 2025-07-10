@@ -17,6 +17,11 @@ import {
   IssueConsumerRewardDto,
   CreateAffiliateCommissionDto,
   CreateInternalChargeDto,
+  KT_CREATE_WALLET_ACCOUNT,
+  KT_SCHEDULE_PROVIDER_PAYOUT,
+  KT_ISSUE_CONSUMER_REWARD,
+  KT_CREATE_AFFILIATE_COMMISSION,
+  KT_CREATE_INTERNAL_CHARGE,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -34,7 +39,7 @@ export class FinanceWalletController {
     );
   }
 
-  @Post('accounts')
+  @Post(KT_CREATE_WALLET_ACCOUNT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateWalletAccountDto })
   async createAccount(
@@ -50,7 +55,7 @@ export class FinanceWalletController {
     );
   }
 
-  @Post('provider-payouts')
+  @Post(KT_SCHEDULE_PROVIDER_PAYOUT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: ScheduleProviderPayoutDto })
   async scheduleProviderPayout(
@@ -66,7 +71,7 @@ export class FinanceWalletController {
     );
   }
 
-  @Post('consumer-rewards')
+  @Post(KT_ISSUE_CONSUMER_REWARD)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: IssueConsumerRewardDto })
   async issueConsumerReward(
@@ -82,7 +87,7 @@ export class FinanceWalletController {
     );
   }
 
-  @Post('affiliate-commissions')
+  @Post(KT_CREATE_AFFILIATE_COMMISSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateAffiliateCommissionDto })
   async createAffiliateCommission(
@@ -98,7 +103,7 @@ export class FinanceWalletController {
     );
   }
 
-  @Post('internal-charges')
+  @Post(KT_CREATE_INTERNAL_CHARGE)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateInternalChargeDto })
   async createInternalCharge(

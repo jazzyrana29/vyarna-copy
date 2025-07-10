@@ -7,7 +7,7 @@ import {
   KT_GET_WALLET_ACCOUNT,
   KT_GET_ZTRACKING_WALLET_ACCOUNT,
   CreateWalletAccountDto,
-  GetWalletAccountDto,
+  GetOneWalletAccountDto,
   GetZtrackingWalletAccountDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
@@ -49,7 +49,7 @@ export class WalletAccountKafkaService {
       KT_GET_WALLET_ACCOUNT,
       message,
       key,
-      async (value: GetWalletAccountDto, traceId: string) =>
+      async (value: GetOneWalletAccountDto, traceId: string) =>
         await this.walletAccountService.getWalletAccount(value, traceId),
     );
   }
