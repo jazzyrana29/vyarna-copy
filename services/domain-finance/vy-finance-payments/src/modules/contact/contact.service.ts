@@ -21,10 +21,13 @@ export class ContactService {
     dto: CreateStripeContactDto,
     traceId: string,
   ): Promise<{ customerId: string }> {
-    const customer = await this.stripeGateway.createContact({
-      name: `${dto.firstName} ${dto.lastName}`.trim(),
-      email: dto.email,
-    });
+    const existing = await this.stripeGateway.findCustomerByEmail(dto.email);
+    const customer =
+      existing ||
+      (await this.stripeGateway.createContact({
+        name: `${dto.firstName} ${dto.lastName}`.trim(),
+        email: dto.email,
+      }));
     this.logger.info(
       'Stripe customer created',
       traceId,
