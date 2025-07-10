@@ -65,9 +65,9 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/identity-
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/review-identity-verification.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
-export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/add-tag-to-contact.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/subscribe-contact-to-list.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/lists-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/tags-response.dto";
