@@ -78,7 +78,7 @@ export class ContactService {
       );
     }
 
-    entity = this.contactRepo.create({
+    const entity = this.contactRepo.create({
       firstName: dto.firstName,
       lastName: dto.lastName,
       email: dto.email,
