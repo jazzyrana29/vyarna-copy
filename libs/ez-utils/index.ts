@@ -35,6 +35,7 @@ export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/p
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-attempt";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-method";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-events";
+export * from "./src/constants/kafka-topics/domain-finance/vy-finance-payments/payment-status";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-account";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-operations";
 export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wallet-events";
