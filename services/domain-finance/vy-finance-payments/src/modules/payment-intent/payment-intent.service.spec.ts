@@ -158,7 +158,10 @@ describe('PaymentIntentService', () => {
         stripeGateway,
       );
 
-      await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
+      await service.handleStripeWebhook(
+        { payload: Buffer.from(''), signature: 'sig' },
+        'trace',
+      );
 
       expect(producerInstance.produce).not.toHaveBeenCalled();
     });
@@ -191,7 +194,10 @@ describe('PaymentIntentService', () => {
         stripeGateway,
       );
 
-      await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
+      await service.handleStripeWebhook(
+        { payload: Buffer.from(''), signature: 'sig' },
+        'trace',
+      );
 
       expect(producerInstance.produce).not.toHaveBeenCalled();
     });

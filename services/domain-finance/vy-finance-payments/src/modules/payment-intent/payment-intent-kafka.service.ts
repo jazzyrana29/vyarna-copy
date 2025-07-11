@@ -141,11 +141,7 @@ export class PaymentIntentKafkaService {
       message,
       key,
       async (value: StripeWebhookDto, traceId: string) =>
-        await this.paymentIntentService.handleStripeWebhook(
-          value.payload,
-          value.signature,
-          traceId,
-        ),
+        await this.paymentIntentService.handleStripeWebhook(value, traceId),
     );
   }
 
