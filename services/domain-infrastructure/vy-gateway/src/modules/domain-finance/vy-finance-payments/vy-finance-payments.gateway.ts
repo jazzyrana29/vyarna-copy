@@ -192,7 +192,10 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   ) {
     const traceId = generateTraceId('finance-payments-capture-intent');
     try {
-      await this.paymentsKafka.confirmPaymentIntent(capturePaymentIntentDto, traceId);
+      await this.paymentsKafka.confirmPaymentIntent(
+        capturePaymentIntentDto as unknown as ConfirmPaymentIntentDto,
+        traceId,
+      );
       const result = await this.paymentsKafka.capturePaymentIntent(
         capturePaymentIntentDto,
         traceId,
