@@ -28,6 +28,7 @@ import { EducationFeedModule } from './modules/domain-emotional-and-engagement/v
 import { EmotionalEngagementModule } from './modules/domain-emotional-and-engagement/vy-emotional-engagement/vy-emotional-engagement.module';
 import { FinancePaymentsModule } from './modules/domain-finance/vy-finance-payments/vy-finance-payments.module';
 import { FinanceWalletModule } from './modules/domain-finance/vy-finance-wallet/vy-finance-wallet.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { HealthCryAnalyzerModule } from './modules/domain-health-and-insights/vy-health-cry-analyzer/vy-health-cry-analyzer.module';
 import { HealthGrowthTrackerModule } from './modules/domain-health-and-insights/vy-health-growth-tracker/vy-health-growth-tracker.module';
 import { HealthLogModule } from './modules/domain-health-and-insights/vy-health-log/vy-health-log.module';
@@ -84,6 +85,7 @@ import { KafkaModule } from './utils/kafka/kafka.module';
       },
     ]),
     KafkaModule,
+    WebhooksModule,
     EducationFeedModule,
     EmotionalEngagementModule,
     FinancePaymentsModule,
