@@ -1,5 +1,5 @@
 import { PromotionCodesService } from '../promotion-codes.service';
-import { StripeGatewayService } from '../stripe-gateway.service';
+import { StripeGatewayService } from '../../../../services/stripe-gateway.service';
 
 describe('PromotionCodesService', () => {
   beforeEach(() => {

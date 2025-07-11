@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { StripeGatewayService } from './stripe-gateway.service';
+import { StripeGatewayService } from '../../../services/stripe-gateway.service';
 import {
   ValidatePromotionCodeDto,
   ValidatePromotionCodeResponseDto,

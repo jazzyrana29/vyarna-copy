@@ -10,7 +10,7 @@ import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
-import { StripeGatewayService } from '../stripe-gateway.service';
+import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import Stripe from 'stripe';
 import {

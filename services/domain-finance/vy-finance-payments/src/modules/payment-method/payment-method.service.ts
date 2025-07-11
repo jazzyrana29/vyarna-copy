@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { StripeGatewayService } from '../stripe-gateway.service';
+import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { PaymentMethod } from '../../entities/payment_method.entity';
 import {
   CreatePaymentMethodDto,
