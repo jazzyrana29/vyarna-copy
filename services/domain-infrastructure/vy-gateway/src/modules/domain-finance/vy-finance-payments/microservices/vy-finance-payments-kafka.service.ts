@@ -19,7 +19,6 @@ import {
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
-  ConfirmPaymentIntentDto,
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
   StripeWebhookDto,
@@ -113,10 +112,7 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async getRefund(
-    getPaymentRefundDto: GetPaymentRefundDto,
-    traceId: string,
-  ) {
+  async getRefund(getPaymentRefundDto: GetPaymentRefundDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_REFUND,
@@ -173,7 +169,10 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async createContact(createContactDto: CreateStripeContactDto, traceId: string) {
+  async createContact(
+    createContactDto: CreateStripeContactDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_CONTACT,

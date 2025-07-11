@@ -132,8 +132,10 @@ __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-m
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/delete-payment-method.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-attempt.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/capture-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/confirm-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-status-update.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/get-one-wallet-account.dto"), exports);
