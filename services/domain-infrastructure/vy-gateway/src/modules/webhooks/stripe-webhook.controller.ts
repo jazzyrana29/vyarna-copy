@@ -152,14 +152,6 @@ switch (event.type) {
       LogStreamLevel.ProdStandard,
     );
     break;
-  case 'dispute.created':
-    this.logger.warn(
-      `Dispute created: ${(event.data.object as any).id}`,
-      traceId,
-      'handleStripe',
-      LogStreamLevel.ProdStandard,
-    );
-    break;
   case 'payout.paid':
     this.logger.info(
       `Payout paid: ${(event.data.object as any).id}`,
