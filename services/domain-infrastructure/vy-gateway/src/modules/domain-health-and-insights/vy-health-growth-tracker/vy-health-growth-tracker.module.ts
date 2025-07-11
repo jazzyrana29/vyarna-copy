@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
 import { KafkaModule } from '../../../utils/kafka/kafka.module';
-import { HealthGrowthTrackerWebsocket } from './vy-health-growth-tracker.gateway';
 import { HealthGrowthTrackerKafkaService } from './microservices/vy-health-growth-tracker-kafka.service';
-import { HealthGrowthTrackerResponseController } from './vy-health-growth-tracker-response.controller';
-import { HealthGrowthTrackerController } from './vy-health-growth-tracker.controller';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Module({
   imports: [KafkaModule],
-  controllers: [HealthGrowthTrackerResponseController, HealthGrowthTrackerController],
-  providers: [HealthGrowthTrackerWebsocket, HealthGrowthTrackerKafkaService],
+  controllers: [],
+  providers: [HealthGrowthTrackerKafkaService],
 })
 export class HealthGrowthTrackerModule {
   private logger = getLoggerConfig(HealthGrowthTrackerModule.name);
