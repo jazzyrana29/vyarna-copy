@@ -302,11 +302,14 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_VALIDATE_PROMOTION_CODE)
   async validatePromotionCode(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() payload: ValidatePromotionCodeDto,
+    @MessageBody() validatePromotionCodeDto: ValidatePromotionCodeDto,
   ) {
     const traceId = generateTraceId('sales-commerce-validate-promo');
     try {
-      const result = await this.kafkaService.validatePromotionCode(payload, traceId);
+      const result = await this.kafkaService.validatePromotionCode(
+        validatePromotionCodeDto,
+        traceId,
+      );
       socket.emit(`${KT_VALIDATE_PROMOTION_CODE}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_VALIDATE_PROMOTION_CODE}-error`, e.message || 'Unknown error');

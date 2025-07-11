@@ -102,11 +102,14 @@ export class PersonEmailWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_ZTRACKING_EMAIL)
   async handleHistory(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() getDto: GetZtrackingEmailDto,
+    @MessageBody() getZtrackingEmailDto: GetZtrackingEmailDto,
   ) {
     const traceId = generateTraceId('person-email-get-history');
     try {
-      const result = await this.emailKafka.getHistory(getDto, traceId);
+      const result = await this.emailKafka.getHistory(
+        getZtrackingEmailDto,
+        traceId,
+      );
       socket.emit(`${KT_GET_ZTRACKING_EMAIL}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_GET_ZTRACKING_EMAIL}-error`, e.message || 'Unknown error');
