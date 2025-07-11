@@ -27,6 +27,10 @@ export class ContactService {
     );
   }
 
+  async findByEmail(email: string): Promise<Contact | null> {
+    return this.contactRepo.findOne({ where: { email } });
+  }
+
   async createContact(dto: CreateContactDto, traceId: string): Promise<Contact> {
     let existing = await this.contactRepo.findOne({ where: { email: dto.email } });
     if (existing) {
@@ -74,7 +78,7 @@ export class ContactService {
       );
     }
 
-    const entity = this.contactRepo.create({
+    entity = this.contactRepo.create({
       firstName: dto.firstName,
       lastName: dto.lastName,
       email: dto.email,
