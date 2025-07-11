@@ -31,35 +31,42 @@ export class ContactService {
     return this.contactRepo.findOne({ where: { email } });
   }
 
-  async createContact(dto: CreateContactDto, traceId: string): Promise<Contact> {
-    let existing = await this.contactRepo.findOne({ where: { email: dto.email } });
+  async createContact(
+    createContactDto: CreateContactDto,
+    traceId: string,
+  ): Promise<Contact> {
+    let existing = await this.contactRepo.findOne({
+      where: { email: createContactDto.email },
+    });
     if (existing) {
       this.logger.info('Contact already exists', traceId, 'createContact', LogStreamLevel.ProdStandard);
       return existing;
     }
 
     const entity = this.contactRepo.create({
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      email: dto.email,
+      firstName: createContactDto.firstName,
+      lastName: createContactDto.lastName,
+      email: createContactDto.email,
     });
     await this.contactRepo.save(entity);
     this.logger.info('Contact created', traceId, 'createContact', LogStreamLevel.ProdStandard);
 
-    let stripeCustomer = await this.stripeGateway.findCustomerByEmail(dto.email);
+    let stripeCustomer = await this.stripeGateway.findCustomerByEmail(
+      createContactDto.email,
+    );
     if (stripeCustomer) {
       this.logger.info('Stripe customer already exists', traceId, 'createContact', LogStreamLevel.ProdStandard);
     } else {
       stripeCustomer = await this.stripeGateway.createContact({
-        name: `${dto.firstName} ${dto.lastName}`.trim(),
-        email: dto.email,
+        name: `${createContactDto.firstName} ${createContactDto.lastName}`.trim(),
+        email: createContactDto.email,
       });
       this.logger.info('Stripe customer created', traceId, 'createContact', LogStreamLevel.ProdStandard);
     }
     entity.stripeCustomerId = stripeCustomer.id;
     await this.contactRepo.save(entity);
 
-    const acRes = await this.activeCampaign.createContact(dto);
+    const acRes = await this.activeCampaign.createContact(createContactDto);
     this.logger.info('ActiveCampaign contact created', traceId, 'createContact', LogStreamLevel.ProdStandard);
     entity.activeCampaignId = acRes.contact.id;
     await this.contactRepo.save(entity);

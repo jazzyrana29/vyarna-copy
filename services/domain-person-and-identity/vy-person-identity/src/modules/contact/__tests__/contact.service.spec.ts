@@ -48,10 +48,14 @@ describe('ContactService', () => {
     };
     (service as any).logger = logger;
 
-    const dto = { firstName: 'John', lastName: 'Doe', email: 'john@example.com' };
+    const createContactDto = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+    };
 
-    const first = await service.createContact(dto as any, 't1');
-    const second = await service.createContact(dto as any, 't1');
+    const first = await service.createContact(createContactDto as any, 't1');
+    const second = await service.createContact(createContactDto as any, 't1');
 
     expect(first).toBe(contact);
     expect(second).toBe(contact);
