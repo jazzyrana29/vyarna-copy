@@ -26,6 +26,7 @@ import {
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
   ConfirmedPaymentIntentDto,
+  StripeWebhookDto,
   PaymentIntentNextAction,
   RetryPaymentAttemptDto,
   PaymentStatusUpdateDto,
@@ -288,7 +289,7 @@ export class PaymentIntentService {
   }
 
   async confirmPaymentIntent(
-    confirmDto: ConfirmPaymentIntentDto,
+    confirmPaymentIntentDto: ConfirmPaymentIntentDto,
     traceId: string,
   ): Promise<ConfirmedPaymentIntentDto> {
     const {
@@ -298,7 +299,7 @@ export class PaymentIntentService {
       returnUrl,
       setupFutureUsage,
       shipping,
-    } = confirmDto;
+    } = confirmPaymentIntentDto;
     const intent = await this.paymentRepo.findOne({ where: { paymentIntentId } });
 
     if (!intent) {
@@ -409,15 +410,15 @@ export class PaymentIntentService {
   }
 
   async getPaymentIntentStatus(
-    dto: GetPaymentIntentStatusDto,
+    getPaymentIntentStatusDto: GetPaymentIntentStatusDto,
     traceId: string,
   ): Promise<PaymentStatusUpdateDto> {
     const intent = await this.paymentRepo.findOne({
-      where: { paymentIntentId: dto.paymentIntentId },
+      where: { paymentIntentId: getPaymentIntentStatusDto.paymentIntentId },
     });
     if (!intent) {
       this.logger.warn(
-        `PaymentIntent not found => ${dto.paymentIntentId}`,
+        `PaymentIntent not found => ${getPaymentIntentStatusDto.paymentIntentId}`,
         traceId,
         'getPaymentIntentStatus',
         LogStreamLevel.DebugLight,
@@ -564,9 +565,10 @@ export class PaymentIntentService {
   }
 
   async capturePaymentIntent(
-    { paymentIntentId }: CapturePaymentIntentDto,
+    capturePaymentIntentDto: CapturePaymentIntentDto,
     traceId: string,
   ): Promise<{ attemptId: string; nextRetryAt?: Date }> {
+    const { paymentIntentId } = capturePaymentIntentDto;
     const intent = await this.paymentRepo.findOne({
       where: { paymentIntentId },
     });
@@ -684,10 +686,10 @@ export class PaymentIntentService {
   }
 
   async handleStripeWebhook(
-    payload: Buffer | string,
-    signature: string,
+    stripeWebhookDto: StripeWebhookDto,
     traceId: string,
   ): Promise<void> {
+    const { payload, signature } = stripeWebhookDto;
     let event: Stripe.Event;
     try {
       event = this.stripeGateway.constructWebhookEvent(
