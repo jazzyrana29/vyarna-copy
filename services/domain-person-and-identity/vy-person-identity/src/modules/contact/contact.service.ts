@@ -32,49 +32,51 @@ export class ContactService {
   }
 
   async createContact(dto: CreateContactDto, traceId: string): Promise<Contact> {
-    let entity = await this.findByEmail(dto.email);
-
-    if (entity) {
+    let existing = await this.contactRepo.findOne({ where: { email: dto.email } });
+    if (existing) {
       this.logger.info(
-        'Contact already exists',
+        'ActiveCampaign contact already exists',
         traceId,
         'createContact',
         LogStreamLevel.ProdStandard,
       );
-
-      let updated = false;
-
-      if (!entity.activeCampaignId) {
-        const acRes = await this.activeCampaign.createContact(dto);
-        entity.activeCampaignId = acRes.contact.id;
-        updated = true;
-      }
-
-      if (!entity.stripeCustomerId) {
-        const stripeCustomer =
-          (await this.stripeGateway.findCustomerByEmail(dto.email)) ||
-          (await this.stripeGateway.createContact({
-            name: `${dto.firstName} ${dto.lastName}`.trim(),
-            email: dto.email,
-          }));
-        entity.stripeCustomerId = stripeCustomer.id;
-        updated = true;
-      }
-
-      if (updated) {
-        await this.contactRepo.save(entity);
-      }
-
-      return entity;
+      this.logger.info(
+        'Stripe customer already exists',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
+      return existing;
     }
 
     const acRes = await this.activeCampaign.createContact(dto);
-    const stripeCustomer =
-      (await this.stripeGateway.findCustomerByEmail(dto.email)) ||
-      (await this.stripeGateway.createContact({
+    this.logger.info(
+      'ActiveCampaign contact created',
+      traceId,
+      'createContact',
+      LogStreamLevel.ProdStandard,
+    );
+
+    let stripeCustomer = await this.stripeGateway.findCustomerByEmail(dto.email);
+    if (stripeCustomer) {
+      this.logger.info(
+        'Stripe customer already exists',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
+    } else {
+      stripeCustomer = await this.stripeGateway.createContact({
         name: `${dto.firstName} ${dto.lastName}`.trim(),
         email: dto.email,
-      }));
+      });
+      this.logger.info(
+        'Stripe customer created',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
+    }
 
     entity = this.contactRepo.create({
       firstName: dto.firstName,
