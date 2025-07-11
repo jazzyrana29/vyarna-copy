@@ -7,6 +7,7 @@ import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from '../stripe-gateway.service';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import Stripe from 'stripe';
 import {
   CreatePaymentIntentPayloadDto,
@@ -485,6 +486,7 @@ export class PaymentIntentService {
         gatewayResponse: stripeIntent as any,
       });
 
+      // Inactive: requires evaluation before implementation
       // await new EzKafkaProducer().produce(
       //   process.env.KAFKA_BROKER as string,
       //   KT_SUCCEEDED_PAYMENT,
@@ -504,11 +506,14 @@ export class PaymentIntentService {
         errorMessage: (error as any)?.message,
         gatewayResponse: error as any,
       });
+      // Inactive: requires evaluation before implementation
       // await new EzKafkaProducer().produce(
       //   process.env.KAFKA_BROKER as string,
       //   KT_FAILED_PAYMENT,
       //   encodeKafkaMessage(PaymentIntentService.name, {
       //     paymentIntentId: intent.paymentIntentId,
+      //     orderId: intent.orderId,
+      //     subscriptionId: intent.subscriptionId,
       //     errorCode: (error as any)?.code,
       //     errorMessage: (error as any)?.message,
       //     traceId,
@@ -608,6 +613,7 @@ export class PaymentIntentService {
           where: { externalId: pi.id },
         });
         if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
+          // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
           //   KT_SUCCEEDED_PAYMENT,
@@ -621,11 +627,14 @@ export class PaymentIntentService {
         }
         if (updated && intentStatusMap[event.type] === 'FAILED') {
           const err = (pi as any).last_payment_error;
+          // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
           //   KT_FAILED_PAYMENT,
           //   encodeKafkaMessage(PaymentIntentService.name, {
           //     paymentIntentId: updated.paymentIntentId,
+          //     orderId: updated.orderId,
+          //     subscriptionId: updated.subscriptionId,
           //     errorCode: err?.code,
           //     errorMessage: err?.message,
           //     traceId,
