@@ -100,31 +100,34 @@ export class HealthSleepKafkaService {
   }
 
   async logSleepInterruption(
-    interruptionDto: SleepInterruptionReasonDto,
+    sleepInterruptionReasonDto: SleepInterruptionReasonDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_INTERRUPT_SLEEP,
-      interruptionDto,
+      sleepInterruptionReasonDto,
       traceId,
     );
   }
 
-  async logSleepEnvironment(envDto: SleepEnvironmentDto, traceId: string) {
+  async logSleepEnvironment(
+    sleepEnvironmentDto: SleepEnvironmentDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_RECORD_SLEEP_ENVIRONMENT,
-      envDto,
+      sleepEnvironmentDto,
       traceId,
     );
   }
 
-  async logSleepRating(ratingDto: SleepRatingDto, traceId: string) {
+  async logSleepRating(sleepRatingDto: SleepRatingDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_RATE_SLEEP,
-      ratingDto,
+      sleepRatingDto,
       traceId,
     );
   }
@@ -138,98 +141,110 @@ export class HealthSleepKafkaService {
     );
   }
 
-  async getSleepEvents(dto: GetSleepEventsDto, traceId: string) {
+  async getSleepEvents(getSleepEventsDto: GetSleepEventsDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_EVENTS,
-      dto,
+      getSleepEventsDto,
       traceId,
     );
   }
 
   async getSleepInterruptionReasons(
-    dto: GetSleepInterruptionReasonsDto,
+    getSleepInterruptionReasonsDto: GetSleepInterruptionReasonsDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_INTERRUPTION_REASONS,
-      dto,
+      getSleepInterruptionReasonsDto,
       traceId,
     );
   }
 
-  async getSleepEnvironments(dto: GetSleepEnvironmentsDto, traceId: string) {
+  async getSleepEnvironments(
+    getSleepEnvironmentsDto: GetSleepEnvironmentsDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_ENVIRONMENTS,
-      dto,
+      getSleepEnvironmentsDto,
       traceId,
     );
   }
 
-  async getSleepRatings(dto: GetSleepRatingsDto, traceId: string) {
+  async getSleepRatings(getSleepRatingsDto: GetSleepRatingsDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_RATINGS,
-      dto,
+      getSleepRatingsDto,
       traceId,
     );
   }
 
-  async createSleepSchedule(dto: SleepScheduleDto, traceId: string) {
+  async createSleepSchedule(sleepScheduleDto: SleepScheduleDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_SLEEP_SCHEDULE,
-      dto,
+      sleepScheduleDto,
       traceId,
     );
   }
 
-  async getSleepSchedules(dto: GetSleepSchedulesDto, traceId: string) {
+  async getSleepSchedules(
+    getSleepSchedulesDto: GetSleepSchedulesDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_SCHEDULES,
-      dto,
+      getSleepSchedulesDto,
       traceId,
     );
   }
 
-  async createSleepNotification(dto: SleepNotificationDto, traceId: string) {
+  async createSleepNotification(
+    sleepNotificationDto: SleepNotificationDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_SLEEP_NOTIFICATION,
-      dto,
+      sleepNotificationDto,
       traceId,
     );
   }
 
-  async getSleepNotifications(dto: GetSleepNotificationsDto, traceId: string) {
+  async getSleepNotifications(
+    getSleepNotificationsDto: GetSleepNotificationsDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_NOTIFICATIONS,
-      dto,
+      getSleepNotificationsDto,
       traceId,
     );
   }
 
   async getSleepPatternSummaries(
-    dto: GetSleepPatternSummariesDto,
+    getSleepPatternSummariesDto: GetSleepPatternSummariesDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_PATTERN_SUMMARIES,
-      dto,
+      getSleepPatternSummariesDto,
       traceId,
     );
   }
 
-  async getSleepSummary(dto: GetSleepSummaryDto, traceId: string) {
+  async getSleepSummary(getSleepSummaryDto: GetSleepSummaryDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SLEEP_SUMMARY,
-      dto,
+      getSleepSummaryDto,
       traceId,
     );
   }

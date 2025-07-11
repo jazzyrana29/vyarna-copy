@@ -47,70 +47,73 @@ export class FinancePaymentsKafkaService {
   }
 
   async createPaymentIntent(
-    createDto: CreatePaymentIntentPayloadDto,
+    createPaymentIntentPayloadDto: CreatePaymentIntentPayloadDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_PAYMENT_INTENT,
-      createDto,
+      createPaymentIntentPayloadDto,
       traceId,
     );
   }
 
-  async getPaymentIntent(getDto: GetPaymentIntentDto, traceId: string) {
+  async getPaymentIntent(
+    getPaymentIntentDto: GetPaymentIntentDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PAYMENT_INTENT,
-      getDto,
+      getPaymentIntentDto,
       traceId,
     );
   }
 
   async getPaymentIntentStatus(
-    getDto: GetPaymentIntentStatusDto,
+    getPaymentIntentStatusDto: GetPaymentIntentStatusDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PAYMENT_INTENT_STATUS,
-      getDto,
+      getPaymentIntentStatusDto,
       traceId,
     );
   }
 
   async getZtrackingPaymentIntent(
-    getDto: GetZtrackingPaymentIntentDto,
+    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_ZTRACKING_PAYMENT_INTENT,
-      getDto,
+      getZtrackingPaymentIntentDto,
       traceId,
     );
   }
 
   async confirmPaymentIntent(
-    confirmDto: ConfirmPaymentIntentDto,
+    confirmPaymentIntentDto: ConfirmPaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CONFIRM_PAYMENT_INTENT,
-      confirmDto,
+      confirmPaymentIntentDto,
       traceId,
     );
   }
 
   async capturePaymentIntent(
-    captureDto: CapturePaymentIntentDto,
+    capturePaymentIntentDto: CapturePaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CAPTURE_PAYMENT_INTENT,
-      captureDto,
+      capturePaymentIntentDto,
       traceId,
     );
   }
