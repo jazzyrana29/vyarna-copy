@@ -111,31 +111,31 @@ export class PaymentIntentService {
   }
 
   async createPaymentIntent(
-    payload: CreatePaymentIntentPayloadDto,
+    createPaymentIntentPayloadDto: CreatePaymentIntentPayloadDto,
     traceId: string,
   ): Promise<PaymentIntentCreatedDto> {
     const { originalAmount, currency } = await this.calculateAmounts(
-      payload.items,
+      createPaymentIntentPayloadDto.items,
     );
     const appliedCoupons: any[] = [];
 
     const totalAmount = originalAmount;
 
     const existing = await this.stripeGateway.findCustomerByEmail(
-      payload.customerDetails.email,
+      createPaymentIntentPayloadDto.customerDetails.email,
     );
     let newCustomerCreated = false;
     const customer =
       existing ??
       (await this.stripeGateway.createCustomer({
-        name: `${payload.customerDetails.firstName} ${payload.customerDetails.lastName}`,
-        email: payload.customerDetails.email,
+        name: `${createPaymentIntentPayloadDto.customerDetails.firstName} ${createPaymentIntentPayloadDto.customerDetails.lastName}`,
+        email: createPaymentIntentPayloadDto.customerDetails.email,
         address: {
-          line1: payload.customerDetails.address.street,
-          city: payload.customerDetails.address.city,
-          state: payload.customerDetails.address.state,
-          postal_code: payload.customerDetails.address.zip,
-          country: payload.customerDetails.address.country,
+          line1: createPaymentIntentPayloadDto.customerDetails.address.street,
+          city: createPaymentIntentPayloadDto.customerDetails.address.city,
+          state: createPaymentIntentPayloadDto.customerDetails.address.state,
+          postal_code: createPaymentIntentPayloadDto.customerDetails.address.zip,
+          country: createPaymentIntentPayloadDto.customerDetails.address.country,
         },
         metadata: { source: 'my-backend' },
       }));
@@ -143,11 +143,11 @@ export class PaymentIntentService {
       newCustomerCreated = true;
     }
 
-    if (newCustomerCreated && payload.customerDetails.email) {
+    if (newCustomerCreated && createPaymentIntentPayloadDto.customerDetails.email) {
       const contactPayload = {
-        firstName: payload.customerDetails.firstName || 'UNKNOWN',
-        lastName: payload.customerDetails.lastName || 'UNKNOWN',
-        email: payload.customerDetails.email,
+        firstName: createPaymentIntentPayloadDto.customerDetails.firstName || 'UNKNOWN',
+        lastName: createPaymentIntentPayloadDto.customerDetails.lastName || 'UNKNOWN',
+        email: createPaymentIntentPayloadDto.customerDetails.email,
         traceId,
       };
       this.logger.info(
@@ -175,7 +175,7 @@ export class PaymentIntentService {
       externalId: uuid(),
       customerExternalId: customer.id,
       status: 'REQUIRES_PAYMENT_METHOD',
-      metadata: { itemsCount: payload.items.length },
+      metadata: { itemsCount: createPaymentIntentPayloadDto.items.length },
     });
 
     entity = await this.paymentRepo.save(entity);
@@ -203,7 +203,7 @@ export class PaymentIntentService {
           automatic_payment_methods: { enabled: true },
           metadata: { localId: entity.paymentIntentId },
         },
-        { idempotencyKey: payload.idempotencyKey },
+        { idempotencyKey: createPaymentIntentPayloadDto.idempotencyKey },
       );
 
       clientSecret = stripeIntent.client_secret || undefined;
