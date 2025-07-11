@@ -28,15 +28,13 @@ export class Contact extends BaseEntity {
   @IsEmail()
   email: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   @Index()
-  @IsString()
-  stripeCustomerId: string;
+  stripeCustomerId?: string | null;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   @Index()
-  @IsString()
-  activeCampaignId: string;
+  activeCampaignId?: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

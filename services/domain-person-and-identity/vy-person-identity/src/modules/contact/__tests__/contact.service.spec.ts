@@ -56,18 +56,12 @@ describe('ContactService', () => {
     expect(first).toBe(contact);
     expect(second).toBe(contact);
 
-    expect(repo.save).toHaveBeenCalledTimes(1);
+    expect(repo.save).toHaveBeenCalledTimes(3);
     expect(ac.createContact).toHaveBeenCalledTimes(1);
     expect(stripe.createContact).toHaveBeenCalledTimes(1);
 
     expect(logger.info).toHaveBeenCalledWith(
-      'ActiveCampaign contact already exists',
-      't1',
-      'createContact',
-      LogStreamLevel.ProdStandard,
-    );
-    expect(logger.info).toHaveBeenCalledWith(
-      'Stripe customer already exists',
+      'Contact already exists',
       't1',
       'createContact',
       LogStreamLevel.ProdStandard,
