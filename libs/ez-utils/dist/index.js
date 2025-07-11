@@ -120,6 +120,7 @@ __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/customer-deta
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-payment-intent-payload.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-intent-created.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent-status.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/refund.dto"), exports);
