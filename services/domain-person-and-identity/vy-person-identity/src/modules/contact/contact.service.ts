@@ -64,14 +64,24 @@ export class ContactService {
     entity.activeCampaignId = acRes.contact.id;
     await this.contactRepo.save(entity);
 
-    await new EzKafkaProducer().produce(
-      process.env.KAFKA_BROKER as string,
-      KT_CONTACT_CREATED,
-      encodeKafkaMessage(ContactService.name, {
-        contactId: entity.contactId,
-        traceId,
-      }),
+    // The current implementation of CREATED broadcasts to all connected
+    // sockets which is inefficient and insecure as it exposes user
+    // information to all sockets. Disable producing KT_CONTACT_CREATED
+    // until proper support structure is implemented.
+    this.logger.warn(
+      'Skipping KT_CONTACT_CREATED production: insecure broadcast',
+      traceId,
+      'createContact',
+      LogStreamLevel.DebugLight,
     );
+    // await new EzKafkaProducer().produce(
+    //   process.env.KAFKA_BROKER as string,
+    //   KT_CONTACT_CREATED,
+    //   encodeKafkaMessage(ContactService.name, {
+    //     contactId: entity.contactId,
+    //     traceId,
+    //   }),
+    // );
 
     return entity;
   }
