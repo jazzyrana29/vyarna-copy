@@ -25,10 +25,7 @@ async function bootstrap(): Promise<void> {
     logger,
   });
 
-  app.use(
-    '/vy-finance-payments/webhooks/process-stripe-webhook',
-    bodyParser.raw({ type: 'application/json' }),
-  );
+  app.use('/webhooks/process-stripe-webhook', bodyParser.raw({ type: 'application/json' }));
 
   // Global validation + transformation for incoming DTOs
   app.useGlobalPipes(
