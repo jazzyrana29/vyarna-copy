@@ -33,6 +33,7 @@ import {
   DeletePaymentMethodDto,
   CreateStripeContactDto,
   RetryPaymentAttemptDto,
+  PaymentStatusUpdateDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT_STATUS,
