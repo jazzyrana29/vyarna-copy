@@ -27,7 +27,47 @@ export class ContactService {
     );
   }
 
+  async findByEmail(email: string): Promise<Contact | null> {
+    return this.contactRepo.findOne({ where: { email } });
+  }
+
   async createContact(dto: CreateContactDto, traceId: string): Promise<Contact> {
+    let entity = await this.findByEmail(dto.email);
+
+    if (entity) {
+      this.logger.info(
+        'Contact already exists',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
+
+      let updated = false;
+
+      if (!entity.activeCampaignId) {
+        const acRes = await this.activeCampaign.createContact(dto);
+        entity.activeCampaignId = acRes.contact.id;
+        updated = true;
+      }
+
+      if (!entity.stripeCustomerId) {
+        const stripeCustomer =
+          (await this.stripeGateway.findCustomerByEmail(dto.email)) ||
+          (await this.stripeGateway.createContact({
+            name: `${dto.firstName} ${dto.lastName}`.trim(),
+            email: dto.email,
+          }));
+        entity.stripeCustomerId = stripeCustomer.id;
+        updated = true;
+      }
+
+      if (updated) {
+        await this.contactRepo.save(entity);
+      }
+
+      return entity;
+    }
+
     const acRes = await this.activeCampaign.createContact(dto);
     const stripeCustomer =
       (await this.stripeGateway.findCustomerByEmail(dto.email)) ||
@@ -36,7 +76,7 @@ export class ContactService {
         email: dto.email,
       }));
 
-    const entity = this.contactRepo.create({
+    entity = this.contactRepo.create({
       firstName: dto.firstName,
       lastName: dto.lastName,
       email: dto.email,
