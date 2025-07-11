@@ -12,6 +12,7 @@ import {
   generateTraceId,
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
@@ -24,6 +25,7 @@ import {
   CreateStripeContactDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
   KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
@@ -142,6 +144,20 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
         `${KT_GET_PAYMENT_INTENT}-error`,
         e.message || 'Unknown error',
       );
+    }
+  }
+
+  @SubscribeMessage(KT_GET_PAYMENT_INTENT_STATUS)
+  async handleGetStatus(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: GetPaymentIntentStatusDto,
+  ) {
+    const traceId = generateTraceId('finance-payments-get-intent-status');
+    try {
+      const result = await this.paymentsKafka.getPaymentIntentStatus(dto, traceId);
+      socket.emit(`${KT_GET_PAYMENT_INTENT_STATUS}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_GET_PAYMENT_INTENT_STATUS}-error`, e.message || 'Unknown error');
     }
   }
 

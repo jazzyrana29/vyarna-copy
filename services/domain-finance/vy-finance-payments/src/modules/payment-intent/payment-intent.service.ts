@@ -12,6 +12,7 @@ import Stripe from 'stripe';
 import {
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   PaymentIntentCreatedDto,
   PaymentIntentDto,
@@ -21,6 +22,7 @@ import {
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
   RetryPaymentAttemptDto,
+  PaymentStatusUpdateDto,
   KT_CREATED_PAYMENT_INTENT,
   KT_SUCCEEDED_PAYMENT,
   KT_FAILED_PAYMENT,
@@ -272,6 +274,43 @@ export class PaymentIntentService {
       );
     }
     return entity;
+  }
+
+  async getPaymentIntentStatus(
+    dto: GetPaymentIntentStatusDto,
+    traceId: string,
+  ): Promise<PaymentStatusUpdateDto> {
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId: dto.paymentIntentId },
+    });
+    if (!intent) {
+      this.logger.warn(
+        `PaymentIntent not found => ${dto.paymentIntentId}`,
+        traceId,
+        'getPaymentIntentStatus',
+        LogStreamLevel.DebugLight,
+      );
+      throw new Error('PaymentIntent not found');
+    }
+
+    const stripeIntent = await this.stripeGateway.retrievePaymentIntent(
+      intent.externalId,
+    );
+
+    const map: Record<string, 'processing' | 'succeeded' | 'failed'> = {
+      processing: 'processing',
+      succeeded: 'succeeded',
+      canceled: 'failed',
+      requires_payment_method: 'failed',
+      requires_confirmation: 'processing',
+      requires_action: 'processing',
+    };
+
+    return {
+      paymentIntentId: intent.paymentIntentId,
+      customerEmail: stripeIntent.receipt_email || '',
+      status: map[stripeIntent.status] || 'processing',
+    } as PaymentStatusUpdateDto;
   }
 
   async getZtrackingPaymentIntent(
