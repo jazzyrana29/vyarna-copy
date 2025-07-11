@@ -50,14 +50,18 @@ export class StripeGatewayService {
     return this.stripe.paymentIntents.capture(paymentIntentId);
   }
 
-  async confirmPaymentIntent(paymentIntentId: string) {
+  async confirmPaymentIntent(
+    paymentIntentId: string,
+    params?: Stripe.PaymentIntentConfirmParams,
+    options?: Stripe.RequestOptions,
+  ) {
     this.logger.debug(
       `Confirming Stripe PaymentIntent ${paymentIntentId}`,
       '',
       'confirmPaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentIntents.confirm(paymentIntentId);
+    return this.stripe.paymentIntents.confirm(paymentIntentId, params, options);
   }
 
   async createRefund(params: Stripe.RefundCreateParams) {
