@@ -18,6 +18,7 @@ import {
   CreateRefundDto,
   GetPaymentRefundDto,
   CapturePaymentIntentDto,
+  ConfirmPaymentIntentDto,
   RetryPaymentAttemptDto,
   StripeWebhookDto,
 } from 'ez-utils';
@@ -82,7 +83,7 @@ export class PaymentIntentKafkaService {
       KT_CONFIRM_PAYMENT_INTENT,
       message,
       key,
-      async (value: CapturePaymentIntentDto, traceId: string) =>
+      async (value: ConfirmPaymentIntentDto, traceId: string) =>
         await this.paymentIntentService.confirmPaymentIntent(value, traceId),
     );
   }

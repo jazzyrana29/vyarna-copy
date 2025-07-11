@@ -18,6 +18,7 @@ import {
   CreateRefundDto,
   GetPaymentRefundDto,
   CapturePaymentIntentDto,
+  ConfirmPaymentIntentDto,
   RetryPaymentAttemptDto,
   KT_CREATED_PAYMENT_INTENT,
   KT_SUCCEEDED_PAYMENT,
@@ -391,9 +392,11 @@ export class PaymentIntentService {
   }
 
   async confirmPaymentIntent(
-    { paymentIntentId }: CapturePaymentIntentDto,
+    confirmDto: ConfirmPaymentIntentDto,
     traceId: string,
   ): Promise<void> {
+    const { paymentIntentId, paymentMethodId, receiptEmail, returnUrl, setupFutureUsage, shipping } =
+      confirmDto;
     const intent = await this.paymentRepo.findOne({
       where: { paymentIntentId },
     });
@@ -410,6 +413,13 @@ export class PaymentIntentService {
 
     const stripeIntent = await this.stripeGateway.confirmPaymentIntent(
       intent.externalId,
+      {
+        payment_method: paymentMethodId,
+        receipt_email: receiptEmail,
+        return_url: returnUrl,
+        setup_future_usage: setupFutureUsage,
+        shipping: shipping as unknown as Stripe.PaymentIntentConfirmParams['shipping'],
+      },
     );
 
     const statusMap: Record<
@@ -460,7 +470,7 @@ export class PaymentIntentService {
 
     try {
       await this.confirmPaymentIntent(
-        { paymentIntentId } as CapturePaymentIntentDto,
+        { paymentIntentId } as unknown as ConfirmPaymentIntentDto,
         traceId,
       );
       const stripeIntent = await this.stripeGateway.capturePaymentIntent(

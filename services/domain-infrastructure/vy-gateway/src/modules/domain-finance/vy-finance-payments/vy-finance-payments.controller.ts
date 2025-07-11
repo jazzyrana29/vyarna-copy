@@ -14,6 +14,7 @@ import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-in
 import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-refund-dto.pipe';
 import { ValidateRetryPaymentAttemptDtoPipe } from './pipes/validate-retry-payment-attempt-dto.pipe';
 import { ValidateCapturePaymentIntentDtoPipe } from './pipes/validate-capture-payment-intent-dto.pipe';
+import { ValidateConfirmPaymentIntentDtoPipe } from './pipes/validate-confirm-payment-intent-dto.pipe';
 import { ValidateCreateContactDtoPipe } from './pipes/validate-create-contact-dto.pipe';
 import {
   generateTraceId,
@@ -112,7 +113,7 @@ export class FinancePaymentsController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: ConfirmPaymentIntentDto })
   async confirmPaymentIntent(
-    @Body(new ValidateCapturePaymentIntentDtoPipe()) confirmDto: ConfirmPaymentIntentDto,
+    @Body(new ValidateConfirmPaymentIntentDtoPipe()) confirmDto: ConfirmPaymentIntentDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('confirmPaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'confirmPaymentIntent', LogStreamLevel.ProdStandard);
