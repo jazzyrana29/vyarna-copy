@@ -19,7 +19,7 @@ export class ContactLinksDto {
   automationEntryCounts: string;
 }
 
-export class ContactDto {
+export class ActiveCampaignContactDto {
   email: string;
   firstName: string;
   lastName: string;
@@ -34,5 +34,5 @@ export class ContactDto {
 }
 
 export class ContactResponseDto {
-  contact: ContactDto;
+  contact: ActiveCampaignContactDto;
 }
