@@ -26,6 +26,7 @@ import {
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
   ConfirmedPaymentIntentDto,
+  PaymentIntentNextAction,
   RetryPaymentAttemptDto,
   PaymentStatusUpdateDto,
   KT_CREATED_PAYMENT_INTENT,
@@ -346,7 +347,7 @@ export class PaymentIntentService {
       status: intent.status as any,
       clientSecret: stripeIntent.client_secret,
       requiresAction: stripeIntent.status === 'requires_action',
-      nextAction: stripeIntent.next_action,
+      nextAction: stripeIntent.next_action as unknown as PaymentIntentNextAction,
     };
   }
 
