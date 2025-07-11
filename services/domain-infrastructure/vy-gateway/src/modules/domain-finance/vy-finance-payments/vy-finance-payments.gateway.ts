@@ -148,11 +148,14 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_GET_PAYMENT_INTENT_STATUS)
   async handleGetStatus(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() dto: GetPaymentIntentStatusDto,
+    @MessageBody() getPaymentIntentStatusDto: GetPaymentIntentStatusDto,
   ) {
     const traceId = generateTraceId('finance-payments-get-intent-status');
     try {
-      const result = await this.paymentsKafka.getPaymentIntentStatus(dto, traceId);
+      const result = await this.paymentsKafka.getPaymentIntentStatus(
+        getPaymentIntentStatusDto,
+        traceId,
+      );
       socket.emit(`${KT_GET_PAYMENT_INTENT_STATUS}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_GET_PAYMENT_INTENT_STATUS}-error`, e.message || 'Unknown error');
@@ -182,12 +185,12 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CONFIRM_PAYMENT_INTENT)
   async handleConfirm(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() confirmDto: ConfirmPaymentIntentDto,
+    @MessageBody() confirmPaymentIntentDto: ConfirmPaymentIntentDto,
   ) {
     const traceId = generateTraceId('finance-payments-confirm-intent');
     try {
       const result = await this.paymentsKafka.confirmPaymentIntent(
-        confirmDto,
+        confirmPaymentIntentDto,
         traceId,
       );
       socket.emit(`${KT_CONFIRM_PAYMENT_INTENT}-result`, result);
