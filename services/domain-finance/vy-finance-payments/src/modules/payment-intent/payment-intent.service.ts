@@ -37,6 +37,7 @@ import {
   KT_FAILED_REFUND,
   KT_USED_COUPON,
   KT_LIMIT_REACHED_COUPON,
+  KT_CREATE_CONTACT,
   encodeKafkaMessage,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
@@ -123,6 +124,7 @@ export class PaymentIntentService {
     const existing = await this.stripeGateway.findCustomerByEmail(
       payload.customerDetails.email,
     );
+    let newCustomerCreated = false;
     const customer =
       existing ??
       (await this.stripeGateway.createCustomer({
@@ -137,6 +139,35 @@ export class PaymentIntentService {
         },
         metadata: { source: 'my-backend' },
       }));
+    if (!existing) {
+      newCustomerCreated = true;
+    }
+
+    if (newCustomerCreated && payload.customerDetails.email) {
+      const contactPayload = {
+        firstName: payload.customerDetails.firstName || 'UNKNOWN',
+        lastName: payload.customerDetails.lastName || 'UNKNOWN',
+        email: payload.customerDetails.email,
+        traceId,
+      };
+      this.logger.info(
+        `About to send Kafka message to ${KT_CREATE_CONTACT} | payload: ${JSON.stringify(contactPayload)}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_CREATE_CONTACT,
+        encodeKafkaMessage(PaymentIntentService.name, contactPayload),
+      );
+      this.logger.info(
+        `Kafka message sent to ${KT_CREATE_CONTACT} | payload: ${JSON.stringify(contactPayload)}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+    }
 
     let entity = this.paymentRepo.create({
       amountCents: originalAmount,
