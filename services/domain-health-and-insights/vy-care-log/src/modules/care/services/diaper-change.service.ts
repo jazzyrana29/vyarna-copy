@@ -93,11 +93,11 @@ export class DiaperChangeService {
   }
 
   async getZtrackingDiaperChange(
-    getDto: GetZtrackingDiaperChangeDto,
+    getZtrackingDiaperChangeDto: GetZtrackingDiaperChangeDto,
     traceId: string,
   ): Promise<ZtrackingDiaperChangeDto[]> {
     return this.ztrackingDiaperChangeService.getZtrackingForDiaperChange(
-      getDto,
+      getZtrackingDiaperChangeDto,
       traceId,
     );
   }

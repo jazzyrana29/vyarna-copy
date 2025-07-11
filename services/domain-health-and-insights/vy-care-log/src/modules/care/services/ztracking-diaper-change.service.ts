@@ -50,9 +50,10 @@ export class ZtrackingDiaperChangeService {
   }
 
   async getZtrackingForDiaperChange(
-    { diaperChangeId = '' }: GetZtrackingDiaperChangeDto,
+    getZtrackingDiaperChangeDto: GetZtrackingDiaperChangeDto,
     traceId: string,
   ): Promise<ZtrackingDiaperChangeDto[]> {
+    const { diaperChangeId = '' } = getZtrackingDiaperChangeDto;
     const ztrackingEntities = await this.diaperChangeRepository.find({
       where: { diaperChangeId },
     });
