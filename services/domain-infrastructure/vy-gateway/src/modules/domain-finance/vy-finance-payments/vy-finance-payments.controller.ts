@@ -11,6 +11,7 @@ import { ValidateGetZtrackingPaymentIntentDtoPipe } from './pipes/validate-get-z
 import { ValidateCreateRefundDtoPipe } from './pipes/validate-create-refund-dto.pipe';
 import { ValidateCreatePaymentMethodDtoPipe } from './pipes/validate-create-payment-method-dto.pipe';
 import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-intent-dto.pipe';
+import { ValidateGetPaymentIntentStatusDtoPipe } from './pipes/validate-get-payment-intent-status-dto.pipe';
 import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-refund-dto.pipe';
 import { ValidateRetryPaymentAttemptDtoPipe } from './pipes/validate-retry-payment-attempt-dto.pipe';
 import { ValidateCapturePaymentIntentDtoPipe } from './pipes/validate-capture-payment-intent-dto.pipe';
@@ -20,6 +21,7 @@ import {
   generateTraceId,
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
@@ -33,6 +35,7 @@ import {
   RetryPaymentAttemptDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
   KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
@@ -91,6 +94,18 @@ export class FinancePaymentsController {
       'Payment intent retrieved',
       traceId,
     );
+  }
+
+  @Post(KT_GET_PAYMENT_INTENT_STATUS)
+  @ApiCreatedResponse({ type: ResponseDTO<PaymentStatusUpdateDto> })
+  @ApiBody({ type: GetPaymentIntentStatusDto })
+  async getPaymentIntentStatus(
+    @Body(new ValidateGetPaymentIntentStatusDtoPipe()) dto: GetPaymentIntentStatusDto,
+  ): Promise<ResponseDTO<PaymentStatusUpdateDto>> {
+    const traceId = generateTraceId('getPaymentIntentStatus');
+    this.logger.info('traceId generated successfully', traceId, 'getPaymentIntentStatus', LogStreamLevel.ProdStandard);
+    const result = await this.paymentsKafkaService.getPaymentIntentStatus(dto, traceId);
+    return new ResponseDTO(HttpStatus.OK, result, 'Status retrieved', traceId);
   }
 
   @Post(KT_GET_ZTRACKING_PAYMENT_INTENT)

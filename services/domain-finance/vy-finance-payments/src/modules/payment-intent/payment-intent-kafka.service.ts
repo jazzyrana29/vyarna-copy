@@ -6,6 +6,7 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
   KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
@@ -14,6 +15,7 @@ import {
   KT_RETRY_PAYMENT_ATTEMPT,
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
@@ -63,6 +65,17 @@ export class PaymentIntentKafkaService {
       key,
       async (value: GetPaymentIntentDto, traceId: string) =>
         await this.paymentIntentService.getPaymentIntent(value, traceId),
+    );
+  }
+
+  async getPaymentIntentStatus(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_GET_PAYMENT_INTENT_STATUS,
+      message,
+      key,
+      async (value: GetPaymentIntentStatusDto, traceId: string) =>
+        await this.paymentIntentService.getPaymentIntentStatus(value, traceId),
     );
   }
 

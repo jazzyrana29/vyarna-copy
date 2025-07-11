@@ -44,6 +44,7 @@ Kafka topic:
 | `POST` | `/payment-intents/get` | Retrieve a payment intent by id. |
 | `POST` | `/payment-intents/ztracking` | Get ztracking information for an intent. |
 | `POST` | `/payment-intents/confirm` | Confirm an existing payment intent. |
+| `POST` | `/payment-intents/status` | Retrieve latest status for a payment intent. |
 | `POST` | `/refunds` | Issue a refund for a payment intent. |
 | `POST` | `/payment-refunds/get` | Get a refund record. |
 | `POST` | `/payment-methods` | Vault a payment method. |
@@ -135,3 +136,11 @@ Each WebSocket event corresponds to a Kafka topic. The main topics are:
 - `create-payment-method`
 - `list-payment-methods`
 - `delete-payment-method`
+- `get-payment-intent-status`
+
+### Get Payment Intent Status
+
+1. Client calls `POST /vy-finance-payments/payment-intents/status`.
+2. Gateway publishes the `get-payment-intent-status` Kafka message.
+3. Service `vy-finance-payments` retrieves the intent from Stripe and responds with a `PaymentStatusUpdateDto`.
+4. Gateway returns this DTO to the HTTP caller and emits it over the WebSocket if subscribed.

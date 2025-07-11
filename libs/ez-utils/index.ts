@@ -120,6 +120,7 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/customer-details.dto
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-payment-intent-payload.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-intent-created.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/get-payment-intent-status.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/refund.dto";

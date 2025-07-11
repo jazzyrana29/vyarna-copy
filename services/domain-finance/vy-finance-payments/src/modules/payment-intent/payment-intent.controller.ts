@@ -5,6 +5,7 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
   KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
@@ -50,6 +51,18 @@ export class PaymentIntentController {
       LogStreamLevel.DebugLight,
     );
     await this.paymentKafkaService.getPaymentIntent(message, key);
+  }
+
+  @MessagePattern(KT_GET_PAYMENT_INTENT_STATUS)
+  async getPaymentIntentStatus(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_GET_PAYMENT_INTENT_STATUS}`,
+      '',
+      'getPaymentIntentStatus',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.getPaymentIntentStatus(message, key);
   }
 
   @MessagePattern(KT_GET_ZTRACKING_PAYMENT_INTENT)
