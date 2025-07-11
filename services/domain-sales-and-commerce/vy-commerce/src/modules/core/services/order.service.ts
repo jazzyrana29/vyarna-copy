@@ -34,10 +34,10 @@ export class OrderService {
   }
 
   async createOrder(
-    createDto: CreateOrderDto,
+    createOrderDto: CreateOrderDto,
     traceId: string,
   ): Promise<OrderDto> {
-    const entity = this.orderRepo.create(createDto);
+    const entity = this.orderRepo.create(createOrderDto);
     await this.orderRepo.save(entity);
     this.logger.info(
       'Order created',
@@ -68,7 +68,7 @@ export class OrderService {
   }
 
   async getOrders(
-    _getDto: GetOrdersDto,
+    getOrdersDto: GetOrdersDto,
     traceId: string,
   ): Promise<OrderDto[]> {
     const list = await this.orderRepo.find();
@@ -82,10 +82,13 @@ export class OrderService {
   }
 
   async getZtrackingOrder(
-    getDto: GetZtrackingOrderDto,
+    getZtrackingOrderDto: GetZtrackingOrderDto,
     traceId: string,
   ): Promise<ZtrackingOrderDto[]> {
-    return this.ztrackingOrderService.getZtrackingForOrder(getDto, traceId);
+    return this.ztrackingOrderService.getZtrackingForOrder(
+      getZtrackingOrderDto,
+      traceId,
+    );
   }
 
   async updateOrderStatus(

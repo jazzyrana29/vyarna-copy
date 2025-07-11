@@ -20,10 +20,10 @@ export class ProductService {
   }
 
   async getProducts(
-    getDto: GetProductsDto,
+    getProductsDto: GetProductsDto,
     traceId: string,
   ): Promise<ProductDto[]> {
-    const { productId, name, active, limit: dtoLimit } = getDto;
+    const { productId, name, active, limit: dtoLimit } = getProductsDto;
     const requestedLimit = dtoLimit ?? this.defaultLimit;
     let stripeProducts: Stripe.Product[] = [];
 
