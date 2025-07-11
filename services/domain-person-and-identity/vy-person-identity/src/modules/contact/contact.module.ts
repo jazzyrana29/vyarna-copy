@@ -4,7 +4,7 @@ import { Contact } from '../../entities/contact.entity';
 import { ContactController } from './contact.controller';
 import { ContactKafkaService } from './contact-kafka.service';
 import { ContactService } from './contact.service';
-import { ActiveCampaignService } from './active-campaign.service';
+import { ActiveCampaignService } from '../person/services/active-campaign.service';
 import { StripeGatewayService } from './stripe-gateway.service';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';

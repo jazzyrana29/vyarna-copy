@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContactResponseDto = exports.ContactDto = exports.ContactLinksDto = void 0;
+exports.ContactResponseDto = exports.ActiveCampaignContactDto = exports.ContactLinksDto = void 0;
 class ContactLinksDto {
 }
 exports.ContactLinksDto = ContactLinksDto;
-class ContactDto {
+class ActiveCampaignContactDto {
 }
-exports.ContactDto = ContactDto;
+exports.ActiveCampaignContactDto = ActiveCampaignContactDto;
 class ContactResponseDto {
 }
 exports.ContactResponseDto = ContactResponseDto;

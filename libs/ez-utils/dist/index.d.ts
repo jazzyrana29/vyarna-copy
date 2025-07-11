@@ -50,6 +50,8 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-em
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-contact/contact.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-contact/create-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/document.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto";
@@ -118,6 +120,8 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/delete-payment-metho
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/capture-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/confirm-payment-intent.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/confirmed-payment-intent.dto";
+export * from "./src/payments/types/payment-intent-next-action";
 export * from "./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-status-update.dto";

@@ -9,25 +9,50 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActiveCampaignCreateContactDto = void 0;
+exports.ContactDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-class ActiveCampaignCreateContactDto {
+class ContactDto {
 }
-exports.ActiveCampaignCreateContactDto = ActiveCampaignCreateContactDto;
+exports.ContactDto = ContactDto;
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsUUID)(),
+    __metadata("design:type", String)
+], ContactDto.prototype, "contactId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ActiveCampaignCreateContactDto.prototype, "firstName", void 0);
+], ContactDto.prototype, "firstName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ActiveCampaignCreateContactDto.prototype, "lastName", void 0);
+], ContactDto.prototype, "lastName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], ContactDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ActiveCampaignCreateContactDto.prototype, "email", void 0);
-//# sourceMappingURL=create-contact.dto.js.map
+], ContactDto.prototype, "stripeCustomerId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ContactDto.prototype, "activeCampaignId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], ContactDto.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], ContactDto.prototype, "updatedAt", void 0);
+//# sourceMappingURL=contact.dto.js.map
