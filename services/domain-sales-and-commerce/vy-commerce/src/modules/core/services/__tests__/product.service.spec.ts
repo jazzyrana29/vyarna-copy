@@ -1,6 +1,6 @@
 import { ProductService } from '../product.service';
 import { GetProductsDto } from 'ez-utils';
-import { StripeGatewayService } from '../stripe-gateway.service';
+import { StripeGatewayService } from '../../../../services/stripe-gateway.service';
 
 describe('ProductService', () => {
   it('maps stripe products to DTOs', async () => {

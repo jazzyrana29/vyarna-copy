@@ -1,6 +1,6 @@
 import { ContactService } from '../contact.service';
 import { ActiveCampaignService } from '../../person/services/active-campaign.service';
-import { StripeGatewayService } from '../stripe-gateway.service';
+import { StripeGatewayService } from '../../../services/stripe-gateway.service';
 import { Repository } from 'typeorm';
 import { Contact } from '../../../entities/contact.entity';
 import { EzKafkaProducer } from 'ez-kafka-producer';

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GetProductsDto, ProductDto } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { StripeGatewayService } from './stripe-gateway.service';
+import { StripeGatewayService } from '../../../services/stripe-gateway.service';
 import Stripe from 'stripe';
 
 @Injectable()

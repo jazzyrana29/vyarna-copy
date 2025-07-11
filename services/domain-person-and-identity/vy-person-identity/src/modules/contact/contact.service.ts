@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from '../../entities/contact.entity';
 import { ActiveCampaignService } from '../person/services/active-campaign.service';
-import { StripeGatewayService } from './stripe-gateway.service';
+import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { CreateContactDto, encodeKafkaMessage, KT_CONTACT_CREATED } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
