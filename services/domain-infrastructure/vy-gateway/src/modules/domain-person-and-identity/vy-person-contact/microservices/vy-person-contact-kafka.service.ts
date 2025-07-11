@@ -6,8 +6,7 @@ import { KT_CREATE_CONTACT, CreateContactDto } from 'ez-utils';
 
 @Injectable()
 export class PersonContactKafkaService {
-  // send contact requests to vy-person-identity service
-  private readonly serviceName = 'VyPersonIdentityService';
+   private readonly serviceName = PersonIdentityKafkaService.name;
   private logger = getLoggerConfig(this.serviceName);
 
   constructor(private readonly kafkaResponder: KafkaResponderService) {
