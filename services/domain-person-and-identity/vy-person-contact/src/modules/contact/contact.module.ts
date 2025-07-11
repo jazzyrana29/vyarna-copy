@@ -1,0 +1,32 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Contact } from '../../entities/contact.entity';
+import { ContactController } from './contact.controller';
+import { ContactKafkaService } from './contact-kafka.service';
+import { ContactService } from './contact.service';
+import { ActiveCampaignService } from './active-campaign.service';
+import { StripeGatewayService } from './stripe-gateway.service';
+import { getLoggerConfig } from '../../utils/common';
+import { LogStreamLevel } from 'ez-logger';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Contact])],
+  controllers: [ContactController],
+  providers: [
+    ContactService,
+    ContactKafkaService,
+    ActiveCampaignService,
+    StripeGatewayService,
+  ],
+})
+export class ContactModule {
+  private logger = getLoggerConfig(ContactModule.name);
+  constructor() {
+    this.logger.debug(
+      `${ContactModule.name} initialized`,
+      '',
+      'constructor',
+      LogStreamLevel.DebugLight,
+    );
+  }
+}
