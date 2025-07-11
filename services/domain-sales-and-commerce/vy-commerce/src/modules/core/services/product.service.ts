@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import Stripe from 'stripe';
+import StripeClient from 'stripe';
+import type Stripe from 'stripe';
 import { GetProductsDto, ProductDto } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -7,7 +8,7 @@ import { LogStreamLevel } from 'ez-logger';
 @Injectable()
 export class ProductService {
   private logger = getLoggerConfig(ProductService.name);
-  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+  private stripe = new StripeClient(process.env.STRIPE_SECRET_KEY as string);
   private readonly defaultLimit = 100;
 
   constructor() {
