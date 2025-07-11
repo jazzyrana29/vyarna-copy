@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
@@ -21,6 +25,7 @@ import {
   GetPaymentRefundDto,
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
+  ConfirmedPaymentIntentDto,
   RetryPaymentAttemptDto,
   PaymentStatusUpdateDto,
   KT_CREATED_PAYMENT_INTENT,
@@ -250,10 +255,10 @@ export class PaymentIntentService {
     } as PaymentIntentCreatedDto;
   }
 
-    async confirmPaymentIntent(
+  async confirmPaymentIntent(
     confirmDto: ConfirmPaymentIntentDto,
     traceId: string,
-  ): Promise<void> {
+  ): Promise<ConfirmedPaymentIntentDto> {
     const {
       paymentIntentId,
       paymentMethodId,
@@ -262,9 +267,7 @@ export class PaymentIntentService {
       setupFutureUsage,
       shipping,
     } = confirmDto;
-    const intent = await this.paymentRepo.findOne({
-      where: { paymentIntentId },
-    });
+    const intent = await this.paymentRepo.findOne({ where: { paymentIntentId } });
 
     if (!intent) {
       this.logger.error(
@@ -273,20 +276,48 @@ export class PaymentIntentService {
         'confirmPaymentIntent',
         LogStreamLevel.DebugHeavy,
       );
-      throw new Error('PaymentIntent not found');
+      throw new NotFoundException('PaymentIntent not found');
     }
 
-    const stripeIntent = await this.stripeGateway.confirmPaymentIntent(
-      intent.externalId,
-      {
-        payment_method: paymentMethodId,
-        receipt_email: receiptEmail,
-        return_url: returnUrl,
-        setup_future_usage: setupFutureUsage,
-        shipping:
-          shipping as unknown as Stripe.PaymentIntentConfirmParams['shipping'],
-      },
+    if (['SUCCEEDED', 'CANCELED'].includes(intent.status)) {
+      throw new BadRequestException(
+        `Cannot confirm intent in status ${intent.status}`,
+      );
+    }
+    const attempt = await this.attemptRepo.save(
+      this.attemptRepo.create({
+        paymentIntentId: intent.paymentIntentId,
+        attemptNumber:
+          (await this.attemptRepo.count({
+            where: { paymentIntentId: intent.paymentIntentId },
+          })) + 1,
+        status: 'PENDING',
+      }),
     );
+
+    let stripeIntent: Stripe.PaymentIntent;
+    try {
+      stripeIntent = await this.stripeGateway.confirmPaymentIntent(
+        intent.externalId,
+        {
+          payment_method: paymentMethodId,
+          receipt_email: receiptEmail,
+          return_url: returnUrl,
+          setup_future_usage: setupFutureUsage,
+          shipping:
+            shipping as unknown as Stripe.PaymentIntentConfirmParams['shipping'],
+        },
+        { idempotencyKey: attempt.attemptId },
+      );
+    } catch (err) {
+      await this.attemptRepo.update(attempt.attemptId, {
+        status: 'FAILED',
+        errorCode: (err as any)?.code,
+        errorMessage: (err as any)?.message,
+        gatewayResponse: err as any,
+      });
+      throw err;
+    }
 
     const statusMap: Record<
       string,
@@ -303,6 +334,20 @@ export class PaymentIntentService {
 
     intent.status = (statusMap[stripeIntent.status] || intent.status) as any;
     await this.paymentRepo.save(intent);
+
+    await this.attemptRepo.update(attempt.attemptId, {
+      status: 'SUCCESS',
+      gatewayResponse: stripeIntent as any,
+    });
+
+    return {
+      success: true,
+      paymentIntentId: intent.paymentIntentId,
+      status: intent.status as any,
+      clientSecret: stripeIntent.client_secret,
+      requiresAction: stripeIntent.status === 'requires_action',
+      nextAction: stripeIntent.next_action,
+    };
   }
 
   async getPaymentIntent(
