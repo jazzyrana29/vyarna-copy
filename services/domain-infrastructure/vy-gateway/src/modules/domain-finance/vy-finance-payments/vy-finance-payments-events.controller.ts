@@ -3,6 +3,7 @@ import { Payload, Ctx, KafkaContext } from '@nestjs/microservices';
 import {
   KT_SUCCEEDED_PAYMENT,
   KT_FAILED_PAYMENT,
+  KT_PAYMENT_STATUS_UPDATE,
 } from 'ez-utils';
 import { FinancePaymentsWebsocket } from './vy-finance-payments.gateway';
 import { getLoggerConfig } from '../../../utils/common';
@@ -36,7 +37,7 @@ export class FinancePaymentsEventsController {
     if (userId) {
       this.websocket.server
         .to(userId)
-        .emit('payment-status-update', {
+        .emit(KT_PAYMENT_STATUS_UPDATE, {
           paymentIntentId,
           orderId,
           subscriptionId,
@@ -60,7 +61,7 @@ export class FinancePaymentsEventsController {
     if (userId) {
       this.websocket.server
         .to(userId)
-        .emit('payment-status-update', {
+        .emit(KT_PAYMENT_STATUS_UPDATE, {
           paymentIntentId,
           status: 'failed',
           errorCode,
