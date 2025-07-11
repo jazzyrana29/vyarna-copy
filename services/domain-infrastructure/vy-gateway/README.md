@@ -80,7 +80,7 @@ the domain services remain decoupled and headless.
 
 ## WebSocket Usage
 
-Clients connect to the `finance-payments` namespace to receive payment updates.
+Clients connect to the `/finance-payments` namespace to receive payment updates.
 Identify the user through a `userId` query parameter during the Socket.IO
 handshake or by emitting a `register-user` event right after connecting. The
 socket joins a room matching that `userId` and all `payment-status-update`
@@ -95,6 +95,30 @@ socket.emit('register-user', '123');
 ```
 
 Only the initiating user will receive status updates for their payment intents.
+
+### Triggering `payment-status-update`
+
+The gateway emits a `payment-status-update` whenever the payments service
+confirms whether a payment succeeded or failed. These notifications are typically
+generated from Stripe webhook events but can also be produced manually through
+Kafka.
+
+1. Send Stripe webhooks such as `payment_intent.succeeded` or
+   `payment_intent.payment_failed` to `vy-finance-payments`.
+2. Or publish messages directly to the Kafka topics `succeeded-payment` and
+   `failed-payment` using the constants `KT_SUCCEEDED_PAYMENT` and
+   `KT_FAILED_PAYMENT`.
+
+Once the gateway processes one of these events it will emit `payment-status-update`
+to the room of the user that created the intent.
+
+```ts
+const socket = io('/finance-payments', { query: { userId: '123' } });
+
+socket.on('payment-status-update', update => {
+  console.log('Intent', update.paymentIntentId, 'is', update.status);
+});
+```
 
 ## Kafka Event Flow
 
