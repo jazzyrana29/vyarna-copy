@@ -109,11 +109,7 @@ function runStripe(args) {
 
   // Prepare network flags depending on platform
   const networkArgs = [];
-  if (process.platform === "linux") {
-    networkArgs.push("--network", "host");
-  } else {
-    networkArgs.push("--add-host", "host.docker.internal:host-gateway");
-  }
+  networkArgs.push("--network", "host");
 
   // If using `stripe listen`, adjust --forward-to URL on non-Linux platforms
   if (args[0] === 'listen') {
