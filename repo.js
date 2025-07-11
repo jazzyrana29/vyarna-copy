@@ -115,6 +115,19 @@ function runStripe(args) {
     networkArgs.push("--add-host", "host.docker.internal:host-gateway");
   }
 
+  // If using `stripe listen`, adjust --forward-to URL on non-Linux platforms
+  if (args[0] === 'listen') {
+    const idx = args.findIndex((a) => a === '--forward-to');
+    if (
+      idx !== -1 &&
+      args[idx + 1] &&
+      args[idx + 1].includes('localhost') &&
+      process.platform !== 'linux'
+    ) {
+      args[idx + 1] = args[idx + 1].replace('localhost', 'host.docker.internal');
+    }
+  }
+
   // Build docker command
   const dockerArgs = [
     'run', '--rm',
