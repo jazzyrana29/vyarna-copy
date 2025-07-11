@@ -70,10 +70,10 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetProductsDto })
   async getProducts(
-    @Body(new ValidateGetProductsDtoPipe()) getDto: GetProductsDto,
+    @Body(new ValidateGetProductsDtoPipe()) getProductsDto: GetProductsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getProducts');
-    const data = await this.commerceKafka.getProducts(getDto, traceId);
+    const data = await this.commerceKafka.getProducts(getProductsDto, traceId);
     return new ResponseDTO(HttpStatus.OK, data, 'Products retrieved', traceId);
   }
 
@@ -82,10 +82,14 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetProductVariantsDto })
   async getProductVariants(
-    @Body(new ValidateGetProductVariantsDtoPipe()) getDto: GetProductVariantsDto,
+    @Body(new ValidateGetProductVariantsDtoPipe())
+    getProductVariantsDto: GetProductVariantsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getProductVariants');
-    const data = await this.commerceKafka.getProductVariants(getDto, traceId);
+    const data = await this.commerceKafka.getProductVariants(
+      getProductVariantsDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Variants retrieved', traceId);
   }
 
@@ -93,10 +97,13 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetCategoriesDto })
   async getCategories(
-    @Body(new ValidateGetCategoriesDtoPipe()) getDto: GetCategoriesDto,
+    @Body(new ValidateGetCategoriesDtoPipe()) getCategoriesDto: GetCategoriesDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getCategories');
-    const data = await this.commerceKafka.getCategories(getDto, traceId);
+    const data = await this.commerceKafka.getCategories(
+      getCategoriesDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Categories retrieved', traceId);
   }
 
@@ -104,10 +111,10 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateCartDto })
   async createCart(
-    @Body(new ValidateCreateCartDtoPipe()) createDto: CreateCartDto,
+    @Body(new ValidateCreateCartDtoPipe()) createCartDto: CreateCartDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createCart');
-    const data = await this.commerceKafka.createCart(createDto, traceId);
+    const data = await this.commerceKafka.createCart(createCartDto, traceId);
     return new ResponseDTO(HttpStatus.OK, data, 'Cart created', traceId);
   }
 
@@ -115,10 +122,10 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateCartItemDto })
   async addCartItem(
-    @Body(new ValidateAddCartItemDtoPipe()) addDto: CreateCartItemDto,
+    @Body(new ValidateAddCartItemDtoPipe()) addCartItemDto: CreateCartItemDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('addCartItem');
-    const data = await this.commerceKafka.addCartItem(addDto, traceId);
+    const data = await this.commerceKafka.addCartItem(addCartItemDto, traceId);
     return new ResponseDTO(HttpStatus.OK, data, 'Item added', traceId);
   }
 
@@ -126,10 +133,13 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: DeleteCartItemDto })
   async removeCartItem(
-    @Body(new ValidateRemoveCartItemDtoPipe()) removeDto: DeleteCartItemDto,
+    @Body(new ValidateRemoveCartItemDtoPipe()) deleteCartItemDto: DeleteCartItemDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('removeCartItem');
-    const data = await this.commerceKafka.removeCartItem(removeDto, traceId);
+    const data = await this.commerceKafka.removeCartItem(
+      deleteCartItemDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Item removed', traceId);
   }
 
@@ -137,10 +147,14 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: ApplyCartPromotionDto })
   async applyPromotion(
-    @Body(new ValidateApplyCartPromotionDtoPipe()) applyDto: ApplyCartPromotionDto,
+    @Body(new ValidateApplyCartPromotionDtoPipe())
+    applyCartPromotionDto: ApplyCartPromotionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('applyPromotion');
-    const data = await this.commerceKafka.applyCartPromotion(applyDto, traceId);
+    const data = await this.commerceKafka.applyCartPromotion(
+      applyCartPromotionDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Promotion applied', traceId);
   }
 
@@ -148,10 +162,10 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateOrderDto })
   async createOrder(
-    @Body(new ValidateCreateOrderDtoPipe()) createDto: CreateOrderDto,
+    @Body(new ValidateCreateOrderDtoPipe()) createOrderDto: CreateOrderDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createOrder');
-    const data = await this.commerceKafka.createOrder(createDto, traceId);
+    const data = await this.commerceKafka.createOrder(createOrderDto, traceId);
     return new ResponseDTO(HttpStatus.OK, data, 'Order created', traceId);
   }
 
@@ -159,10 +173,10 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetZtrackingOrderDto })
   async getOrder(
-    @Body(new ValidateGetOrderDtoPipe()) getDto: GetZtrackingOrderDto,
+    @Body(new ValidateGetOrderDtoPipe()) getZtrackingOrderDto: GetZtrackingOrderDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getOrder');
-    const data = await this.commerceKafka.getOrder(getDto, traceId);
+    const data = await this.commerceKafka.getOrder(getZtrackingOrderDto, traceId);
     return new ResponseDTO(HttpStatus.OK, data, 'Order retrieved', traceId);
   }
 
@@ -170,10 +184,14 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: UpdateOrderShippingDto })
   async updateShipping(
-    @Body(new ValidateUpdateOrderShippingDtoPipe()) updateDto: UpdateOrderShippingDto,
+    @Body(new ValidateUpdateOrderShippingDtoPipe())
+    updateOrderShippingDto: UpdateOrderShippingDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('updateShipping');
-    const data = await this.commerceKafka.updateOrderShipping(updateDto, traceId);
+    const data = await this.commerceKafka.updateOrderShipping(
+      updateOrderShippingDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Shipping updated', traceId);
   }
 
@@ -181,10 +199,14 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateSubscriptionDto })
   async createSubscription(
-    @Body(new ValidateCreateSubscriptionDtoPipe()) createDto: CreateSubscriptionDto,
+    @Body(new ValidateCreateSubscriptionDtoPipe())
+    createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createSubscription');
-    const data = await this.commerceKafka.createSubscription(createDto, traceId);
+    const data = await this.commerceKafka.createSubscription(
+      createSubscriptionDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription created', traceId);
   }
 
@@ -192,10 +214,13 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetSubscriptionDto })
   async getSubscription(
-    @Body(new ValidateGetSubscriptionDtoPipe()) getDto: GetSubscriptionDto,
+    @Body(new ValidateGetSubscriptionDtoPipe()) getSubscriptionDto: GetSubscriptionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getSubscription');
-    const data = await this.commerceKafka.getSubscription(getDto, traceId);
+    const data = await this.commerceKafka.getSubscription(
+      getSubscriptionDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription retrieved', traceId);
   }
 
@@ -203,10 +228,14 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: DeleteSubscriptionDto })
   async cancelSubscription(
-    @Body(new ValidateCancelSubscriptionDtoPipe()) cancelDto: DeleteSubscriptionDto,
+    @Body(new ValidateCancelSubscriptionDtoPipe())
+    deleteSubscriptionDto: DeleteSubscriptionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('cancelSubscription');
-    const data = await this.commerceKafka.cancelSubscription(cancelDto, traceId);
+    const data = await this.commerceKafka.cancelSubscription(
+      deleteSubscriptionDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Subscription cancelled', traceId);
   }
 
@@ -214,10 +243,14 @@ export class SalesCommerceController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: ValidatePromotionCodeDto })
   async validatePromotionCode(
-    @Body(new ValidatePromotionCodeDtoPipe()) payload: ValidatePromotionCodeDto,
+    @Body(new ValidatePromotionCodeDtoPipe())
+    validatePromotionCodeDto: ValidatePromotionCodeDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('validatePromotionCode');
-    const data = await this.commerceKafka.validatePromotionCode(payload, traceId);
+    const data = await this.commerceKafka.validatePromotionCode(
+      validatePromotionCodeDto,
+      traceId,
+    );
     return new ResponseDTO(HttpStatus.OK, data, 'Promotion code validation', traceId);
   }
 }

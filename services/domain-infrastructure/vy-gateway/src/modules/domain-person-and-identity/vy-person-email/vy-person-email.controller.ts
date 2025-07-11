@@ -88,13 +88,14 @@ export class PersonEmailController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetZtrackingEmailDto })
   async getHistory(
-    @Body(new ValidateGetZtrackingEmailDtoPipe()) getDto: GetZtrackingEmailDto,
+    @Body(new ValidateGetZtrackingEmailDtoPipe())
+    getZtrackingEmailDto: GetZtrackingEmailDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getZtrackingEmail');
     this.logger.info('traceId generated successfully', traceId, 'getZtrackingEmail', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.emailKafkaService.getHistory(getDto, traceId),
+      await this.emailKafkaService.getHistory(getZtrackingEmailDto, traceId),
       'Email history retrieved',
       traceId,
     );

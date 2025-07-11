@@ -44,7 +44,7 @@ export class NutritionLogController {
   @ApiBody({ type: CreateNutritionSessionDto })
   async startSession(
     @Body(new ValidateStartNutritionSessionDtoPipe())
-    dto: CreateNutritionSessionDto,
+    createNutritionSessionDto: CreateNutritionSessionDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('startNutritionSession');
     this.logger.info(
@@ -55,7 +55,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.startSession(dto, traceId),
+      await this.kafkaService.startSession(createNutritionSessionDto, traceId),
       'Nutrition session started',
       traceId,
     );
@@ -65,7 +65,7 @@ export class NutritionLogController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: NutritionEventDto })
   async logEvent(
-    @Body(new ValidateNutritionEventDtoPipe()) dto: NutritionEventDto,
+    @Body(new ValidateNutritionEventDtoPipe()) nutritionEventDto: NutritionEventDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('logNutritionEvent');
     this.logger.info(
@@ -76,7 +76,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logEvent(dto, traceId),
+      await this.kafkaService.logEvent(nutritionEventDto, traceId),
       'Nutrition event logged',
       traceId,
     );
@@ -85,7 +85,9 @@ export class NutritionLogController {
   @Post(KT_END_NUTRITION_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetOneNutritionSessionDto })
-  async endSession(@Body() dto: GetOneNutritionSessionDto): Promise<ResponseDTO<any>> {
+  async endSession(
+    @Body() getOneNutritionSessionDto: GetOneNutritionSessionDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('endNutritionSession');
     this.logger.info(
       'traceId generated successfully',
@@ -95,7 +97,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.endSession(dto, traceId),
+      await this.kafkaService.endSession(getOneNutritionSessionDto, traceId),
       'Nutrition session ended',
       traceId,
     );
@@ -104,7 +106,9 @@ export class NutritionLogController {
   @Post(KT_GET_NUTRITION_SESSION)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetOneNutritionSessionDto })
-  async getSession(@Body() dto: GetOneNutritionSessionDto): Promise<ResponseDTO<any>> {
+  async getSession(
+    @Body() getOneNutritionSessionDto: GetOneNutritionSessionDto,
+  ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getNutritionSession');
     this.logger.info(
       'traceId generated successfully',
@@ -114,7 +118,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSession(dto, traceId),
+      await this.kafkaService.getSession(getOneNutritionSessionDto, traceId),
       'Nutrition session retrieved',
       traceId,
     );
