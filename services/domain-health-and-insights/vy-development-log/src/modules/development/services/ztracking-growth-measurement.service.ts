@@ -40,9 +40,10 @@ export class ZtrackingGrowthMeasurementService {
   }
 
   async findZtrackingGrowthMeasurementEntity(
-    { growthId }: GetZtrackingGrowthMeasurementDto,
+    findZtrackingGrowthMeasurementEntityDto: GetZtrackingGrowthMeasurementDto,
     traceId: string,
   ): Promise<ZtrackingGrowthMeasurement[]> {
+    const { growthId } = findZtrackingGrowthMeasurementEntityDto;
     const records = await this.ztrackingRepo.find({ where: { growthId } });
 
     if (!records.length) {
