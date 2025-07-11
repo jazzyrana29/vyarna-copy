@@ -20,16 +20,20 @@ export class PersonContactEventsController {
     );
   }
 
-  @MessagePattern(KT_CONTACT_CREATED)
+  // The current implementation of CREATED broadcasts to all connected sockets
+  // which is inefficient and insecure as it exposes user information to all
+  // sockets. Disable listening to KT_CONTACT_CREATED until proper support
+  // structure is implemented.
+  // @MessagePattern(KT_CONTACT_CREATED)
   handleCreated(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
     const traceId = message.traceId;
-    this.logger.debug(
-      `Kafka event ${KT_CONTACT_CREATED} | key: ${key}`,
+    this.logger.warn(
+      `Skipped handling ${KT_CONTACT_CREATED} | key: ${key}`,
       traceId,
       'handleCreated',
       LogStreamLevel.DebugLight,
     );
-    this.websocket.server.emit(ClientMessagesMode.NEW_CONTACT_CREATED, message);
+    // this.websocket.server.emit(ClientMessagesMode.NEW_CONTACT_CREATED, message);
   }
 }

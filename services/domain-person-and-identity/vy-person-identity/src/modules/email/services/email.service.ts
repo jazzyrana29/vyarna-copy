@@ -40,15 +40,25 @@ export class EmailService {
     await this.emailRepo.save(entity);
     this.logger.info('Email created', traceId, 'createEmail', LogStreamLevel.ProdStandard);
 
-    await new EzKafkaProducer().produce(
-      process.env.KAFKA_BROKER as string,
-      KT_CONTACT_CREATED,
-      encodeKafkaMessage(EmailService.name, {
-        emailId: entity.emailId,
-        personId: entity.personId,
-        traceId,
-      }),
+    // The current implementation of CREATED broadcasts to all connected
+    // sockets which is inefficient and insecure as it exposes user
+    // information to all sockets. Disable producing KT_CONTACT_CREATED
+    // until proper support structure is implemented.
+    this.logger.warn(
+      'Skipping KT_CONTACT_CREATED production: insecure broadcast',
+      traceId,
+      'createEmail',
+      LogStreamLevel.DebugLight,
     );
+    // await new EzKafkaProducer().produce(
+    //   process.env.KAFKA_BROKER as string,
+    //   KT_CONTACT_CREATED,
+    //   encodeKafkaMessage(EmailService.name, {
+    //     emailId: entity.emailId,
+    //     personId: entity.personId,
+    //     traceId,
+    //   }),
+    // );
     await this.ztrackingEmailService.createZtrackingEmail(entity, traceId);
     return entity;
   }
