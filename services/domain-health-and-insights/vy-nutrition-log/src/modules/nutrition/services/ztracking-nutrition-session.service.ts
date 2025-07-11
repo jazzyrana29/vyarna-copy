@@ -40,9 +40,10 @@ export class ZtrackingNutritionSessionService {
   }
 
   async findZtrackingNutritionSessionEntity(
-    { sessionId }: GetZtrackingNutritionSessionDto,
+    getZtrackingNutritionSessionDto: GetZtrackingNutritionSessionDto,
     traceId: string,
   ): Promise<ZtrackingNutritionSession[]> {
+    const { sessionId } = getZtrackingNutritionSessionDto;
     const entities = await this.ztrackingRepo.find({ where: { sessionId } });
 
     if (!entities.length) {
