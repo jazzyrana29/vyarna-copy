@@ -250,6 +250,61 @@ export class PaymentIntentService {
     } as PaymentIntentCreatedDto;
   }
 
+    async confirmPaymentIntent(
+    confirmDto: ConfirmPaymentIntentDto,
+    traceId: string,
+  ): Promise<void> {
+    const {
+      paymentIntentId,
+      paymentMethodId,
+      receiptEmail,
+      returnUrl,
+      setupFutureUsage,
+      shipping,
+    } = confirmDto;
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId },
+    });
+
+    if (!intent) {
+      this.logger.error(
+        `PaymentIntent not found => ${paymentIntentId}`,
+        traceId,
+        'confirmPaymentIntent',
+        LogStreamLevel.DebugHeavy,
+      );
+      throw new Error('PaymentIntent not found');
+    }
+
+    const stripeIntent = await this.stripeGateway.confirmPaymentIntent(
+      intent.externalId,
+      {
+        payment_method: paymentMethodId,
+        receipt_email: receiptEmail,
+        return_url: returnUrl,
+        setup_future_usage: setupFutureUsage,
+        shipping:
+          shipping as unknown as Stripe.PaymentIntentConfirmParams['shipping'],
+      },
+    );
+
+    const statusMap: Record<
+      string,
+      PaymentIntent['status'] | 'REQUIRES_CAPTURE'
+    > = {
+      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
+      requires_confirmation: 'REQUIRES_CONFIRMATION',
+      requires_action: 'REQUIRES_ACTION',
+      requires_capture: 'REQUIRES_CAPTURE',
+      processing: 'PROCESSING',
+      succeeded: 'SUCCEEDED',
+      canceled: 'CANCELED',
+    };
+
+    intent.status = (statusMap[stripeIntent.status] || intent.status) as any;
+    await this.paymentRepo.save(intent);
+  }
+
   async getPaymentIntent(
     getPaymentIntentDto: GetPaymentIntentDto,
     traceId: string,
@@ -429,54 +484,6 @@ export class PaymentIntentService {
       );
     }
     return entity;
-  }
-
-  async confirmPaymentIntent(
-    confirmDto: ConfirmPaymentIntentDto,
-    traceId: string,
-  ): Promise<void> {
-    const { paymentIntentId, paymentMethodId, receiptEmail, returnUrl, setupFutureUsage, shipping } =
-      confirmDto;
-    const intent = await this.paymentRepo.findOne({
-      where: { paymentIntentId },
-    });
-
-    if (!intent) {
-      this.logger.error(
-        `PaymentIntent not found => ${paymentIntentId}`,
-        traceId,
-        'confirmPaymentIntent',
-        LogStreamLevel.DebugHeavy,
-      );
-      throw new Error('PaymentIntent not found');
-    }
-
-    const stripeIntent = await this.stripeGateway.confirmPaymentIntent(
-      intent.externalId,
-      {
-        payment_method: paymentMethodId,
-        receipt_email: receiptEmail,
-        return_url: returnUrl,
-        setup_future_usage: setupFutureUsage,
-        shipping: shipping as unknown as Stripe.PaymentIntentConfirmParams['shipping'],
-      },
-    );
-
-    const statusMap: Record<
-      string,
-      PaymentIntent['status'] | 'REQUIRES_CAPTURE'
-    > = {
-      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-      requires_confirmation: 'REQUIRES_CONFIRMATION',
-      requires_action: 'REQUIRES_ACTION',
-      requires_capture: 'REQUIRES_CAPTURE',
-      processing: 'PROCESSING',
-      succeeded: 'SUCCEEDED',
-      canceled: 'CANCELED',
-    };
-
-    intent.status = (statusMap[stripeIntent.status] || intent.status) as any;
-    await this.paymentRepo.save(intent);
   }
 
   async capturePaymentIntent(
