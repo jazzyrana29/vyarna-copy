@@ -10,7 +10,13 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
+  KT_CONFIRM_PAYMENT_INTENT,
+  KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
+  KT_GET_REFUND,
+  KT_RETRY_PAYMENT_ATTEMPT,
+  KT_PROCESS_STRIPE_WEBHOOK,
   KT_CREATE_PAYMENT_METHOD,
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
@@ -68,6 +74,42 @@ export class FinancePaymentsResponseController {
     this.kafkaResponder.handleIncomingMessage(message);
   }
 
+  @MessagePattern(KT_GET_PAYMENT_INTENT_STATUS + '-response')
+  handleGetStatus(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_GET_PAYMENT_INTENT_STATUS} | key: ${key}`,
+      '',
+      'handleGetStatus',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_CONFIRM_PAYMENT_INTENT + '-response')
+  handleConfirm(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_CONFIRM_PAYMENT_INTENT} | key: ${key}`,
+      '',
+      'handleConfirm',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_CAPTURE_PAYMENT_INTENT + '-response')
+  handleCapture(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_CAPTURE_PAYMENT_INTENT} | key: ${key}`,
+      '',
+      'handleCapture',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
   @MessagePattern(KT_CREATE_REFUND + '-response')
   handleRefund(@Payload() message: any, @Ctx() context: KafkaContext) {
     const key = context.getMessage().key.toString();
@@ -75,6 +117,42 @@ export class FinancePaymentsResponseController {
       `Kafka response for ${KT_CREATE_REFUND} | key: ${key}`,
       '',
       'handleRefund',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_GET_REFUND + '-response')
+  handleGetRefund(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_GET_REFUND} | key: ${key}`,
+      '',
+      'handleGetRefund',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_RETRY_PAYMENT_ATTEMPT + '-response')
+  handleRetryAttempt(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_RETRY_PAYMENT_ATTEMPT} | key: ${key}`,
+      '',
+      'handleRetryAttempt',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_PROCESS_STRIPE_WEBHOOK + '-response')
+  handleStripeWebhook(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_PROCESS_STRIPE_WEBHOOK} | key: ${key}`,
+      '',
+      'handleStripeWebhook',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
