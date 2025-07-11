@@ -49,144 +49,150 @@ export class SalesCommerceKafkaService {
     );
   }
 
-  async getProducts(getDto: GetProductsDto, traceId: string) {
-    console.log('getDto', getDto);
+  async getProducts(getProductsDto: GetProductsDto, traceId: string) {
+    console.log('getDto', getProductsDto);
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PRODUCTS,
-      getDto,
+      getProductsDto,
       traceId,
     );
   }
 
-  async getProductVariants(getDto: GetProductVariantsDto, traceId: string) {
+  async getProductVariants(
+    getProductVariantsDto: GetProductVariantsDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PRODUCT_VARIANTS,
-      getDto,
+      getProductVariantsDto,
       traceId,
     );
   }
 
-  async getCategories(getDto: GetCategoriesDto, traceId: string) {
+  async getCategories(getCategoriesDto: GetCategoriesDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_CATEGORIES,
-      getDto,
+      getCategoriesDto,
       traceId,
     );
   }
 
-  async createCart(createDto: CreateCartDto, traceId: string) {
+  async createCart(createCartDto: CreateCartDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_CART,
-      createDto,
+      createCartDto,
       traceId,
     );
   }
 
-  async addCartItem(addDto: CreateCartItemDto, traceId: string) {
+  async addCartItem(createCartItemDto: CreateCartItemDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_ADD_CART_ITEM,
-      addDto,
+      createCartItemDto,
       traceId,
     );
   }
 
-  async removeCartItem(removeDto: DeleteCartItemDto, traceId: string) {
+  async removeCartItem(deleteCartItemDto: DeleteCartItemDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_REMOVE_CART_ITEM,
-      removeDto,
+      deleteCartItemDto,
       traceId,
     );
   }
 
-  async applyCartPromotion(applyDto: ApplyCartPromotionDto, traceId: string) {
+  async applyCartPromotion(
+    applyCartPromotionDto: ApplyCartPromotionDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_APPLY_CART_PROMOTION,
-      applyDto,
+      applyCartPromotionDto,
       traceId,
     );
   }
 
-  async createOrder(createDto: CreateOrderDto, traceId: string) {
+  async createOrder(createOrderDto: CreateOrderDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_ORDER,
-      createDto,
+      createOrderDto,
       traceId,
     );
   }
 
-  async getOrders(getDto: GetOrdersDto, traceId: string) {
+  async getOrders(getOrdersDto: GetOrdersDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_ORDERS,
-      getDto,
+      getOrdersDto,
       traceId,
     );
   }
 
-  async getOrder(getDto: GetZtrackingOrderDto, traceId: string) {
+  async getOrder(getZtrackingOrderDto: GetZtrackingOrderDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_ZTRACKING_ORDER,
-      getDto,
+      getZtrackingOrderDto,
       traceId,
     );
   }
 
   async updateOrderShipping(
-    updateDto: UpdateOrderShippingDto,
+    updateOrderShippingDto: UpdateOrderShippingDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_UPDATE_ORDER_SHIPPING,
-      updateDto,
+      updateOrderShippingDto,
       traceId,
     );
   }
 
-  async createSubscription(createDto: CreateSubscriptionDto, traceId: string) {
+  async createSubscription(createSubscriptionDto: CreateSubscriptionDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_SUBSCRIPTION,
-      createDto,
+      createSubscriptionDto,
       traceId,
     );
   }
 
-  async getSubscription(getDto: GetSubscriptionDto, traceId: string) {
+  async getSubscription(getSubscriptionDto: GetSubscriptionDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_SUBSCRIPTION,
-      getDto,
+      getSubscriptionDto,
       traceId,
     );
   }
 
-  async cancelSubscription(cancelDto: DeleteSubscriptionDto, traceId: string) {
+  async cancelSubscription(deleteSubscriptionDto: DeleteSubscriptionDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CANCEL_SUBSCRIPTION,
-      cancelDto,
+      deleteSubscriptionDto,
       traceId,
     );
   }
 
   async validatePromotionCode(
-    payload: ValidatePromotionCodeDto,
+    validatePromotionCodeDto: ValidatePromotionCodeDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_VALIDATE_PROMOTION_CODE,
-      payload,
+      validatePromotionCodeDto,
       traceId,
     );
   }
