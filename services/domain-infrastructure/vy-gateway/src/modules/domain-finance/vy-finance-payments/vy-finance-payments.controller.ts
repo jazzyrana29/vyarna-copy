@@ -16,7 +16,6 @@ import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-re
 import { ValidateRetryPaymentAttemptDtoPipe } from './pipes/validate-retry-payment-attempt-dto.pipe';
 import { ValidateCapturePaymentIntentDtoPipe } from './pipes/validate-capture-payment-intent-dto.pipe';
 import { ValidateConfirmPaymentIntentDtoPipe } from './pipes/validate-confirm-payment-intent-dto.pipe';
-import { ValidateCreateContactDtoPipe } from './pipes/validate-create-contact-dto.pipe';
 import {
   generateTraceId,
   CreatePaymentIntentPayloadDto,
@@ -32,7 +31,6 @@ import {
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
-  CreateStripeContactDto,
   RetryPaymentAttemptDto,
   PaymentStatusUpdateDto,
   KT_CREATE_PAYMENT_INTENT,
@@ -47,7 +45,6 @@ import {
   KT_CREATE_PAYMENT_METHOD,
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
-  KT_CREATE_CONTACT,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -231,26 +228,6 @@ export class FinancePaymentsController {
     );
   }
 
-  @Post(KT_CREATE_CONTACT)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CreateStripeContactDto })
-  async createContact(
-    @Body(new ValidateCreateContactDtoPipe()) createContactDto: CreateStripeContactDto,
-  ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('createContact');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'createContact',
-      LogStreamLevel.ProdStandard,
-    );
-    return new ResponseDTO(
-      HttpStatus.OK,
-      await this.paymentsKafkaService.createContact(createContactDto, traceId),
-      'Contact created',
-      traceId,
-    );
-  }
 
   @Post(KT_LIST_PAYMENT_METHODS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
