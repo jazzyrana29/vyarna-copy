@@ -93,19 +93,39 @@ function openTerminal(cwd, command) {
 function runStripe(args) {
   const globalPath = path.join(__dirname, 'global.env.local');
   if (!fs.existsSync(globalPath)) {
-    console.log('global.env.local not found. Create it from global.env.local-example first.');
+    console.log("global.env.local not found. Create it from global.env.local-example first.");
     return;
   }
-  const env = parseEnv(fs.readFileSync(globalPath, 'utf8'));
+
+  const env = parseEnv(fs.readFileSync(globalPath, "utf8"));
   const apiKey = env.STRIPE_SECRET_KEY;
   if (!apiKey) {
-    console.log('STRIPE_SECRET_KEY is missing in global.env.local.');
+    console.log("STRIPE_SECRET_KEY is missing in global.env.local.");
     return;
   }
-  const dockerCmd = process.platform === 'win32' ? 'docker.exe' : 'docker';
-  const dockerArgs = ['run', '--rm', '-e', `STRIPE_API_KEY=${apiKey}`, 'stripe/stripe-cli', ...args];
-  const proc = spawn(dockerCmd, dockerArgs, { stdio: 'inherit' });
-  proc.on('exit', (code) => process.exit(code));
+
+  // Detect Docker CLI
+  const dockerCmd = process.platform === "win32" ? "docker.exe" : "docker";
+
+  // Prepare network flags depending on platform
+  const networkArgs = [];
+  if (process.platform === "linux") {
+    networkArgs.push("--network", "host");
+  } else {
+    networkArgs.push("--add-host", "host.docker.internal:host-gateway");
+  }
+
+  // Build docker command
+  const dockerArgs = [
+    'run', '--rm',
+    ...networkArgs,
+    '-e', `STRIPE_API_KEY=${apiKey}`,
+    'stripe/stripe-cli',
+    ...args,
+  ];
+
+  const proc = spawn(dockerCmd, dockerArgs, { stdio: "inherit" });
+  proc.on("exit", code => process.exit(code));
 }
 
 function ensureLibsBuilt(libraries) {
