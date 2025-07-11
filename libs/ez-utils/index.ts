@@ -134,6 +134,8 @@ export * from "./src/DTO/domain-finance/vy-finance-payments/delete-payment-metho
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/capture-payment-intent.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/confirm-payment-intent.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/confirmed-payment-intent.dto";
+export * from "./src/payments/types/payment-intent-next-action";
 export * from "./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-status-update.dto";
