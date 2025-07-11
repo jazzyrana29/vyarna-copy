@@ -150,6 +150,7 @@ without pulling in unrelated configs.
 
    ```bash
    node repo.js stripe customers list
+   node repo.js stripe listen --forward-to http://localhost:4040/webhooks/process-stripe-webhook
    ```
 
 ---
