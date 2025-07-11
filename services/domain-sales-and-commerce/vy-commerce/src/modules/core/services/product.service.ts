@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import Stripe from 'stripe';
 import { GetProductsDto, ProductDto } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { StripeGatewayService } from './stripe-gateway.service';
 
 @Injectable()
 export class ProductService {
   private logger = getLoggerConfig(ProductService.name);
-  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
   private readonly defaultLimit = 100;
 
-  constructor() {
+  constructor(private readonly stripeGateway: StripeGatewayService) {
     this.logger.debug(
       `${ProductService.name} initialized`,
       '',
@@ -30,7 +29,7 @@ export class ProductService {
     if (productId) {
       // Lookup exact ID
       try {
-        const prod = await this.stripe.products.retrieve(productId);
+        const prod = await this.stripeGateway.retrieveProduct(productId);
         stripeProducts = [prod];
       } catch {
         stripeProducts = [];
@@ -44,14 +43,14 @@ export class ProductService {
         .filter(Boolean)
         .join(' AND ');
       // Opción directa con .data
-      const searchRes = await this.stripe.products.search({
+      const searchRes = await this.stripeGateway.searchProducts({
         query: clauses,
         limit: requestedLimit,
       });
       stripeProducts = searchRes.data;
     } else {
       // Listado sin filtros
-      const listRes = await this.stripe.products.list({
+      const listRes = await this.stripeGateway.listProducts({
         limit: requestedLimit,
       });
       stripeProducts = listRes.data;
