@@ -34,11 +34,11 @@ export class WalletAccountService {
   }
 
   async createWalletAccount(
-    account: CreateWalletAccountDto,
+    createWalletAccountDto: CreateWalletAccountDto,
     traceId: string,
   ): Promise<WalletAccountDto> {
     const entity = this.walletRepo.create({
-      ...account,
+      ...createWalletAccountDto,
       balanceCents: 0,
     });
     await this.walletRepo.save(entity);
@@ -67,9 +67,10 @@ export class WalletAccountService {
   }
 
   async getWalletAccount(
-    { accountId }: GetOneWalletAccountDto,
+    getOneWalletAccountDto: GetOneWalletAccountDto,
     traceId: string,
   ): Promise<WalletAccountDto | null> {
+    const { accountId } = getOneWalletAccountDto;
     const entity = await this.walletRepo.findOne({ where: { accountId } });
     if (entity) {
       this.logger.info(
@@ -90,11 +91,11 @@ export class WalletAccountService {
   }
 
   async getZtrackingWalletAccount(
-    getDto: GetZtrackingWalletAccountDto,
+    getZtrackingWalletAccountDto: GetZtrackingWalletAccountDto,
     traceId: string,
   ): Promise<ZtrackingWalletAccountDto[]> {
     return this.ztrackingWalletAccountService.getZtrackingForWalletAccount(
-      getDto,
+      getZtrackingWalletAccountDto,
       traceId,
     );
   }

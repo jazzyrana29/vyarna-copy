@@ -31,12 +31,18 @@ export class VerificationService {
     );
   }
 
-  async startVerification(dto: StartIdentityVerificationDto, traceId: string): Promise<IdentityVerification> {
+  async startVerification(
+    startVerificationDto: StartIdentityVerificationDto,
+    traceId: string,
+  ): Promise<IdentityVerification> {
     const verification = await this.verificationRepo.save(
-      this.verificationRepo.create({ personId: dto.personId, status: VerificationStatus.PENDING }),
+      this.verificationRepo.create({
+        personId: startVerificationDto.personId,
+        status: VerificationStatus.PENDING,
+      }),
     );
 
-    for (const doc of dto.documents) {
+    for (const doc of startVerificationDto.documents) {
       await this.documentRepo.save(this.documentRepo.create({
         verificationId: verification.verificationId,
         type: doc.type,
@@ -48,33 +54,43 @@ export class VerificationService {
       process.env.KAFKA_BROKER as string,
       'KYCStarted',
       encodeKafkaMessage(VerificationService.name, {
-        verificationId: verification.verificationId,
-        personId: verification.personId,
-        traceId,
-      }),
-    );
+          verificationId: verification.verificationId,
+          personId: verification.personId,
+          traceId,
+        }),
+      );
 
     this.logger.info('Verification started', traceId, 'startVerification', LogStreamLevel.ProdStandard);
     return verification;
   }
 
-  async reviewVerification(dto: ReviewIdentityVerificationDto, traceId: string): Promise<IdentityVerification> {
-    const entity = await this.verificationRepo.findOne({ where: { verificationId: dto.verificationId } });
-    if (!entity) throw new NotFoundException(`no verification with id => ${dto.verificationId}`);
+  async reviewVerification(
+    reviewVerificationDto: ReviewIdentityVerificationDto,
+    traceId: string,
+  ): Promise<IdentityVerification> {
+    const entity = await this.verificationRepo.findOne({
+      where: { verificationId: reviewVerificationDto.verificationId },
+    });
+    if (!entity)
+      throw new NotFoundException(
+        `no verification with id => ${reviewVerificationDto.verificationId}`,
+      );
 
-    const status = dto.status as unknown as VerificationStatus;
-    await this.verificationRepo.update(dto.verificationId, {
+    const status = reviewVerificationDto.status as unknown as VerificationStatus;
+    await this.verificationRepo.update(reviewVerificationDto.verificationId, {
       status,
       reviewedAt: new Date(),
     });
-    const updated = await this.verificationRepo.findOne({ where: { verificationId: dto.verificationId } });
+    const updated = await this.verificationRepo.findOne({
+      where: { verificationId: reviewVerificationDto.verificationId },
+    });
 
     if (status === VerificationStatus.APPROVED) {
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
         'IdentityVerified',
         encodeKafkaMessage(VerificationService.name, {
-          verificationId: dto.verificationId,
+          verificationId: reviewVerificationDto.verificationId,
           personId: entity.personId,
           traceId,
         }),
@@ -84,7 +100,7 @@ export class VerificationService {
         process.env.KAFKA_BROKER as string,
         'IdentityRejected',
         encodeKafkaMessage(VerificationService.name, {
-          verificationId: dto.verificationId,
+          verificationId: reviewVerificationDto.verificationId,
           personId: entity.personId,
           traceId,
         }),

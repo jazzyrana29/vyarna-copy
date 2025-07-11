@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import Stripe from 'stripe';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { StripeGatewayService } from '../../../services/stripe-gateway.service';
 import {
   ValidatePromotionCodeDto,
   ValidatePromotionCodeResponseDto,
@@ -10,9 +10,8 @@ import {
 @Injectable()
 export class PromotionCodesService {
   private logger = getLoggerConfig(PromotionCodesService.name);
-  private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
-  constructor() {
+  constructor(private readonly stripeGateway: StripeGatewayService) {
     this.logger.debug(
       `${PromotionCodesService.name} initialized`,
       '',
@@ -28,7 +27,7 @@ export class PromotionCodesService {
     const { code, cartTotal } = validatePromotionCodeDto;
     if (!code) throw new BadRequestException('Promotion code is required');
 
-    const { data } = await this.stripe.promotionCodes.list({
+    const { data } = await this.stripeGateway.listPromotionCodes({
       code,
       active: true,
       limit: 1,
@@ -63,7 +62,7 @@ export class PromotionCodesService {
 
     const couponId =
       typeof promo.coupon === 'string' ? promo.coupon : promo.coupon.id;
-    const coupon = await this.stripe.coupons.retrieve(couponId);
+    const coupon = await this.stripeGateway.retrieveCoupon(couponId);
 
     const resp: ValidatePromotionCodeResponseDto = { eligible: true };
     if (coupon.amount_off) resp.discountAmount = coupon.amount_off;

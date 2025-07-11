@@ -1,5 +1,5 @@
 import { PaymentIntentService } from './payment-intent.service';
-import { StripeGatewayService } from './stripe-gateway.service';
+import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../entities/payment_refund.entity';
@@ -158,7 +158,10 @@ describe('PaymentIntentService', () => {
         stripeGateway,
       );
 
-      await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
+      await service.handleStripeWebhook(
+        { payload: Buffer.from(''), signature: 'sig' },
+        'trace',
+      );
 
       expect(producerInstance.produce).not.toHaveBeenCalled();
     });
@@ -191,7 +194,10 @@ describe('PaymentIntentService', () => {
         stripeGateway,
       );
 
-      await service.handleStripeWebhook(Buffer.from(''), 'sig', 'trace');
+      await service.handleStripeWebhook(
+        { payload: Buffer.from(''), signature: 'sig' },
+        'trace',
+      );
 
       expect(producerInstance.produce).not.toHaveBeenCalled();
     });

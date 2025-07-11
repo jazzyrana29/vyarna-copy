@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
@@ -6,11 +10,13 @@ import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
-import { StripeGatewayService } from '../stripe-gateway.service';
+import { StripeGatewayService } from '../../services/stripe-gateway.service';
+import { EzKafkaProducer } from 'ez-kafka-producer';
 import Stripe from 'stripe';
 import {
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   PaymentIntentCreatedDto,
   PaymentIntentDto,
@@ -18,7 +24,12 @@ import {
   CreateRefundDto,
   GetPaymentRefundDto,
   CapturePaymentIntentDto,
+  ConfirmPaymentIntentDto,
+  ConfirmedPaymentIntentDto,
+  StripeWebhookDto,
+  PaymentIntentNextAction,
   RetryPaymentAttemptDto,
+  PaymentStatusUpdateDto,
   KT_CREATED_PAYMENT_INTENT,
   KT_SUCCEEDED_PAYMENT,
   KT_FAILED_PAYMENT,
@@ -27,6 +38,7 @@ import {
   KT_FAILED_REFUND,
   KT_USED_COUPON,
   KT_LIMIT_REACHED_COUPON,
+  KT_CREATE_CONTACT,
   encodeKafkaMessage,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
@@ -100,33 +112,63 @@ export class PaymentIntentService {
   }
 
   async createPaymentIntent(
-    payload: CreatePaymentIntentPayloadDto,
+    createPaymentIntentPayloadDto: CreatePaymentIntentPayloadDto,
     traceId: string,
   ): Promise<PaymentIntentCreatedDto> {
     const { originalAmount, currency } = await this.calculateAmounts(
-      payload.items,
+      createPaymentIntentPayloadDto.items,
     );
     const appliedCoupons: any[] = [];
 
     const totalAmount = originalAmount;
 
     const existing = await this.stripeGateway.findCustomerByEmail(
-      payload.customerDetails.email,
+      createPaymentIntentPayloadDto.customerDetails.email,
     );
+    let newCustomerCreated = false;
     const customer =
       existing ??
       (await this.stripeGateway.createCustomer({
-        name: `${payload.customerDetails.firstName} ${payload.customerDetails.lastName}`,
-        email: payload.customerDetails.email,
+        name: `${createPaymentIntentPayloadDto.customerDetails.firstName} ${createPaymentIntentPayloadDto.customerDetails.lastName}`,
+        email: createPaymentIntentPayloadDto.customerDetails.email,
         address: {
-          line1: payload.customerDetails.address.street,
-          city: payload.customerDetails.address.city,
-          state: payload.customerDetails.address.state,
-          postal_code: payload.customerDetails.address.zip,
-          country: payload.customerDetails.address.country,
+          line1: createPaymentIntentPayloadDto.customerDetails.address.street,
+          city: createPaymentIntentPayloadDto.customerDetails.address.city,
+          state: createPaymentIntentPayloadDto.customerDetails.address.state,
+          postal_code: createPaymentIntentPayloadDto.customerDetails.address.zip,
+          country: createPaymentIntentPayloadDto.customerDetails.address.country,
         },
         metadata: { source: 'my-backend' },
       }));
+    if (!existing) {
+      newCustomerCreated = true;
+    }
+
+    if (newCustomerCreated && createPaymentIntentPayloadDto.customerDetails.email) {
+      const contactPayload = {
+        firstName: createPaymentIntentPayloadDto.customerDetails.firstName || 'UNKNOWN',
+        lastName: createPaymentIntentPayloadDto.customerDetails.lastName || 'UNKNOWN',
+        email: createPaymentIntentPayloadDto.customerDetails.email,
+        traceId,
+      };
+      this.logger.info(
+        `About to send Kafka message to ${KT_CREATE_CONTACT} | payload: ${JSON.stringify(contactPayload)}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+      await new EzKafkaProducer().produce(
+        process.env.KAFKA_BROKER as string,
+        KT_CREATE_CONTACT,
+        encodeKafkaMessage(PaymentIntentService.name, contactPayload),
+      );
+      this.logger.info(
+        `Kafka message sent to ${KT_CREATE_CONTACT} | payload: ${JSON.stringify(contactPayload)}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+    }
 
     let entity = this.paymentRepo.create({
       amountCents: originalAmount,
@@ -134,7 +176,7 @@ export class PaymentIntentService {
       externalId: uuid(),
       customerExternalId: customer.id,
       status: 'REQUIRES_PAYMENT_METHOD',
-      metadata: { itemsCount: payload.items.length },
+      metadata: { itemsCount: createPaymentIntentPayloadDto.items.length },
     });
 
     entity = await this.paymentRepo.save(entity);
@@ -162,7 +204,7 @@ export class PaymentIntentService {
           automatic_payment_methods: { enabled: true },
           metadata: { localId: entity.paymentIntentId },
         },
-        { idempotencyKey: payload.idempotencyKey },
+        { idempotencyKey: createPaymentIntentPayloadDto.idempotencyKey },
       );
 
       clientSecret = stripeIntent.client_secret || undefined;
@@ -246,6 +288,101 @@ export class PaymentIntentService {
     } as PaymentIntentCreatedDto;
   }
 
+  async confirmPaymentIntent(
+    confirmPaymentIntentDto: ConfirmPaymentIntentDto,
+    traceId: string,
+  ): Promise<ConfirmedPaymentIntentDto> {
+    const {
+      paymentIntentId,
+      paymentMethodId,
+      receiptEmail,
+      returnUrl,
+      setupFutureUsage,
+      shipping,
+    } = confirmPaymentIntentDto;
+    const intent = await this.paymentRepo.findOne({ where: { paymentIntentId } });
+
+    if (!intent) {
+      this.logger.error(
+        `PaymentIntent not found => ${paymentIntentId}`,
+        traceId,
+        'confirmPaymentIntent',
+        LogStreamLevel.DebugHeavy,
+      );
+      throw new NotFoundException('PaymentIntent not found');
+    }
+
+    if (['SUCCEEDED', 'CANCELED'].includes(intent.status)) {
+      throw new BadRequestException(
+        `Cannot confirm intent in status ${intent.status}`,
+      );
+    }
+    const attempt = await this.attemptRepo.save(
+      this.attemptRepo.create({
+        paymentIntentId: intent.paymentIntentId,
+        attemptNumber:
+          (await this.attemptRepo.count({
+            where: { paymentIntentId: intent.paymentIntentId },
+          })) + 1,
+        status: 'PENDING',
+      }),
+    );
+
+    let stripeIntent: Stripe.PaymentIntent;
+    try {
+      stripeIntent = await this.stripeGateway.confirmPaymentIntent(
+        intent.externalId,
+        {
+          payment_method: paymentMethodId,
+          receipt_email: receiptEmail,
+          return_url: returnUrl,
+          setup_future_usage: setupFutureUsage,
+          shipping:
+            shipping as unknown as Stripe.PaymentIntentConfirmParams['shipping'],
+        },
+        { idempotencyKey: attempt.attemptId },
+      );
+    } catch (err) {
+      await this.attemptRepo.update(attempt.attemptId, {
+        status: 'FAILED',
+        errorCode: (err as any)?.code,
+        errorMessage: (err as any)?.message,
+        gatewayResponse: err as any,
+      });
+      throw err;
+    }
+
+    const statusMap: Record<
+      string,
+      PaymentIntent['status'] | 'REQUIRES_CAPTURE'
+    > = {
+      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
+      requires_confirmation: 'REQUIRES_CONFIRMATION',
+      requires_action: 'REQUIRES_ACTION',
+      requires_capture: 'REQUIRES_CAPTURE',
+      processing: 'PROCESSING',
+      succeeded: 'SUCCEEDED',
+      canceled: 'CANCELED',
+    };
+
+    intent.status = (statusMap[stripeIntent.status] || intent.status) as any;
+    await this.paymentRepo.save(intent);
+
+    await this.attemptRepo.update(attempt.attemptId, {
+      status: 'SUCCESS',
+      gatewayResponse: stripeIntent as any,
+    });
+
+    return {
+      success: true,
+      paymentIntentId: intent.paymentIntentId,
+      status: intent.status as any,
+      clientSecret: stripeIntent.client_secret,
+      requiresAction: stripeIntent.status === 'requires_action',
+      nextAction: stripeIntent.next_action as unknown as PaymentIntentNextAction,
+    };
+  }
+
   async getPaymentIntent(
     getPaymentIntentDto: GetPaymentIntentDto,
     traceId: string,
@@ -270,6 +407,43 @@ export class PaymentIntentService {
       );
     }
     return entity;
+  }
+
+  async getPaymentIntentStatus(
+    getPaymentIntentStatusDto: GetPaymentIntentStatusDto,
+    traceId: string,
+  ): Promise<PaymentStatusUpdateDto> {
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId: getPaymentIntentStatusDto.paymentIntentId },
+    });
+    if (!intent) {
+      this.logger.warn(
+        `PaymentIntent not found => ${getPaymentIntentStatusDto.paymentIntentId}`,
+        traceId,
+        'getPaymentIntentStatus',
+        LogStreamLevel.DebugLight,
+      );
+      throw new Error('PaymentIntent not found');
+    }
+
+    const stripeIntent = await this.stripeGateway.retrievePaymentIntent(
+      intent.externalId,
+    );
+
+    const map: Record<string, 'processing' | 'succeeded' | 'failed'> = {
+      processing: 'processing',
+      succeeded: 'succeeded',
+      canceled: 'failed',
+      requires_payment_method: 'failed',
+      requires_confirmation: 'processing',
+      requires_action: 'processing',
+    };
+
+    return {
+      paymentIntentId: intent.paymentIntentId,
+      customerEmail: stripeIntent.receipt_email || '',
+      status: map[stripeIntent.status] || 'processing',
+    } as PaymentStatusUpdateDto;
   }
 
   async getZtrackingPaymentIntent(
@@ -390,49 +564,11 @@ export class PaymentIntentService {
     return entity;
   }
 
-  async confirmPaymentIntent(
-    { paymentIntentId }: CapturePaymentIntentDto,
-    traceId: string,
-  ): Promise<void> {
-    const intent = await this.paymentRepo.findOne({
-      where: { paymentIntentId },
-    });
-
-    if (!intent) {
-      this.logger.error(
-        `PaymentIntent not found => ${paymentIntentId}`,
-        traceId,
-        'confirmPaymentIntent',
-        LogStreamLevel.DebugHeavy,
-      );
-      throw new Error('PaymentIntent not found');
-    }
-
-    const stripeIntent = await this.stripeGateway.confirmPaymentIntent(
-      intent.externalId,
-    );
-
-    const statusMap: Record<
-      string,
-      PaymentIntent['status'] | 'REQUIRES_CAPTURE'
-    > = {
-      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-      requires_confirmation: 'REQUIRES_CONFIRMATION',
-      requires_action: 'REQUIRES_ACTION',
-      requires_capture: 'REQUIRES_CAPTURE',
-      processing: 'PROCESSING',
-      succeeded: 'SUCCEEDED',
-      canceled: 'CANCELED',
-    };
-
-    intent.status = (statusMap[stripeIntent.status] || intent.status) as any;
-    await this.paymentRepo.save(intent);
-  }
-
   async capturePaymentIntent(
-    { paymentIntentId }: CapturePaymentIntentDto,
+    capturePaymentIntentDto: CapturePaymentIntentDto,
     traceId: string,
   ): Promise<{ attemptId: string; nextRetryAt?: Date }> {
+    const { paymentIntentId } = capturePaymentIntentDto;
     const intent = await this.paymentRepo.findOne({
       where: { paymentIntentId },
     });
@@ -460,7 +596,7 @@ export class PaymentIntentService {
 
     try {
       await this.confirmPaymentIntent(
-        { paymentIntentId } as CapturePaymentIntentDto,
+        { paymentIntentId } as unknown as ConfirmPaymentIntentDto,
         traceId,
       );
       const stripeIntent = await this.stripeGateway.capturePaymentIntent(
@@ -485,6 +621,7 @@ export class PaymentIntentService {
         gatewayResponse: stripeIntent as any,
       });
 
+      // Inactive: requires evaluation before implementation
       // await new EzKafkaProducer().produce(
       //   process.env.KAFKA_BROKER as string,
       //   KT_SUCCEEDED_PAYMENT,
@@ -504,11 +641,14 @@ export class PaymentIntentService {
         errorMessage: (error as any)?.message,
         gatewayResponse: error as any,
       });
+      // Inactive: requires evaluation before implementation
       // await new EzKafkaProducer().produce(
       //   process.env.KAFKA_BROKER as string,
       //   KT_FAILED_PAYMENT,
       //   encodeKafkaMessage(PaymentIntentService.name, {
       //     paymentIntentId: intent.paymentIntentId,
+      //     orderId: intent.orderId,
+      //     subscriptionId: intent.subscriptionId,
       //     errorCode: (error as any)?.code,
       //     errorMessage: (error as any)?.message,
       //     traceId,
@@ -546,10 +686,10 @@ export class PaymentIntentService {
   }
 
   async handleStripeWebhook(
-    payload: Buffer | string,
-    signature: string,
+    stripeWebhookDto: StripeWebhookDto,
     traceId: string,
   ): Promise<void> {
+    const { payload, signature } = stripeWebhookDto;
     let event: Stripe.Event;
     try {
       event = this.stripeGateway.constructWebhookEvent(
@@ -608,6 +748,7 @@ export class PaymentIntentService {
           where: { externalId: pi.id },
         });
         if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
+          // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
           //   KT_SUCCEEDED_PAYMENT,
@@ -621,11 +762,14 @@ export class PaymentIntentService {
         }
         if (updated && intentStatusMap[event.type] === 'FAILED') {
           const err = (pi as any).last_payment_error;
+          // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
           //   KT_FAILED_PAYMENT,
           //   encodeKafkaMessage(PaymentIntentService.name, {
           //     paymentIntentId: updated.paymentIntentId,
+          //     orderId: updated.orderId,
+          //     subscriptionId: updated.subscriptionId,
           //     errorCode: err?.code,
           //     errorMessage: err?.message,
           //     traceId,

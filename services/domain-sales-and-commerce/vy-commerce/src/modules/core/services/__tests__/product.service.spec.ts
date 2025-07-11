@@ -1,5 +1,6 @@
 import { ProductService } from '../product.service';
 import { GetProductsDto } from 'ez-utils';
+import { StripeGatewayService } from '../../../../services/stripe-gateway.service';
 
 describe('ProductService', () => {
   it('maps stripe products to DTOs', async () => {
@@ -11,25 +12,17 @@ describe('ProductService', () => {
       created: 1,
       updated: 2,
     };
-    const stripeMock = {
-      products: {
-        list: jest.fn().mockReturnValue({
-          autoPagingIterable: () =>
-            (async function* () {
-              yield product;
-            })(),
-        }),
-        search: jest.fn(),
-      },
-    } as any;
+    const stripeGateway = {
+      listProducts: jest.fn().mockResolvedValue({ data: [product] }),
+      searchProducts: jest.fn(),
+      retrieveProduct: jest.fn(),
+    } as unknown as StripeGatewayService;
 
-    const service = new ProductService();
-    // @ts-ignore accessing private field for test
-    service['stripe'] = stripeMock as any;
+    const service = new ProductService(stripeGateway);
 
     const result = await service.getProducts({} as GetProductsDto, 'trace');
 
-    expect(stripeMock.products.list).toHaveBeenCalled();
+    expect(stripeGateway.listProducts).toHaveBeenCalled();
     expect(result).toEqual([
       {
         productId: 'prod_1',
@@ -50,21 +43,13 @@ describe('ProductService', () => {
       created: 1,
       updated: 2,
     };
-    const stripeMock = {
-      products: {
-        search: jest.fn().mockReturnValue({
-          autoPagingIterable: () =>
-            (async function* () {
-              yield product;
-            })(),
-        }),
-        list: jest.fn(),
-      },
-    } as any;
+    const stripeGateway = {
+      searchProducts: jest.fn().mockResolvedValue({ data: [product] }),
+      listProducts: jest.fn(),
+      retrieveProduct: jest.fn(),
+    } as unknown as StripeGatewayService;
 
-    const service = new ProductService();
-    // @ts-ignore accessing private field for test
-    service['stripe'] = stripeMock as any;
+    const service = new ProductService(stripeGateway);
 
     const dto: GetProductsDto = {
       active: true,
@@ -74,7 +59,7 @@ describe('ProductService', () => {
 
     const result = await service.getProducts(dto, 'trace');
 
-    expect(stripeMock.products.search).toHaveBeenCalled();
+    expect(stripeGateway.searchProducts).toHaveBeenCalled();
     expect(result).toEqual([
       {
         productId: 'prod_1',

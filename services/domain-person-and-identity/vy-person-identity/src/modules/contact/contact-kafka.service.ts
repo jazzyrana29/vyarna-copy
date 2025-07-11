@@ -3,7 +3,7 @@ import { ContactService } from './contact.service';
 import {
   KafkaMessageResponderService,
   KT_CREATE_CONTACT,
-  CreateStripeContactDto,
+  CreateContactDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -32,7 +32,7 @@ export class ContactKafkaService {
       KT_CREATE_CONTACT,
       message,
       key,
-      async (value: CreateStripeContactDto, traceId: string) =>
+      async (value: CreateContactDto, traceId: string) =>
         await this.contactService.createContact(value, traceId),
     );
   }

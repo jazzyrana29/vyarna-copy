@@ -26,38 +26,47 @@ export class NutritionLogKafkaService {
     );
   }
 
-  async startSession(dto: CreateNutritionSessionDto, traceId: string) {
+  async startSession(
+    createNutritionSessionDto: CreateNutritionSessionDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_START_NUTRITION_SESSION,
-      dto,
+      createNutritionSessionDto,
       traceId,
     );
   }
 
-  async logEvent(dto: NutritionEventDto, traceId: string) {
+  async logEvent(nutritionEventDto: NutritionEventDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_LOG_NUTRITION_EVENT,
-      dto,
+      nutritionEventDto,
       traceId,
     );
   }
 
-  async endSession(dto: GetOneNutritionSessionDto, traceId: string) {
+  async endSession(
+    getOneNutritionSessionDto: GetOneNutritionSessionDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_END_NUTRITION_SESSION,
-      dto,
+      getOneNutritionSessionDto,
       traceId,
     );
   }
 
-  async getSession(dto: GetOneNutritionSessionDto, traceId: string) {
+  async getSession(
+    getOneNutritionSessionDto: GetOneNutritionSessionDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_NUTRITION_SESSION,
-      dto,
+      getOneNutritionSessionDto,
       traceId,
     );
   }

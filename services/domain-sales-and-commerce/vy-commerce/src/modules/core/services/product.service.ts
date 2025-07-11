@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import StripeClient from 'stripe';
-import type Stripe from 'stripe';
 import { GetProductsDto, ProductDto } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { StripeGatewayService } from '../../../services/stripe-gateway.service';
+import Stripe from 'stripe';
 
 @Injectable()
 export class ProductService {
   private logger = getLoggerConfig(ProductService.name);
-  private stripe = new StripeClient(process.env.STRIPE_SECRET_KEY as string);
   private readonly defaultLimit = 100;
 
-  constructor() {
+  constructor(private readonly stripeGateway: StripeGatewayService) {
     this.logger.debug(
       `${ProductService.name} initialized`,
       '',
@@ -21,17 +20,17 @@ export class ProductService {
   }
 
   async getProducts(
-    getDto: GetProductsDto,
+    getProductsDto: GetProductsDto,
     traceId: string,
   ): Promise<ProductDto[]> {
-    const { productId, name, active, limit: dtoLimit } = getDto;
+    const { productId, name, active, limit: dtoLimit } = getProductsDto;
     const requestedLimit = dtoLimit ?? this.defaultLimit;
     let stripeProducts: Stripe.Product[] = [];
 
     if (productId) {
       // Lookup exact ID
       try {
-        const prod = await this.stripe.products.retrieve(productId);
+        const prod = await this.stripeGateway.retrieveProduct(productId);
         stripeProducts = [prod];
       } catch {
         stripeProducts = [];
@@ -45,14 +44,14 @@ export class ProductService {
         .filter(Boolean)
         .join(' AND ');
       // Opción directa con .data
-      const searchRes = await this.stripe.products.search({
+      const searchRes = await this.stripeGateway.searchProducts({
         query: clauses,
         limit: requestedLimit,
       });
       stripeProducts = searchRes.data;
     } else {
       // Listado sin filtros
-      const listRes = await this.stripe.products.list({
+      const listRes = await this.stripeGateway.listProducts({
         limit: requestedLimit,
       });
       stripeProducts = listRes.data;

@@ -11,27 +11,33 @@ import { ValidateGetZtrackingPaymentIntentDtoPipe } from './pipes/validate-get-z
 import { ValidateCreateRefundDtoPipe } from './pipes/validate-create-refund-dto.pipe';
 import { ValidateCreatePaymentMethodDtoPipe } from './pipes/validate-create-payment-method-dto.pipe';
 import { ValidateGetPaymentIntentDtoPipe } from './pipes/validate-get-payment-intent-dto.pipe';
+import { ValidateGetPaymentIntentStatusDtoPipe } from './pipes/validate-get-payment-intent-status-dto.pipe';
 import { ValidateGetPaymentRefundDtoPipe } from './pipes/validate-get-payment-refund-dto.pipe';
 import { ValidateRetryPaymentAttemptDtoPipe } from './pipes/validate-retry-payment-attempt-dto.pipe';
 import { ValidateCapturePaymentIntentDtoPipe } from './pipes/validate-capture-payment-intent-dto.pipe';
-import { ValidateCreateContactDtoPipe } from './pipes/validate-create-contact-dto.pipe';
+import { ValidateConfirmPaymentIntentDtoPipe } from './pipes/validate-confirm-payment-intent-dto.pipe';
 import {
   generateTraceId,
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
   RefundDto,
+  ConfirmPaymentIntentDto,
+  ConfirmedPaymentIntentDto,
   CapturePaymentIntentDto,
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
-  CreateStripeContactDto,
   RetryPaymentAttemptDto,
+  PaymentStatusUpdateDto,
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
   KT_GET_REFUND,
@@ -39,7 +45,6 @@ import {
   KT_CREATE_PAYMENT_METHOD,
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
-  KT_CREATE_CONTACT,
 } from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
@@ -62,13 +67,16 @@ export class FinancePaymentsController {
   @ApiBody({ type: CreatePaymentIntentPayloadDto })
   async createPaymentIntent(
     @Body(new ValidateCreatePaymentIntentDtoPipe())
-    createDto: CreatePaymentIntentPayloadDto,
+    createPaymentIntentPayloadDto: CreatePaymentIntentPayloadDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createPaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'createPaymentIntent', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.paymentsKafkaService.createPaymentIntent(createDto, traceId),
+      await this.paymentsKafkaService.createPaymentIntent(
+        createPaymentIntentPayloadDto,
+        traceId,
+      ),
       'Payment intent created',
       traceId,
     );
@@ -90,34 +98,77 @@ export class FinancePaymentsController {
     );
   }
 
+  @Post(KT_GET_PAYMENT_INTENT_STATUS)
+  @ApiCreatedResponse({ type: ResponseDTO<PaymentStatusUpdateDto> })
+  @ApiBody({ type: GetPaymentIntentStatusDto })
+  async getPaymentIntentStatus(
+    @Body(new ValidateGetPaymentIntentStatusDtoPipe())
+    getPaymentIntentStatusDto: GetPaymentIntentStatusDto,
+  ): Promise<ResponseDTO<PaymentStatusUpdateDto>> {
+    const traceId = generateTraceId('getPaymentIntentStatus');
+    this.logger.info('traceId generated successfully', traceId, 'getPaymentIntentStatus', LogStreamLevel.ProdStandard);
+    const result = await this.paymentsKafkaService.getPaymentIntentStatus(
+      getPaymentIntentStatusDto,
+      traceId,
+    );
+    return new ResponseDTO(HttpStatus.OK, result, 'Status retrieved', traceId);
+  }
+
   @Post(KT_GET_ZTRACKING_PAYMENT_INTENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetZtrackingPaymentIntentDto })
   async getZtrackingPaymentIntent(
-    @Body(new ValidateGetZtrackingPaymentIntentDtoPipe()) getDto: GetZtrackingPaymentIntentDto,
+    @Body(new ValidateGetZtrackingPaymentIntentDtoPipe())
+    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getZtrackingPaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'getZtrackingPaymentIntent', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.paymentsKafkaService.getZtrackingPaymentIntent(getDto, traceId),
+      await this.paymentsKafkaService.getZtrackingPaymentIntent(
+        getZtrackingPaymentIntentDto,
+        traceId,
+      ),
       'Ztracking retrieved',
       traceId,
     );
+  }
+
+  @Post(KT_CONFIRM_PAYMENT_INTENT)
+  @ApiCreatedResponse({ type: ResponseDTO<ConfirmedPaymentIntentDto> })
+  @ApiBody({ type: ConfirmPaymentIntentDto })
+  async confirmPaymentIntent(
+    @Body(new ValidateConfirmPaymentIntentDtoPipe())
+    confirmPaymentIntentDto: ConfirmPaymentIntentDto,
+  ): Promise<ResponseDTO<ConfirmedPaymentIntentDto>> {
+    const traceId = generateTraceId('confirmPaymentIntent');
+    this.logger.info('traceId generated successfully', traceId, 'confirmPaymentIntent', LogStreamLevel.ProdStandard);
+    const result = await this.paymentsKafkaService.confirmPaymentIntent(
+      confirmPaymentIntentDto,
+      traceId,
+    );
+    return new ResponseDTO(HttpStatus.OK, result, 'Payment intent confirmed', traceId);
   }
 
   @Post(KT_CAPTURE_PAYMENT_INTENT)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CapturePaymentIntentDto })
   async capturePaymentIntent(
-    @Body(new ValidateCapturePaymentIntentDtoPipe()) captureDto: CapturePaymentIntentDto,
+    @Body(new ValidateCapturePaymentIntentDtoPipe())
+    capturePaymentIntentDto: CapturePaymentIntentDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('capturePaymentIntent');
     this.logger.info('traceId generated successfully', traceId, 'capturePaymentIntent', LogStreamLevel.ProdStandard);
-    await this.paymentsKafkaService.confirmPaymentIntent(captureDto, traceId);
+    await this.paymentsKafkaService.confirmPaymentIntent(
+      capturePaymentIntentDto as unknown as ConfirmPaymentIntentDto,
+      traceId,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.paymentsKafkaService.capturePaymentIntent(captureDto, traceId),
+      await this.paymentsKafkaService.capturePaymentIntent(
+        capturePaymentIntentDto,
+        traceId,
+      ),
       'Capture scheduled',
       traceId,
     );
@@ -196,26 +247,6 @@ export class FinancePaymentsController {
     );
   }
 
-  @Post(KT_CREATE_CONTACT)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
-  @ApiBody({ type: CreateStripeContactDto })
-  async createContact(
-    @Body(new ValidateCreateContactDtoPipe()) createContactDto: CreateStripeContactDto,
-  ): Promise<ResponseDTO<any>> {
-    const traceId = generateTraceId('createContact');
-    this.logger.info(
-      'traceId generated successfully',
-      traceId,
-      'createContact',
-      LogStreamLevel.ProdStandard,
-    );
-    return new ResponseDTO(
-      HttpStatus.OK,
-      await this.paymentsKafkaService.createContact(createContactDto, traceId),
-      'Contact created',
-      traceId,
-    );
-  }
 
   @Post(KT_LIST_PAYMENT_METHODS)
   @ApiCreatedResponse({ type: ResponseDTO<any> })

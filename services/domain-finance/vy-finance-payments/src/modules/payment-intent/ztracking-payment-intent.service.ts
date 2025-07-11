@@ -41,9 +41,10 @@ export class ZtrackingPaymentIntentService {
   }
 
   async getZtrackingForPaymentIntent(
-    { paymentIntentId = '' }: GetZtrackingPaymentIntentDto,
+    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
     traceId: string,
   ): Promise<ZtrackingPaymentIntentDto[]> {
+    const { paymentIntentId = '' } = getZtrackingPaymentIntentDto;
     const entities = await this.paymentIntentRepo.find({ where: { paymentIntentId } });
 
     if (!entities.length) {

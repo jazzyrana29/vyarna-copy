@@ -18,6 +18,9 @@ import {
   GetOnePersonDto,
   GetHistoryOfPersonDto,
   GetManyPersonsDto,
+  PersonDto,
+  ZtrackingPersonDto,
+  PaginatedPersonsResponseDto,
   KT_CREATE_PERSON_ENTITY,
   KT_UPDATE_PERSON_ENTITY,
   KT_GET_PERSON_ENTITY,
@@ -43,11 +46,11 @@ export class HealthGrowthTrackerController {
   }
 
   @Post(KT_CREATE_PERSON_ENTITY)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiCreatedResponse({ type: ResponseDTO<PersonDto> })
   @ApiBody({ type: CreatePersonDto })
   async createPerson(
     @Body(new ValidateCreatePersonDtoPipe()) createPersonDto: CreatePersonDto,
-  ): Promise<ResponseDTO<any>> {
+  ): Promise<ResponseDTO<PersonDto>> {
     const traceId = generateTraceId('createPerson');
     this.logger.info(
       'traceId generated successfully',
@@ -64,11 +67,11 @@ export class HealthGrowthTrackerController {
   }
 
   @Post(KT_UPDATE_PERSON_ENTITY)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiCreatedResponse({ type: ResponseDTO<PersonDto> })
   @ApiBody({ type: UpdatePersonDto })
   async updatePerson(
     @Body(new ValidateUpdatePersonDtoPipe()) updatePersonDto: UpdatePersonDto,
-  ): Promise<ResponseDTO<any>> {
+  ): Promise<ResponseDTO<PersonDto>> {
     const traceId = generateTraceId('updatePerson');
     this.logger.info(
       'traceId generated successfully',
@@ -85,11 +88,11 @@ export class HealthGrowthTrackerController {
   }
 
   @Post(KT_GET_PERSON_ENTITY)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiCreatedResponse({ type: ResponseDTO<PersonDto> })
   @ApiBody({ type: GetOnePersonDto })
   async getPerson(
     @Body(new ValidateGetOnePersonDtoPipe()) getPersonDto: GetOnePersonDto,
-  ): Promise<ResponseDTO<any>> {
+  ): Promise<ResponseDTO<PersonDto>> {
     const traceId = generateTraceId('getPerson');
     this.logger.info(
       'traceId generated successfully',
@@ -106,12 +109,12 @@ export class HealthGrowthTrackerController {
   }
 
   @Post(KT_GET_HISTORY_PERSON_ENTITY)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiCreatedResponse({ type: ResponseDTO<ZtrackingPersonDto[]> })
   @ApiBody({ type: GetHistoryOfPersonDto })
   async getHistory(
     @Body(new ValidateGetHistoryPersonDtoPipe())
     getHistoryOfPersonDto: GetHistoryOfPersonDto,
-  ): Promise<ResponseDTO<any>> {
+  ): Promise<ResponseDTO<ZtrackingPersonDto[]>> {
     const traceId = generateTraceId('getHistoryPerson');
     this.logger.info(
       'traceId generated successfully',
@@ -131,11 +134,11 @@ export class HealthGrowthTrackerController {
   }
 
   @Post(KT_GET_MANY_PERSONS)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiCreatedResponse({ type: ResponseDTO<PaginatedPersonsResponseDto> })
   @ApiBody({ type: GetManyPersonsDto })
   async getManyPersons(
     @Body(new ValidateGetManyPersonsDtoPipe()) getManyPersonsDto: GetManyPersonsDto,
-  ): Promise<ResponseDTO<any>> {
+  ): Promise<ResponseDTO<PaginatedPersonsResponseDto>> {
     const traceId = generateTraceId('getManyPersons');
     this.logger.info(
       'traceId generated successfully',

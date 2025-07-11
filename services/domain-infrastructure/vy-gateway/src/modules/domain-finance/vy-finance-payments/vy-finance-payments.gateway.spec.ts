@@ -1,4 +1,5 @@
 import { FinancePaymentsWebsocket } from './vy-finance-payments.gateway';
+import { KT_GET_PAYMENT_INTENT_STATUS } from 'ez-utils';
 
 describe('FinancePaymentsWebsocket', () => {
   test('joins room from query on connection', () => {
@@ -23,5 +24,14 @@ describe('FinancePaymentsWebsocket', () => {
     const socket: any = { emit: jest.fn(), data: { userId: 'userA' } };
     await gateway.handleCreate(socket, {} as any);
     expect(gateway.getUserForIntent('p1')).toBe('userA');
+  });
+
+  test('forwards payment intent status result', async () => {
+    const service = { getPaymentIntentStatus: jest.fn().mockResolvedValue({ status: 'succeeded' }) } as any;
+    const gateway = new FinancePaymentsWebsocket(service);
+    const socket: any = { emit: jest.fn(), data: {} };
+    await gateway.handleGetStatus(socket, { paymentIntentId: 'pi' } as any);
+    expect(service.getPaymentIntentStatus).toHaveBeenCalled();
+    expect(socket.emit).toHaveBeenCalledWith(`${KT_GET_PAYMENT_INTENT_STATUS}-result`, { status: 'succeeded' });
   });
 });

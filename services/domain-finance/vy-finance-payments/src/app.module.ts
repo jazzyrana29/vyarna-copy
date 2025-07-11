@@ -5,7 +5,6 @@ import typeorm from './config/typeorm/typeorm';
 import { CFG_TOKEN_TYPEORM } from './config/config.tokens';
 import { PaymentIntentModule } from './modules/payment-intent/payment-intent.module';
 import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
-import { ContactModule } from './modules/contact/contact.module';
 import { getLoggerConfig } from './utils/common';
 import { ensureDatabaseExists } from './utils/db-init';
 import { LogStreamLevel } from 'ez-logger';
@@ -31,7 +30,6 @@ import { LogStreamLevel } from 'ez-logger';
     }),
     PaymentIntentModule,
     PaymentMethodModule,
-    ContactModule,
   ],
   controllers: [],
   providers: [],

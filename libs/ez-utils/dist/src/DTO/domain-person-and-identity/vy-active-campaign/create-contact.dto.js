@@ -9,25 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateContactDto = void 0;
+exports.ActiveCampaignCreateContactDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-class CreateContactDto {
+class ActiveCampaignCreateContactDto {
 }
-exports.CreateContactDto = CreateContactDto;
+exports.ActiveCampaignCreateContactDto = ActiveCampaignCreateContactDto;
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateContactDto.prototype, "firstName", void 0);
+], ActiveCampaignCreateContactDto.prototype, "firstName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateContactDto.prototype, "lastName", void 0);
+], ActiveCampaignCreateContactDto.prototype, "lastName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateContactDto.prototype, "email", void 0);
+], ActiveCampaignCreateContactDto.prototype, "email", void 0);
 //# sourceMappingURL=create-contact.dto.js.map

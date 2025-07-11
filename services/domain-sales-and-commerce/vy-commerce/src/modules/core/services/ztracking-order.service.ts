@@ -41,9 +41,10 @@ export class ZtrackingOrderService {
   }
 
   async getZtrackingForOrder(
-    { orderId = '' }: GetZtrackingOrderDto,
+    getZtrackingForOrderDto: GetZtrackingOrderDto,
     traceId: string,
   ): Promise<ZtrackingOrderDto[]> {
+    const { orderId = '' } = getZtrackingForOrderDto;
     const entities = await this.ztrackingRepo.find({ where: { orderId } });
 
     if (!entities.length) {

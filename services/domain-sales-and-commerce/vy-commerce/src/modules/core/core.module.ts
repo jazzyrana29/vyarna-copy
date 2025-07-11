@@ -8,6 +8,7 @@ import { ProductService } from './services/product.service';
 import { ZtrackingOrderService } from './services/ztracking-order.service';
 import { PromotionCodesService } from './services/promotion-codes.service';
 import { PromotionCodesKafkaService } from './services/promotion-codes-kafka.service';
+import { StripeGatewayService } from '../services/stripe-gateway.service';
 import { OrderController } from './order.controller';
 import { PromotionCodesController } from './promotion-codes.controller';
 import { getLoggerConfig } from '../../utils/common';
@@ -23,6 +24,7 @@ import { LogStreamLevel } from 'ez-logger';
     ProductService,
     PromotionCodesService,
     PromotionCodesKafkaService,
+    StripeGatewayService,
   ],
 })
 export class CoreModule {

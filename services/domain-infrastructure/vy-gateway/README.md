@@ -43,6 +43,8 @@ Kafka topic:
 | `POST` | `/payment-intents` | Create a new payment intent. |
 | `POST` | `/payment-intents/get` | Retrieve a payment intent by id. |
 | `POST` | `/payment-intents/ztracking` | Get ztracking information for an intent. |
+| `POST` | `/payment-intents/confirm` | Confirm an existing payment intent. |
+| `POST` | `/payment-intents/status` | Retrieve latest status for a payment intent. |
 | `POST` | `/refunds` | Issue a refund for a payment intent. |
 | `POST` | `/payment-refunds/get` | Get a refund record. |
 | `POST` | `/payment-methods` | Vault a payment method. |
@@ -79,7 +81,7 @@ the domain services remain decoupled and headless.
 
 ## WebSocket Usage
 
-Clients connect to the `finance-payments` namespace to receive payment updates.
+Clients connect to the `/finance-payments` namespace to receive payment updates.
 Identify the user through a `userId` query parameter during the Socket.IO
 handshake or by emitting a `register-user` event right after connecting. The
 socket joins a room matching that `userId` and all `payment-status-update`
@@ -94,3 +96,51 @@ socket.emit('register-user', '123');
 ```
 
 Only the initiating user will receive status updates for their payment intents.
+
+### Triggering `payment-status-update`
+
+The gateway emits a `payment-status-update` whenever the payments service
+confirms whether a payment succeeded or failed. These notifications are typically
+generated from Stripe webhook events but can also be produced manually through
+Kafka.
+
+1. Send Stripe webhooks such as `payment_intent.succeeded` or
+   `payment_intent.payment_failed` to `vy-finance-payments`.
+2. Or publish messages directly to the Kafka topics `succeeded-payment` and
+   `failed-payment` using the constants `KT_SUCCEEDED_PAYMENT` and
+   `KT_FAILED_PAYMENT`.
+
+Once the gateway processes one of these events it will emit `payment-status-update`
+to the room of the user that created the intent.
+
+```ts
+const socket = io('/finance-payments', { query: { userId: '123' } });
+
+socket.on('payment-status-update', update => {
+  console.log('Intent', update.paymentIntentId, 'is', update.status);
+});
+```
+
+## Kafka Event Flow
+
+Each WebSocket event corresponds to a Kafka topic. The main topics are:
+
+- `create-payment-intent`
+- `get-payment-intent`
+- `get-ztracking-payment-intent`
+- `confirm-payment-intent`
+- `capture-payment-intent`
+- `create-refund`
+- `get-refund`
+- `process-stripe-webhook`
+- `create-payment-method`
+- `list-payment-methods`
+- `delete-payment-method`
+- `get-payment-intent-status`
+
+### Get Payment Intent Status
+
+1. Client calls `POST /vy-finance-payments/payment-intents/status`.
+2. Gateway publishes the `get-payment-intent-status` Kafka message.
+3. Service `vy-finance-payments` retrieves the intent from Stripe and responds with a `PaymentStatusUpdateDto`.
+4. Gateway returns this DTO to the HTTP caller and emits it over the WebSocket if subscribed.

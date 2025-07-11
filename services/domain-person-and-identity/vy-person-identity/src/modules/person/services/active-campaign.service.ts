@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import axios, { AxiosInstance } from "axios";
 import {
-  CreateContactDto,
+  ActiveCampaignCreateContactDto,
   ContactResponseDto,
   ListsResponseDto,
   CreateContactListDto,
@@ -13,7 +13,7 @@ import {
 export class ActiveCampaignService {
   private client: AxiosInstance;
 
-  async createContact(contact: CreateContactDto): Promise<ContactResponseDto> {
+  async createContact(contact: ActiveCampaignCreateContactDto): Promise<ContactResponseDto> {
     try {
       const response = await this.getClient().post("/contacts", { contact });
       return response.data;

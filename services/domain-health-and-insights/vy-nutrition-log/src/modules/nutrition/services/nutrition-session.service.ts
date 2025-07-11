@@ -131,20 +131,20 @@ export class NutritionSessionService {
   }
 
   async getZtrackingNutritionSession(
-    getDto: GetZtrackingNutritionSessionDto,
+    getZtrackingNutritionSessionDto: GetZtrackingNutritionSessionDto,
     traceId: string,
   ): Promise<ZtrackingNutritionSession[]> {
     return this.ztrackingService.findZtrackingNutritionSessionEntity(
-      getDto,
+      getZtrackingNutritionSessionDto,
       traceId,
     );
   }
 
   async logEvent(
-    dto: CreateNutritionEventDto,
+    createNutritionEventDto: CreateNutritionEventDto,
     traceId: string,
   ): Promise<any> {
-    const { sessionId, eventType, payload } = dto;
+    const { sessionId, eventType, payload } = createNutritionEventDto;
     const session = await this.nutritionSessionRepo.findOne({ where: { sessionId } });
     if (!session) {
       throw new Error(`Nutrition session not found => ${sessionId}`);

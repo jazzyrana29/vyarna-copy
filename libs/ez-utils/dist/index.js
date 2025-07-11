@@ -66,6 +66,8 @@ __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/up
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-one-email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-contact/contact.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-contact/create-contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/document.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/identity-verification.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto"), exports);
@@ -120,6 +122,7 @@ __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/customer-deta
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-payment-intent-payload.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-intent-created.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-intent-status.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/ztracking-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-ztracking-payment-intent.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/refund.dto"), exports);
@@ -132,8 +135,12 @@ __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/get-payment-m
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/delete-payment-method.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-attempt.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/capture-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/confirm-payment-intent.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/confirmed-payment-intent.dto"), exports);
+__exportStar(require("./src/payments/types/payment-intent-next-action"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-status-update.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/get-one-wallet-account.dto"), exports);

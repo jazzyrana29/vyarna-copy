@@ -19,7 +19,10 @@ export class ContactController {
   }
 
   @MessagePattern(KT_CREATE_CONTACT)
-  async createContact(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async createContact(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_CONTACT}`,

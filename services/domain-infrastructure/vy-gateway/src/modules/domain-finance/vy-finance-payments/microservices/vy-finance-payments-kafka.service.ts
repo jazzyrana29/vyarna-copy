@@ -6,6 +6,7 @@ import {
   KT_CREATE_PAYMENT_INTENT,
   KT_GET_PAYMENT_INTENT,
   KT_GET_ZTRACKING_PAYMENT_INTENT,
+  KT_GET_PAYMENT_INTENT_STATUS,
   KT_CONFIRM_PAYMENT_INTENT,
   KT_CAPTURE_PAYMENT_INTENT,
   KT_CREATE_REFUND,
@@ -16,17 +17,17 @@ import {
   KT_DELETE_PAYMENT_METHOD,
   CreatePaymentIntentPayloadDto,
   GetPaymentIntentDto,
+  GetPaymentIntentStatusDto,
   GetZtrackingPaymentIntentDto,
   CreateRefundDto,
   GetPaymentRefundDto,
   CapturePaymentIntentDto,
+  ConfirmPaymentIntentDto,
   StripeWebhookDto,
   RefundDto,
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
-  KT_CREATE_CONTACT,
-  CreateStripeContactDto,
   KT_RETRY_PAYMENT_ATTEMPT,
   RetryPaymentAttemptDto,
 } from 'ez-utils';
@@ -46,58 +47,73 @@ export class FinancePaymentsKafkaService {
   }
 
   async createPaymentIntent(
-    createDto: CreatePaymentIntentPayloadDto,
+    createPaymentIntentPayloadDto: CreatePaymentIntentPayloadDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_PAYMENT_INTENT,
-      createDto,
+      createPaymentIntentPayloadDto,
       traceId,
     );
   }
 
-  async getPaymentIntent(getDto: GetPaymentIntentDto, traceId: string) {
+  async getPaymentIntent(
+    getPaymentIntentDto: GetPaymentIntentDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PAYMENT_INTENT,
-      getDto,
+      getPaymentIntentDto,
+      traceId,
+    );
+  }
+
+  async getPaymentIntentStatus(
+    getPaymentIntentStatusDto: GetPaymentIntentStatusDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_GET_PAYMENT_INTENT_STATUS,
+      getPaymentIntentStatusDto,
       traceId,
     );
   }
 
   async getZtrackingPaymentIntent(
-    getDto: GetZtrackingPaymentIntentDto,
+    getZtrackingPaymentIntentDto: GetZtrackingPaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_ZTRACKING_PAYMENT_INTENT,
-      getDto,
+      getZtrackingPaymentIntentDto,
       traceId,
     );
   }
 
   async confirmPaymentIntent(
-    confirmDto: CapturePaymentIntentDto,
+    confirmPaymentIntentDto: ConfirmPaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CONFIRM_PAYMENT_INTENT,
-      confirmDto,
+      confirmPaymentIntentDto,
       traceId,
     );
   }
 
   async capturePaymentIntent(
-    captureDto: CapturePaymentIntentDto,
+    capturePaymentIntentDto: CapturePaymentIntentDto,
     traceId: string,
   ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CAPTURE_PAYMENT_INTENT,
-      captureDto,
+      capturePaymentIntentDto,
       traceId,
     );
   }
@@ -111,10 +127,7 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async getRefund(
-    getPaymentRefundDto: GetPaymentRefundDto,
-    traceId: string,
-  ) {
+  async getRefund(getPaymentRefundDto: GetPaymentRefundDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_REFUND,
@@ -171,14 +184,6 @@ export class FinancePaymentsKafkaService {
     );
   }
 
-  async createContact(createContactDto: CreateStripeContactDto, traceId: string) {
-    return await this.kafkaResponder.sendMessageAndWaitForResponse(
-      this.serviceName,
-      KT_CREATE_CONTACT,
-      createContactDto,
-      traceId,
-    );
-  }
 
   async retryPaymentAttempt(
     retryPaymentAttemptDto: RetryPaymentAttemptDto,

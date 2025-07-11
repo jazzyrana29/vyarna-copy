@@ -1,4 +1,4 @@
-export declare class CreateContactDto {
+export declare class ActiveCampaignCreateContactDto {
     firstName: string;
     lastName: string;
     email: string;
