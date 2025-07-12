@@ -16,6 +16,7 @@ import { LogStreamLevel } from 'ez-logger';
     FinancePaymentsEventsController,
   ],
   providers: [FinancePaymentsWebsocket, FinancePaymentsKafkaService],
+  exports: [FinancePaymentsWebsocket],
 })
 export class FinancePaymentsModule {
   private logger = getLoggerConfig(FinancePaymentsModule.name);
