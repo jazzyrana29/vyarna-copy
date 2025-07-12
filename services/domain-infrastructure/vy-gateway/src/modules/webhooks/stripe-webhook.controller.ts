@@ -146,14 +146,6 @@ export class StripeWebhookController {
         );
     }
 
-    // Logic for forwarding payload to Kafka would normally go here
-    // await this.webhooksKafkaService.updatePaymentStatus(
-    //   StripeWebhookController.name,
-    //   KT_PROCESS_STRIPE_WEBHOOK,
-    //   { payload: rawBody.toString(), signature: sig } as StripeWebhookDto,
-    //   traceId,
-    // );
-
     this.logger.debug(
       'Stripe webhook processed',
       traceId,
