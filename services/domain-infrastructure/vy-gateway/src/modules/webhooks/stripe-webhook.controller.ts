@@ -76,7 +76,7 @@ export class StripeWebhookController {
             {
               sessionId: pi.metadata?.sessionId,
               paymentIntentId: pi.id,
-              customerEmail: pi.customer_details?.email || '',
+              customerEmail: pi.receipt_email || '',
               status: 'processing',
             } as PaymentStatusUpdatePayload,
             traceId,
@@ -104,7 +104,7 @@ export class StripeWebhookController {
             {
               sessionId: pi.metadata?.sessionId,
               paymentIntentId: pi.id,
-              customerEmail: pi.customer_details?.email || '',
+              customerEmail: pi.receipt_email || '',
               status: 'succeeded',
             } as PaymentStatusUpdatePayload,
             traceId,
@@ -133,7 +133,7 @@ export class StripeWebhookController {
             {
               sessionId: pi.metadata?.sessionId,
               paymentIntentId: pi.id,
-              customerEmail: pi.customer_details?.email || '',
+              customerEmail: pi.receipt_email || '',
               status: 'failed',
               error: lastError?.message,
             } as PaymentStatusUpdatePayload,
