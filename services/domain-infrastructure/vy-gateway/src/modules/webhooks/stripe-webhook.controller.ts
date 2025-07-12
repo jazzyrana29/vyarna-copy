@@ -11,9 +11,11 @@ import Stripe from 'stripe';
 import {
   generateTraceId,
   KT_PROCESS_STRIPE_WEBHOOK,
+  KT_PAYMENT_STATUS_UPDATE,
   PaymentStatusUpdatePayloadDto,
 } from 'ez-utils';
 import { WebhooksKafkaService } from './microservices/webhooks-kafka.service';
+import { FinancePaymentsWebsocket } from '../domain-finance/vy-finance-payments/vy-finance-payments.gateway';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -23,7 +25,10 @@ export class StripeWebhookController {
   private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
   private endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
-  constructor(private readonly webhooksKafkaService: WebhooksKafkaService) {}
+  constructor(
+    private readonly webhooksKafkaService: WebhooksKafkaService,
+    private readonly paymentsWs: FinancePaymentsWebsocket,
+  ) {}
 
   @Post(KT_PROCESS_STRIPE_WEBHOOK)
   @HttpCode(200)
@@ -67,22 +72,37 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        const responseProcessing =
-          await this.webhooksKafkaService.updatePaymentStatus(
-            {
-              sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.metadata?.localId || '',
-              customerEmail: pi.receipt_email || '',
-              status: 'processing',
-            } as PaymentStatusUpdatePayloadDto,
+        try {
+          const responseProcessing =
+            await this.webhooksKafkaService.updatePaymentStatus(
+              {
+                sessionId: pi.metadata?.sessionId,
+                paymentIntentId: pi.metadata?.localId || '',
+                customerEmail: pi.receipt_email || '',
+                status: 'processing',
+              } as PaymentStatusUpdatePayloadDto,
+              traceId,
+            );
+          this.logger.debug(
+            `Kafka response: ${JSON.stringify(responseProcessing)}`,
             traceId,
+            'handleStripe',
+            LogStreamLevel.DebugLight,
           );
-        this.logger.debug(
-          `Kafka response: ${JSON.stringify(responseProcessing)}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.DebugLight,
-        );
+          this.paymentsWs.server
+            .to(pi.metadata?.localId || pi.id)
+            .emit(`${KT_PAYMENT_STATUS_UPDATE}-result`, responseProcessing);
+        } catch (e: any) {
+          this.paymentsWs.server
+            .to(pi.metadata?.localId || pi.id)
+            .emit(`${KT_PAYMENT_STATUS_UPDATE}-error`, e.message || 'Unknown error');
+          this.logger.warn(
+            e.message || 'Unknown error',
+            traceId,
+            'handleStripe',
+            LogStreamLevel.ProdStandard,
+          );
+        }
         break;
       }
       case 'payment_intent.succeeded': {
@@ -93,22 +113,37 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        const responseSucceeded =
-          await this.webhooksKafkaService.updatePaymentStatus(
-            {
-              sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.metadata?.localId || '',
-              customerEmail: pi.receipt_email || '',
-              status: 'succeeded',
-            } as PaymentStatusUpdatePayloadDto,
+        try {
+          const responseSucceeded =
+            await this.webhooksKafkaService.updatePaymentStatus(
+              {
+                sessionId: pi.metadata?.sessionId,
+                paymentIntentId: pi.metadata?.localId || '',
+                customerEmail: pi.receipt_email || '',
+                status: 'succeeded',
+              } as PaymentStatusUpdatePayloadDto,
+              traceId,
+            );
+          this.logger.debug(
+            `Kafka response: ${JSON.stringify(responseSucceeded)}`,
             traceId,
+            'handleStripe',
+            LogStreamLevel.DebugLight,
           );
-        this.logger.debug(
-          `Kafka response: ${JSON.stringify(responseSucceeded)}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.DebugLight,
-        );
+          this.paymentsWs.server
+            .to(pi.metadata?.localId || pi.id)
+            .emit(`${KT_PAYMENT_STATUS_UPDATE}-result`, responseSucceeded);
+        } catch (e: any) {
+          this.paymentsWs.server
+            .to(pi.metadata?.localId || pi.id)
+            .emit(`${KT_PAYMENT_STATUS_UPDATE}-error`, e.message || 'Unknown error');
+          this.logger.warn(
+            e.message || 'Unknown error',
+            traceId,
+            'handleStripe',
+            LogStreamLevel.ProdStandard,
+          );
+        }
         break;
       }
       case 'payment_intent.payment_failed': {
@@ -120,23 +155,38 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        const responseFailed =
-          await this.webhooksKafkaService.updatePaymentStatus(
-            {
-              sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.metadata?.localId || '',
-              customerEmail: pi.receipt_email || '',
-              status: 'failed',
-              error: lastError?.message,
-            } as PaymentStatusUpdatePayloadDto,
+        try {
+          const responseFailed =
+            await this.webhooksKafkaService.updatePaymentStatus(
+              {
+                sessionId: pi.metadata?.sessionId,
+                paymentIntentId: pi.metadata?.localId || '',
+                customerEmail: pi.receipt_email || '',
+                status: 'failed',
+                error: lastError?.message,
+              } as PaymentStatusUpdatePayloadDto,
+              traceId,
+            );
+          this.logger.debug(
+            `Kafka response: ${JSON.stringify(responseFailed)}`,
             traceId,
+            'handleStripe',
+            LogStreamLevel.DebugLight,
           );
-        this.logger.debug(
-          `Kafka response: ${JSON.stringify(responseFailed)}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.DebugLight,
-        );
+          this.paymentsWs.server
+            .to(pi.metadata?.localId || pi.id)
+            .emit(`${KT_PAYMENT_STATUS_UPDATE}-result`, responseFailed);
+        } catch (e: any) {
+          this.paymentsWs.server
+            .to(pi.metadata?.localId || pi.id)
+            .emit(`${KT_PAYMENT_STATUS_UPDATE}-error`, e.message || 'Unknown error');
+          this.logger.warn(
+            e.message || 'Unknown error',
+            traceId,
+            'handleStripe',
+            LogStreamLevel.ProdStandard,
+          );
+        }
         break;
       }
       default:
