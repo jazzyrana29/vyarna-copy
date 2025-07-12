@@ -141,6 +141,7 @@ __exportStar(require("./src/payments/types/payment-intent-next-action"), exports
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-status-update.dto"), exports);
+__exportStar(require("./src/DTO/domain-finance/vy-finance-payments/payment-status-update-payload.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto"), exports);
 __exportStar(require("./src/DTO/domain-finance/vy-finance-wallet/get-one-wallet-account.dto"), exports);
@@ -214,4 +215,5 @@ __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/product.dt
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto"), exports);
+__exportStar(require("./src/DTO/shared-dtos/socket/join-room.dto"), exports);
 //# sourceMappingURL=index.js.map

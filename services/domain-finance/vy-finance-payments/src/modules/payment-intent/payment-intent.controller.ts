@@ -1,5 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { Ctx, KafkaContext, MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  Ctx,
+  KafkaContext,
+  MessagePattern,
+  Payload,
+} from '@nestjs/microservices';
 import { PaymentIntentKafkaService } from './payment-intent-kafka.service';
 import {
   KT_CREATE_PAYMENT_INTENT,
@@ -11,6 +16,7 @@ import {
   KT_CREATE_REFUND,
   KT_GET_REFUND,
   KT_PROCESS_STRIPE_WEBHOOK,
+  KT_PAYMENT_STATUS_UPDATE,
   KT_RETRY_PAYMENT_ATTEMPT,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
@@ -30,7 +36,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_CREATE_PAYMENT_INTENT)
-  async createPaymentIntent(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async createPaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_PAYMENT_INTENT}`,
@@ -42,7 +51,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_GET_PAYMENT_INTENT)
-  async getPaymentIntent(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async getPaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PAYMENT_INTENT}`,
@@ -54,7 +66,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_GET_PAYMENT_INTENT_STATUS)
-  async getPaymentIntentStatus(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async getPaymentIntentStatus(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_PAYMENT_INTENT_STATUS}`,
@@ -66,7 +81,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_GET_ZTRACKING_PAYMENT_INTENT)
-  async getZtrackingPaymentIntent(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async getZtrackingPaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_ZTRACKING_PAYMENT_INTENT}`,
@@ -78,7 +96,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_CONFIRM_PAYMENT_INTENT)
-  async confirmPaymentIntent(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async confirmPaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CONFIRM_PAYMENT_INTENT}`,
@@ -90,7 +111,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_CAPTURE_PAYMENT_INTENT)
-  async capturePaymentIntent(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async capturePaymentIntent(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CAPTURE_PAYMENT_INTENT}`,
@@ -102,7 +126,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_CREATE_REFUND)
-  async createRefund(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async createRefund(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_CREATE_REFUND}`,
@@ -114,7 +141,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_GET_REFUND)
-  async getRefund(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async getRefund(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_GET_REFUND}`,
@@ -125,8 +155,26 @@ export class PaymentIntentController {
     await this.paymentKafkaService.getRefund(message, key);
   }
 
+  @MessagePattern(KT_PAYMENT_STATUS_UPDATE)
+  async handlePaymentStatusUpdate(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_PAYMENT_STATUS_UPDATE}`,
+      '',
+      'handlePaymentStatusUpdate',
+      LogStreamLevel.DebugLight,
+    );
+    await this.paymentKafkaService.updatePaymentStatus(message, key);
+  }
+
   @MessagePattern(KT_PROCESS_STRIPE_WEBHOOK)
-  async processStripeWebhook(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async processStripeWebhook(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_PROCESS_STRIPE_WEBHOOK}`,
@@ -138,7 +186,10 @@ export class PaymentIntentController {
   }
 
   @MessagePattern(KT_RETRY_PAYMENT_ATTEMPT)
-  async retryPaymentAttempt(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+  async retryPaymentAttempt(
+    @Payload() message: any,
+    @Ctx() context: KafkaContext,
+  ): Promise<void> {
     const key = context.getMessage().key.toString();
     this.logger.debug(
       `Message Pattern hit for kafka topic : ${KT_RETRY_PAYMENT_ATTEMPT}`,

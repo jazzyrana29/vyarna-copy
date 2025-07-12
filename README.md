@@ -60,6 +60,7 @@ node repo.js start <names...>   # run one or more apps or services
 node repo.js build-libs lib     # build a shared library
 node repo.js list               # show all workspaces
 node repo.js run script name    # run an npm script in one or more packages
+node repo.js stripe <args...>   # run the Stripe CLI (requires STRIPE_SECRET_KEY)
 ```
 
 ### 2. `tsconfig.base.json`
@@ -111,7 +112,7 @@ without pulling in unrelated configs.
 
    > **Requires Node 18+ and npm 9+** – older versions may fail with `npm ERR! Invalid Version`.
 
-   Create a `global.env.local` file at the repo root using `global.env.local-example` as a starting point. This file stores shared database credentials and is ignored by Git.
+   Create a `global.env.local` file at the repo root using `global.env.local-example` as a starting point. This file stores shared database credentials and other secrets like `STRIPE_SECRET_KEY`, and is ignored by Git.
 
 2. **Develop a service or app**
 
@@ -143,6 +144,15 @@ without pulling in unrelated configs.
    ```bash
    node repo.js list
    node repo.js run build vy-person-identity
+   ```
+
+6. **Run the Stripe CLI**
+
+   ```bash
+   node repo.js stripe customers list
+   node repo.js stripe listen --forward-to http://localhost:4040/webhooks/process-stripe-webhook
+   node repo.js stripe listen --print-secret            # print your local webhook signing secret
+   node repo.js stripe trigger checkout.session.completed
    ```
 
 ---

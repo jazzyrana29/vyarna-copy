@@ -135,8 +135,10 @@ export class PaymentIntentService {
           line1: createPaymentIntentPayloadDto.customerDetails.address.street,
           city: createPaymentIntentPayloadDto.customerDetails.address.city,
           state: createPaymentIntentPayloadDto.customerDetails.address.state,
-          postal_code: createPaymentIntentPayloadDto.customerDetails.address.zip,
-          country: createPaymentIntentPayloadDto.customerDetails.address.country,
+          postal_code:
+            createPaymentIntentPayloadDto.customerDetails.address.zip,
+          country:
+            createPaymentIntentPayloadDto.customerDetails.address.country,
         },
         metadata: { source: 'my-backend' },
       }));
@@ -144,10 +146,15 @@ export class PaymentIntentService {
       newCustomerCreated = true;
     }
 
-    if (newCustomerCreated && createPaymentIntentPayloadDto.customerDetails.email) {
+    if (
+      newCustomerCreated &&
+      createPaymentIntentPayloadDto.customerDetails.email
+    ) {
       const contactPayload = {
-        firstName: createPaymentIntentPayloadDto.customerDetails.firstName || 'UNKNOWN',
-        lastName: createPaymentIntentPayloadDto.customerDetails.lastName || 'UNKNOWN',
+        firstName:
+          createPaymentIntentPayloadDto.customerDetails.firstName || 'UNKNOWN',
+        lastName:
+          createPaymentIntentPayloadDto.customerDetails.lastName || 'UNKNOWN',
         email: createPaymentIntentPayloadDto.customerDetails.email,
         traceId,
       };
@@ -203,6 +210,8 @@ export class PaymentIntentService {
           capture_method: 'manual',
           automatic_payment_methods: { enabled: true },
           metadata: { localId: entity.paymentIntentId },
+          receipt_email:
+            createPaymentIntentPayloadDto?.customerDetails?.email || null,
         },
         { idempotencyKey: createPaymentIntentPayloadDto.idempotencyKey },
       );
@@ -300,7 +309,9 @@ export class PaymentIntentService {
       setupFutureUsage,
       shipping,
     } = confirmPaymentIntentDto;
-    const intent = await this.paymentRepo.findOne({ where: { paymentIntentId } });
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId },
+    });
 
     if (!intent) {
       this.logger.error(
@@ -379,7 +390,8 @@ export class PaymentIntentService {
       status: intent.status as any,
       clientSecret: stripeIntent.client_secret,
       requiresAction: stripeIntent.status === 'requires_action',
-      nextAction: stripeIntent.next_action as unknown as PaymentIntentNextAction,
+      nextAction:
+        stripeIntent.next_action as unknown as PaymentIntentNextAction,
     };
   }
 
@@ -444,6 +456,35 @@ export class PaymentIntentService {
       customerEmail: stripeIntent.receipt_email || '',
       status: map[stripeIntent.status] || 'processing',
     } as PaymentStatusUpdateDto;
+  }
+
+  async updatePaymentStatus(
+    paymentStatusUpdateDto: PaymentStatusUpdateDto,
+    traceId: string,
+  ): Promise<PaymentStatusUpdateDto> {
+    const intent = await this.paymentRepo.findOne({
+      where: { paymentIntentId: paymentStatusUpdateDto.paymentIntentId },
+    });
+    if (!intent) {
+      this.logger.warn(
+        `PaymentIntent not found => ${paymentStatusUpdateDto.paymentIntentId}`,
+        traceId,
+        'updatePaymentStatus',
+        LogStreamLevel.DebugLight,
+      );
+      throw new NotFoundException('PaymentIntent not found');
+    }
+
+    const map: Record<string, PaymentIntent['status']> = {
+      processing: 'PROCESSING',
+      succeeded: 'SUCCEEDED',
+      failed: 'FAILED',
+    };
+
+    intent.status = map[paymentStatusUpdateDto.status] || intent.status;
+    await this.paymentRepo.save(intent);
+
+    return paymentStatusUpdateDto;
   }
 
   async getZtrackingPaymentIntent(

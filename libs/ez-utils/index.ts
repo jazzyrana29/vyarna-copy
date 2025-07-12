@@ -141,6 +141,7 @@ export * from "./src/payments/types/payment-intent-next-action";
 export * from "./src/DTO/domain-finance/vy-finance-payments/retry-payment-attempt.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/create-stripe-contact.dto";
 export * from "./src/DTO/domain-finance/vy-finance-payments/payment-status-update.dto";
+export * from "./src/DTO/domain-finance/vy-finance-payments/payment-status-update-payload.dto";
 
 export * from "./src/DTO/domain-finance/vy-finance-wallet/wallet-account.dto";
 export * from "./src/DTO/domain-finance/vy-finance-wallet/create-wallet-account.dto";
@@ -218,3 +219,4 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-varia
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
 
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto";
+export * from './src/DTO/shared-dtos/socket/join-room.dto';

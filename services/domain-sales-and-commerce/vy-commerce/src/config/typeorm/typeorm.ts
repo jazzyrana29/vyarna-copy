@@ -26,6 +26,13 @@ const config = {
   logging: false,
   entities: ["dist/**/*.entity{.ts,.js}"],
   migrations: ["dist/migrations/*{.ts,.js}"],
+  extra: {
+    connectionLimit: 10, // Pool size for MySQL connections
+    waitForConnections: true, // Prevent excessive connection failures
+    queueLimit: 0, // No limit on queueing pending connections
+    keepAliveInitialDelay: 10000, // Keep connection alive every 10s
+    enableKeepAlive: true, // Prevent disconnections
+  },
 };
 
 export default registerAs(CFG_TOKEN_TYPEORM, () => config);

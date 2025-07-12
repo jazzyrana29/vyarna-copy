@@ -90,6 +90,53 @@ function openTerminal(cwd, command) {
   }
 }
 
+function runStripe(args) {
+  const globalPath = path.join(__dirname, 'global.env.local');
+  if (!fs.existsSync(globalPath)) {
+    console.log("global.env.local not found. Create it from global.env.local-example first.");
+    return;
+  }
+
+  const env = parseEnv(fs.readFileSync(globalPath, "utf8"));
+  const apiKey = env.STRIPE_SECRET_KEY;
+  if (!apiKey) {
+    console.log("STRIPE_SECRET_KEY is missing in global.env.local.");
+    return;
+  }
+
+  // Detect Docker CLI
+  const dockerCmd = process.platform === "win32" ? "docker.exe" : "docker";
+
+  // Prepare network flags depending on platform
+  const networkArgs = [];
+  networkArgs.push("--network", "host");
+
+  // If using `stripe listen`, adjust --forward-to URL on non-Linux platforms
+  if (args[0] === 'listen') {
+    const idx = args.findIndex((a) => a === '--forward-to');
+    if (
+      idx !== -1 &&
+      args[idx + 1] &&
+      args[idx + 1].includes('localhost') &&
+      process.platform !== 'linux'
+    ) {
+      args[idx + 1] = args[idx + 1].replace('localhost', 'host.docker.internal');
+    }
+  }
+
+  // Build docker command
+  const dockerArgs = [
+    'run', '--rm',
+    ...networkArgs,
+    '-e', `STRIPE_API_KEY=${apiKey}`,
+    'stripe/stripe-cli',
+    ...args,
+  ];
+
+  const proc = spawn(dockerCmd, dockerArgs, { stdio: "inherit" });
+  proc.on("exit", code => process.exit(code));
+}
+
 function ensureLibsBuilt(libraries) {
   libraries.forEach((pkg) => {
     const nm = path.join(pkg.path, 'node_modules');
@@ -155,6 +202,7 @@ Commands:
   fill-env                   generate .env files for services
   list [names...]            list packages (all types)
   run <script> [names...]    run arbitrary npm script in packages
+  stripe <args...>           run Stripe CLI using STRIPE_SECRET_KEY
 Examples:
   node repo.js install
   node repo.js clean-install
@@ -163,6 +211,7 @@ Examples:
   node repo.js list
   node repo.js fill-env
   node repo.js run build vy-person-identity
+  node repo.js stripe customers list
 `);
 }
 
@@ -305,6 +354,13 @@ switch (cmd) {
     filterPackages(all, args).forEach((p) => {
       console.log(`${p.type}\t${p.name}\t${p.path}`);
     });
+    break;
+  case 'stripe':
+    if (!args.length) {
+      usage();
+      break;
+    }
+    runStripe(args);
     break;
   case 'run':
     const script = args.shift();
