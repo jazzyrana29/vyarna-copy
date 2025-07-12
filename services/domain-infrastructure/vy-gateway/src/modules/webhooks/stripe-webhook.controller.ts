@@ -10,8 +10,9 @@ import { Request } from 'express';
 import Stripe from 'stripe';
 import {
   generateTraceId,
-  StripeWebhookDto,
   KT_PROCESS_STRIPE_WEBHOOK,
+  KT_PAYMENT_STATUS_UPDATE,
+  PaymentStatusUpdatePayload,
 } from 'ez-utils';
 import { KafkaResponderService } from '../../utils/kafka/kafka-responder.service';
 import { getLoggerConfig } from '../../utils/common';
@@ -60,134 +61,71 @@ export class StripeWebhookController {
     );
 
     switch (event.type) {
-      case 'payment_intent.succeeded':
+      case 'payment_intent.processing': {
+        const pi = event.data.object as Stripe.PaymentIntent;
         this.logger.info(
-          `Payment intent succeeded: ${(event.data.object as any).id}`,
+          `Processing intent ${pi.id}: ${JSON.stringify(pi)}`,
           traceId,
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
+        await this.kafkaResponder.sendMessageAndWaitForResponse(
+          StripeWebhookController.name,
+          KT_PAYMENT_STATUS_UPDATE,
+          {
+            sessionId: pi.metadata?.sessionId,
+            paymentIntentId: pi.id,
+            customerEmail: pi.customer_details?.email || '',
+            status: 'processing',
+          } as PaymentStatusUpdatePayload,
+          traceId,
+        );
         break;
-      case 'payment_intent.payment_failed':
+      }
+      case 'payment_intent.succeeded': {
+        const pi = event.data.object as Stripe.PaymentIntent;
+        this.logger.info(
+          `Intent succeeded ${pi.id}`,
+          traceId,
+          'handleStripe',
+          LogStreamLevel.ProdStandard,
+        );
+        await this.kafkaResponder.sendMessageAndWaitForResponse(
+          StripeWebhookController.name,
+          KT_PAYMENT_STATUS_UPDATE,
+          {
+            sessionId: pi.metadata?.sessionId,
+            paymentIntentId: pi.id,
+            customerEmail: pi.customer_details?.email || '',
+            status: 'succeeded',
+          } as PaymentStatusUpdatePayload,
+          traceId,
+        );
+        break;
+      }
+      case 'payment_intent.payment_failed': {
+        const pi = event.data.object as Stripe.PaymentIntent;
+        const lastError = pi.last_payment_error;
         this.logger.warn(
-          `Payment intent failed: ${(event.data.object as any).id}`,
+          `Intent failed ${pi.id}: ${JSON.stringify(pi)}`,
           traceId,
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        break;
-      case 'payment_intent.canceled':
-        this.logger.info(
-          `Payment intent canceled: ${(event.data.object as any).id}`,
+        await this.kafkaResponder.sendMessageAndWaitForResponse(
+          StripeWebhookController.name,
+          KT_PAYMENT_STATUS_UPDATE,
+          {
+            sessionId: pi.metadata?.sessionId,
+            paymentIntentId: pi.id,
+            customerEmail: pi.customer_details?.email || '',
+            status: 'failed',
+            error: lastError?.message,
+          } as PaymentStatusUpdatePayload,
           traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
         );
         break;
-      case 'payment_intent.processing':
-        this.logger.debug(
-          `Payment intent processing: ${(event.data.object as any).id} body ${JSON.stringify(event.data.object, null, 2)}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.DebugLight,
-        );
-        break;
-      case 'charge.succeeded':
-        this.logger.info(
-          `Charge succeeded: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'charge.failed':
-        this.logger.warn(
-          `Charge failed: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'charge.refunded':
-        this.logger.info(
-          `Charge refunded: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'checkout.session.completed':
-        this.logger.info(
-          `Checkout session completed: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'invoice.paid':
-        this.logger.info(
-          `Invoice paid: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'invoice.payment_failed':
-        this.logger.warn(
-          `Invoice payment failed: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'customer.subscription.created':
-        this.logger.info(
-          `Subscription created: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'customer.subscription.updated':
-        this.logger.info(
-          `Subscription updated: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'customer.subscription.deleted':
-        this.logger.info(
-          `Subscription deleted: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'payout.paid':
-        this.logger.info(
-          `Payout paid: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'payout.failed':
-        this.logger.error(
-          `Payout failed: ${(event.data.object as any).id}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
-      case 'product.created':
-        this.logger.info(
-          `Product created: ${(event.data.object as any).id} body ${JSON.stringify(event.data.object, null, 2)}`,
-          traceId,
-          'handleStripe',
-          LogStreamLevel.ProdStandard,
-        );
-        break;
+      }
       default:
         this.logger.debug(
           `Unhandled Stripe event type: ${event.type}`,
