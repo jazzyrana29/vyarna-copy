@@ -11,10 +11,9 @@ import Stripe from 'stripe';
 import {
   generateTraceId,
   KT_PROCESS_STRIPE_WEBHOOK,
-  KT_PAYMENT_STATUS_UPDATE,
-  PaymentStatusUpdatePayload,
+  PaymentStatusUpdatePayloadDto,
 } from 'ez-utils';
-import { KafkaResponderService } from '../../utils/kafka/kafka-responder.service';
+import { WebhooksKafkaService } from './microservices/webhooks-kafka.service';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -24,7 +23,7 @@ export class StripeWebhookController {
   private stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
   private endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
-  constructor(private readonly kafkaResponder: KafkaResponderService) {}
+  constructor(private readonly webhooksKafkaService: WebhooksKafkaService) {}
 
   @Post(KT_PROCESS_STRIPE_WEBHOOK)
   @HttpCode(200)
@@ -69,18 +68,15 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        const responseProcessing =
-          await this.kafkaResponder.sendMessageAndWaitForResponse(
-            StripeWebhookController.name,
-            KT_PAYMENT_STATUS_UPDATE,
-            {
-              sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.metadata?.localId || '',
-              customerEmail: pi.receipt_email || '',
-              status: 'processing',
-            } as PaymentStatusUpdatePayload,
-            traceId,
-          );
+        const responseProcessing = await this.webhooksKafkaService.updatePaymentStatus(
+          {
+            sessionId: pi.metadata?.sessionId,
+            paymentIntentId: pi.metadata?.localId || '',
+            customerEmail: pi.receipt_email || '',
+            status: 'processing',
+          } as PaymentStatusUpdatePayloadDto,
+          traceId,
+        );
         this.logger.debug(
           `Kafka response: ${JSON.stringify(responseProcessing)}`,
           traceId,
@@ -97,18 +93,15 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        const responseSucceeded =
-          await this.kafkaResponder.sendMessageAndWaitForResponse(
-            StripeWebhookController.name,
-            KT_PAYMENT_STATUS_UPDATE,
-            {
-              sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.metadata?.localId || '',
-              customerEmail: pi.receipt_email || '',
-              status: 'succeeded',
-            } as PaymentStatusUpdatePayload,
-            traceId,
-          );
+        const responseSucceeded = await this.webhooksKafkaService.updatePaymentStatus(
+          {
+            sessionId: pi.metadata?.sessionId,
+            paymentIntentId: pi.metadata?.localId || '',
+            customerEmail: pi.receipt_email || '',
+            status: 'succeeded',
+          } as PaymentStatusUpdatePayloadDto,
+          traceId,
+        );
         this.logger.debug(
           `Kafka response: ${JSON.stringify(responseSucceeded)}`,
           traceId,
@@ -126,19 +119,16 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        const responseFailed =
-          await this.kafkaResponder.sendMessageAndWaitForResponse(
-            StripeWebhookController.name,
-            KT_PAYMENT_STATUS_UPDATE,
-            {
-              sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.metadata?.localId || '',
-              customerEmail: pi.receipt_email || '',
-              status: 'failed',
-              error: lastError?.message,
-            } as PaymentStatusUpdatePayload,
-            traceId,
-          );
+        const responseFailed = await this.webhooksKafkaService.updatePaymentStatus(
+          {
+            sessionId: pi.metadata?.sessionId,
+            paymentIntentId: pi.metadata?.localId || '',
+            customerEmail: pi.receipt_email || '',
+            status: 'failed',
+            error: lastError?.message,
+          } as PaymentStatusUpdatePayloadDto,
+          traceId,
+        );
         this.logger.debug(
           `Kafka response: ${JSON.stringify(responseFailed)}`,
           traceId,
@@ -155,14 +145,6 @@ export class StripeWebhookController {
           LogStreamLevel.DebugLight,
         );
     }
-
-    // Logic for forwarding payload to Kafka would normally go here
-    // await this.kafkaResponder.sendMessageAndWaitForResponse(
-    //   StripeWebhookController.name,
-    //   KT_PROCESS_STRIPE_WEBHOOK,
-    //   { payload: rawBody.toString(), signature: sig } as StripeWebhookDto,
-    //   traceId,
-    // );
 
     this.logger.debug(
       'Stripe webhook processed',

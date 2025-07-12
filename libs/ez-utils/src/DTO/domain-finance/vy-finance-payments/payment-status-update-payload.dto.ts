@@ -1,4 +1,4 @@
-export interface PaymentStatusUpdatePayload {
+export interface PaymentStatusUpdatePayloadDto {
   sessionId?: string;
   paymentIntentId?: string;
   customerEmail: string;
