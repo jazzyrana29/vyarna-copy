@@ -8,8 +8,12 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PersonContactKafkaService } from './microservices/vy-person-contact-kafka.service';
+import {
+  generateTraceId,
+  CreateContactDto,
+  KT_CREATE_CONTACT,
   JoinRoomDto,
-import { generateTraceId, CreateContactDto, KT_CREATE_CONTACT } from 'ez-utils';
+} from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -56,7 +60,12 @@ export class PersonContactWebsocket implements OnGatewayInit {
     const { room } = joinRoomDto;
     if (room) {
       socket.join(room);
-      this.logger.debug(`Socket ${socket.id} joined room ${room}`, '', 'handleJoin', LogStreamLevel.DebugLight);
+      this.logger.debug(
+        `Socket ${socket.id} joined room ${room}`,
+        '',
+        'handleJoin',
+        LogStreamLevel.DebugLight,
+      );
       socket.emit('join-result', { room, success: true });
     } else {
       socket.emit('join-error', { message: 'Room field is required' });
