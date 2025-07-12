@@ -1,7 +1,7 @@
 import { WaveTypeDto } from "./wave-type.dto";
 import { SortOptionDto } from "../../../shared-dtos/sort-option.dto";
 import { PaginationDto } from "../../../shared-dtos/pagination.dto";
-declare const GetManyWaveTypesDto_base: import("@nestjs/common").Type<Partial<Pick<WaveTypeDto, "isDeleted" | "updatedBy" | "name" | "description">>>;
+declare const GetManyWaveTypesDto_base: import("@nestjs/common").Type<Partial<Pick<WaveTypeDto, "name" | "description" | "isDeleted" | "updatedBy">>>;
 export declare class GetManyWaveTypesDto extends GetManyWaveTypesDto_base {
     waveTypeGenreId?: string;
     pagination?: PaginationDto | null;

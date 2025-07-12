@@ -43,6 +43,7 @@
     "class-validator": "^0.14.2",
     "ez-logger": "file:../../../libs/ez-logger",
     "ez-utils": "file:../../../libs/ez-utils",
+    "ez-kafka-producer": "file:../../../libs/ez-kafka-producer",
     "kafkajs": "^2.2.4",
     "mysql2": "^3.6.0",
     "stripe": "^18.3.0",
