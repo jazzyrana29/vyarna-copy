@@ -215,4 +215,5 @@ __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/product.dt
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto"), exports);
 __exportStar(require("./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto"), exports);
+__exportStar(require("./src/DTO/shared-dtos/socket/join-room.dto"), exports);
 //# sourceMappingURL=index.js.map
