@@ -25,7 +25,10 @@ async function bootstrap(): Promise<void> {
     logger,
   });
 
-  app.use('/webhooks/process-stripe-webhook', bodyParser.raw({ type: 'application/json' }));
+  app.use(
+    '/webhooks/process-stripe-webhook',
+    express.raw({ type: 'application/json' }),
+  );
 
   // Global validation + transformation for incoming DTOs
   app.useGlobalPipes(
