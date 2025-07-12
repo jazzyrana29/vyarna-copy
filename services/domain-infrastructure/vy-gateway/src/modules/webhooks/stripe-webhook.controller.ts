@@ -64,7 +64,7 @@ export class StripeWebhookController {
       case 'payment_intent.processing': {
         const pi = event.data.object as Stripe.PaymentIntent;
         this.logger.info(
-          `Processing intent ${pi.id}: ${JSON.stringify(pi)}`,
+          `Processing intent ${pi.metadata?.localId || ''}: ${JSON.stringify(pi)}`,
           traceId,
           'handleStripe',
           LogStreamLevel.ProdStandard,
@@ -75,7 +75,7 @@ export class StripeWebhookController {
             KT_PAYMENT_STATUS_UPDATE,
             {
               sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.id,
+              paymentIntentId: pi.metadata?.localId || '',
               customerEmail: pi.receipt_email || '',
               status: 'processing',
             } as PaymentStatusUpdatePayload,
@@ -92,7 +92,7 @@ export class StripeWebhookController {
       case 'payment_intent.succeeded': {
         const pi = event.data.object as Stripe.PaymentIntent;
         this.logger.info(
-          `Intent succeeded ${pi.id}`,
+          `Intent succeeded ${pi.metadata?.localId || ''}`,
           traceId,
           'handleStripe',
           LogStreamLevel.ProdStandard,
@@ -103,7 +103,7 @@ export class StripeWebhookController {
             KT_PAYMENT_STATUS_UPDATE,
             {
               sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.id,
+              paymentIntentId: pi.metadata?.localId || '',
               customerEmail: pi.receipt_email || '',
               status: 'succeeded',
             } as PaymentStatusUpdatePayload,
@@ -121,7 +121,7 @@ export class StripeWebhookController {
         const pi = event.data.object as Stripe.PaymentIntent;
         const lastError = pi.last_payment_error;
         this.logger.warn(
-          `Intent failed ${pi.id}: ${JSON.stringify(pi)}`,
+          `Intent failed ${pi.metadata?.localId || ''}: ${JSON.stringify(pi)}`,
           traceId,
           'handleStripe',
           LogStreamLevel.ProdStandard,
@@ -132,7 +132,7 @@ export class StripeWebhookController {
             KT_PAYMENT_STATUS_UPDATE,
             {
               sessionId: pi.metadata?.sessionId,
-              paymentIntentId: pi.id,
+              paymentIntentId: pi.metadata?.localId || '',
               customerEmail: pi.receipt_email || '',
               status: 'failed',
               error: lastError?.message,

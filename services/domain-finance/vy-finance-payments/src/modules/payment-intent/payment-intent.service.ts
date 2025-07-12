@@ -210,6 +210,8 @@ export class PaymentIntentService {
           capture_method: 'manual',
           automatic_payment_methods: { enabled: true },
           metadata: { localId: entity.paymentIntentId },
+          receipt_email:
+            createPaymentIntentPayloadDto?.customerDetails?.email || null,
         },
         { idempotencyKey: createPaymentIntentPayloadDto.idempotencyKey },
       );
