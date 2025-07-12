@@ -152,6 +152,7 @@ without pulling in unrelated configs.
    node repo.js stripe customers list
    node repo.js stripe listen --forward-to http://localhost:4040/webhooks/process-stripe-webhook
    node repo.js stripe listen --print-secret            # print your local webhook signing secret
+   node repo.js stripe trigger checkout.session.completed
    ```
 
 ---
