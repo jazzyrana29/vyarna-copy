@@ -69,16 +69,23 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        await this.kafkaResponder.sendMessageAndWaitForResponse(
-          StripeWebhookController.name,
-          KT_PAYMENT_STATUS_UPDATE,
-          {
-            sessionId: pi.metadata?.sessionId,
-            paymentIntentId: pi.id,
-            customerEmail: pi.customer_details?.email || '',
-            status: 'processing',
-          } as PaymentStatusUpdatePayload,
+        const responseProcessing =
+          await this.kafkaResponder.sendMessageAndWaitForResponse(
+            StripeWebhookController.name,
+            KT_PAYMENT_STATUS_UPDATE,
+            {
+              sessionId: pi.metadata?.sessionId,
+              paymentIntentId: pi.id,
+              customerEmail: pi.customer_details?.email || '',
+              status: 'processing',
+            } as PaymentStatusUpdatePayload,
+            traceId,
+          );
+        this.logger.debug(
+          `Kafka response: ${JSON.stringify(responseProcessing)}`,
           traceId,
+          'handleStripe',
+          LogStreamLevel.DebugLight,
         );
         break;
       }
@@ -90,16 +97,23 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        await this.kafkaResponder.sendMessageAndWaitForResponse(
-          StripeWebhookController.name,
-          KT_PAYMENT_STATUS_UPDATE,
-          {
-            sessionId: pi.metadata?.sessionId,
-            paymentIntentId: pi.id,
-            customerEmail: pi.customer_details?.email || '',
-            status: 'succeeded',
-          } as PaymentStatusUpdatePayload,
+        const responseSucceeded =
+          await this.kafkaResponder.sendMessageAndWaitForResponse(
+            StripeWebhookController.name,
+            KT_PAYMENT_STATUS_UPDATE,
+            {
+              sessionId: pi.metadata?.sessionId,
+              paymentIntentId: pi.id,
+              customerEmail: pi.customer_details?.email || '',
+              status: 'succeeded',
+            } as PaymentStatusUpdatePayload,
+            traceId,
+          );
+        this.logger.debug(
+          `Kafka response: ${JSON.stringify(responseSucceeded)}`,
           traceId,
+          'handleStripe',
+          LogStreamLevel.DebugLight,
         );
         break;
       }
@@ -112,17 +126,24 @@ export class StripeWebhookController {
           'handleStripe',
           LogStreamLevel.ProdStandard,
         );
-        await this.kafkaResponder.sendMessageAndWaitForResponse(
-          StripeWebhookController.name,
-          KT_PAYMENT_STATUS_UPDATE,
-          {
-            sessionId: pi.metadata?.sessionId,
-            paymentIntentId: pi.id,
-            customerEmail: pi.customer_details?.email || '',
-            status: 'failed',
-            error: lastError?.message,
-          } as PaymentStatusUpdatePayload,
+        const responseFailed =
+          await this.kafkaResponder.sendMessageAndWaitForResponse(
+            StripeWebhookController.name,
+            KT_PAYMENT_STATUS_UPDATE,
+            {
+              sessionId: pi.metadata?.sessionId,
+              paymentIntentId: pi.id,
+              customerEmail: pi.customer_details?.email || '',
+              status: 'failed',
+              error: lastError?.message,
+            } as PaymentStatusUpdatePayload,
+            traceId,
+          );
+        this.logger.debug(
+          `Kafka response: ${JSON.stringify(responseFailed)}`,
           traceId,
+          'handleStripe',
+          LogStreamLevel.DebugLight,
         );
         break;
       }
