@@ -20,6 +20,7 @@ import {
   KT_GET_PERSON_ENTITY,
   KT_GET_HISTORY_PERSON_ENTITY,
   KT_GET_MANY_PERSONS,
+  JoinRoomDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -57,6 +58,21 @@ export class SalesAffiliateProductsWebsocket implements OnGatewayInit {
       'handleDisconnect',
       LogStreamLevel.DebugLight,
     );
+  }
+
+  @SubscribeMessage('join')
+  handleJoin(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() joinRoomDto: JoinRoomDto,
+  ) {
+    const { room } = joinRoomDto;
+    if (room) {
+      socket.join(room);
+      this.logger.debug(`Socket ${socket.id} joined room ${room}`, '', 'handleJoin', LogStreamLevel.DebugLight);
+      socket.emit('join-result', { room, success: true });
+    } else {
+      socket.emit('join-error', { message: 'Room field is required' });
+    }
   }
 
   @SubscribeMessage(KT_CREATE_PERSON_ENTITY)

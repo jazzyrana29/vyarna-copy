@@ -35,6 +35,7 @@ import {
   KT_LIST_PAYMENT_METHODS,
   KT_DELETE_PAYMENT_METHOD,
   KT_RETRY_PAYMENT_ATTEMPT,
+  JoinRoomDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -96,6 +97,21 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
           this.intentUserMap.delete(intentId);
         }
       }
+    }
+  }
+
+  @SubscribeMessage('join')
+  handleJoin(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() joinRoomDto: JoinRoomDto,
+  ) {
+    const { room } = joinRoomDto;
+    if (room) {
+      socket.join(room);
+      this.logger.debug(`Socket ${socket.id} joined room ${room}`, '', 'handleJoin', LogStreamLevel.DebugLight);
+      socket.emit('join-result', { room, success: true });
+    } else {
+      socket.emit('join-error', { message: 'Room field is required' });
     }
   }
 

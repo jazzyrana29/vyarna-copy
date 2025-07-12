@@ -39,6 +39,7 @@ import {
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
   KT_VALIDATE_PROMOTION_CODE,
+  JoinRoomDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -76,6 +77,21 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       'handleDisconnect',
       LogStreamLevel.DebugLight,
     );
+  }
+
+  @SubscribeMessage('join')
+  handleJoin(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() joinRoomDto: JoinRoomDto,
+  ) {
+    const { room } = joinRoomDto;
+    if (room) {
+      socket.join(room);
+      this.logger.debug(`Socket ${socket.id} joined room ${room}`, '', 'handleJoin', LogStreamLevel.DebugLight);
+      socket.emit('join-result', { room, success: true });
+    } else {
+      socket.emit('join-error', { message: 'Room field is required' });
+    }
   }
 
   @SubscribeMessage(KT_GET_PRODUCTS)

@@ -219,3 +219,4 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-varia
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
 
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto";
+export * from './src/DTO/shared-dtos/socket/join-room.dto';
