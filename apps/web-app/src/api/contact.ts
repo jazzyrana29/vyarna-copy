@@ -1,12 +1,19 @@
-import api from "../utils/api";
-import { CreateContactPayload } from "./types/contact";
+import { wsApiService } from '../services/websocketApiService';
+import type { CreateContactPayload } from '../constants/websocket-messages';
 
 export const createContact = async (
   createContactPayload: CreateContactPayload,
 ): Promise<void> => {
-  const { data } = await api.post(
-    "/contact/create-contact",
-    createContactPayload,
-  );
-  console.log(data);
+  try {
+    const response = await wsApiService.createContact(createContactPayload);
+
+    if (response.success) {
+      console.log('Contact created successfully:', response);
+    } else {
+      throw new Error('Failed to create contact');
+    }
+  } catch (error) {
+    console.error('Error creating contact:', error);
+    throw error;
+  }
 };

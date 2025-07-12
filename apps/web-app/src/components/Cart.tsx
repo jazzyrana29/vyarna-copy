@@ -1,10 +1,9 @@
 'use client';
 
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   Modal,
   Pressable,
@@ -16,7 +15,7 @@ import {
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
-import { mockApiService } from '../services/mockApiService';
+import StripePaymentForm from './StripePaymentForm';
 
 interface CartProps {
   visible: boolean;
@@ -34,57 +33,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     getOriginalTotal,
     getTotalSavings,
   } = useCartStore();
+
   const { userDetails, hasUserDetails } = useUserStore();
-  const {
-    isProcessing,
-    paymentStatus,
-    paymentError,
-    setProcessing,
-    setPaymentStatus,
-    setPaymentError,
-    resetPayment,
-  } = usePaymentStore();
+  const { isProcessing, paymentStatus, paymentError, resetPayment } =
+    usePaymentStore();
 
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
-
-  // Listen for mock WebSocket events
-  useEffect(() => {
-    const handlePaymentCompleted = (event: any) => {
-      const { status, error } = event.detail;
-      setProcessing(false);
-
-      if (status === 'succeeded') {
-        setPaymentStatus('succeeded');
-        resetCart();
-        Alert.alert(
-          'Payment Successful!',
-          'Your order has been confirmed. You will receive an email confirmation shortly.',
-          [{ text: 'OK', onPress: onClose }],
-        );
-      } else {
-        setPaymentStatus('failed');
-        setPaymentError(error || 'Payment failed');
-      }
-    };
-
-    const handlePaymentFailed = (event: any) => {
-      const { error } = event.detail;
-      setProcessing(false);
-      setPaymentStatus('failed');
-      setPaymentError(error || 'Payment failed');
-    };
-
-    window.addEventListener('mock-payment-completed', handlePaymentCompleted);
-    window.addEventListener('mock-payment-failed', handlePaymentFailed);
-
-    return () => {
-      window.removeEventListener(
-        'mock-payment-completed',
-        handlePaymentCompleted,
-      );
-      window.removeEventListener('mock-payment-failed', handlePaymentFailed);
-    };
-  }, []);
 
   const handleProceedToPayment = () => {
     if (!hasUserDetails()) {
@@ -92,75 +47,18 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       return;
     }
 
-    initiatePayment();
+    setShowPaymentForm(true);
   };
 
-  const initiatePayment = async () => {
-    if (!userDetails) return;
+  const handlePaymentSuccess = () => {
+    setShowPaymentForm(false);
+    onClose();
+    resetPayment();
+  };
 
-    try {
-      setProcessing(true);
-      setPaymentStatus('processing');
-      setPaymentError(null);
-
-      // Create payment session with auto-applied coupons
-      const sessionData = await mockApiService.createPaymentSession(
-        items,
-        userDetails,
-      );
-
-      console.log('Payment session created:', sessionData);
-
-      // In a real implementation, you would redirect to Stripe Checkout
-      // For now, we'll simulate the payment process
-      Alert.alert(
-        'Redirecting to Payment',
-        `Session ID: ${sessionData.sessionId}\n\nIn a real app, you would be redirected to Stripe Checkout.`,
-        [
-          {
-            text: 'Simulate Success',
-            onPress: () => {
-              // Simulate successful payment
-              setTimeout(() => {
-                window.dispatchEvent(
-                  new CustomEvent('mock-payment-completed', {
-                    detail: {
-                      sessionId: sessionData.sessionId,
-                      customerEmail: userDetails.email,
-                      status: 'succeeded',
-                    },
-                  }),
-                );
-              }, 2000);
-            },
-          },
-          {
-            text: 'Simulate Failure',
-            style: 'destructive',
-            onPress: () => {
-              // Simulate failed payment
-              setTimeout(() => {
-                window.dispatchEvent(
-                  new CustomEvent('mock-payment-failed', {
-                    detail: {
-                      sessionId: sessionData.sessionId,
-                      customerEmail: userDetails.email,
-                      status: 'failed',
-                      error:
-                        'Your card was declined. Please try a different payment method.',
-                    },
-                  }),
-                );
-              }, 2000);
-            },
-          },
-        ],
-      );
-    } catch (error: any) {
-      setProcessing(false);
-      setPaymentStatus('failed');
-      setPaymentError(error.message || 'Failed to create payment session');
-    }
+  const handlePaymentCancel = () => {
+    setShowPaymentForm(false);
+    resetPayment();
   };
 
   const handleBackToProducts = () => {
@@ -168,10 +66,25 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     onBackToProducts(); // Then open product selector
   };
 
-  const handleRetryPayment = () => {
-    resetPayment();
-    initiatePayment();
-  };
+  // Show payment form if requested
+  if (showPaymentForm) {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onRequestClose={handlePaymentCancel}
+      >
+        <View className="flex-1 justify-center items-center bg-black bg-opacity-50 p-4">
+          <StripePaymentForm
+            visible={showPaymentForm}
+            onSuccess={handlePaymentSuccess}
+            onCancel={handlePaymentCancel}
+          />
+        </View>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
@@ -223,7 +136,10 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                 Payment Failed
               </Text>
               <Text className="text-red-700 text-sm">{paymentError}</Text>
-              <TouchableOpacity className="mt-2" onPress={handleRetryPayment}>
+              <TouchableOpacity
+                className="mt-2"
+                onPress={() => setShowPaymentForm(true)}
+              >
                 <Text className="text-red-800 font-semibold underline">
                   Try Again
                 </Text>
