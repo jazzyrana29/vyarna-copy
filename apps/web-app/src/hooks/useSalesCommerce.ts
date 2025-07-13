@@ -1,4 +1,4 @@
-// hooks/useSalesProducts.ts
+// hooks/useSalesCommerce.ts
 import { useEffect, useState } from 'react';
 import { SocketService } from '../services/socketService';
 import {
@@ -9,7 +9,7 @@ import {
 } from '../constants/socketEvents';
 import { GetProductsDto } from 'ez-utils';
 
-export function useSalesProducts(
+export function useSalesCommerce(
   roomId: string,
   query: GetProductsDto,
 ): { products: any[]; error: string | null } {
@@ -36,7 +36,9 @@ export function useSalesProducts(
     // ask for products
     socketSvc.emit<GetProductsDto>(KT_GET_PRODUCTS, { ...query });
 
-    return () => {
+    //...add more connection of this name space here
+
+    return (): void => {
       socketSvc.disconnect();
     };
   }, [roomId, JSON.stringify(query)]);

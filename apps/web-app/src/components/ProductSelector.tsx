@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useSalesProducts } from '../hooks/useSalesProducts';
+import { useSalesCommerce } from '../hooks/useSalesCommerce';
 
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
@@ -36,7 +36,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   onClose,
 }) => {
   const { addItem, openCart } = useCartStore();
-  const { products, error } = useSalesProducts(room, {
+  const { products, error } = useSalesCommerce(room, {
     active: true,
   } as GetProductsDto);
   const [loading, setLoading] = useState(true);

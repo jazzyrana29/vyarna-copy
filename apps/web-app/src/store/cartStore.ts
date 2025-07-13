@@ -24,7 +24,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   items: [],
   isOpen: false,
 
-  addItem: (item) => {
+  addItem: (item): void => {
     const items = get().items;
     const existingItem = items.find((i) => i.id === item.id);
 
@@ -41,13 +41,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }
   },
 
-  removeItem: (id) => {
+  removeItem: (id): void => {
     set({
       items: get().items.filter((item) => item.id !== id),
     });
   },
 
-  updateQuantity: (id, quantity) => {
+  updateQuantity: (id, quantity): void => {
     if (quantity <= 0) {
       get().removeItem(id);
       return;
@@ -60,19 +60,19 @@ export const useCartStore = create<CartStore>((set, get) => ({
     });
   },
 
-  resetCart: () => {
+  resetCart: (): void => {
     set({ items: [] });
   },
 
-  getItemCount: () => {
+  getItemCount: (): number => {
     return get().items.reduce((count, item) => count + item.quantity, 0);
   },
 
-  openCart: () => {
+  openCart: (): void => {
     set({ isOpen: true });
   },
 
-  closeCart: () => {
+  closeCart: (): void => {
     set({ isOpen: false });
   },
 }));

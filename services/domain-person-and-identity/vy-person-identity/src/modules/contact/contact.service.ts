@@ -4,10 +4,9 @@ import { Repository } from 'typeorm';
 import { Contact } from '../../entities/contact.entity';
 import { ActiveCampaignService } from '../person/services/active-campaign.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
-import { CreateContactDto, encodeKafkaMessage, KT_CONTACT_CREATED } from 'ez-utils';
+import { CreateContactDto } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { EzKafkaProducer } from 'ez-kafka-producer';
 
 @Injectable()
 export class ContactService {
@@ -39,7 +38,12 @@ export class ContactService {
       where: { email: createContactDto.email },
     });
     if (existing) {
-      this.logger.info('Contact already exists', traceId, 'createContact', LogStreamLevel.ProdStandard);
+      this.logger.info(
+        'Contact already exists',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
       return existing;
     }
 
@@ -49,25 +53,45 @@ export class ContactService {
       email: createContactDto.email,
     });
     await this.contactRepo.save(entity);
-    this.logger.info('Contact created', traceId, 'createContact', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Contact created',
+      traceId,
+      'createContact',
+      LogStreamLevel.ProdStandard,
+    );
 
     let stripeCustomer = await this.stripeGateway.findCustomerByEmail(
       createContactDto.email,
     );
     if (stripeCustomer) {
-      this.logger.info('Stripe customer already exists', traceId, 'createContact', LogStreamLevel.ProdStandard);
+      this.logger.info(
+        'Stripe customer already exists',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
     } else {
       stripeCustomer = await this.stripeGateway.createContact({
         name: `${createContactDto.firstName} ${createContactDto.lastName}`.trim(),
         email: createContactDto.email,
       });
-      this.logger.info('Stripe customer created', traceId, 'createContact', LogStreamLevel.ProdStandard);
+      this.logger.info(
+        'Stripe customer created',
+        traceId,
+        'createContact',
+        LogStreamLevel.ProdStandard,
+      );
     }
     entity.stripeCustomerId = stripeCustomer.id;
     await this.contactRepo.save(entity);
 
     const acRes = await this.activeCampaign.createContact(createContactDto);
-    this.logger.info('ActiveCampaign contact created', traceId, 'createContact', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'ActiveCampaign contact created',
+      traceId,
+      'createContact',
+      LogStreamLevel.ProdStandard,
+    );
     entity.activeCampaignId = acRes.contact.id;
     await this.contactRepo.save(entity);
 
