@@ -1,6 +1,6 @@
 // constants/socketEvents.ts
 export const RESULT = `result`;
-export const ERROR = `result`;
+export const ERROR = `error`;
 
 export const SOCKET_NAMESPACE_SALES = 'sales-commerce';
 export const KT_GET_PRODUCTS = 'get-products';

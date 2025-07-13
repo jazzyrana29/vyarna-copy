@@ -30,6 +30,7 @@ export function useSalesCommerce(
       setProducts(data);
     });
     socketSvc.on<string>(KT_GET_PRODUCTS_ERROR, (msg) => {
+      console.log('Error received ', msg);
       setError(msg);
     });
 
