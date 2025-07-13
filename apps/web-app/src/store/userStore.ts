@@ -1,38 +1,44 @@
-import { create } from "zustand"
+// src/store/userStore.ts
+import { create } from 'zustand';
 
 export interface UserDetails {
-  firstName: string
-  lastName: string
-  email: string
-  address: {
-    street: string
-    city: string
-    state: string
-    zip: string
-    country: string
-  }
+  firstName: string;
+  lastName: string;
+  email: string;
+  address?: {
+    street: string;
+    city: string;
+    postalCode?: string;
+    country?: string;
+  };
+  // add any other user fields here
 }
 
 interface UserStore {
-  userDetails: UserDetails | null
-  setUserDetails: (details: UserDetails) => void
-  clearUserDetails: () => void
-  hasUserDetails: () => boolean
+  userDetails: UserDetails | null;
+  stripeCustomerId: string | null;
+  setUserDetails: (details: UserDetails) => void;
+  setStripeCustomerId: (id: string) => void;
+  clearUserDetails: () => void;
+  hasUserDetails: () => boolean;
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
+  // initial state
   userDetails: null,
+  stripeCustomerId: null,
 
-  setUserDetails: (details) => {
-    set({ userDetails: details })
-  },
+  // setters
+  setUserDetails: (details): void => set({ userDetails: details }),
+  setStripeCustomerId: (id): void => set({ stripeCustomerId: id }),
 
-  clearUserDetails: () => {
-    set({ userDetails: null })
-  },
+  // clear all user info
+  clearUserDetails: (): void =>
+    set({ userDetails: null, stripeCustomerId: null }),
 
-  hasUserDetails: () => {
-    const details = get().userDetails
-    return !!(details?.firstName && details?.lastName && details?.email && details?.address?.street)
+  // helper to check if required fields are present
+  hasUserDetails: (): boolean => {
+    const d = get().userDetails;
+    return !!(d?.firstName && d?.lastName && d?.email && d.address?.street);
   },
-}))
+}));
