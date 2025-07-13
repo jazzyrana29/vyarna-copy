@@ -24,7 +24,7 @@ const PreorderScreen: FC = () => {
 
   const handlePreorderClick = () => {
     if (!hasUserDetails()) {
-      setUserDetailsModalVisible(true);
+      setProductSelectorVisible(true);
     } else {
       setProductSelectorVisible(true);
     }
@@ -53,7 +53,6 @@ const PreorderScreen: FC = () => {
   return (
     <ScrollView className="flex-1 bg-white">
       <View className="max-w-screen-xl mx-auto px-4 py-8">
-        {/* Hero */}
         <Animatable.View animation="fadeIn" delay={100}>
           <View className="relative w-full h-[500px] md:h-[600px] overflow-hidden rounded-lg shadow-sm">
             <Image
@@ -190,10 +189,13 @@ const PreorderScreen: FC = () => {
       />
 
       {/* Product Selector Modal */}
-      <ProductSelector
-        visible={productSelectorVisible}
-        onClose={() => setProductSelectorVisible(false)}
-      />
+      {productSelectorVisible && (
+        <ProductSelector
+          room={'get-products'}
+          visible={productSelectorVisible}
+          onClose={() => setProductSelectorVisible(false)}
+        />
+      )}
 
       {/* Cart Modal */}
       <Cart

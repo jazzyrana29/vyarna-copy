@@ -11,7 +11,7 @@ import {
 import { usePaymentStore } from '../store/paymentStore';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
-import { wsApiService } from '../services/websocketApiService';
+// import { wsApiService } from '../services/websocketApiService';
 import type { PaymentIntentCreatedPayload } from '../constants/websocket-messages';
 
 interface StripePaymentFormProps {

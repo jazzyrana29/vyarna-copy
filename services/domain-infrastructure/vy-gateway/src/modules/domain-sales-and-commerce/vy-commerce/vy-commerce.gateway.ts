@@ -1,45 +1,44 @@
 import {
-  WebSocketGateway,
-  WebSocketServer,
-  SubscribeMessage,
   ConnectedSocket,
   MessageBody,
   OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.service';
 import {
-  generateTraceId,
+  ApplyCartPromotionDto,
   CreateCartDto,
   CreateCartItemDto,
-  DeleteCartItemDto,
-  ApplyCartPromotionDto,
   CreateOrderDto,
-  GetZtrackingOrderDto,
-  UpdateOrderShippingDto,
   CreateSubscriptionDto,
-  GetSubscriptionDto,
+  DeleteCartItemDto,
   DeleteSubscriptionDto,
-  ValidatePromotionCodeDto,
+  generateTraceId,
+  GetCategoriesDto,
   GetProductsDto,
   GetProductVariantsDto,
-  GetCategoriesDto,
-  KT_GET_PRODUCTS,
-  KT_GET_PRODUCT_VARIANTS,
-  KT_GET_CATEGORIES,
-  KT_CREATE_CART,
-  KT_ADD_CART_ITEM,
-  KT_REMOVE_CART_ITEM,
-  KT_APPLY_CART_PROMOTION,
-  KT_CREATE_ORDER,
-  KT_GET_ORDERS,
-  KT_GET_ZTRACKING_ORDER,
-  KT_UPDATE_ORDER_SHIPPING,
-  KT_CREATE_SUBSCRIPTION,
-  KT_GET_SUBSCRIPTION,
-  KT_CANCEL_SUBSCRIPTION,
-  KT_VALIDATE_PROMOTION_CODE,
+  GetSubscriptionDto,
+  GetZtrackingOrderDto,
   JoinRoomDto,
+  KT_ADD_CART_ITEM,
+  KT_APPLY_CART_PROMOTION,
+  KT_CANCEL_SUBSCRIPTION,
+  KT_CREATE_CART,
+  KT_CREATE_ORDER,
+  KT_CREATE_SUBSCRIPTION,
+  KT_GET_CATEGORIES,
+  KT_GET_PRODUCT_VARIANTS,
+  KT_GET_PRODUCTS,
+  KT_GET_SUBSCRIPTION,
+  KT_GET_ZTRACKING_ORDER,
+  KT_REMOVE_CART_ITEM,
+  KT_UPDATE_ORDER_SHIPPING,
+  KT_VALIDATE_PROMOTION_CODE,
+  UpdateOrderShippingDto,
+  ValidatePromotionCodeDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -87,7 +86,12 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
     const { room } = joinRoomDto;
     if (room) {
       socket.join(room);
-      this.logger.debug(`Socket ${socket.id} joined room ${room}`, '', 'handleJoin', LogStreamLevel.DebugLight);
+      this.logger.debug(
+        `Socket ${socket.id} joined room ${room}`,
+        '',
+        'handleJoin',
+        LogStreamLevel.DebugLight,
+      );
       socket.emit('join-result', { room, success: true });
     } else {
       socket.emit('join-error', { message: 'Room field is required' });
@@ -124,7 +128,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_GET_PRODUCT_VARIANTS}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_GET_PRODUCT_VARIANTS}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_GET_PRODUCT_VARIANTS}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -152,10 +159,7 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   ) {
     const traceId = generateTraceId('sales-commerce-create-cart');
     try {
-      const result = await this.kafkaService.createCart(
-        createCartDto,
-        traceId,
-      );
+      const result = await this.kafkaService.createCart(createCartDto, traceId);
       socket.emit(`${KT_CREATE_CART}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_CREATE_CART}-error`, e.message || 'Unknown error');
@@ -209,7 +213,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_APPLY_CART_PROMOTION}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_APPLY_CART_PROMOTION}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_APPLY_CART_PROMOTION}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -243,7 +250,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_GET_ZTRACKING_ORDER}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_GET_ZTRACKING_ORDER}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_GET_ZTRACKING_ORDER}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -260,7 +270,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_UPDATE_ORDER_SHIPPING}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_UPDATE_ORDER_SHIPPING}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_UPDATE_ORDER_SHIPPING}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -277,7 +290,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_CREATE_SUBSCRIPTION}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_CREATE_SUBSCRIPTION}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_CREATE_SUBSCRIPTION}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -311,7 +327,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_CANCEL_SUBSCRIPTION}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_CANCEL_SUBSCRIPTION}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_CANCEL_SUBSCRIPTION}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -328,7 +347,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_VALIDATE_PROMOTION_CODE}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_VALIDATE_PROMOTION_CODE}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_VALIDATE_PROMOTION_CODE}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 }

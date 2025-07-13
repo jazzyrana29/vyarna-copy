@@ -15,7 +15,6 @@ import {
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
-import StripePaymentForm from './StripePaymentForm';
 
 interface CartProps {
   visible: boolean;
@@ -76,11 +75,11 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
         onRequestClose={handlePaymentCancel}
       >
         <View className="flex-1 justify-center items-center bg-black bg-opacity-50 p-4">
-          <StripePaymentForm
-            visible={showPaymentForm}
-            onSuccess={handlePaymentSuccess}
-            onCancel={handlePaymentCancel}
-          />
+          {/*<StripePaymentForm*/}
+          {/*  visible={showPaymentForm}*/}
+          {/*  onSuccess={handlePaymentSuccess}*/}
+          {/*  onCancel={handlePaymentCancel}*/}
+          {/*/>*/}
         </View>
       </Modal>
     );
