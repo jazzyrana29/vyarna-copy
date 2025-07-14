@@ -32,7 +32,7 @@ export class GetProductsDto {
   @IsOptional()
   limit?: number;
 
-  @ApiProperty({ description: 'Currency code (ISO 4217)' })
+  @ApiProperty({ description: 'Target currency code (ISO 4217)' })
   @IsISO4217CurrencyCode()
-  currency: string;
+  targetCurrency: string;
 }

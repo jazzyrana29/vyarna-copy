@@ -25,7 +25,7 @@ interface Product {
   images: string[];
   active: boolean;
   priceCents: number;
-  currency: string;
+  targetCurrency: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -44,7 +44,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   const currency = useCurrency();
   const { products, error: productsError } = useSalesCommerce(room, {
     active: true,
-    currency,
+    targetCurrency: currency,
   } as GetProductsDto);
   const { addItem, openCart } = useCartStore();
 
@@ -175,7 +175,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
                           {p.description}
                         </Text>
                         <Text className="text-base font-bold text-primary mt-1">
-                          {formatMoney(p.priceCents, p.currency)}
+                          {formatMoney(p.priceCents, p.targetCurrency)}
                         </Text>
                       </View>
                     </View>

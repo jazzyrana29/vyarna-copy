@@ -76,4 +76,14 @@ export class StripeGatewayService {
     );
     return this.stripe.coupons.retrieve(id);
   }
+
+  async retrieveExchangeRate(currency: string) {
+    this.logger.debug(
+      `Retrieving exchange rate for ${currency}`,
+      '',
+      'retrieveExchangeRate',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.exchangeRates.retrieve(currency.toLowerCase());
+  }
 }
