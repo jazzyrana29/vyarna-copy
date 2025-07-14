@@ -37,3 +37,4 @@ yarn-error.*
 *.tsbuildinfo
 depcheck-report.json
 .env
+*.zip

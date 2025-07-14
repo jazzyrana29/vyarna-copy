@@ -18,8 +18,7 @@ const PreorderScreen: FC = () => {
   const [userDetailsModalVisible, setUserDetailsModalVisible] = useState(false);
   const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(false);
 
-  const { isOpen, closeCart, getItemCount, getTotal, getTotalSavings } =
-    useCartStore();
+  const { isOpen, closeCart, getItemCount } = useCartStore();
   const { userDetails, hasUserDetails, setUserDetails } = useUserStore();
 
   const handlePreorderClick = () => {
@@ -30,7 +29,9 @@ const PreorderScreen: FC = () => {
     }
   };
 
-  const handleUserDetailsSubmit = async (details: UserDetails) => {
+  const handleUserDetailsSubmit = async (
+    details: UserDetails,
+  ): Promise<void> => {
     setIsLoadingUserDetails(true);
     try {
       // Simulate processing time
@@ -108,14 +109,14 @@ const PreorderScreen: FC = () => {
                 <Text className="text-lg font-bold text-primary">
                   {getItemCount()} item(s) in cart
                 </Text>
-                <Text className="text-base text-neutralText">
-                  Total: ${getTotal().toFixed(2)}
-                </Text>
-                {getTotalSavings() > 0 && (
-                  <Text className="text-sm text-green-600">
-                    You're saving ${getTotalSavings().toFixed(2)}!
-                  </Text>
-                )}
+                {/*<Text className="text-base text-neutralText">*/}
+                {/*  Total: ${getTotal().toFixed(2)}*/}
+                {/*</Text>*/}
+                {/*{getTotalSavings() > 0 && (*/}
+                {/*  <Text className="text-sm text-green-600">*/}
+                {/*    You're saving ${getTotalSavings().toFixed(2)}!*/}
+                {/*  </Text>*/}
+                {/*)}*/}
               </View>
               <TouchableOpacity
                 className="bg-primary px-4 py-2 rounded-lg"
@@ -184,8 +185,7 @@ const PreorderScreen: FC = () => {
       <UserDetailsModal
         visible={userDetailsModalVisible}
         onClose={() => setUserDetailsModalVisible(false)}
-        onSubmit={handleUserDetailsSubmit}
-        isLoading={isLoadingUserDetails}
+        onSave={handleUserDetailsSubmit}
       />
 
       {/* Product Selector Modal */}
