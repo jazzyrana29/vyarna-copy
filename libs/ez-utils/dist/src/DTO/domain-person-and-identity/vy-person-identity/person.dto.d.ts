@@ -9,6 +9,8 @@ export declare class PersonDto {
     nameLast: string;
     email: string;
     password: string;
+    stripeCustomerId?: string;
+    activeCampaignId?: string;
     isDeleted: boolean;
     updatedBy?: string;
     createdAt: Date;

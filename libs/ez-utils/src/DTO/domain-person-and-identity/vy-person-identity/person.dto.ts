@@ -92,6 +92,24 @@ export class PersonDto {
   password: string;
 
   @ApiProperty({
+    description: "Stripe customer id associated with the person",
+    type: String,
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  stripeCustomerId?: string;
+
+  @ApiProperty({
+    description: "ActiveCampaign contact id associated with the person",
+    type: String,
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  activeCampaignId?: string;
+
+  @ApiProperty({
     description: "Indicates if the person is deleted",
     type: Boolean,
     required: true,
