@@ -86,4 +86,31 @@ export class StripeGatewayService {
     );
     return this.stripe.exchangeRates.retrieve(currency.toLowerCase());
   }
+
+  async retrieveExchangeRate(
+    fromCurrency: string,
+    toCurrency: string,
+  ): Promise<number> {
+    this.logger.debug(
+      `Retrieving FX quote from ${fromCurrency} to ${toCurrency}`,
+      '',
+      'retrieveExchangeRate',
+      LogStreamLevel.DebugLight,
+    );
+
+    const fxQuote = await this.stripe.fxQuotes.create({
+      from_currencies: [fromCurrency.toLowerCase()],
+      to_currency: toCurrency.toLowerCase(),
+      lock_duration: 'none', // tasa en tiempo real
+    });
+
+    const quote = fxQuote.rates[fromCurrency.toLowerCase()];
+    if (!quote) {
+      throw new Error(
+        `No exchange rate found for ${fromCurrency} → ${toCurrency}`,
+      );
+    }
+
+    return quote.exchange_rate;
+  }
 }

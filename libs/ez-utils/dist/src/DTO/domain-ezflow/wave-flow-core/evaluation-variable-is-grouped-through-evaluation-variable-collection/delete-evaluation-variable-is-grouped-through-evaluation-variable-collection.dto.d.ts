@@ -1,0 +1,5 @@
+import { EvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto } from "./evaluation-variable-is-grouped-through-evaluation-variable-collection.dto";
+declare const DeleteEvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto_base: import("@nestjs/common").Type<Pick<EvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto, "updatedBy" | "evaluationVariableIsGroupedThroughEvaluationVariableCollectionId">>;
+export declare class DeleteEvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto extends DeleteEvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto_base {
+}
+export {};
