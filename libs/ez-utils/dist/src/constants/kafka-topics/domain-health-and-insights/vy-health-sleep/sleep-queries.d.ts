@@ -1,0 +1,10 @@
+export declare const KT_GET_SLEEP_EVENTS = "get-sleep-events";
+export declare const KT_GET_SLEEP_INTERRUPTION_REASONS = "get-sleep-interruption-reasons";
+export declare const KT_GET_SLEEP_ENVIRONMENTS = "get-sleep-environments";
+export declare const KT_GET_SLEEP_RATINGS = "get-sleep-ratings";
+export declare const KT_CREATE_SLEEP_SCHEDULE = "create-sleep-schedule";
+export declare const KT_GET_SLEEP_SCHEDULES = "get-sleep-schedules";
+export declare const KT_CREATE_SLEEP_NOTIFICATION = "create-sleep-notification";
+export declare const KT_GET_SLEEP_NOTIFICATIONS = "get-sleep-notifications";
+export declare const KT_GET_SLEEP_PATTERN_SUMMARIES = "get-sleep-pattern-summaries";
+export declare const KT_GET_SLEEP_SUMMARY = "get-sleep-summary";

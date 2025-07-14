@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import localeCurrency from 'locale-currency';
 
-export function useCurrency(defaultCurrency: string = 'usd'): string {
+export function useCurrency(defaultCurrency: string = 'pkr'): string {
   const [currency, setCurrency] = useState(defaultCurrency);
 
   // A (non-exhaustive) list of Stripe’s supported ISO 4217 codes in lowercase.
