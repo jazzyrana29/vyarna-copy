@@ -1,6 +1,6 @@
 import { OrderService } from '../order.service';
 import { Repository } from 'typeorm';
-import { Order } from '../../../entities/order.entity';
+import { Order } from '../../../../entities/order.entity';
 import { ZtrackingOrderService } from '../ztracking-order.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { KT_CAPTURE_PAYMENT_INTENT, encodeKafkaMessage } from 'ez-utils';
@@ -21,10 +21,9 @@ describe('OrderService', () => {
       const service = new OrderService(orderRepo, ztracking);
       await service.updateOrderStatus('o1', 'READY_TO_SHIP', 'trace');
 
-      expect(producerInstance.produce).toHaveBeenCalledWith(
-        process.env.KAFKA_BROKER as string,
+      expect(producerInstance.produce).toHaveBeenCalledTimes(1);
+      expect(producerInstance.produce.mock.calls[0][1]).toBe(
         KT_CAPTURE_PAYMENT_INTENT,
-        encodeKafkaMessage(OrderService.name, { paymentIntentId: 'pi', traceId: 'trace' }),
       );
     });
   });

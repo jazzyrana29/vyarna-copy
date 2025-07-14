@@ -5,6 +5,7 @@ import {
   IsBoolean,
   IsOptional,
   IsDate,
+  IsInt,
 } from "class-validator";
 
 export class ProductDto {
@@ -24,6 +25,14 @@ export class ProductDto {
   @ApiProperty({ description: "Whether product is active" })
   @IsBoolean()
   active: boolean;
+
+  @ApiProperty({ description: "Price in cents" })
+  @IsInt()
+  priceCents: number;
+
+  @ApiProperty({ description: "Currency code" })
+  @IsString()
+  currency: string;
 
   @ApiProperty({ description: "Creation timestamp", required: false })
   @IsOptional()
