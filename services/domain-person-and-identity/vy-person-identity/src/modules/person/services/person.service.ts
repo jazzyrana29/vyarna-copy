@@ -92,7 +92,8 @@ export class PersonService {
     }
 
     const { email, roles = [], ...rest } = createPersonDto;
-    const finalRoles = Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
+    const finalRoles =
+      Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
 
     const person = await this.personRepository.save(
       this.personRepository.create({
