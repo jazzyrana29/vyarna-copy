@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Contact } from '../../entities/contact.entity';
+import { Person } from '../../entities/person.entity';
 import { ActiveCampaignService } from '../person/services/active-campaign.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { CreateContactDto } from 'ez-utils';
@@ -13,8 +13,8 @@ export class ContactService {
   private logger = getLoggerConfig(ContactService.name);
 
   constructor(
-    @InjectRepository(Contact)
-    private readonly contactRepo: Repository<Contact>,
+    @InjectRepository(Person)
+    private readonly personRepo: Repository<Person>,
     private readonly activeCampaign: ActiveCampaignService,
     private readonly stripeGateway: StripeGatewayService,
   ) {
@@ -26,15 +26,15 @@ export class ContactService {
     );
   }
 
-  async findByEmail(email: string): Promise<Contact | null> {
-    return this.contactRepo.findOne({ where: { email } });
+  async findByEmail(email: string): Promise<Person | null> {
+    return this.personRepo.findOne({ where: { email } });
   }
 
   async createContact(
     createContactDto: CreateContactDto,
     traceId: string,
-  ): Promise<Contact> {
-    let existing = await this.contactRepo.findOne({
+  ): Promise<Person> {
+    let existing = await this.personRepo.findOne({
       where: { email: createContactDto.email },
     });
     if (existing) {
@@ -47,12 +47,12 @@ export class ContactService {
       return existing;
     }
 
-    const entity = this.contactRepo.create({
+    const entity = this.personRepo.create({
       firstName: createContactDto.firstName,
       lastName: createContactDto.lastName,
       email: createContactDto.email,
     });
-    await this.contactRepo.save(entity);
+    await this.personRepo.save(entity);
     this.logger.info(
       'Contact created',
       traceId,
@@ -83,7 +83,7 @@ export class ContactService {
       );
     }
     entity.stripeCustomerId = stripeCustomer.id;
-    await this.contactRepo.save(entity);
+    await this.personRepo.save(entity);
 
     const acRes = await this.activeCampaign.createContact(createContactDto);
     this.logger.info(
@@ -93,7 +93,7 @@ export class ContactService {
       LogStreamLevel.ProdStandard,
     );
     entity.activeCampaignId = acRes.contact.id;
-    await this.contactRepo.save(entity);
+    await this.personRepo.save(entity);
 
     // The current implementation of CREATED broadcasts to all connected
     // sockets which is inefficient and insecure as it exposes user
