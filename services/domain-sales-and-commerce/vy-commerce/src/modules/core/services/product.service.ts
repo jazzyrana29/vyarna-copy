@@ -23,7 +23,7 @@ export class ProductService {
     getProductsDto: GetProductsDto,
     traceId: string,
   ): Promise<ProductDto[]> {
-    const { productId, name, active, limit: dtoLimit } = getProductsDto;
+    const { productId, name, active, limit: dtoLimit, targetCurrency } = getProductsDto;
     const requestedLimit = dtoLimit ?? this.defaultLimit;
     let stripeProducts: Stripe.Product[] = [];
 
@@ -64,15 +64,44 @@ export class ProductService {
       LogStreamLevel.DebugLight,
     );
 
-    return stripeProducts.map((p) => ({
-      productId: p.id,
-      name: p.name,
-      description: p.description ?? undefined,
-      url: p.url ?? undefined,
-      images: p.images ?? [],
-      active: p.active,
-      createdAt: new Date((p.created ?? 0) * 1000),
-      updatedAt: p.updated ? new Date((p.updated as number) * 1000) : undefined,
-    }));
+    const withPrices = await Promise.all(
+      stripeProducts.map(async (p) => {
+        const prices = await this.stripeGateway.listPrices({
+          product: p.id,
+          active: true,
+          limit: 100,
+        });
+        let price = prices.data.find((pr) => pr.currency === targetCurrency);
+        let amount = price?.unit_amount ?? 0;
+        if (!price) {
+          price = prices.data[0];
+          if (price) {
+            amount = price.unit_amount ?? 0;
+            if (price.currency !== targetCurrency) {
+              const rate = await this.stripeGateway.retrieveExchangeRate(
+                price.currency,
+              );
+              const conv = (rate.rates as any)[targetCurrency.toLowerCase()];
+              if (conv) {
+                amount = Math.round(((amount / 100) * conv) * 100);
+              }
+            }
+          }
+        }
+        return {
+          productId: p.id,
+          name: p.name,
+          description: p.description ?? undefined,
+          url: p.url ?? undefined,
+          images: p.images ?? [],
+          active: p.active,
+          priceCents: amount,
+          targetCurrency: targetCurrency,
+          createdAt: new Date((p.created ?? 0) * 1000),
+          updatedAt: p.updated ? new Date((p.updated as number) * 1000) : undefined,
+        } as ProductDto;
+      }),
+    );
+    return withPrices;
   }
 }

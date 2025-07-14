@@ -3,6 +3,8 @@ export declare class ProductDto {
     name: string;
     description?: string;
     active: boolean;
+    priceCents: number;
+    targetCurrency: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

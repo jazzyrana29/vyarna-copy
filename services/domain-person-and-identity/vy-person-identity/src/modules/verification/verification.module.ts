@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { IdentityVerification } from '../../entities/identityVerification.entity';
+import { IdentityVerification } from '../../entities/identity-verification.entity';
 import { Document } from '../../entities/document.entity';
 import { VerificationService } from './services/verification.service';
 import { VerificationKafkaService } from './services/verification-kafka.service';
@@ -15,6 +15,7 @@ import { LogStreamLevel } from 'ez-logger';
 })
 export class VerificationModule {
   private logger = getLoggerConfig(VerificationModule.name);
+
   constructor() {
     this.logger.debug(
       `${VerificationModule.name} initialized`,

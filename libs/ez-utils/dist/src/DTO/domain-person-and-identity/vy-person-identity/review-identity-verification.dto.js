@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewIdentityVerificationDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-const identity_verification_dto_1 = require("./identity-verification.dto");
+const verification_status_enum_1 = require("../../../enums/domain-person-and-identity/verification-status.enum");
 class ReviewIdentityVerificationDto {
 }
 exports.ReviewIdentityVerificationDto = ReviewIdentityVerificationDto;
@@ -22,8 +22,8 @@ __decorate([
     __metadata("design:type", String)
 ], ReviewIdentityVerificationDto.prototype, "verificationId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: identity_verification_dto_1.VerificationStatusDto }),
-    (0, class_validator_1.IsEnum)(identity_verification_dto_1.VerificationStatusDto),
+    (0, swagger_1.ApiProperty)({ enum: verification_status_enum_1.VerificationStatus }),
+    (0, class_validator_1.IsEnum)(verification_status_enum_1.VerificationStatus),
     __metadata("design:type", String)
 ], ReviewIdentityVerificationDto.prototype, "status", void 0);
 //# sourceMappingURL=review-identity-verification.dto.js.map

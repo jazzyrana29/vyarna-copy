@@ -1,1 +1,0 @@
-{"version":3,"file":"create-business-unit.dto.js","sourceRoot":"","sources":["../../../../../../src/DTO/domain-multitenant/operators/business-unit/create-business-unit.dto.ts"],"names":[],"mappings":";;;AAAA,6CAA2C;AAC3C,2DAAsD;AAEtD,MAAa,qBAAsB,SAAQ,IAAA,kBAAQ,EAAC,mCAAe,EAAE;IACnE,MAAM;IACN,sBAAsB;IACtB,UAAU;IACV,WAAW;CACH,CAAC;CAAG;AALd,sDAKc"}

@@ -21,6 +21,9 @@ __exportStar(require("./src/services/kafka-message-responder.service"), exports)
 __exportStar(require("./src/config"), exports);
 __exportStar(require("./src/enums/domain-person-and-identity/vy-active-campaign/tags.enum"), exports);
 __exportStar(require("./src/enums/domain-person-and-identity/vy-active-campaign/lists.enum"), exports);
+__exportStar(require("./src/enums/domain-person-and-identity/phone-type.enum"), exports);
+__exportStar(require("./src/enums/domain-person-and-identity/address-type.enum"), exports);
+__exportStar(require("./src/enums/domain-person-and-identity/verification-status.enum"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/email"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact"), exports);
@@ -71,6 +74,8 @@ __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/do
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/identity-verification.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/review-identity-verification.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/phone.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/physical-address.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto"), exports);

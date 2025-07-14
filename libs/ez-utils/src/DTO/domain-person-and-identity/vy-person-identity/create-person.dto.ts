@@ -1,14 +1,19 @@
-import { PickType } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { IsEmail } from "class-validator";
 import { PersonDto } from "./person.dto";
 
 export class CreatePersonDto extends PickType(PersonDto, [
-  "businessUnitId",
+  "rootBusinessUnitId",
   "username",
   "nameFirst",
   "nameMiddle",
-  "nameLast",
-  "email",
+  "nameLastFirst",
+  "nameLastSecond",
   "password",
   "roles",
   "updatedBy",
-] as const) {}
+] as const) {
+  @ApiProperty({ description: "Primary email address" })
+  @IsEmail()
+  email: string;
+}

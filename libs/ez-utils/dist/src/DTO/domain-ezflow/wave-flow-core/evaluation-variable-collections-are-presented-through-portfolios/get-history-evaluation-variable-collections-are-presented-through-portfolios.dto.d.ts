@@ -1,5 +1,0 @@
-import { EvaluationVariableCollectionsArePresentedThroughPortfoliosDto } from "./evaluation-variable-collections-are-presented-through-portfolios.dto";
-declare const GetHistoryOfEvaluationVariableCollectionsArePresentedThroughPortfoliosDto_base: import("@nestjs/common").Type<Pick<EvaluationVariableCollectionsArePresentedThroughPortfoliosDto, "evaluationVariableCollectionsArePresentedThroughPortfoliosId">>;
-export declare class GetHistoryOfEvaluationVariableCollectionsArePresentedThroughPortfoliosDto extends GetHistoryOfEvaluationVariableCollectionsArePresentedThroughPortfoliosDto_base {
-}
-export {};

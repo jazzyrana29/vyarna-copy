@@ -44,4 +44,9 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], GetProductsDto.prototype, "limit", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Target currency code (ISO 4217)' }),
+    (0, class_validator_1.IsISO4217CurrencyCode)(),
+    __metadata("design:type", String)
+], GetProductsDto.prototype, "targetCurrency", void 0);
 //# sourceMappingURL=get-products.dto.js.map

@@ -2,15 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { encodeKafkaMessage } from 'ez-utils';
+import {
+  encodeKafkaMessage,
+  ReviewIdentityVerificationDto,
+  StartIdentityVerificationDto,
+  VerificationStatus,
+} from 'ez-utils';
 import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
-import {
-  StartIdentityVerificationDto,
-  ReviewIdentityVerificationDto,
-  VerificationStatusDto,
-} from 'ez-utils';
-import { IdentityVerification, VerificationStatus } from '../../../entities/identityVerification.entity';
+import { IdentityVerification } from '../../../entities/identity-verification.entity';
 import { Document } from '../../../entities/document.entity';
 
 @Injectable()
@@ -43,24 +43,31 @@ export class VerificationService {
     );
 
     for (const doc of startVerificationDto.documents) {
-      await this.documentRepo.save(this.documentRepo.create({
-        verificationId: verification.verificationId,
-        type: doc.type,
-        url: doc.url,
-      }));
+      await this.documentRepo.save(
+        this.documentRepo.create({
+          verificationId: verification.verificationId,
+          type: doc.type,
+          url: doc.url,
+        }),
+      );
     }
 
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
       'KYCStarted',
       encodeKafkaMessage(VerificationService.name, {
-          verificationId: verification.verificationId,
-          personId: verification.personId,
-          traceId,
-        }),
-      );
+        verificationId: verification.verificationId,
+        personId: verification.personId,
+        traceId,
+      }),
+    );
 
-    this.logger.info('Verification started', traceId, 'startVerification', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Verification started',
+      traceId,
+      'startVerification',
+      LogStreamLevel.ProdStandard,
+    );
     return verification;
   }
 
@@ -76,7 +83,8 @@ export class VerificationService {
         `no verification with id => ${reviewVerificationDto.verificationId}`,
       );
 
-    const status = reviewVerificationDto.status as unknown as VerificationStatus;
+    const status =
+      reviewVerificationDto.status as unknown as VerificationStatus;
     await this.verificationRepo.update(reviewVerificationDto.verificationId, {
       status,
       reviewedAt: new Date(),
@@ -107,7 +115,12 @@ export class VerificationService {
       );
     }
 
-    this.logger.info('Verification reviewed', traceId, 'reviewVerification', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Verification reviewed',
+      traceId,
+      'reviewVerification',
+      LogStreamLevel.ProdStandard,
+    );
     return updated!;
   }
 }

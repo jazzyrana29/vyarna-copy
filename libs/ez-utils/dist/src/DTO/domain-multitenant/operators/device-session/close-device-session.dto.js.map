@@ -1,1 +1,0 @@
-{"version":3,"file":"close-device-session.dto.js","sourceRoot":"","sources":["../../../../../../src/DTO/domain-multitenant/operators/device-session/close-device-session.dto.ts"],"names":[],"mappings":";;;AAAA,6CAA2C;AAC3C,6DAAwD;AAExD,MAAa,qBAAsB,SAAQ,IAAA,kBAAQ,EAAC,qCAAgB,EAAE;IACpE,iBAAiB;IACjB,WAAW;IACX,SAAS;IACT,WAAW;IACX,WAAW;IACX,aAAa;IACb,WAAW;CACH,CAAC;CAAG;AARd,sDAQc"}

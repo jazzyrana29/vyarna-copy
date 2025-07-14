@@ -12,7 +12,12 @@ import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { PersonContactKafkaService } from './microservices/vy-person-contact-kafka.service';
 import { ValidateCreateContactDtoPipe } from './pipes/validate-create-contact-dto.pipe';
-import { generateTraceId, CreateContactDto, KT_CREATE_CONTACT } from 'ez-utils';
+import {
+  CreateContactDto,
+  CreatePersonDto,
+  generateTraceId,
+  KT_CREATE_CONTACT,
+} from 'ez-utils';
 
 @UseInterceptors(SentryInterceptor)
 @ApiTags('vy-person-contact')
@@ -34,7 +39,7 @@ export class PersonContactController {
   @ApiBody({ type: CreateContactDto })
   async createContact(
     @Body(new ValidateCreateContactDtoPipe())
-    createContactDto: CreateContactDto,
+    createContactDto: CreatePersonDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createContact');
     this.logger.info(

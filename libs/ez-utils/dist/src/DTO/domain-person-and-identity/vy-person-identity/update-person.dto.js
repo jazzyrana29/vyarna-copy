@@ -14,13 +14,12 @@ const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const person_dto_1 = require("./person.dto");
 class UpdatePersonDto extends (0, swagger_1.PartialType)((0, swagger_1.PickType)(person_dto_1.PersonDto, [
-    "businessUnitId",
     "rootBusinessUnitId",
     "username",
     "nameFirst",
     "nameMiddle",
-    "nameLast",
-    "email",
+    "nameLastFirst",
+    "nameLastSecond",
     "password",
     "roles",
     "isDeleted",
@@ -46,4 +45,10 @@ __decorate([
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], UpdatePersonDto.prototype, "operatorId", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: "Primary email address" }),
+    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdatePersonDto.prototype, "email", void 0);
 //# sourceMappingURL=update-person.dto.js.map

@@ -8,9 +8,10 @@ import { ActiveCampaignService } from '../person/services/active-campaign.servic
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { Email } from '../../entities/email.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Person])],
+  imports: [TypeOrmModule.forFeature([Person, Email])],
   controllers: [ContactController],
   providers: [
     ContactService,
@@ -21,6 +22,7 @@ import { LogStreamLevel } from 'ez-logger';
 })
 export class ContactModule {
   private logger = getLoggerConfig(ContactModule.name);
+
   constructor() {
     this.logger.debug(
       `${ContactModule.name} initialized`,

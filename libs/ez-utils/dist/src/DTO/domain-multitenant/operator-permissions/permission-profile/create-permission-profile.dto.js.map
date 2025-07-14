@@ -1,1 +1,0 @@
-{"version":3,"file":"create-permission-profile.dto.js","sourceRoot":"","sources":["../../../../../../src/DTO/domain-multitenant/operator-permissions/permission-profile/create-permission-profile.dto.ts"],"names":[],"mappings":";;;AAAA,6CAA2C;AAC3C,qEAAgE;AAEhE,MAAa,0BAA2B,SAAQ,IAAA,kBAAQ,EAAC,6CAAoB,EAAE;IAC7E,gBAAgB;IAChB,MAAM;IACN,aAAa;IACb,WAAW;CACH,CAAC;CAAG;AALd,gEAKc"}

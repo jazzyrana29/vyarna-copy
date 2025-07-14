@@ -4,4 +4,5 @@ export declare class GetProductsDto {
     name?: string;
     active?: boolean;
     limit?: number;
+    targetCurrency: string;
 }

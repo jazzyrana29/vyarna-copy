@@ -47,6 +47,16 @@ export class StripeGatewayService {
     return this.stripe.products.list(params);
   }
 
+  async listPrices(params: Stripe.PriceListParams) {
+    this.logger.debug(
+      'Listing prices',
+      '',
+      'listPrices',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.prices.list(params);
+  }
+
   async listPromotionCodes(params: Stripe.PromotionCodeListParams) {
     this.logger.debug(
       'Listing promotion codes',
@@ -65,5 +75,15 @@ export class StripeGatewayService {
       LogStreamLevel.DebugLight,
     );
     return this.stripe.coupons.retrieve(id);
+  }
+
+  async retrieveExchangeRate(currency: string) {
+    this.logger.debug(
+      `Retrieving exchange rate for ${currency}`,
+      '',
+      'retrieveExchangeRate',
+      LogStreamLevel.DebugLight,
+    );
+    return this.stripe.exchangeRates.retrieve(currency.toLowerCase());
   }
 }

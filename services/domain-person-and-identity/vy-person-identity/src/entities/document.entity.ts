@@ -8,8 +8,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IsUUID, IsString } from 'class-validator';
-import { IdentityVerification } from './identityVerification.entity';
+import { IsString, IsUUID } from 'class-validator';
+import { IdentityVerification } from './identity-verification.entity';
 
 @Entity('document', { schema: process.env.TIDB_DATABASE })
 export class Document extends BaseEntity {
@@ -23,7 +23,9 @@ export class Document extends BaseEntity {
   @Index()
   verificationId: string;
 
-  @ManyToOne(() => IdentityVerification, (v) => v.documents, { onDelete: 'CASCADE' })
+  @ManyToOne(() => IdentityVerification, (v) => v.documents, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'verificationId' })
   verification: IdentityVerification;
 
