@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Contact } from '../../entities/contact.entity';
+import { Person } from '../../entities/person.entity';
 import { ContactController } from './contact.controller';
 import { ContactKafkaService } from './contact-kafka.service';
 import { ContactService } from './contact.service';
@@ -10,7 +10,7 @@ import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Contact])],
+  imports: [TypeOrmModule.forFeature([Person])],
   controllers: [ContactController],
   providers: [
     ContactService,

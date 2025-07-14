@@ -61,6 +61,14 @@ export class Person extends BaseEntity {
   @Index()
   password: string;
 
+  @Column({ type: "varchar", length: 255, nullable: true })
+  @Index()
+  stripeCustomerId?: string | null;
+
+  @Column({ type: "varchar", length: 255, nullable: true })
+  @Index()
+  activeCampaignId?: string | null;
+
   @Column({ default: false })
   @Index()
   isDeleted: boolean;
