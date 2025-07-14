@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { KafkaResponderService } from '../../../../utils/kafka/kafka-responder.service';
 import { getLoggerConfig } from '../../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { KT_CREATE_CONTACT, CreateContactDto } from 'ez-utils';
+import { CreatePersonDto, KT_CREATE_CONTACT } from 'ez-utils';
 
 @Injectable()
 export class PersonContactKafkaService {
@@ -18,7 +18,7 @@ export class PersonContactKafkaService {
     );
   }
 
-  async createContact(createContactDto: CreateContactDto, traceId: string) {
+  async createContact(createContactDto: CreatePersonDto, traceId: string) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_CONTACT,

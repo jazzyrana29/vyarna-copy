@@ -7,6 +7,9 @@ export * from "./src/config";
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
 export * from "./src/enums/domain-person-and-identity/vy-active-campaign/tags.enum";
 export * from "./src/enums/domain-person-and-identity/vy-active-campaign/lists.enum";
+export * from "./src/enums/domain-person-and-identity/phone-type.enum";
+export * from "./src/enums/domain-person-and-identity/address-type.enum";
+export * from "./src/enums/domain-person-and-identity/verification-status.enum";
 
 /**************************************** Kafka Topics **************************************************************/
 /* ------------------------------------- domain-person-and-identity ---------------------------------------------------------*/
@@ -65,6 +68,8 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/document.
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/review-identity-verification.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/phone.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/physical-address.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto";
@@ -218,4 +223,4 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-varia
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
 
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto";
-export * from './src/DTO/shared-dtos/socket/join-room.dto';
+export * from "./src/DTO/shared-dtos/socket/join-room.dto";

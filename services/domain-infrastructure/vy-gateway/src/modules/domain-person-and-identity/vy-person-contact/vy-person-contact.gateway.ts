@@ -1,18 +1,18 @@
 import {
-  WebSocketGateway,
-  WebSocketServer,
-  SubscribeMessage,
   ConnectedSocket,
   MessageBody,
   OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PersonContactKafkaService } from './microservices/vy-person-contact-kafka.service';
 import {
+  CreatePersonDto,
   generateTraceId,
-  CreateContactDto,
-  KT_CREATE_CONTACT,
   JoinRoomDto,
+  KT_CREATE_CONTACT,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -75,7 +75,7 @@ export class PersonContactWebsocket implements OnGatewayInit {
   @SubscribeMessage(KT_CREATE_CONTACT)
   async handleCreate(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() createContactDto: CreateContactDto,
+    @MessageBody() createContactDto: CreatePersonDto,
   ) {
     const traceId = generateTraceId('person-contact-create');
     try {

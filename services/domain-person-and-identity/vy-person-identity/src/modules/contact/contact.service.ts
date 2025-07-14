@@ -4,9 +4,10 @@ import { Repository } from 'typeorm';
 import { Person } from '../../entities/person.entity';
 import { ActiveCampaignService } from '../person/services/active-campaign.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
-import { CreateContactDto } from 'ez-utils';
+import { CreatePersonDto } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { Email } from '../../entities/email.entity';
 
 @Injectable()
 export class ContactService {
@@ -15,6 +16,8 @@ export class ContactService {
   constructor(
     @InjectRepository(Person)
     private readonly personRepo: Repository<Person>,
+    @InjectRepository(Email)
+    private readonly emailRepo: Repository<Email>,
     private readonly activeCampaign: ActiveCampaignService,
     private readonly stripeGateway: StripeGatewayService,
   ) {
@@ -26,16 +29,14 @@ export class ContactService {
     );
   }
 
-  async findByEmail(email: string): Promise<Person | null> {
-    return this.personRepo.findOne({ where: { email } });
-  }
-
   async createContact(
-    createContactDto: CreateContactDto,
+    createContactDto: CreatePersonDto,
     traceId: string,
   ): Promise<Person> {
-    let existing = await this.personRepo.findOne({
-      where: { email: createContactDto.email },
+    const emailToProcess = createContactDto.emails[0]?.email;
+    const existing = await this.emailRepo.findOne({
+      where: { email: emailToProcess },
+      relations: ['person'],
     });
     if (existing) {
       this.logger.info(
@@ -44,13 +45,11 @@ export class ContactService {
         'createContact',
         LogStreamLevel.ProdStandard,
       );
-      return existing;
+      return existing.person;
     }
 
     const entity = this.personRepo.create({
-      firstName: createContactDto.firstName,
-      lastName: createContactDto.lastName,
-      email: createContactDto.email,
+      ...createContactDto,
     });
     await this.personRepo.save(entity);
     this.logger.info(
@@ -60,9 +59,8 @@ export class ContactService {
       LogStreamLevel.ProdStandard,
     );
 
-    let stripeCustomer = await this.stripeGateway.findCustomerByEmail(
-      createContactDto.email,
-    );
+    let stripeCustomer =
+      await this.stripeGateway.findCustomerByEmail(emailToProcess);
     if (stripeCustomer) {
       this.logger.info(
         'Stripe customer already exists',
@@ -72,8 +70,8 @@ export class ContactService {
       );
     } else {
       stripeCustomer = await this.stripeGateway.createContact({
-        name: `${createContactDto.firstName} ${createContactDto.lastName}`.trim(),
-        email: createContactDto.email,
+        name: `${createContactDto.nameFirst} ${createContactDto.nameMiddle || ''} ${createContactDto.nameLastFirst} ${createContactDto.nameLastSecond || ''}`.trim(),
+        email: emailToProcess,
       });
       this.logger.info(
         'Stripe customer created',
@@ -85,7 +83,11 @@ export class ContactService {
     entity.stripeCustomerId = stripeCustomer.id;
     await this.personRepo.save(entity);
 
-    const acRes = await this.activeCampaign.createContact(createContactDto);
+    const acRes = await this.activeCampaign.createContact({
+      firstName: createContactDto.nameFirst,
+      lastName: createContactDto.nameLastFirst,
+      email: emailToProcess,
+    });
     this.logger.info(
       'ActiveCampaign contact created',
       traceId,

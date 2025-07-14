@@ -1,12 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  ArrayNotEmpty,
+  IsArray,
   IsBoolean,
   IsDate,
-  IsEmail,
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from "class-validator";
+import { Type } from "class-transformer";
+import { EmailDto } from "./email.dto";
+import { PhoneDto } from "./phone.dto";
+import { IdentityVerificationDto } from "./identity-verification.dto";
+import { PhysicalAddressDto } from "./physical-address.dto";
 
 export class PersonDto {
   @ApiProperty({
@@ -18,37 +25,31 @@ export class PersonDto {
   personId: string;
 
   @ApiProperty({
-    description: "Identifier for the business unit the person belongs to",
-    type: String,
-    required: false,
-  })
-  @IsOptional()
-  @IsUUID()
-  businessUnitId: string;
-
-  @ApiProperty({
     description: "Identifier for the root business unit the person belongs to",
     type: String,
     required: false,
   })
   @IsOptional()
   @IsUUID()
-  rootBusinessUnitId: string;
+  rootBusinessUnitId?: string;
 
   @ApiProperty({
     description: "Roles assigned to the person",
     type: [String],
   })
+  @IsArray()
+  @ArrayNotEmpty()
   @IsString({ each: true })
   roles: string[];
 
   @ApiProperty({
     description: "Username of the person",
     type: String,
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsString()
-  username: string;
+  username?: string;
 
   @ApiProperty({
     description: "First name of the person",
@@ -65,31 +66,73 @@ export class PersonDto {
   })
   @IsOptional()
   @IsString()
-  nameMiddle: string;
+  nameMiddle?: string;
 
   @ApiProperty({
-    description: "Last name of the person",
+    description: "First part of the last name",
     type: String,
     required: true,
   })
   @IsString()
-  nameLast: string;
+  nameLastFirst: string;
 
   @ApiProperty({
-    description: "Email of the person",
+    description: "Second part of the last name, if applicable",
     type: String,
-    required: true,
+    required: false,
   })
-  @IsEmail()
-  email: string;
+  @IsOptional()
+  @IsString()
+  nameLastSecond?: string;
+
+  @ApiProperty({
+    description: "Email addresses associated with the person",
+    type: [EmailDto],
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => EmailDto)
+  emails?: EmailDto[];
+
+  @ApiProperty({
+    description: "Phone numbers associated with the person",
+    type: [PhoneDto],
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => PhoneDto)
+  phones?: PhoneDto[];
+
+  @ApiProperty({
+    description: "Physical addresses associated with the person",
+    type: [PhysicalAddressDto],
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => PhysicalAddressDto)
+  addresses?: PhysicalAddressDto[];
+
+  @ApiProperty({
+    description: "Identity verification records for the person",
+    type: [IdentityVerificationDto],
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => IdentityVerificationDto)
+  identityVerifications?: IdentityVerificationDto[];
 
   @ApiProperty({
     description: "Password of the person",
     type: String,
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @ApiProperty({
     description: "Stripe customer id associated with the person",
@@ -129,16 +172,20 @@ export class PersonDto {
   @ApiProperty({
     description: "Creation date of the person",
     type: Date,
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsDate()
-  createdAt: Date;
+  @Type(() => Date)
+  createdAt?: Date;
 
   @ApiProperty({
     description: "Date the person was last updated",
     type: Date,
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsDate()
-  updatedAt: Date;
+  @Type(() => Date)
+  updatedAt?: Date;
 }

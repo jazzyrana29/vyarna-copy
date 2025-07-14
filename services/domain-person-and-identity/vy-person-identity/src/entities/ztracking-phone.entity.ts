@@ -5,27 +5,27 @@ import {
   Entity,
   Index,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { PhoneType } from "./phone.entity";
+} from 'typeorm';
+import { PhoneType } from 'ez-utils';
 
-@Entity("ztracking_phone", { schema: process.env.TIDB_DATABASE })
+@Entity('ztracking_phone', { schema: process.env.TIDB_DATABASE })
 export class ZtrackingPhone extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   ztrackingVersion: string;
 
   @Index()
-  @Column("uuid")
+  @Column('uuid')
   phoneId: string;
 
   @Index()
-  @Column("uuid")
+  @Column('uuid')
   personId: string;
 
-  @Column({ type: "enum", enum: PhoneType, default: PhoneType.MOBILE })
+  @Column({ type: 'enum', enum: PhoneType, default: PhoneType.MOBILE })
   @Index()
   type: PhoneType;
 
-  @Column({ type: "varchar", length: 20 })
+  @Column({ type: 'varchar', length: 20 })
   phoneNumber: string;
 
   @Column({ default: false })

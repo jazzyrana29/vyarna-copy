@@ -4,13 +4,13 @@ import { PersonDto } from "./person.dto";
 
 export class UpdatePersonDto extends PartialType(
   PickType(PersonDto, [
-    "businessUnitId",
     "rootBusinessUnitId",
     "username",
     "nameFirst",
     "nameMiddle",
-    "nameLast",
-    "email",
+    "nameLastFirst",
+    "nameLastSecond",
+    "emails",
     "password",
     "roles",
     "isDeleted",

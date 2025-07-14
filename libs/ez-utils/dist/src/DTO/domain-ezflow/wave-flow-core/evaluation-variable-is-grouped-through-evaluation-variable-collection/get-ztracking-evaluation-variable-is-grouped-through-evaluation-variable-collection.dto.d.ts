@@ -1,5 +1,0 @@
-import { EvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto } from "./evaluation-variable-is-grouped-through-evaluation-variable-collection.dto";
-declare const GetZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto_base: import("@nestjs/common").Type<Pick<EvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto, "evaluationVariableIsGroupedThroughEvaluationVariableCollectionId">>;
-export declare class GetZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto extends GetZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollectionDto_base {
-}
-export {};

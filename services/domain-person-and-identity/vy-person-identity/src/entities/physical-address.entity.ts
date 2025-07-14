@@ -1,25 +1,34 @@
-// src/entities/ZtrackingPhysicalAddress.ts
+// src/entities/PersonAddress.ts
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+import { IsBoolean, IsUUID, Length } from 'class-validator';
+import { Person } from './person.entity';
 import { AddressType } from 'ez-utils';
 
-@Entity('ztracking_physical_address', { schema: process.env.TIDB_DATABASE })
-export class ZtrackingPhysicalAddress extends BaseEntity {
+@Entity('physical_address', { schema: process.env.TIDB_DATABASE })
+export class PhysicalAddress extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  ztrackingVersion: string;
-
+  @IsUUID()
   @Index()
-  @Column('uuid')
   addressId: string;
 
-  @Index()
   @Column('uuid')
+  @IsUUID()
+  @Index()
   personId: string;
+
+  @ManyToOne(() => Person, (p) => p.addresses, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'personId' })
+  person: Person;
 
   @Column({
     type: 'enum',
@@ -30,33 +39,36 @@ export class ZtrackingPhysicalAddress extends BaseEntity {
   addressType: AddressType;
 
   @Column({ type: 'varchar', length: 255 })
+  @Length(1, 255)
   addressLine1: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
+  @Length(0, 255)
   addressLine2?: string;
 
   @Column({ type: 'varchar', length: 100 })
+  @Length(1, 100)
   city: string;
 
   @Column({ type: 'varchar', length: 100 })
+  @Length(1, 100)
   state: string;
 
   @Column({ type: 'varchar', length: 20 })
+  @Length(1, 20)
   postalCode: string;
 
   @Column({ type: 'varchar', length: 100 })
+  @Length(1, 100)
   country: string;
 
   @Column({ default: false })
+  @IsBoolean()
   isPrimary: boolean;
 
-  @Column({ nullable: true })
-  createdAt?: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ nullable: true })
-  updatedAt?: Date;
-
-  @Index()
-  @Column()
-  versionDate: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
