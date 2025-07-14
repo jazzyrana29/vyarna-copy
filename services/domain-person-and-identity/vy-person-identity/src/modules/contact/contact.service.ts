@@ -33,7 +33,7 @@ export class ContactService {
     createContactDto: CreatePersonDto,
     traceId: string,
   ): Promise<Person> {
-    const emailToProcess = createContactDto.emails[0]?.email;
+    const emailToProcess = createContactDto.email;
     const existing = await this.emailRepo.findOne({
       where: { email: emailToProcess },
       relations: ['person'],
@@ -48,10 +48,19 @@ export class ContactService {
       return existing.person;
     }
 
+    const { email, ...rest } = createContactDto;
     const entity = this.personRepo.create({
-      ...createContactDto,
+      ...rest,
     });
     await this.personRepo.save(entity);
+
+    await this.emailRepo.save(
+      this.emailRepo.create({
+        personId: entity.personId,
+        email: emailToProcess,
+        isPrimary: true,
+      }),
+    );
     this.logger.info(
       'Contact created',
       traceId,
