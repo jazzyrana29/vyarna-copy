@@ -109,6 +109,26 @@ __decorate([
 ], PersonDto.prototype, "password", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
+        description: "Stripe customer id associated with the person",
+        type: String,
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PersonDto.prototype, "stripeCustomerId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "ActiveCampaign contact id associated with the person",
+        type: String,
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PersonDto.prototype, "activeCampaignId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
         description: "Indicates if the person is deleted",
         type: Boolean,
         required: true,

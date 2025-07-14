@@ -2,7 +2,7 @@ import { ContactService } from '../contact.service';
 import { ActiveCampaignService } from '../../person/services/active-campaign.service';
 import { StripeGatewayService } from '../../../services/stripe-gateway.service';
 import { Repository } from 'typeorm';
-import { Contact } from '../../../entities/contact.entity';
+import { Person } from '../../../entities/person.entity';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -10,8 +10,8 @@ jest.mock('ez-kafka-producer');
 
 describe('ContactService', () => {
   it('returns existing contact on repeated creation and logs', async () => {
-    const contact: Contact = {
-      contactId: 'c1',
+    const contact: Person = {
+      personId: 'c1',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
@@ -19,7 +19,7 @@ describe('ContactService', () => {
       stripeCustomerId: 'st1',
       createdAt: new Date(),
       updatedAt: new Date(),
-    } as Contact;
+    } as Person;
 
     const repo = {
       findOne: jest.fn()
@@ -27,7 +27,7 @@ describe('ContactService', () => {
         .mockResolvedValue(contact),
       create: jest.fn().mockReturnValue(contact),
       save: jest.fn().mockResolvedValue(contact),
-    } as unknown as Repository<Contact>;
+    } as unknown as Repository<Person>;
 
     const ac = {
       createContact: jest.fn().mockResolvedValue({ contact: { id: 'ac1' } }),
