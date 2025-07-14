@@ -77,35 +77,25 @@ export class StripeGatewayService {
     return this.stripe.coupons.retrieve(id);
   }
 
-  async retrieveExchangeRate(currency: string) {
-    this.logger.debug(
-      `Retrieving exchange rate for ${currency}`,
-      '',
-      'retrieveExchangeRate',
-      LogStreamLevel.DebugLight,
-    );
-    return this.stripe.exchangeRates.retrieve(currency.toLowerCase());
-  }
-
   async retrieveExchangeRate(
     fromCurrency: string,
     toCurrency: string,
   ): Promise<number> {
     this.logger.debug(
-      `Retrieving FX quote from ${fromCurrency} to ${toCurrency}`,
+      `Retrieving FX quote from ${fromCurrency} to ${toCurrency} via generic request`,
       '',
       'retrieveExchangeRate',
       LogStreamLevel.DebugLight,
     );
 
-    const fxQuote = await this.stripe.fxQuotes.create({
+    const fxQuote: any = await this.stripe.rawRequest('POST', '/v1/fx_quotes', {
       from_currencies: [fromCurrency.toLowerCase()],
       to_currency: toCurrency.toLowerCase(),
-      lock_duration: 'none', // tasa en tiempo real
+      lock_duration: 'none',
     });
 
-    const quote = fxQuote.rates[fromCurrency.toLowerCase()];
-    if (!quote) {
+    const quote = fxQuote.rates?.[fromCurrency.toLowerCase()];
+    if (!quote || typeof quote.exchange_rate !== 'number') {
       throw new Error(
         `No exchange rate found for ${fromCurrency} → ${toCurrency}`,
       );
