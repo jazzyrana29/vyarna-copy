@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Person } from '../../entities/person.entity';
 import { ActiveCampaignService } from '../person/services/active-campaign.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
-import { CreatePersonDto } from 'ez-utils';
+import { CreatePersonDto, PersonDto } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { Email } from '../../entities/email.entity';
@@ -32,7 +32,7 @@ export class ContactService {
   async createContact(
     createContactDto: CreatePersonDto,
     traceId: string,
-  ): Promise<Person> {
+  ): Promise<PersonDto> {
     const emailToProcess = createContactDto.email;
     const existing = await this.emailRepo.findOne({
       where: { email: emailToProcess },
@@ -48,9 +48,13 @@ export class ContactService {
       return existing.person;
     }
 
-    const { email, ...rest } = createContactDto;
+    const { email, roles = [], ...rest } = createContactDto;
+    const finalRoles =
+      Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
+
     const entity = this.personRepo.create({
       ...rest,
+      roles: finalRoles,
     });
     await this.personRepo.save(entity);
 

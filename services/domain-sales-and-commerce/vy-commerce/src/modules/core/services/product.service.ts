@@ -23,12 +23,22 @@ export class ProductService {
     getProductsDto: GetProductsDto,
     traceId: string,
   ): Promise<ProductDto[]> {
-    const { productId, name, active, limit: dtoLimit, targetCurrency } = getProductsDto;
+    const {
+      productId,
+      name,
+      active,
+      limit: dtoLimit,
+      targetCurrency,
+    } = getProductsDto;
+
+    if (!targetCurrency) {
+      throw new Error('targetCurrency must be defined');
+    }
+
     const requestedLimit = dtoLimit ?? this.defaultLimit;
     let stripeProducts: Stripe.Product[] = [];
 
     if (productId) {
-      // Lookup exact ID
       try {
         const prod = await this.stripeGateway.retrieveProduct(productId);
         stripeProducts = [prod];
@@ -36,21 +46,18 @@ export class ProductService {
         stripeProducts = [];
       }
     } else if (typeof active === 'boolean' || name) {
-      // Search con filtros
       const clauses = [
         typeof active === 'boolean' ? `active:"${active}"` : null,
         name ? `name~"${name}"` : null,
       ]
         .filter(Boolean)
         .join(' AND ');
-      // Opción directa con .data
       const searchRes = await this.stripeGateway.searchProducts({
         query: clauses,
         limit: requestedLimit,
       });
       stripeProducts = searchRes.data;
     } else {
-      // Listado sin filtros
       const listRes = await this.stripeGateway.listProducts({
         limit: requestedLimit,
       });
@@ -71,23 +78,25 @@ export class ProductService {
           active: true,
           limit: 100,
         });
-        let price = prices.data.find((pr) => pr.currency === targetCurrency);
+        let price = prices.data.find(
+          (pr) => pr.currency === targetCurrency.toLowerCase(),
+        );
         let amount = price?.unit_amount ?? 0;
-        if (!price) {
+
+        if (!price && prices.data.length) {
           price = prices.data[0];
-          if (price) {
-            amount = price.unit_amount ?? 0;
-            if (price.currency !== targetCurrency) {
-              const rate = await this.stripeGateway.retrieveExchangeRate(
-                price.currency,
-              );
-              const conv = (rate.rates as any)[targetCurrency.toLowerCase()];
-              if (conv) {
-                amount = Math.round(((amount / 100) * conv) * 100);
-              }
-            }
+          amount = price.unit_amount ?? 0;
+
+          if (price.currency !== targetCurrency) {
+            const rate = await this.stripeGateway.retrieveExchangeRate(
+              price.currency,
+              targetCurrency,
+            );
+            const major = amount / 100;
+            amount = Math.round(major * rate * 100);
           }
         }
+
         return {
           productId: p.id,
           name: p.name,
@@ -98,7 +107,9 @@ export class ProductService {
           priceCents: amount,
           targetCurrency: targetCurrency,
           createdAt: new Date((p.created ?? 0) * 1000),
-          updatedAt: p.updated ? new Date((p.updated as number) * 1000) : undefined,
+          updatedAt: p.updated
+            ? new Date((p.updated as number) * 1000)
+            : undefined,
         } as ProductDto;
       }),
     );
