@@ -60,7 +60,7 @@ export class PersonService {
       LogStreamLevel.ProdStandard,
     );
 
-    const emailToProcess = createPersonDto?.emails[0]?.email;
+    const emailToProcess = createPersonDto.email;
     let rootBusinessUnit = await this.businessUnitRepository.findOne({
       where: { businessUnitId: createPersonDto.rootBusinessUnitId },
     });
@@ -91,9 +91,10 @@ export class PersonService {
       );
     }
 
+    const { email, ...rest } = createPersonDto;
     const person = await this.personRepository.save(
       this.personRepository.create({
-        ...createPersonDto,
+        ...rest,
         rootBusinessUnitId: rootBusinessUnit.businessUnitId,
         roles: createPersonDto.roles,
       }),
@@ -160,7 +161,30 @@ export class PersonService {
         `no person existed with this id => ${updatePersonDto.personId}`,
       );
     }
-    const updatedPerson = await this.personRepository.save(updatePersonDto);
+    const { email, ...personUpdate } = updatePersonDto;
+    const updatedPerson = await this.personRepository.save(personUpdate);
+
+    if (email) {
+      const conflictEmail = await this.emailRepository.findOne({
+        where: { email },
+      });
+      if (conflictEmail && conflictEmail.personId !== updatedPerson.personId) {
+        throw new BadRequestException(`Email "${email}" is already in use`);
+      }
+
+      const existingEmail = await this.emailRepository.findOne({
+        where: { personId: updatedPerson.personId, email },
+      });
+      if (!existingEmail) {
+        await this.emailRepository.save(
+          this.emailRepository.create({
+            personId: updatedPerson.personId,
+            email,
+            isPrimary: true,
+          }),
+        );
+      }
+    }
 
     this.logger.info(
       `person entity updated in database`,

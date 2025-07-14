@@ -1,5 +1,5 @@
-import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
-import { IsUUID } from "class-validator";
+import { ApiProperty, ApiPropertyOptional, PartialType, PickType } from "@nestjs/swagger";
+import { IsEmail, IsOptional, IsUUID } from "class-validator";
 import { PersonDto } from "./person.dto";
 
 export class UpdatePersonDto extends PartialType(
@@ -10,7 +10,6 @@ export class UpdatePersonDto extends PartialType(
     "nameMiddle",
     "nameLastFirst",
     "nameLastSecond",
-    "emails",
     "password",
     "roles",
     "isDeleted",
@@ -32,4 +31,9 @@ export class UpdatePersonDto extends PartialType(
   })
   @IsUUID()
   operatorId: string;
+
+  @ApiPropertyOptional({ description: "Primary email address" })
+  @IsEmail()
+  @IsOptional()
+  email?: string;
 }
