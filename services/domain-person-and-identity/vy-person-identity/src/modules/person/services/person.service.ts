@@ -91,12 +91,14 @@ export class PersonService {
       );
     }
 
-    const { email, ...rest } = createPersonDto;
+    const { email, roles = [], ...rest } = createPersonDto;
+    const finalRoles = Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
+
     const person = await this.personRepository.save(
       this.personRepository.create({
         ...rest,
         rootBusinessUnitId: rootBusinessUnit.businessUnitId,
-        roles: createPersonDto.roles,
+        roles: finalRoles,
       }),
     );
 

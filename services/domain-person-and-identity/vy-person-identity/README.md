@@ -68,6 +68,11 @@ Example payload for creating a person:
 }
 ```
 
+**Roles are multi-valued.** A person can hold several roles at once, for
+example `["Provider", "Consumer", "Admin"]`. If the payload omits the
+`roles` field, the service will automatically assign the default role
+`"Consumer"`.
+
 ---
 
 ## Kafka Topics

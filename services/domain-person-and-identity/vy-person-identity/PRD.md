@@ -87,7 +87,9 @@ A single Person may hold one or more of these roles simultaneously. Each role un
 
 ### 3.2 Relationships & Constraints
 
-- **Person.roles[]** supports multiple concurrent roles
+- **Person.roles[]** supports multiple concurrent roles. If the array is omitted
+  on creation, the service assigns the default role `Consumer`. Example
+  values include `"Provider"`, `"Consumer"`, and `"Admin"`.
 - **One Person → many Emails, many Phones, many PhysicalAddresses, many IdentityVerifications**
 - **PhysicalAddress.isPrimary** marks the active address; others are historical
 - **Email.isPrimary / Phone.isPrimary** designate default contact methods

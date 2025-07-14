@@ -48,9 +48,12 @@ export class ContactService {
       return existing.person;
     }
 
-    const { email, ...rest } = createContactDto;
+    const { email, roles = [], ...rest } = createContactDto;
+    const finalRoles = Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
+
     const entity = this.personRepo.create({
       ...rest,
+      roles: finalRoles,
     });
     await this.personRepo.save(entity);
 
