@@ -23,7 +23,7 @@ export class ProductService {
     getProductsDto: GetProductsDto,
     traceId: string,
   ): Promise<ProductDto[]> {
-    const { productId, name, active, limit: dtoLimit } = getProductsDto;
+    const { productId, name, active, limit: dtoLimit, currency } = getProductsDto;
     const requestedLimit = dtoLimit ?? this.defaultLimit;
     let stripeProducts: Stripe.Product[] = [];
 
@@ -64,15 +64,29 @@ export class ProductService {
       LogStreamLevel.DebugLight,
     );
 
-    return stripeProducts.map((p) => ({
-      productId: p.id,
-      name: p.name,
-      description: p.description ?? undefined,
-      url: p.url ?? undefined,
-      images: p.images ?? [],
-      active: p.active,
-      createdAt: new Date((p.created ?? 0) * 1000),
-      updatedAt: p.updated ? new Date((p.updated as number) * 1000) : undefined,
-    }));
+    const withPrices = await Promise.all(
+      stripeProducts.map(async (p) => {
+        const prices = await this.stripeGateway.listPrices({
+          product: p.id,
+          currency,
+          active: true,
+          limit: 1,
+        });
+        const price = prices.data[0];
+        return {
+          productId: p.id,
+          name: p.name,
+          description: p.description ?? undefined,
+          url: p.url ?? undefined,
+          images: p.images ?? [],
+          active: p.active,
+          priceCents: price?.unit_amount ?? 0,
+          currency: price?.currency ?? currency,
+          createdAt: new Date((p.created ?? 0) * 1000),
+          updatedAt: p.updated ? new Date((p.updated as number) * 1000) : undefined,
+        } as ProductDto;
+      }),
+    );
+    return withPrices;
   }
 }

@@ -10,11 +10,13 @@ import {
   View,
 } from 'react-native';
 import { useSalesCommerce } from '../hooks/useSalesCommerce';
+import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
 import { usePersonContact } from '../hooks/usePersonContact';
 import { useUserStore } from '../store/userStore';
 import UserDetailsModal from './UserDetailsModal';
+import { formatMoney } from '../utils/currency';
 
 interface Product {
   productId: string;
@@ -22,6 +24,8 @@ interface Product {
   description: string;
   images: string[];
   active: boolean;
+  priceCents: number;
+  currency: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,8 +41,10 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   room,
   onClose,
 }) => {
+  const currency = useCurrency();
   const { products, error: productsError } = useSalesCommerce(room, {
     active: true,
+    currency,
   } as GetProductsDto);
   const { addItem, openCart } = useCartStore();
 
@@ -167,6 +173,9 @@ const ProductSelector: FC<ProductSelectorProps> = ({
                         <Text className="text-lg font-semibold">{p.name}</Text>
                         <Text className="text-sm text-secondary">
                           {p.description}
+                        </Text>
+                        <Text className="text-base font-bold text-primary mt-1">
+                          {formatMoney(p.priceCents, p.currency)}
                         </Text>
                       </View>
                     </View>

@@ -12,15 +12,20 @@ describe('ProductService', () => {
       created: 1,
       updated: 2,
     };
+    const price = { unit_amount: 500, currency: 'usd' };
     const stripeGateway = {
       listProducts: jest.fn().mockResolvedValue({ data: [product] }),
       searchProducts: jest.fn(),
       retrieveProduct: jest.fn(),
+      listPrices: jest.fn().mockResolvedValue({ data: [price] }),
     } as unknown as StripeGatewayService;
 
     const service = new ProductService(stripeGateway);
 
-    const result = await service.getProducts({} as GetProductsDto, 'trace');
+    const result = await service.getProducts(
+      { currency: 'usd' } as GetProductsDto,
+      'trace',
+    );
 
     expect(stripeGateway.listProducts).toHaveBeenCalled();
     expect(result).toEqual([
@@ -29,6 +34,10 @@ describe('ProductService', () => {
         name: 'Prod 1',
         description: 'desc',
         active: true,
+        url: undefined,
+        images: [],
+        priceCents: 500,
+        currency: 'usd',
         createdAt: new Date(1000),
         updatedAt: new Date(2000),
       },
@@ -43,18 +52,20 @@ describe('ProductService', () => {
       created: 1,
       updated: 2,
     };
+    const price = { unit_amount: 700, currency: 'usd' };
     const stripeGateway = {
       searchProducts: jest.fn().mockResolvedValue({ data: [product] }),
       listProducts: jest.fn(),
       retrieveProduct: jest.fn(),
+      listPrices: jest.fn().mockResolvedValue({ data: [price] }),
     } as unknown as StripeGatewayService;
 
     const service = new ProductService(stripeGateway);
 
     const dto: GetProductsDto = {
       active: true,
-      productId: 'prod_1',
       name: 'test',
+      currency: 'usd',
     } as any;
 
     const result = await service.getProducts(dto, 'trace');
@@ -66,6 +77,10 @@ describe('ProductService', () => {
         name: 'Test 1',
         description: undefined,
         active: true,
+        url: undefined,
+        images: [],
+        priceCents: 700,
+        currency: 'usd',
         createdAt: new Date(1000),
         updatedAt: new Date(2000),
       },
