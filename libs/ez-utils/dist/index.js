@@ -66,7 +66,6 @@ __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/up
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-one-email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto"), exports);
-__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-contact/contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-contact/create-contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/document.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/identity-verification.dto"), exports);
