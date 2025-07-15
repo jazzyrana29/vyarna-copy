@@ -1,5 +1,5 @@
-// src/store/userStore.ts
 import { create } from 'zustand';
+import * as SecureStore from 'expo-secure-store';
 
 export interface UserDetails {
   nameFirst: string;
@@ -13,7 +13,6 @@ export interface UserDetails {
     postalCode?: string;
     country?: string;
   };
-  // add any other user fields here
 }
 
 interface UserStore {
@@ -28,23 +27,50 @@ interface UserStore {
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
-  // initial state
-  userDetails: null,
-  stripeCustomerId: null,
-  personId: null,
+      userDetails: null,
+      stripeCustomerId: null,
+      personId: null,
 
-  // setters
-  setUserDetails: (details): void => set({ userDetails: details }),
-  setStripeCustomerId: (id): void => set({ stripeCustomerId: id }),
-  setPersonId: (id): void => set({ personId: id }),
+      setUserDetails: (details) => set({ userDetails: details }),
+      setStripeCustomerId: (id) => set({ stripeCustomerId: id }),
+      setPersonId: (id) => set({ personId: id }),
 
-  // clear all user info
-  clearUserDetails: (): void =>
-    set({ userDetails: null, stripeCustomerId: null, personId: null }),
+      clearUserDetails: () =>
+        set({ userDetails: null, stripeCustomerId: null, personId: null }),
 
-  // helper to check if required fields are present
-  hasUserDetails: (): boolean => {
-    const d = get().userDetails;
-    return !!(d?.nameFirst && d?.nameLastFirst && d?.email);
-  },
+      hasUserDetails: () => {
+        const d = get().userDetails;
+        return !!(d?.nameFirst && d?.nameLastFirst && d?.email);
+      },
 }));
+
+const USER_KEY = 'user-store';
+
+SecureStore.getItemAsync(USER_KEY)
+  .then((data) => {
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        useUserStore.setState((state) => ({
+          ...state,
+          userDetails: parsed.userDetails ?? null,
+          stripeCustomerId: parsed.stripeCustomerId ?? null,
+          personId: parsed.personId ?? null,
+        }));
+      } catch (err) {
+        console.warn('Failed to parse stored user', err);
+      }
+    }
+  })
+  .catch((err) => console.warn('Failed to load user', err));
+
+useUserStore.subscribe((state) => {
+  SecureStore.setItemAsync(
+    USER_KEY,
+    JSON.stringify({
+      userDetails: state.userDetails,
+      stripeCustomerId: state.stripeCustomerId,
+      personId: state.personId,
+    }),
+  ).catch((err) => console.warn('Failed to save user', err));
+});

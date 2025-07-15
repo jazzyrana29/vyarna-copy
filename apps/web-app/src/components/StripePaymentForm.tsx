@@ -36,7 +36,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
   const [isInitializingStripe, setIsInitializingStripe] = useState(false);
   const paymentElementRef = useRef<HTMLDivElement>(null);
 
-  const { items, resetCart, getTotal, getTotalSavings } = useCartStore();
+  const { items, resetCart, getTotalCents, getTotalSavings } = useCartStore();
   const { userDetails } = useUserStore();
   const { setProcessing, setPaymentStatus, setPaymentError } =
     usePaymentStore();
@@ -189,7 +189,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
         // Fallback to simulation for non-web platforms or when Stripe isn't available
         Alert.alert(
           'Payment Simulation',
-          `Payment Intent: ${paymentIntentId}\nTotal: $${getTotal().toFixed(2)}\n\nSimulating payment processing...`,
+          `Payment Intent: ${paymentIntentId}\nTotal: $${(getTotalCents() / 100).toFixed(2)}\n\nSimulating payment processing...`,
           [
             {
               text: 'Simulate Success',
@@ -308,7 +308,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
         <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200">
           <Text className="font-bold text-neutralText">Total:</Text>
           <Text className="font-bold text-primary text-lg">
-            ${getTotal().toFixed(2)}
+            ${(getTotalCents() / 100).toFixed(2)}
           </Text>
         </View>
       </View>
@@ -432,7 +432,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
           <Text className="text-white font-bold text-center">
             {isLoading || isInitializingStripe
               ? 'Loading...'
-              : `Pay $${getTotal().toFixed(2)}`}
+              : `Pay $${(getTotalCents() / 100).toFixed(2)}`}
           </Text>
         </TouchableOpacity>
       </View>

@@ -50,7 +50,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     active: true,
     targetCurrency: currency,
   } as GetProductsDto);
-  const { addItem, openCart, cartId, setCartId } = useCartStore();
+  const { addItem, openCart, cartId, setCartId, getItemCount } = useCartStore();
 
   const userDetails = useUserStore((s) => s.userDetails);
   const personId = useUserStore((s) => s.personId);
@@ -230,8 +230,12 @@ const ProductSelector: FC<ProductSelectorProps> = ({
                 {/* View Cart Button */}
                 <View className="flex-row justify-center mt-4">
                   <TouchableOpacity
-                    className="bg-primary px-4 py-2 rounded-lg"
-                    onPress={openCart}
+                    className={`px-4 py-2 rounded-lg ${getItemCount() > 0 ? 'bg-primary' : 'bg-secondary'}`}
+                    onPress={() => {
+                      onClose();
+                      openCart();
+                    }}
+                    disabled={getItemCount() === 0}
                   >
                     <Text className="text-white font-bold text-center text-base">
                       View Cart

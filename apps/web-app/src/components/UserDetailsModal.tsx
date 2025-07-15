@@ -1,6 +1,7 @@
 // src/components/UserDetailsModal.tsx
 import React, { FC, useEffect, useState } from 'react';
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { colors } from '../theme/color';
 import { UserDetails, useUserStore } from '../store/userStore';
 
 export interface UserDetailsModalProps {
@@ -38,7 +39,14 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
     }
   }, [visible, userDetails]);
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isFirstValid = nameFirst.trim().length > 0;
+  const isLastValid = nameLastFirst.trim().length > 0;
+  const isEmailValid = emailRegex.test(email);
+  const isValid = isFirstValid && isLastValid && isEmailValid;
+
   const handleSubmit = () => {
+    if (!isValid) return;
     const details: UserDetails = {
       nameFirst,
       nameMiddle,
@@ -65,6 +73,7 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             onChangeText={setNameFirst}
             className="border border-gray-300 rounded p-2 mb-4"
             placeholder="First Name"
+            placeholderTextColor={colors.paper}
           />
 
           <Text className="mb-1 text-secondary">Middle Name</Text>
@@ -73,6 +82,7 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             onChangeText={setNameMiddle}
             className="border border-gray-300 rounded p-2 mb-4"
             placeholder="Middle Name (optional)"
+            placeholderTextColor={colors.paper}
           />
 
           <Text className="mb-1 text-secondary">Last Name</Text>
@@ -81,6 +91,7 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             onChangeText={setNameLastFirst}
             className="border border-gray-300 rounded p-2 mb-4"
             placeholder="Last Name"
+            placeholderTextColor={colors.paper}
           />
 
           <Text className="mb-1 text-secondary">Second Last Name</Text>
@@ -89,6 +100,7 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             onChangeText={setNameLastSecond}
             className="border border-gray-300 rounded p-2 mb-4"
             placeholder="Second Last Name (optional)"
+            placeholderTextColor={colors.paper}
           />
 
           <Text className="mb-1 text-secondary">Email</Text>
@@ -97,6 +109,7 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             onChangeText={setEmail}
             className="border border-gray-300 rounded p-2 mb-6"
             placeholder="you@example.com"
+            placeholderTextColor={colors.paper}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -107,7 +120,8 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSubmit}
-              className="bg-primary px-4 py-2 rounded-lg"
+              className={`px-4 py-2 rounded-lg ${isValid ? 'bg-primary' : 'bg-secondary'}`}
+              disabled={!isValid}
             >
               <Text className="text-white">Save</Text>
             </TouchableOpacity>
