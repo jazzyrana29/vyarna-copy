@@ -38,6 +38,8 @@ The `.env-example` file documents required variables:
 
 | Variable | Description |
 | --- | --- |
+| `APP` | Application name used in logs |
+| `CONTEXT` | Context identifier for log streams |
 | `APP_PORT` | Port for the NestJS application |
 | `NODE_ENV` | Environment name (`development`, `production`, etc.) |
 | `KAFKA_BROKER` | Kafka broker connection string |
@@ -51,7 +53,7 @@ The `.env-example` file documents required variables:
 | `TIDB_DATABASE` | Database name |
 | `TIDB_ENABLE_SSL` | `true` to enable SSL connection |
 | `TIDB_CA_PATH` | Path to CA certificate when SSL is enabled |
-| `AUTO_SEED` | Seed initial data on start |
+| `AUTO_SEED` | Unused variable reserved for future seeding |
 
 ## Kafka Topics
 
