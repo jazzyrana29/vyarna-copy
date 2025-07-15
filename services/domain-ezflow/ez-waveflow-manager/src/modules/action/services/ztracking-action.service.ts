@@ -28,7 +28,7 @@ export class ZtrackingActionService {
   async createZtrackingForAction(
     action: Action,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingAction> {
     const ztrackingEntity = await this.ztrackingActionRepo.save({
       ...action,
       versionDate: new Date(),
@@ -41,7 +41,7 @@ export class ZtrackingActionService {
       LogStreamLevel.ProdStandard,
     );
 
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForAction(

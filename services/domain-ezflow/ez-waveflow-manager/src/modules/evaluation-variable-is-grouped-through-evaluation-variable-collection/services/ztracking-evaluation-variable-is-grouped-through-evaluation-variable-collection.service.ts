@@ -36,7 +36,7 @@ export class ZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollec
   async createZtrackingForEvaluationVariableIsGroupedThroughEvaluationVariableCollection(
     evaluationVariableIsGroupedThroughEvaluationVariableCollection: EvaluationVariableIsGroupedThroughEvaluationVariableCollection,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollection> {
     const ztrackingEntity =
       await this.evaluationVariableIsGroupedThroughEvaluationVariableCollectionRepository.save(
         this.evaluationVariableIsGroupedThroughEvaluationVariableCollectionRepository.create(
@@ -53,8 +53,7 @@ export class ZtrackingEvaluationVariableIsGroupedThroughEvaluationVariableCollec
       'createZtrackingForEvaluationVariableIsGroupedThroughEvaluationVariableCollection',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForEvaluationVariableIsGroupedThroughEvaluationVariableCollection(

@@ -37,7 +37,7 @@ export class ZtrackingFlowIsActiveForWaveTypeAndBusinessUnitService {
   async createZtrackingForFlowIsActiveForWaveTypeAndBusinessUnit(
     flowIsActiveForWaveTypeAndBusinessUnit: FlowIsActiveForWaveTypeAndBusinessUnit,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingFlowIsActiveForWaveTypeAndBusinessUnit> {
     const ztrackingEntity =
       await this.flowIsActiveForWaveTypeAndBusinessUnitRepository.save(
         this.flowIsActiveForWaveTypeAndBusinessUnitRepository.create({
@@ -52,8 +52,7 @@ export class ZtrackingFlowIsActiveForWaveTypeAndBusinessUnitService {
       'createZtrackingForFlowIsActiveForWaveTypeAndBusinessUnit',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForFlowIsActiveForWaveTypeAndBusinessUnit(

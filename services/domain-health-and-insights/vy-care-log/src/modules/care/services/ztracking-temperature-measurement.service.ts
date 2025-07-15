@@ -30,7 +30,7 @@ export class ZtrackingTemperatureMeasurementService {
   async createZtrackingForTemperatureMeasurement(
     temp: TemperatureMeasurement,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingTemperatureMeasurement> {
     const entity = await this.zRepo.save(
       this.zRepo.create({ ...temp, versionDate: new Date() }),
     );
@@ -41,8 +41,7 @@ export class ZtrackingTemperatureMeasurementService {
       'createZtrackingForTemperatureMeasurement',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForTemperatureMeasurement(

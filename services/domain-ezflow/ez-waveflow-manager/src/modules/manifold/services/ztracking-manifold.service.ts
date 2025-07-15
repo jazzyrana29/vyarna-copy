@@ -28,7 +28,7 @@ export class ZtrackingManifoldService {
   async createZtrackingForManifold(
     manifold: Manifold,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingManifold> {
     const ztrackingEntity = await this.manifoldRepository.save(
       this.manifoldRepository.create({
         ...manifold,
@@ -42,8 +42,7 @@ export class ZtrackingManifoldService {
       'createZtrackingForManifold',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForManifold(

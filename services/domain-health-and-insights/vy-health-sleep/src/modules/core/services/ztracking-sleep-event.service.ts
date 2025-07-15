@@ -23,7 +23,10 @@ export class ZtrackingSleepEventService {
     );
   }
 
-  async createZtrackingForSleepEvent(event: SleepEvent, traceId: string): Promise<boolean> {
+  async createZtrackingForSleepEvent(
+    event: SleepEvent,
+    traceId: string,
+  ): Promise<ZtrackingSleepEvent> {
     const entity = await this.ztrackingRepo.save(
       this.ztrackingRepo.create({ ...event, versionDate: new Date() }),
     );
@@ -33,7 +36,7 @@ export class ZtrackingSleepEventService {
       'createZtrackingForSleepEvent',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForSleepEvent(

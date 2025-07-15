@@ -30,7 +30,7 @@ export class ZtrackingSymptomReportService {
   async createZtrackingForSymptomReport(
     symptom: SymptomReport,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingSymptomReport> {
     const entity = await this.zRepo.save(
       this.zRepo.create({ ...symptom, versionDate: new Date() }),
     );
@@ -41,8 +41,7 @@ export class ZtrackingSymptomReportService {
       'createZtrackingForSymptomReport',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForSymptomReport(

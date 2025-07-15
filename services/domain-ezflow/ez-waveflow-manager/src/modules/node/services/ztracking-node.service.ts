@@ -25,7 +25,10 @@ export class ZtrackingNodeService {
     );
   }
 
-  async createZtrackingForNode(node: Node, traceId: string): Promise<boolean> {
+  async createZtrackingForNode(
+    node: Node,
+    traceId: string,
+  ): Promise<ZtrackingNode> {
     const ztrackingEntity = await this.nodeRepository.save(
       this.nodeRepository.create({
         ...node,
@@ -39,8 +42,7 @@ export class ZtrackingNodeService {
       'createZtrackingForNode',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForNode(

@@ -34,7 +34,7 @@ export class ZtrackingTaskTypeHaveAccessToBusinessUnitService {
   async createZtrackingForTaskTypeHaveAccessToBusinessUnit(
     taskTypeHaveAccessToBusinessUnit: TaskTypeHaveAccessToBusinessUnit,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingTaskTypeHaveAccessToBusinessUnit> {
     const ztrackingEntity =
       await this.taskTypeHaveAccessToBusinessUnitRepository.save(
         this.taskTypeHaveAccessToBusinessUnitRepository.create({
@@ -49,8 +49,7 @@ export class ZtrackingTaskTypeHaveAccessToBusinessUnitService {
       'createZtrackingForTaskTypeHaveAccessToBusinessUnit',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForTaskTypeHaveAccessToBusinessUnit(
