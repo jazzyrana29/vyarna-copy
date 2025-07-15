@@ -1,7 +1,9 @@
 # Vyara Person Identity Service
 
-NestJS microservice handling creation and management of `Person` records.  It
-communicates over Kafka and persists data in TiDB via TypeORM.
+NestJS microservice handling creation and management of `Person`, `Email` and
+identity verification records. It communicates exclusively over Kafka and
+persists data in TiDB via TypeORM. Optionally it integrates with ActiveCampaign
+and Stripe when creating new persons.
 
 ---
 
@@ -11,20 +13,23 @@ Copy `.env-example` to `.env` and provide the following values:
 
 | Variable           | Description                               |
 | ------------------ | ----------------------------------------- |
-| `APP_PORT`         | Port the service listens on (default 5006) |
-| `NODE_ENV`         | Node environment (`development`, `prod`)  |
-| `KAFKA_BROKER`     | Kafka broker connection string            |
-| `KAFKA_GROUP`      | Kafka consumer group ID                   |
-| `LOG_STREAM_LEVEL` | Numeric log level for `ez-logger`         |
-| `SENTRY_DNS`       | Sentry DSN for error reporting            |
-| `TIDB_HOST`        | TiDB host                                 |
-| `TIDB_PORT`        | TiDB port                                 |
-| `TIDB_USER`        | TiDB user                                 |
-| `TIDB_PASSWORD`    | TiDB password                             |
-| `TIDB_DATABASE`    | Database name                             |
-| `TIDB_ENABLE_SSL`  | `true` to enable TLS                      |
-| `TIDB_CA_PATH`     | Path to CA certificate                    |
-| `AUTO_SEED`        | Seed demo data on startup (`true/false`)  |
+| `APP_PORT`                | Port the service listens on (default 5006) |
+| `NODE_ENV`                | Node environment (`development`, `prod`)  |
+| `KAFKA_BROKER`            | Kafka broker connection string            |
+| `KAFKA_GROUP`             | Kafka consumer group ID                   |
+| `LOG_STREAM_LEVEL`        | Numeric log level for `ez-logger`         |
+| `CONTEXT`                 | Logger context identifier                  |
+| `SENTRY_DNS`              | Sentry DSN for error reporting            |
+| `TIDB_HOST`               | TiDB host                                 |
+| `TIDB_PORT`               | TiDB port                                 |
+| `TIDB_USER`               | TiDB user                                 |
+| `TIDB_PASSWORD`           | TiDB password                             |
+| `TIDB_DATABASE`           | Database name                             |
+| `TIDB_ENABLE_SSL`         | `true` to enable TLS                      |
+| `TIDB_CA_PATH`            | Path to CA certificate                    |
+| `ACTIVE_CAMPAIGN_NAME`    | ActiveCampaign account name               |
+| `ACTIVE_CAMPAIGN_API_KEY` | ActiveCampaign API token                  |
+| `STRIPE_SECRET_KEY`       | Stripe API key                            |
 
 ---
 
@@ -43,9 +48,11 @@ npm run start:dev
 
 ---
 
-## REST Endpoints
+## Triggering Operations
 
-The Gateway exposes the following POST endpoints:
+This service does not expose HTTP endpoints directly. The `vy-gateway` service
+provides REST APIs which publish Kafka messages consumed here. Typical gateway
+routes include:
 
 - `POST /vy-person-identity/create-person-entity`
 - `POST /vy-person-identity/update-person-entity`
@@ -53,14 +60,15 @@ The Gateway exposes the following POST endpoints:
 - `POST /vy-person-identity/get-history-person-entity`
 - `POST /vy-person-identity/get-many-persons`
 
-Example payload for creating a person:
+Example payload sent via Kafka when creating a person:
 
 ```json
 {
-  "businessUnitId": "uuid",
+  "rootBusinessUnitId": "uuid",
   "username": "jdoe",
   "nameFirst": "John",
-  "nameLast": "Doe",
+  "nameLastFirst": "Doe",
+  "nameLastSecond": null,
   "email": "john@example.com",
   "password": "secret",
   "roles": ["Provider"],
@@ -105,10 +113,11 @@ Example Kafka message for `create-person-entity`:
 {
   "key": "trace-id",
   "value": {
-    "businessUnitId": "uuid",
+    "rootBusinessUnitId": "uuid",
     "username": "jdoe",
     "nameFirst": "John",
-    "nameLast": "Doe",
+    "nameLastFirst": "Doe",
+    "nameLastSecond": null,
     "email": "john@example.com",
     "password": "secret",
     "roles": ["Provider"],
