@@ -1,9 +1,8 @@
 import { ContactService } from '../contact.service';
-import { ActiveCampaignService } from '../../person/services/active-campaign.service';
+import { ActiveCampaignService } from '../../../services/active-campaign.service';
 import { StripeGatewayService } from '../../../services/stripe-gateway.service';
 import { Repository } from 'typeorm';
 import { Person } from '../../../entities/person.entity';
-import { EzKafkaProducer } from 'ez-kafka-producer';
 import { LogStreamLevel } from 'ez-logger';
 
 jest.mock('ez-kafka-producer');
@@ -22,9 +21,7 @@ describe('ContactService', () => {
     } as Person;
 
     const repo = {
-      findOne: jest.fn()
-        .mockResolvedValueOnce(null)
-        .mockResolvedValue(contact),
+      findOne: jest.fn().mockResolvedValueOnce(null).mockResolvedValue(contact),
       create: jest.fn().mockReturnValue(contact),
       save: jest.fn().mockResolvedValue(contact),
     } as unknown as Repository<Person>;

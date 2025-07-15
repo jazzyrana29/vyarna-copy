@@ -9,47 +9,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreatePersonDto = void 0;
+exports.CreateActiveCampaignContactDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-const person_dto_1 = require("./person.dto");
 const tags_enum_1 = require("../../../enums/domain-person-and-identity/vy-active-campaign/tags.enum");
-class CreatePersonDto extends (0, swagger_1.PickType)(person_dto_1.PersonDto, [
-    "rootBusinessUnitId",
-    "username",
-    "nameFirst",
-    "nameMiddle",
-    "nameLastFirst",
-    "nameLastSecond",
-    "password",
-    "roles",
-    "updatedBy",
-]) {
+class CreateActiveCampaignContactDto {
 }
-exports.CreatePersonDto = CreatePersonDto;
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: "Primary email address" }),
-    (0, class_validator_1.IsEmail)(),
-    __metadata("design:type", String)
-], CreatePersonDto.prototype, "email", void 0);
+exports.CreateActiveCampaignContactDto = CreateActiveCampaignContactDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: "Identifier for the person agree to associate with vyarna",
-        type: Boolean,
-        required: false,
+        description: "First Name of the contact",
+        example: "Joe",
     }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsBoolean)(),
-    __metadata("design:type", Boolean)
-], CreatePersonDto.prototype, "addInActiveCampaign", void 0);
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateActiveCampaignContactDto.prototype, "firstName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: "form id of the contact for active campaign",
+        description: "Last Name of the contact",
+        example: "Goldberg",
+    }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateActiveCampaignContactDto.prototype, "lastName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "Email of the contact",
+        example: "joe-golberg@gmail.com",
+    }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateActiveCampaignContactDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: "form id of the contact",
         enum: tags_enum_1.TagsEnum,
         example: tags_enum_1.TagsEnum.SIGNUP_HOME_TOP,
     }),
     (0, class_validator_1.IsEnum)(tags_enum_1.TagsEnum),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], CreatePersonDto.prototype, "formId", void 0);
-//# sourceMappingURL=create-person.dto.js.map
+], CreateActiveCampaignContactDto.prototype, "formId", void 0);
+//# sourceMappingURL=create-active-campaign-contact.dto.js.map

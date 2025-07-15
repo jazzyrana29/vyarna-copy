@@ -2,12 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Person } from '../../entities/person.entity';
-import { ActiveCampaignService } from '../person/services/active-campaign.service';
+import { ActiveCampaignService } from '../../services/active-campaign.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
-import {
-  CreatePersonDto,
-  PersonWithoutPasswordDto,
-} from 'ez-utils';
+import { CreatePersonDto, PersonWithoutPasswordDto } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { Email } from '../../entities/email.entity';
@@ -15,11 +12,6 @@ import { Email } from '../../entities/email.entity';
 @Injectable()
 export class ContactService {
   private logger = getLoggerConfig(ContactService.name);
-
-  private sanitizePerson(person: Person): PersonWithoutPasswordDto {
-    const { password, ...rest } = person;
-    return rest as PersonWithoutPasswordDto;
-  }
 
   constructor(
     @InjectRepository(Person)
@@ -57,8 +49,7 @@ export class ContactService {
     }
 
     const { email, roles = [], ...rest } = createContactDto;
-    const finalRoles =
-      Array.isArray(roles) && roles.length > 0 ? roles : ['Client'];
+    const finalRoles = Array.isArray(roles) && roles.length > 0 ? roles : [];
 
     const entity = this.personRepo.create({
       ...rest,
@@ -138,5 +129,10 @@ export class ContactService {
     // );
 
     return this.sanitizePerson(entity);
+  }
+
+  private sanitizePerson(person: Person): PersonWithoutPasswordDto {
+    const { password, ...rest } = person;
+    return rest as PersonWithoutPasswordDto;
   }
 }

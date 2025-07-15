@@ -78,7 +78,7 @@ __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/re
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/phone.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/physical-address.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto"), exports);
-__exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-active-campaign-contact.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-active-campaign/lists-response.dto"), exports);

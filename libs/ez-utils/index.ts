@@ -73,7 +73,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/phone.dto
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/physical-address.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-active-campaign-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/lists-response.dto";

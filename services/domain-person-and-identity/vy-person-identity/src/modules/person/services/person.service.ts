@@ -6,7 +6,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ZtrackingPersonService } from './ztracking-person.service';
-import { ActiveCampaignService } from './active-campaign.service';
 import { LogStreamLevel } from 'ez-logger';
 
 import { getLoggerConfig } from '../../../utils/common';
@@ -26,15 +25,11 @@ import {
 import { BusinessUnit } from '../../../entities/business-unit.entity';
 import { Email } from '../../../entities/email.entity';
 import { EzKafkaProducer } from 'ez-kafka-producer';
+import { PersonIntegrationService } from './person-integration.service';
 
 @Injectable()
 export class PersonService {
   private logger = getLoggerConfig(PersonService.name);
-
-  private sanitizePerson(person: Person): PersonWithoutPasswordDto {
-    const { password, ...rest } = person;
-    return rest as PersonWithoutPasswordDto;
-  }
 
   constructor(
     @InjectRepository(Person)
@@ -44,7 +39,7 @@ export class PersonService {
     @InjectRepository(Email)
     private readonly emailRepository: Repository<Email>,
     private readonly ztrackingPersonService: ZtrackingPersonService,
-    private readonly activeCampaignService: ActiveCampaignService,
+    private readonly personIntegrationService: PersonIntegrationService,
   ) {
     this.logger.debug(
       `${PersonService.name} initialized`,
@@ -66,25 +61,27 @@ export class PersonService {
     );
 
     const emailToProcess = createPersonDto.email;
-    let rootBusinessUnit = await this.businessUnitRepository.findOne({
-      where: { businessUnitId: createPersonDto.rootBusinessUnitId },
-    });
-    while (rootBusinessUnit.parentBusinessUnitId) {
+    let rootBusinessUnit = null;
+    if (createPersonDto?.rootBusinessUnitId) {
       rootBusinessUnit = await this.businessUnitRepository.findOne({
-        where: { businessUnitId: rootBusinessUnit.parentBusinessUnitId },
+        where: { businessUnitId: createPersonDto.rootBusinessUnitId },
       });
-    }
-
-    const conflictUser = await this.personRepository.findOne({
-      where: {
-        username: createPersonDto.username,
-        rootBusinessUnitId: rootBusinessUnit.businessUnitId,
-      },
-    });
-    if (conflictUser) {
-      throw new BadRequestException(
-        `Username "${createPersonDto.username}" already exists in the root business unit "${rootBusinessUnit.businessUnitId}"`,
-      );
+      while (rootBusinessUnit.parentBusinessUnitId) {
+        rootBusinessUnit = await this.businessUnitRepository.findOne({
+          where: { businessUnitId: rootBusinessUnit.parentBusinessUnitId },
+        });
+      }
+      const conflictUser = await this.personRepository.findOne({
+        where: {
+          username: createPersonDto.username,
+          rootBusinessUnitId: rootBusinessUnit.businessUnitId,
+        },
+      });
+      if (conflictUser) {
+        throw new BadRequestException(
+          `Username "${createPersonDto.username}" already exists in the root business unit "${rootBusinessUnit.businessUnitId}"`,
+        );
+      }
     }
 
     const conflictEmail = await this.emailRepository.findOne({
@@ -97,13 +94,12 @@ export class PersonService {
     }
 
     const { email, roles = [], ...rest } = createPersonDto;
-    const finalRoles =
-      Array.isArray(roles) && roles.length > 0 ? roles : ['Client'];
+    const finalRoles = Array.isArray(roles) && roles.length > 0 ? roles : [];
 
     const person = await this.personRepository.save(
       this.personRepository.create({
         ...rest,
-        rootBusinessUnitId: rootBusinessUnit.businessUnitId,
+        rootBusinessUnitId: rootBusinessUnit?.businessUnitId,
         roles: finalRoles,
       }),
     );
@@ -131,20 +127,32 @@ export class PersonService {
         traceId,
       }),
     );
+    if (createPersonDto?.addInActiveCampaign) {
+      try {
+        await this.personIntegrationService.createActiveCampaignContactAndSubscribeToTopic(
+          {
+            firstName: person.nameFirst,
+            lastName: person.nameLastFirst,
+            email: emailToProcess,
+            formId: createPersonDto?.formId,
+          },
+          traceId,
+        );
 
-    try {
-      await this.activeCampaignService.createContact({
-        firstName: person.nameFirst,
-        lastName: person.nameLastFirst,
-        email: emailToProcess,
-      });
-    } catch (err) {
-      this.logger.error(
-        `Failed to create ActiveCampaign contact : ${err}`,
-        traceId,
-        'createPerson',
-        LogStreamLevel.ProdStandard,
-      );
+        this.logger.info(
+          `person created in activeCampaign`,
+          traceId,
+          'createPerson',
+          LogStreamLevel.ProdStandard,
+        );
+      } catch (err) {
+        this.logger.error(
+          `Failed to create ActiveCampaign contact : ${err}`,
+          traceId,
+          'createPerson',
+          LogStreamLevel.ProdStandard,
+        );
+      }
     }
 
     if (
@@ -153,7 +161,7 @@ export class PersonService {
         traceId,
       )
     )
-      return this.sanitizePerson(person);
+      return this.personIntegrationService.sanitizePerson(person);
   }
 
   async updatePersonUnit(
@@ -216,7 +224,7 @@ export class PersonService {
         traceId,
       )
     )
-      return this.sanitizePerson(updatedPerson);
+      return this.personIntegrationService.sanitizePerson(updatedPerson);
   }
 
   async findPerson(
@@ -249,7 +257,7 @@ export class PersonService {
       LogStreamLevel.ProdStandard,
     );
 
-    return this.sanitizePerson(person);
+    return this.personIntegrationService.sanitizePerson(person);
   }
 
   async getManyPersons(
@@ -342,7 +350,7 @@ export class PersonService {
 
     // 7) Return structured pagination & sorting response
     return {
-      data: persons.map((p) => this.sanitizePerson(p)),
+      data: persons.map((p) => this.personIntegrationService.sanitizePerson(p)),
       maxPages,
       currentPage,
       pageSize: usedPageSize,
