@@ -64,25 +64,6 @@ export class GrowthMeasurementService {
     return measurements;
   }
 
-  async updateGrowthMeasurement(
-    growthMeasurementDto: GrowthMeasurementDto,
-    traceId: string,
-  ): Promise<GrowthMeasurementDto> {
-    await this.growthMeasurementRepo.save(growthMeasurementDto);
-    this.logger.info(
-      'GrowthMeasurement updated',
-      traceId,
-      'updateGrowthMeasurement',
-      LogStreamLevel.ProdStandard,
-    );
-
-    await this.ztrackingGrowthMeasurementService.createZtrackingGrowthMeasurementEntity(
-      growthMeasurementDto as GrowthMeasurement,
-      traceId,
-    );
-
-    return growthMeasurementDto;
-  }
 
   async getGrowthMeasurementHistory(
     getZtrackingGrowthMeasurementDto: GetZtrackingGrowthMeasurementDto,
