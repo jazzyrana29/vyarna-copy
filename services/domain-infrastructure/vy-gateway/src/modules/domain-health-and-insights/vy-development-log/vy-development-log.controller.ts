@@ -48,7 +48,7 @@ import { ValidateGetZtrackingGrowthMeasurementDtoPipe } from './pipes/validate-g
 export class DevelopmentLogController {
   private logger = getLoggerConfig(DevelopmentLogController.name);
 
-  constructor(private readonly kafkaService: DevelopmentLogKafkaService) {
+  constructor(private readonly developmentLogKafkaService: DevelopmentLogKafkaService) {
     this.logger.debug(
       `${DevelopmentLogController.name} initialized`,
       '',
@@ -73,7 +73,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createGrowth(createGrowthMeasurementDto, traceId),
+      await this.developmentLogKafkaService.createGrowth(createGrowthMeasurementDto, traceId),
       'Growth measurement logged',
       traceId,
     );
@@ -95,7 +95,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getGrowth(query, traceId),
+      await this.developmentLogKafkaService.getGrowth(query, traceId),
       'Growth measurements retrieved',
       traceId,
     );
@@ -117,7 +117,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getGrowthMeasurementHistory(
+      await this.developmentLogKafkaService.getGrowthMeasurementHistory(
         getZtrackingGrowthMeasurementDto,
         traceId,
       ),
@@ -142,7 +142,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createMilestone(createMilestoneDto, traceId),
+      await this.developmentLogKafkaService.createMilestone(createMilestoneDto, traceId),
       'Milestone logged',
       traceId,
     );
@@ -163,7 +163,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getMilestones(query, traceId),
+      await this.developmentLogKafkaService.getMilestones(query, traceId),
       'Milestones retrieved',
       traceId,
     );
@@ -185,7 +185,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createTeethingEvent(
+      await this.developmentLogKafkaService.createTeethingEvent(
         createTeethingEventDto,
         traceId,
       ),
@@ -210,7 +210,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getTeethingEvents(query, traceId),
+      await this.developmentLogKafkaService.getTeethingEvents(query, traceId),
       'Teething events retrieved',
       traceId,
     );
@@ -232,7 +232,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createDevelopmentMoment(
+      await this.developmentLogKafkaService.createDevelopmentMoment(
         createDevelopmentMomentDto,
         traceId,
       ),
@@ -257,7 +257,7 @@ export class DevelopmentLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getDevelopmentMoments(query, traceId),
+      await this.developmentLogKafkaService.getDevelopmentMoments(query, traceId),
       'Development moments retrieved',
       traceId,
     );

@@ -32,7 +32,7 @@ export class SalesSubscriptionsController {
   private logger = getLoggerConfig(SalesSubscriptionsController.name);
 
   constructor(
-    private readonly personBabyKafkaService: SalesSubscriptionsKafkaService,
+    private readonly salesSubscriptionsKafkaService: SalesSubscriptionsKafkaService,
   ) {
     this.logger.debug(
       `${SalesSubscriptionsController.name} initialized`,
@@ -57,7 +57,7 @@ export class SalesSubscriptionsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
+      await this.salesSubscriptionsKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
       traceId,
     );
@@ -78,7 +78,7 @@ export class SalesSubscriptionsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
+      await this.salesSubscriptionsKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
       traceId,
     );
@@ -99,7 +99,7 @@ export class SalesSubscriptionsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
+      await this.salesSubscriptionsKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
       traceId,
     );
@@ -121,7 +121,7 @@ export class SalesSubscriptionsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
+      await this.salesSubscriptionsKafkaService.getHistory(
         getHistoryOfPersonDto,
         traceId,
       ),
@@ -145,7 +145,7 @@ export class SalesSubscriptionsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
+      await this.salesSubscriptionsKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
       traceId,
     );

@@ -32,7 +32,7 @@ export class SalesAffiliateProductsController {
   private logger = getLoggerConfig(SalesAffiliateProductsController.name);
 
   constructor(
-    private readonly personBabyKafkaService: SalesAffiliateProductsKafkaService,
+    private readonly salesAffiliateProductsKafkaService: SalesAffiliateProductsKafkaService,
   ) {
     this.logger.debug(
       `${SalesAffiliateProductsController.name} initialized`,
@@ -57,7 +57,7 @@ export class SalesAffiliateProductsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
+      await this.salesAffiliateProductsKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
       traceId,
     );
@@ -78,7 +78,7 @@ export class SalesAffiliateProductsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
+      await this.salesAffiliateProductsKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
       traceId,
     );
@@ -99,7 +99,7 @@ export class SalesAffiliateProductsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
+      await this.salesAffiliateProductsKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
       traceId,
     );
@@ -121,7 +121,7 @@ export class SalesAffiliateProductsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
+      await this.salesAffiliateProductsKafkaService.getHistory(
         getHistoryOfPersonDto,
         traceId,
       ),
@@ -145,7 +145,7 @@ export class SalesAffiliateProductsController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
+      await this.salesAffiliateProductsKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
       traceId,
     );

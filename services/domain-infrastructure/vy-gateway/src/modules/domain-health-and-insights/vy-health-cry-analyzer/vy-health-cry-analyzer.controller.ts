@@ -32,7 +32,7 @@ export class HealthCryAnalyzerController {
   private logger = getLoggerConfig(HealthCryAnalyzerController.name);
 
   constructor(
-    private readonly personBabyKafkaService: HealthCryAnalyzerKafkaService,
+    private readonly healthCryAnalyzerKafkaService: HealthCryAnalyzerKafkaService,
   ) {
     this.logger.debug(
       `${HealthCryAnalyzerController.name} initialized`,
@@ -57,7 +57,7 @@ export class HealthCryAnalyzerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
+      await this.healthCryAnalyzerKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
       traceId,
     );
@@ -78,7 +78,7 @@ export class HealthCryAnalyzerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
+      await this.healthCryAnalyzerKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
       traceId,
     );
@@ -99,7 +99,7 @@ export class HealthCryAnalyzerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
+      await this.healthCryAnalyzerKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
       traceId,
     );
@@ -121,7 +121,7 @@ export class HealthCryAnalyzerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
+      await this.healthCryAnalyzerKafkaService.getHistory(
         getHistoryOfPersonDto,
         traceId,
       ),
@@ -145,7 +145,7 @@ export class HealthCryAnalyzerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
+      await this.healthCryAnalyzerKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
       traceId,
     );
