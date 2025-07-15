@@ -22,6 +22,7 @@ import {
   GetProductVariantsDto,
   GetSubscriptionDto,
   GetZtrackingOrderDto,
+  GetCartDto,
   JoinRoomDto,
   KT_ADD_CART_ITEM,
   KT_APPLY_CART_PROMOTION,
@@ -32,6 +33,7 @@ import {
   KT_GET_CATEGORIES,
   KT_GET_PRODUCT_VARIANTS,
   KT_GET_PRODUCTS,
+  KT_GET_CART,
   KT_GET_SUBSCRIPTION,
   KT_GET_ZTRACKING_ORDER,
   KT_REMOVE_CART_ITEM,
@@ -217,6 +219,20 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
         `${KT_APPLY_CART_PROMOTION}-error`,
         e.message || 'Unknown error',
       );
+    }
+  }
+
+  @SubscribeMessage(KT_GET_CART)
+  async getCart(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() getCartDto: GetCartDto,
+  ) {
+    const traceId = generateTraceId('sales-commerce-get-cart');
+    try {
+      const result = await this.kafkaService.getCart(getCartDto, traceId);
+      socket.emit(`${KT_GET_CART}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_GET_CART}-error`, e.message || 'Unknown error');
     }
   }
 

@@ -9,6 +9,7 @@ import {
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
   KT_APPLY_CART_PROMOTION,
+  KT_GET_CART,
   KT_CREATE_ORDER,
   KT_GET_ORDERS,
   KT_GET_ZTRACKING_ORDER,
@@ -113,6 +114,18 @@ export class SalesCommerceResponseController {
       `Kafka response for ${KT_APPLY_CART_PROMOTION} | key: ${key}`,
       '',
       'handleApplyPromotion',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_GET_CART + '-response')
+  handleGetCart(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_GET_CART} | key: ${key}`,
+      '',
+      'handleGetCart',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
