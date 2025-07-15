@@ -61,7 +61,7 @@ import { ValidateSleepEventDtoPipe } from './pipes/validate-sleep-event-dto.pipe
 export class HealthSleepController {
   private logger = getLoggerConfig(HealthSleepController.name);
 
-  constructor(private readonly kafkaService: HealthSleepKafkaService) {
+  constructor(private readonly healthSleepKafkaService: HealthSleepKafkaService) {
     this.logger.debug(
       `${HealthSleepController.name} initialized`,
       '',
@@ -86,7 +86,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createSleepSession(
+      await this.healthSleepKafkaService.createSleepSession(
         createSleepSessionDto,
         traceId,
       ),
@@ -110,7 +110,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepSessions(getSleepSessionsDto, traceId),
+      await this.healthSleepKafkaService.getSleepSessions(getSleepSessionsDto, traceId),
       'Sleep sessions retrieved',
       traceId,
     );
@@ -131,7 +131,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getZtrackingSleepSession(
+      await this.healthSleepKafkaService.getZtrackingSleepSession(
         getZtrackingSleepSessionDto,
         traceId,
       ),
@@ -155,7 +155,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepEvent(sleepEventDto, traceId),
+      await this.healthSleepKafkaService.logSleepEvent(sleepEventDto, traceId),
       'Sleep event logged',
       traceId,
     );
@@ -176,7 +176,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepInterruption(
+      await this.healthSleepKafkaService.logSleepInterruption(
         sleepInterruptionReasonDto,
         traceId,
       ),
@@ -200,7 +200,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepEnvironment(
+      await this.healthSleepKafkaService.logSleepEnvironment(
         sleepEnvironmentDto,
         traceId,
       ),
@@ -224,7 +224,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logSleepRating(sleepRatingDto, traceId),
+      await this.healthSleepKafkaService.logSleepRating(sleepRatingDto, traceId),
       'Sleep rated',
       traceId,
     );
@@ -245,7 +245,7 @@ export class HealthSleepController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.endSleepSession(
+      await this.healthSleepKafkaService.endSleepSession(
         deleteSleepSessionDto.sessionId,
         traceId,
       ),
@@ -263,7 +263,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepEvents');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepEvents(getSleepEventsDto, traceId),
+      await this.healthSleepKafkaService.getSleepEvents(getSleepEventsDto, traceId),
       'Sleep events retrieved',
       traceId,
     );
@@ -278,7 +278,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepInterruptions');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepInterruptionReasons(
+      await this.healthSleepKafkaService.getSleepInterruptionReasons(
         getSleepInterruptionReasonsDto,
         traceId,
       ),
@@ -296,7 +296,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepEnvironments');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepEnvironments(
+      await this.healthSleepKafkaService.getSleepEnvironments(
         getSleepEnvironmentsDto,
         traceId,
       ),
@@ -314,7 +314,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepRatings');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepRatings(getSleepRatingsDto, traceId),
+      await this.healthSleepKafkaService.getSleepRatings(getSleepRatingsDto, traceId),
       'Sleep ratings retrieved',
       traceId,
     );
@@ -329,7 +329,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepSummary');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepSummary(getSleepSummaryDto, traceId),
+      await this.healthSleepKafkaService.getSleepSummary(getSleepSummaryDto, traceId),
       'Sleep summary retrieved',
       traceId,
     );
@@ -344,7 +344,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepSchedules');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepSchedules(
+      await this.healthSleepKafkaService.getSleepSchedules(
         getSleepSchedulesDto,
         traceId,
       ),
@@ -362,7 +362,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('createSleepSchedule');
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createSleepSchedule(sleepScheduleDto, traceId),
+      await this.healthSleepKafkaService.createSleepSchedule(sleepScheduleDto, traceId),
       'Sleep schedule created',
       traceId,
     );
@@ -377,7 +377,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepNotifications');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepNotifications(
+      await this.healthSleepKafkaService.getSleepNotifications(
         getSleepNotificationsDto,
         traceId,
       ),
@@ -395,7 +395,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('createSleepNotification');
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createSleepNotification(
+      await this.healthSleepKafkaService.createSleepNotification(
         sleepNotificationDto,
         traceId,
       ),
@@ -413,7 +413,7 @@ export class HealthSleepController {
     const traceId = generateTraceId('getSleepPatterns');
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSleepPatternSummaries(
+      await this.healthSleepKafkaService.getSleepPatternSummaries(
         getSleepPatternSummariesDto,
         traceId,
       ),

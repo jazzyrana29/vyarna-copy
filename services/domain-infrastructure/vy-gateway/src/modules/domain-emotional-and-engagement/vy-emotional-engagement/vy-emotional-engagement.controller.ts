@@ -32,7 +32,7 @@ export class EmotionalEngagementController {
   private logger = getLoggerConfig(EmotionalEngagementController.name);
 
   constructor(
-    private readonly personBabyKafkaService: EmotionalEngagementKafkaService,
+    private readonly emotionalEngagementKafkaService: EmotionalEngagementKafkaService,
   ) {
     this.logger.debug(
       `${EmotionalEngagementController.name} initialized`,
@@ -57,7 +57,7 @@ export class EmotionalEngagementController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
+      await this.emotionalEngagementKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
       traceId,
     );
@@ -78,7 +78,7 @@ export class EmotionalEngagementController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
+      await this.emotionalEngagementKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
       traceId,
     );
@@ -99,7 +99,7 @@ export class EmotionalEngagementController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
+      await this.emotionalEngagementKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
       traceId,
     );
@@ -121,7 +121,7 @@ export class EmotionalEngagementController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
+      await this.emotionalEngagementKafkaService.getHistory(
         getHistoryOfPersonDto,
         traceId,
       ),
@@ -145,7 +145,7 @@ export class EmotionalEngagementController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
+      await this.emotionalEngagementKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
       traceId,
     );
