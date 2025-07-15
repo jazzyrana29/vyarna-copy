@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TemperatureMeasurement } from '../../../entities/temperature_measurement.entity';
@@ -7,9 +7,9 @@ import {
   CreateTemperatureMeasurementDto,
   GetManyTemperatureMeasurementsDto,
   TemperatureMeasurementDto,
-  ValidateCareEventTimeDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
+import { validateEventTime } from '../../../utils/validate-event-time';
 import { LogStreamLevel } from 'ez-logger';
 
 @Injectable()
@@ -29,31 +29,18 @@ export class TemperatureMeasurementService {
     );
   }
 
-  private async validateEventTime(
-    validateCareEventTimeDto: ValidateCareEventTimeDto,
-  ): Promise<void> {
-    const { babyId, eventTime } = validateCareEventTimeDto;
-    const latest = await this.tempRepo.findOne({
-      where: { babyId, isDeleted: false },
-      order: { eventTime: 'DESC' },
-    });
-
-    if (
-      latest &&
-      latest.eventTime.getTime() - new Date(eventTime).getTime() >
-        60 * 60 * 1000
-    ) {
-      throw new BadRequestException(
-        'Event time cannot be more than one hour older than the latest temperature measurement',
-      );
-    }
-  }
 
   async createTemperatureMeasurement(
     createTemperatureMeasurementDto: CreateTemperatureMeasurementDto,
     traceId: string,
   ): Promise<TemperatureMeasurementDto> {
-    await this.validateEventTime(createTemperatureMeasurementDto);
+    await validateEventTime({
+      repo: this.tempRepo,
+      babyId: createTemperatureMeasurementDto.babyId,
+      eventTime: createTemperatureMeasurementDto.eventTime,
+      errorMessage:
+        'Event time cannot be more than one hour older than the latest temperature measurement',
+    });
     const entity = this.tempRepo.create(createTemperatureMeasurementDto);
     await this.tempRepo.save(entity);
     this.logger.info(
