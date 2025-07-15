@@ -11,13 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaginatedPersonsResponseDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const person_dto_1 = require("./person.dto");
+const person_without_password_dto_1 = require("./person-without-password.dto");
 class PaginatedPersonsResponseDto {
 }
 exports.PaginatedPersonsResponseDto = PaginatedPersonsResponseDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        type: [person_dto_1.PersonDto],
+        type: [person_without_password_dto_1.PersonWithoutPasswordDto],
         description: "List of operator results",
     }),
     __metadata("design:type", Array)

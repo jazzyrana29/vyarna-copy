@@ -57,8 +57,9 @@ describe('ContactService', () => {
     const first = await service.createContact(createContactDto as any, 't1');
     const second = await service.createContact(createContactDto as any, 't1');
 
-    expect(first).toBe(contact);
-    expect(second).toBe(contact);
+    const { password, ...sanitized } = contact;
+    expect(first).toEqual(sanitized);
+    expect(second).toEqual(sanitized);
 
     expect(repo.save).toHaveBeenCalledTimes(3);
     expect(ac.createContact).toHaveBeenCalledTimes(1);

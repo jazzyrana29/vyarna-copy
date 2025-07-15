@@ -56,6 +56,7 @@ __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-
 __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription"), exports);
 __exportStar(require("./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/coupon"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/person.dto"), exports);
+__exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/person-without-password.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/create-person.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-one-person.dto"), exports);
 __exportStar(require("./src/DTO/domain-person-and-identity/vy-person-identity/get-history-of-person.dto"), exports);
