@@ -12,6 +12,7 @@ import { WebhookEvent } from '../../entities/webhook_event.entity';
 import { ZtrackingPaymentIntentService } from './ztracking-payment-intent.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
+import { mapStripeIntentStatus } from './payment-intent.utils';
 import Stripe from 'stripe';
 import {
   CreatePaymentIntentPayloadDto,
@@ -89,17 +90,6 @@ export class PaymentIntentService {
     return { originalAmount, currency: currency! };
   }
 
-  private mapStripeStatus(apiStatus: Stripe.PaymentIntent.Status) {
-    const map: Record<string, PaymentIntent['status']> = {
-      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-      requires_confirmation: 'REQUIRES_CONFIRMATION',
-      requires_action: 'REQUIRES_ACTION',
-      processing: 'PROCESSING',
-      succeeded: 'SUCCEEDED',
-      canceled: 'CANCELED',
-    };
-    return map[apiStatus] ?? 'REQUIRES_PAYMENT_METHOD';
-  }
 
   private getAmountUnit(currency: string): string {
     const units: Record<string, string> = {
@@ -219,7 +209,7 @@ export class PaymentIntentService {
       clientSecret = stripeIntent.client_secret || undefined;
 
       entity.externalId = stripeIntent.id;
-      entity.status = this.mapStripeStatus(stripeIntent.status);
+      entity.status = mapStripeIntentStatus(stripeIntent.status) as any;
 
       await this.paymentRepo.save(entity);
       await this.attemptRepo.update(attempt.attemptId, {
@@ -363,20 +353,7 @@ export class PaymentIntentService {
       throw err;
     }
 
-    const statusMap: Record<
-      string,
-      PaymentIntent['status'] | 'REQUIRES_CAPTURE'
-    > = {
-      requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-      requires_confirmation: 'REQUIRES_CONFIRMATION',
-      requires_action: 'REQUIRES_ACTION',
-      requires_capture: 'REQUIRES_CAPTURE',
-      processing: 'PROCESSING',
-      succeeded: 'SUCCEEDED',
-      canceled: 'CANCELED',
-    };
-
-    intent.status = (statusMap[stripeIntent.status] || intent.status) as any;
+    intent.status = mapStripeIntentStatus(stripeIntent.status) as any;
     await this.paymentRepo.save(intent);
 
     await this.attemptRepo.update(attempt.attemptId, {
@@ -644,16 +621,7 @@ export class PaymentIntentService {
         intent.externalId,
       );
 
-      const statusMap: Record<string, PaymentIntent['status']> = {
-        requires_payment_method: 'REQUIRES_PAYMENT_METHOD',
-        requires_confirmation: 'REQUIRES_CONFIRMATION',
-        requires_action: 'REQUIRES_ACTION',
-        processing: 'PROCESSING',
-        succeeded: 'SUCCEEDED',
-        canceled: 'CANCELED',
-      };
-
-      intent.status = statusMap[stripeIntent.status] || intent.status;
+      intent.status = mapStripeIntentStatus(stripeIntent.status) as any;
       intent.nextRetryAt = null;
       await this.paymentRepo.save(intent);
 
@@ -772,23 +740,18 @@ export class PaymentIntentService {
     );
 
     try {
-      const intentStatusMap: Record<string, PaymentIntent['status']> = {
-        'payment_intent.succeeded': 'SUCCEEDED',
-        'payment_intent.canceled': 'CANCELED',
-        'payment_intent.processing': 'PROCESSING',
-        'payment_intent.payment_failed': 'FAILED',
-      };
-
-      if (intentStatusMap[event.type]) {
+      if (event.type.startsWith('payment_intent.')) {
         const pi = event.data.object as Stripe.PaymentIntent;
+        const status = event.type.replace('payment_intent.', '') as any;
+        const internal = mapStripeIntentStatus(status);
         await this.paymentRepo.update(
           { externalId: pi.id },
-          { status: intentStatusMap[event.type] },
+          { status: internal as any },
         );
         const updated = await this.paymentRepo.findOne({
           where: { externalId: pi.id },
         });
-        if (updated && intentStatusMap[event.type] === 'SUCCEEDED') {
+        if (updated && internal === 'SUCCEEDED') {
           // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
@@ -801,7 +764,7 @@ export class PaymentIntentService {
           //   }),
           // );
         }
-        if (updated && intentStatusMap[event.type] === 'FAILED') {
+        if (updated && internal === 'FAILED') {
           const err = (pi as any).last_payment_error;
           // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
