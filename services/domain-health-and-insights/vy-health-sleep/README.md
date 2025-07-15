@@ -97,11 +97,13 @@ curl http://localhost:4040/sleep/sessions?babyId=<babyId>
 # Get ztracking data for a session
 curl http://localhost:4040/sleep/sessions/<sessionId>
 
-# Log a sleep event
-curl -X POST http://localhost:4040/sleep/sessions/<sessionId>/events \
-  -H 'Content-Type: application/json' \
-  -d '{"eventId":"<eventId>","eventType":"WAKE","eventTime":"2024-01-01T03:00:00Z"}'
+# Log a sleep event (handler pending)
+# curl -X POST http://localhost:4040/sleep/sessions/<sessionId>/events \
+#   -H 'Content-Type: application/json' \
+#   -d '{"eventId":"<eventId>","eventType":"WAKE","eventTime":"2024-01-01T03:00:00Z"}'
 ```
+
+Other operations are planned but not yet available.
 
 All HTTP traffic goes through the gateway; this service only communicates via
 Kafka.
