@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 import * as SecureStore from 'expo-secure-store';
 
 export interface UserDetails {
@@ -27,9 +26,7 @@ interface UserStore {
   hasUserDetails: () => boolean;
 }
 
-export const useUserStore = create<UserStore>()(
-  persist(
-    (set, get) => ({
+export const useUserStore = create<UserStore>((set, get) => ({
       userDetails: null,
       stripeCustomerId: null,
       personId: null,
@@ -45,14 +42,35 @@ export const useUserStore = create<UserStore>()(
         const d = get().userDetails;
         return !!(d?.nameFirst && d?.nameLastFirst && d?.email);
       },
+}));
+
+const USER_KEY = 'user-store';
+
+SecureStore.getItemAsync(USER_KEY)
+  .then((data) => {
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        useUserStore.setState((state) => ({
+          ...state,
+          userDetails: parsed.userDetails ?? null,
+          stripeCustomerId: parsed.stripeCustomerId ?? null,
+          personId: parsed.personId ?? null,
+        }));
+      } catch (err) {
+        console.warn('Failed to parse stored user', err);
+      }
+    }
+  })
+  .catch((err) => console.warn('Failed to load user', err));
+
+useUserStore.subscribe((state) => {
+  SecureStore.setItemAsync(
+    USER_KEY,
+    JSON.stringify({
+      userDetails: state.userDetails,
+      stripeCustomerId: state.stripeCustomerId,
+      personId: state.personId,
     }),
-    {
-      name: 'user-store',
-      storage: createJSONStorage(() => ({
-        getItem: SecureStore.getItemAsync,
-        setItem: SecureStore.setItemAsync,
-        removeItem: SecureStore.deleteItemAsync,
-      })),
-    },
-  ),
-);
+  ).catch((err) => console.warn('Failed to save user', err));
+});

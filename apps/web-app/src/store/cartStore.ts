@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 import * as SecureStore from 'expo-secure-store';
 
 export interface CartItem {
@@ -27,9 +26,7 @@ interface CartStore {
   closeCart: () => void;
 }
 
-export const useCartStore = create<CartStore>()(
-  persist(
-    (set, get) => ({
+export const useCartStore = create<CartStore>((set, get) => ({
       cartId: null,
       items: [],
       isOpen: false,
@@ -78,14 +75,32 @@ export const useCartStore = create<CartStore>()(
       openCart: () => set({ isOpen: true }),
 
       closeCart: () => set({ isOpen: false }),
-    }),
-    {
-      name: 'cart-store',
-      storage: createJSONStorage(() => ({
-        getItem: SecureStore.getItemAsync,
-        setItem: SecureStore.setItemAsync,
-        removeItem: SecureStore.deleteItemAsync,
-      })),
-    },
-  ),
-);
+}));
+
+const CART_KEY = 'cart-store';
+
+// Load stored cart on startup
+SecureStore.getItemAsync(CART_KEY)
+  .then((data) => {
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        useCartStore.setState((state) => ({
+          ...state,
+          items: parsed.items ?? [],
+          cartId: parsed.cartId ?? null,
+        }));
+      } catch (err) {
+        console.warn('Failed to parse stored cart', err);
+      }
+    }
+  })
+  .catch((err) => console.warn('Failed to load cart', err));
+
+// Persist cart whenever items or cartId change
+useCartStore.subscribe((state) => {
+  SecureStore.setItemAsync(
+    CART_KEY,
+    JSON.stringify({ items: state.items, cartId: state.cartId }),
+  ).catch((err) => console.warn('Failed to save cart', err));
+});
