@@ -95,6 +95,9 @@ main topics are:
 - `create-payment-method`
 - `list-payment-methods`
 - `delete-payment-method`
+- `get-payment-intent-status`
+- `payment-status-update`
+- `retry-payment-attempt`
 
 The payments service consumes these topics, executes the business logic (Stripe
 operations, persistence, etc.) and publishes the result back on the response
