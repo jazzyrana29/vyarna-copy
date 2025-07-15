@@ -208,7 +208,7 @@ export class PersonService {
     this.logger.info(
       `person entity updated in database`,
       traceId,
-      'updatedBusinessUnit',
+      'updatePerson',
       LogStreamLevel.ProdStandard,
     );
 
@@ -256,7 +256,7 @@ export class PersonService {
     this.logger.info(
       `Person entity found in database`,
       traceId,
-      'findBusinessUnit',
+      'findPerson',
       LogStreamLevel.ProdStandard,
     );
 
