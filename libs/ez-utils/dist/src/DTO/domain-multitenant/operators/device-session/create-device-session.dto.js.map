@@ -1,1 +1,0 @@
-{"version":3,"file":"create-device-session.dto.js","sourceRoot":"","sources":["../../../../../../src/DTO/domain-multitenant/operators/device-session/create-device-session.dto.ts"],"names":[],"mappings":";;;AAAA,6CAA2C;AAC3C,6DAAwD;AAExD,MAAa,sBAAuB,SAAQ,IAAA,kBAAQ,EAAC,qCAAgB,EAAE;IACrE,WAAW;IACX,WAAW;IACX,MAAM;IACN,UAAU;IACV,WAAW;CACH,CAAC;CAAG;AANd,wDAMc"}
