@@ -1,6 +1,13 @@
 // src/components/UserDetailsModal.tsx
 import React, { FC, useEffect, useState } from 'react';
-import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Modal,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Pressable,
+} from 'react-native';
 import { colors } from '../theme/color';
 import { UserDetails, useUserStore } from '../store/userStore';
 
@@ -18,42 +25,71 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
   const userDetails = useUserStore((s) => s.userDetails);
   const setUserDetails = useUserStore((s) => s.setUserDetails);
 
-  const [nameFirst, setNameFirst] = useState(userDetails?.nameFirst || '');
-  const [nameMiddle, setNameMiddle] = useState(userDetails?.nameMiddle || '');
-  const [nameLastFirst, setNameLastFirst] = useState(
-    userDetails?.nameLastFirst || '',
-  );
-  const [nameLastSecond, setNameLastSecond] = useState(
-    userDetails?.nameLastSecond || '',
-  );
-  const [email, setEmail] = useState(userDetails?.email || '');
+  type FormValues = UserDetails & { addInActiveCampaign?: boolean };
+
+  const [values, setValues] = useState<FormValues>({
+    nameFirst: userDetails?.nameFirst || '',
+    nameMiddle: userDetails?.nameMiddle || '',
+    nameLastFirst: userDetails?.nameLastFirst || '',
+    nameLastSecond: userDetails?.nameLastSecond || '',
+    email: userDetails?.email || '',
+    addInActiveCampaign: userDetails?.addInActiveCampaign || false,
+  });
+  const [touched, setTouched] = useState<Record<keyof FormValues, boolean>>({
+    nameFirst: false,
+    nameMiddle: false,
+    nameLastFirst: false,
+    nameLastSecond: false,
+    email: false,
+    addInActiveCampaign: false,
+  });
 
   // Populate inputs whenever the modal opens
   useEffect(() => {
     if (visible) {
-      setNameFirst(userDetails?.nameFirst || '');
-      setNameMiddle(userDetails?.nameMiddle || '');
-      setNameLastFirst(userDetails?.nameLastFirst || '');
-      setNameLastSecond(userDetails?.nameLastSecond || '');
-      setEmail(userDetails?.email || '');
+      setValues({
+        nameFirst: userDetails?.nameFirst || '',
+        nameMiddle: userDetails?.nameMiddle || '',
+        nameLastFirst: userDetails?.nameLastFirst || '',
+        nameLastSecond: userDetails?.nameLastSecond || '',
+        email: userDetails?.email || '',
+        addInActiveCampaign: userDetails?.addInActiveCampaign || false,
+      });
+      setTouched({
+        nameFirst: false,
+        nameMiddle: false,
+        nameLastFirst: false,
+        nameLastSecond: false,
+        email: false,
+        addInActiveCampaign: false,
+      });
     }
   }, [visible, userDetails]);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const isFirstValid = nameFirst.trim().length > 0;
-  const isLastValid = nameLastFirst.trim().length > 0;
-  const isEmailValid = emailRegex.test(email);
-  const isValid = isFirstValid && isLastValid && isEmailValid;
+
+  const errors = {
+    nameFirst:
+      values.nameFirst.trim().length === 0 ? 'Enter first name.' : undefined,
+    nameLastFirst:
+      values.nameLastFirst.trim().length === 0 ? 'Enter last name.' : undefined,
+    email: emailRegex.test(values.email) ? undefined : 'Enter valid email.',
+  } as Record<keyof FormValues, string | undefined>;
+
+  const isValid =
+    !errors.nameFirst && !errors.nameLastFirst && !errors.email;
+
+  const handleChange = (field: keyof FormValues) => (text: any) => {
+    setValues((v) => ({ ...v, [field]: text }));
+  };
+
+  const handleBlur = (field: keyof FormValues) => {
+    setTouched((t) => ({ ...t, [field]: true }));
+  };
 
   const handleSubmit = () => {
     if (!isValid) return;
-    const details: UserDetails = {
-      nameFirst,
-      nameMiddle,
-      nameLastFirst,
-      nameLastSecond,
-      email,
-    };
+    const details: UserDetails = { ...values };
     setUserDetails(details);
     onSave(details);
     onClose();
@@ -69,50 +105,87 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
 
           <Text className="mb-1 text-secondary">First Name</Text>
           <TextInput
-            value={nameFirst}
-            onChangeText={setNameFirst}
-            className="border border-gray-300 rounded p-2 mb-4"
+            value={values.nameFirst}
+            onChangeText={handleChange('nameFirst')}
+            onBlur={() => handleBlur('nameFirst')}
+            className="w-full h-11 bg-white rounded px-3 mb-1"
             placeholder="First Name"
             placeholderTextColor={colors.paper}
           />
+          {touched.nameFirst && errors.nameFirst && (
+            <Text className="text-accent text-sm mb-2">{errors.nameFirst}</Text>
+          )}
 
           <Text className="mb-1 text-secondary">Middle Name</Text>
           <TextInput
-            value={nameMiddle}
-            onChangeText={setNameMiddle}
-            className="border border-gray-300 rounded p-2 mb-4"
+            value={values.nameMiddle}
+            onChangeText={handleChange('nameMiddle')}
+            onBlur={() => handleBlur('nameMiddle')}
+            className="w-full h-11 bg-white rounded px-3 mb-4"
             placeholder="Middle Name (optional)"
             placeholderTextColor={colors.paper}
           />
 
           <Text className="mb-1 text-secondary">Last Name</Text>
           <TextInput
-            value={nameLastFirst}
-            onChangeText={setNameLastFirst}
-            className="border border-gray-300 rounded p-2 mb-4"
+            value={values.nameLastFirst}
+            onChangeText={handleChange('nameLastFirst')}
+            onBlur={() => handleBlur('nameLastFirst')}
+            className="w-full h-11 bg-white rounded px-3 mb-1"
             placeholder="Last Name"
             placeholderTextColor={colors.paper}
           />
+          {touched.nameLastFirst && errors.nameLastFirst && (
+            <Text className="text-accent text-sm mb-2">{errors.nameLastFirst}</Text>
+          )}
 
           <Text className="mb-1 text-secondary">Second Last Name</Text>
           <TextInput
-            value={nameLastSecond}
-            onChangeText={setNameLastSecond}
-            className="border border-gray-300 rounded p-2 mb-4"
+            value={values.nameLastSecond}
+            onChangeText={handleChange('nameLastSecond')}
+            onBlur={() => handleBlur('nameLastSecond')}
+            className="w-full h-11 bg-white rounded px-3 mb-4"
             placeholder="Second Last Name (optional)"
             placeholderTextColor={colors.paper}
           />
 
           <Text className="mb-1 text-secondary">Email</Text>
           <TextInput
-            value={email}
-            onChangeText={setEmail}
-            className="border border-gray-300 rounded p-2 mb-6"
+            value={values.email}
+            onChangeText={handleChange('email')}
+            onBlur={() => handleBlur('email')}
+            className="w-full h-11 bg-white rounded px-3 mb-1"
             placeholder="you@example.com"
             placeholderTextColor={colors.paper}
             keyboardType="email-address"
             autoCapitalize="none"
           />
+          {touched.email && errors.email && (
+            <Text className="text-accent text-sm mb-2">{errors.email}</Text>
+          )}
+
+          <View className="flex-row items-start mb-4 mt-2">
+            <Pressable
+              onPress={() =>
+                setValues((v) => ({
+                  ...v,
+                  addInActiveCampaign: !v.addInActiveCampaign,
+                }))
+              }
+              className="mr-2 mt-1"
+            >
+              <View
+                className={`w-4 h-4 border rounded ${
+                  values.addInActiveCampaign ? 'bg-primary' : 'bg-white'
+                }`}
+              />
+            </Pressable>
+            <Text className="flex-1 text-xs text-neutralText">
+              I agree to receive emails from Vyarna, including updates, product
+              announcements, and special offers. I understand I can unsubscribe
+              at any time
+            </Text>
+          </View>
 
           <View className="flex-row justify-end">
             <TouchableOpacity onPress={onClose} className="mr-4 py-2">
