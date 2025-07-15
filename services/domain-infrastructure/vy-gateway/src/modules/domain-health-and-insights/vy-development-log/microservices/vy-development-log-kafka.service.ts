@@ -7,6 +7,8 @@ import {
   GetManyGrowthMeasurementsDto,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
+  GetZtrackingGrowthMeasurementDto,
+  KT_GET_HISTORY_GROWTH_MEASUREMENT,
   CreateMilestoneDto,
   GetManyMilestonesDto,
   CreateTeethingEventDto,
@@ -14,14 +16,8 @@ import {
   CreateDevelopmentMomentDto,
   GetManyDevelopmentMomentsDto,
 } from 'ez-utils';
-import {
-  KT_CREATE_MILESTONE,
-  KT_GET_MILESTONES,
-} from 'ez-utils';
-import {
-  KT_CREATE_TEETHING_EVENT,
-  KT_GET_TEETHING_EVENTS,
-} from 'ez-utils';
+import { KT_CREATE_MILESTONE, KT_GET_MILESTONES } from 'ez-utils';
+import { KT_CREATE_TEETHING_EVENT, KT_GET_TEETHING_EVENTS } from 'ez-utils';
 import {
   KT_CREATE_DEVELOPMENT_MOMENT,
   KT_GET_DEVELOPMENT_MOMENTS,
@@ -65,7 +61,10 @@ export class DevelopmentLogKafkaService {
     );
   }
 
-  async createMilestone(createMilestoneDto: CreateMilestoneDto, traceId: string) {
+  async createMilestone(
+    createMilestoneDto: CreateMilestoneDto,
+    traceId: string,
+  ) {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_CREATE_MILESTONE,
@@ -127,6 +126,18 @@ export class DevelopmentLogKafkaService {
       this.serviceName,
       KT_GET_DEVELOPMENT_MOMENTS,
       getDevelopmentMomentsDto,
+      traceId,
+    );
+  }
+
+  async getGrowthMeasurementHistory(
+    getZtrackingGrowthMeasurementDto: GetZtrackingGrowthMeasurementDto,
+    traceId: string,
+  ) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_GET_HISTORY_GROWTH_MEASUREMENT,
+      getZtrackingGrowthMeasurementDto,
       traceId,
     );
   }
