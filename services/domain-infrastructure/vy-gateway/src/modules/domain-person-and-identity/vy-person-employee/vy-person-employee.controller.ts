@@ -32,7 +32,7 @@ export class PersonEmployeeController {
   private logger = getLoggerConfig(PersonEmployeeController.name);
 
   constructor(
-    private readonly personBabyKafkaService: PersonEmployeeKafkaService,
+    private readonly personEmployeeKafkaService: PersonEmployeeKafkaService,
   ) {
     this.logger.debug(
       `${PersonEmployeeController.name} initialized`,
@@ -57,7 +57,7 @@ export class PersonEmployeeController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
+      await this.personEmployeeKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
       traceId,
     );
@@ -78,7 +78,7 @@ export class PersonEmployeeController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
+      await this.personEmployeeKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
       traceId,
     );
@@ -99,7 +99,7 @@ export class PersonEmployeeController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
+      await this.personEmployeeKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
       traceId,
     );
@@ -121,7 +121,7 @@ export class PersonEmployeeController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
+      await this.personEmployeeKafkaService.getHistory(
         getHistoryOfPersonDto,
         traceId,
       ),
@@ -145,7 +145,7 @@ export class PersonEmployeeController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
+      await this.personEmployeeKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
       traceId,
     );

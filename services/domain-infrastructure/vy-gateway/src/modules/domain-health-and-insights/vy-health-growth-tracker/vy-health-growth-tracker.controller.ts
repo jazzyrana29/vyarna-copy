@@ -35,7 +35,7 @@ export class HealthGrowthTrackerController {
   private logger = getLoggerConfig(HealthGrowthTrackerController.name);
 
   constructor(
-    private readonly personBabyKafkaService: HealthGrowthTrackerKafkaService,
+    private readonly healthGrowthTrackerKafkaService: HealthGrowthTrackerKafkaService,
   ) {
     this.logger.debug(
       `${HealthGrowthTrackerController.name} initialized`,
@@ -60,7 +60,7 @@ export class HealthGrowthTrackerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.createPerson(createPersonDto, traceId),
+      await this.healthGrowthTrackerKafkaService.createPerson(createPersonDto, traceId),
       'Person created',
       traceId,
     );
@@ -81,7 +81,7 @@ export class HealthGrowthTrackerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.updatePerson(updatePersonDto, traceId),
+      await this.healthGrowthTrackerKafkaService.updatePerson(updatePersonDto, traceId),
       'Person updated',
       traceId,
     );
@@ -102,7 +102,7 @@ export class HealthGrowthTrackerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getPerson(getPersonDto, traceId),
+      await this.healthGrowthTrackerKafkaService.getPerson(getPersonDto, traceId),
       'Person retrieved',
       traceId,
     );
@@ -124,7 +124,7 @@ export class HealthGrowthTrackerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getHistory(
+      await this.healthGrowthTrackerKafkaService.getHistory(
         getHistoryOfPersonDto,
         traceId,
       ),
@@ -148,7 +148,7 @@ export class HealthGrowthTrackerController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.personBabyKafkaService.getManyPersons(getManyPersonsDto, traceId),
+      await this.healthGrowthTrackerKafkaService.getManyPersons(getManyPersonsDto, traceId),
       'Persons retrieved',
       traceId,
     );

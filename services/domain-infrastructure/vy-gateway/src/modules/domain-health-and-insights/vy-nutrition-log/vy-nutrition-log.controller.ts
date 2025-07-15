@@ -30,7 +30,7 @@ import { generateTraceId } from 'ez-utils';
 export class NutritionLogController {
   private logger = getLoggerConfig(NutritionLogController.name);
 
-  constructor(private readonly kafkaService: NutritionLogKafkaService) {
+  constructor(private readonly nutritionLogKafkaService: NutritionLogKafkaService) {
     this.logger.debug(
       `${NutritionLogController.name} initialized`,
       '',
@@ -55,7 +55,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.startSession(createNutritionSessionDto, traceId),
+      await this.nutritionLogKafkaService.startSession(createNutritionSessionDto, traceId),
       'Nutrition session started',
       traceId,
     );
@@ -76,7 +76,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.logEvent(nutritionEventDto, traceId),
+      await this.nutritionLogKafkaService.logEvent(nutritionEventDto, traceId),
       'Nutrition event logged',
       traceId,
     );
@@ -97,7 +97,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.endSession(getOneNutritionSessionDto, traceId),
+      await this.nutritionLogKafkaService.endSession(getOneNutritionSessionDto, traceId),
       'Nutrition session ended',
       traceId,
     );
@@ -118,7 +118,7 @@ export class NutritionLogController {
     );
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSession(getOneNutritionSessionDto, traceId),
+      await this.nutritionLogKafkaService.getSession(getOneNutritionSessionDto, traceId),
       'Nutrition session retrieved',
       traceId,
     );

@@ -35,7 +35,7 @@ import { ValidateCreateSymptomReportDtoPipe } from './pipes/validate-create-symp
 export class CareLogController {
   private logger = getLoggerConfig(CareLogController.name);
 
-  constructor(private readonly kafkaService: CareLogKafkaService) {
+  constructor(private readonly careLogKafkaService: CareLogKafkaService) {
     this.logger.debug(
       `${CareLogController.name} initialized`,
       '',
@@ -55,7 +55,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'createDiaperChange', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createDiaperChange(
+      await this.careLogKafkaService.createDiaperChange(
         createDiaperChangeDto,
         traceId,
       ),
@@ -74,7 +74,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'getDiaperChanges', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getDiaperChanges(getDiaperChangesDto, traceId),
+      await this.careLogKafkaService.getDiaperChanges(getDiaperChangesDto, traceId),
       'Diaper changes retrieved',
       traceId,
     );
@@ -91,7 +91,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'createMedicationAdministration', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createMedicationAdministration(
+      await this.careLogKafkaService.createMedicationAdministration(
         createMedicationAdministrationDto,
         traceId,
       ),
@@ -110,7 +110,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'getMedicationAdministrations', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getMedicationAdministrations(
+      await this.careLogKafkaService.getMedicationAdministrations(
         getMedicationAdministrationsDto,
         traceId,
       ),
@@ -130,7 +130,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'createTemperatureMeasurement', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createTemperatureMeasurement(
+      await this.careLogKafkaService.createTemperatureMeasurement(
         createTemperatureMeasurementDto,
         traceId,
       ),
@@ -149,7 +149,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'getTemperatureMeasurements', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getTemperatureMeasurements(
+      await this.careLogKafkaService.getTemperatureMeasurements(
         getTemperatureMeasurementsDto,
         traceId,
       ),
@@ -169,7 +169,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'createSymptomReport', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createSymptomReport(
+      await this.careLogKafkaService.createSymptomReport(
         createSymptomReportDto,
         traceId,
       ),
@@ -188,7 +188,7 @@ export class CareLogController {
     this.logger.info('traceId generated successfully', traceId, 'getSymptomReports', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
       HttpStatus.OK,
-      await this.kafkaService.getSymptomReports(getSymptomReportsDto, traceId),
+      await this.careLogKafkaService.getSymptomReports(getSymptomReportsDto, traceId),
       'Symptom reports retrieved',
       traceId,
     );
