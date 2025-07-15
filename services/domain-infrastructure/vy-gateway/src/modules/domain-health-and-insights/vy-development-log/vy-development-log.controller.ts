@@ -1,4 +1,10 @@
-import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from '../../../dto/response.dto';
 import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
@@ -15,8 +21,10 @@ import {
   GetManyTeethingEventsDto,
   CreateDevelopmentMomentDto,
   GetManyDevelopmentMomentsDto,
+  GetZtrackingGrowthMeasurementDto,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
+  KT_GET_HISTORY_GROWTH_MEASUREMENT,
   KT_CREATE_MILESTONE,
   KT_GET_MILESTONES,
   KT_CREATE_TEETHING_EVENT,
@@ -32,6 +40,7 @@ import { ValidateGetGrowthMeasurementsDtoPipe } from './pipes/validate-get-growt
 import { ValidateGetMilestonesDtoPipe } from './pipes/validate-get-milestones-dto.pipe';
 import { ValidateGetTeethingEventsDtoPipe } from './pipes/validate-get-teething-events-dto.pipe';
 import { ValidateGetDevelopmentMomentsDtoPipe } from './pipes/validate-get-development-moments-dto.pipe';
+import { ValidateGetZtrackingGrowthMeasurementDtoPipe } from './pipes/validate-get-ztracking-growth-measurement-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
 @ApiTags('vy-development-log')
@@ -56,7 +65,12 @@ export class DevelopmentLogController {
     createGrowthMeasurementDto: CreateGrowthMeasurementDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createGrowth');
-    this.logger.info('traceId generated successfully', traceId, 'createGrowth', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'createGrowth',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.CREATED,
       await this.kafkaService.createGrowth(createGrowthMeasurementDto, traceId),
@@ -73,7 +87,12 @@ export class DevelopmentLogController {
     query: GetManyGrowthMeasurementsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getGrowth');
-    this.logger.info('traceId generated successfully', traceId, 'getGrowth', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getGrowth',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getGrowth(query, traceId),
@@ -82,14 +101,45 @@ export class DevelopmentLogController {
     );
   }
 
+  @Post(KT_GET_HISTORY_GROWTH_MEASUREMENT)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: GetZtrackingGrowthMeasurementDto })
+  async getGrowthHistory(
+    @Body(new ValidateGetZtrackingGrowthMeasurementDtoPipe())
+    getZtrackingGrowthMeasurementDto: GetZtrackingGrowthMeasurementDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('getGrowthHistory');
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getGrowthHistory',
+      LogStreamLevel.ProdStandard,
+    );
+    return new ResponseDTO(
+      HttpStatus.OK,
+      await this.kafkaService.getGrowthMeasurementHistory(
+        getZtrackingGrowthMeasurementDto,
+        traceId,
+      ),
+      'Growth measurement history retrieved',
+      traceId,
+    );
+  }
+
   @Post(KT_CREATE_MILESTONE)
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: CreateMilestoneDto })
   async createMilestone(
-    @Body(new ValidateCreateMilestoneDtoPipe()) createMilestoneDto: CreateMilestoneDto,
+    @Body(new ValidateCreateMilestoneDtoPipe())
+    createMilestoneDto: CreateMilestoneDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createMilestone');
-    this.logger.info('traceId generated successfully', traceId, 'createMilestone', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'createMilestone',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.CREATED,
       await this.kafkaService.createMilestone(createMilestoneDto, traceId),
@@ -105,7 +155,12 @@ export class DevelopmentLogController {
     @Body(new ValidateGetMilestonesDtoPipe()) query: GetManyMilestonesDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMilestones');
-    this.logger.info('traceId generated successfully', traceId, 'getMilestones', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getMilestones',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getMilestones(query, traceId),
@@ -122,10 +177,18 @@ export class DevelopmentLogController {
     createTeethingEventDto: CreateTeethingEventDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createTeethingEvent');
-    this.logger.info('traceId generated successfully', traceId, 'createTeethingEvent', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'createTeethingEvent',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createTeethingEvent(createTeethingEventDto, traceId),
+      await this.kafkaService.createTeethingEvent(
+        createTeethingEventDto,
+        traceId,
+      ),
       'Teething event logged',
       traceId,
     );
@@ -135,10 +198,16 @@ export class DevelopmentLogController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetManyTeethingEventsDto })
   async getTeethingEvents(
-    @Body(new ValidateGetTeethingEventsDtoPipe()) query: GetManyTeethingEventsDto,
+    @Body(new ValidateGetTeethingEventsDtoPipe())
+    query: GetManyTeethingEventsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getTeethingEvents');
-    this.logger.info('traceId generated successfully', traceId, 'getTeethingEvents', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getTeethingEvents',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getTeethingEvents(query, traceId),
@@ -155,10 +224,18 @@ export class DevelopmentLogController {
     createDevelopmentMomentDto: CreateDevelopmentMomentDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('createMoment');
-    this.logger.info('traceId generated successfully', traceId, 'createMoment', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'createMoment',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.CREATED,
-      await this.kafkaService.createDevelopmentMoment(createDevelopmentMomentDto, traceId),
+      await this.kafkaService.createDevelopmentMoment(
+        createDevelopmentMomentDto,
+        traceId,
+      ),
       'Development moment logged',
       traceId,
     );
@@ -168,10 +245,16 @@ export class DevelopmentLogController {
   @ApiCreatedResponse({ type: ResponseDTO<any> })
   @ApiBody({ type: GetManyDevelopmentMomentsDto })
   async getMoments(
-    @Body(new ValidateGetDevelopmentMomentsDtoPipe()) query: GetManyDevelopmentMomentsDto,
+    @Body(new ValidateGetDevelopmentMomentsDtoPipe())
+    query: GetManyDevelopmentMomentsDto,
   ): Promise<ResponseDTO<any>> {
     const traceId = generateTraceId('getMoments');
-    this.logger.info('traceId generated successfully', traceId, 'getMoments', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'traceId generated successfully',
+      traceId,
+      'getMoments',
+      LogStreamLevel.ProdStandard,
+    );
     return new ResponseDTO(
       HttpStatus.OK,
       await this.kafkaService.getDevelopmentMoments(query, traceId),

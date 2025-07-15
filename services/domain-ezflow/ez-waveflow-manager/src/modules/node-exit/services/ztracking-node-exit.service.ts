@@ -28,7 +28,7 @@ export class ZtrackingNodeExitService {
   async createZtrackingForNodeExit(
     nodeExit: NodeExit,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingNodeExit> {
     const ztrackingEntity = await this.nodeExitRepository.save(
       this.nodeExitRepository.create({
         ...nodeExit,
@@ -42,8 +42,7 @@ export class ZtrackingNodeExitService {
       'createZtrackingForNodeExit',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForNodeExit(

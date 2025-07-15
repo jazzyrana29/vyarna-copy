@@ -18,8 +18,10 @@ import {
   GetManyTeethingEventsDto,
   CreateDevelopmentMomentDto,
   GetManyDevelopmentMomentsDto,
+  GetZtrackingGrowthMeasurementDto,
   KT_CREATE_GROWTH_MEASUREMENT,
   KT_GET_GROWTH_MEASUREMENTS,
+  KT_GET_HISTORY_GROWTH_MEASUREMENT,
   KT_CREATE_MILESTONE,
   KT_GET_MILESTONES,
   KT_CREATE_TEETHING_EVENT,
@@ -74,7 +76,12 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
     const { room } = joinRoomDto;
     if (room) {
       socket.join(room);
-      this.logger.debug(`Socket ${socket.id} joined room ${room}`, '', 'handleJoin', LogStreamLevel.DebugLight);
+      this.logger.debug(
+        `Socket ${socket.id} joined room ${room}`,
+        '',
+        'handleJoin',
+        LogStreamLevel.DebugLight,
+      );
       socket.emit('join-result', { room, success: true });
     } else {
       socket.emit('join-error', { message: 'Room field is required' });
@@ -94,7 +101,10 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_CREATE_GROWTH_MEASUREMENT}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_CREATE_GROWTH_MEASUREMENT}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_CREATE_GROWTH_MEASUREMENT}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -111,7 +121,31 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_GET_GROWTH_MEASUREMENTS}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_GET_GROWTH_MEASUREMENTS}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_GET_GROWTH_MEASUREMENTS}-error`,
+        e.message || 'Unknown error',
+      );
+    }
+  }
+
+  @SubscribeMessage(KT_GET_HISTORY_GROWTH_MEASUREMENT)
+  async getGrowthHistory(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody()
+    getZtrackingGrowthMeasurementDto: GetZtrackingGrowthMeasurementDto,
+  ) {
+    const traceId = generateTraceId('development-log-get-growth-history');
+    try {
+      const result = await this.kafkaService.getGrowthMeasurementHistory(
+        getZtrackingGrowthMeasurementDto,
+        traceId,
+      );
+      socket.emit(`${KT_GET_HISTORY_GROWTH_MEASUREMENT}-result`, result);
+    } catch (e: any) {
+      socket.emit(
+        `${KT_GET_HISTORY_GROWTH_MEASUREMENT}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -162,7 +196,10 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_CREATE_TEETHING_EVENT}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_CREATE_TEETHING_EVENT}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_CREATE_TEETHING_EVENT}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -179,7 +216,10 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_GET_TEETHING_EVENTS}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_GET_TEETHING_EVENTS}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_GET_TEETHING_EVENTS}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -196,7 +236,10 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_CREATE_DEVELOPMENT_MOMENT}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_CREATE_DEVELOPMENT_MOMENT}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_CREATE_DEVELOPMENT_MOMENT}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 
@@ -213,7 +256,10 @@ export class DevelopmentLogWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_GET_DEVELOPMENT_MOMENTS}-result`, result);
     } catch (e: any) {
-      socket.emit(`${KT_GET_DEVELOPMENT_MOMENTS}-error`, e.message || 'Unknown error');
+      socket.emit(
+        `${KT_GET_DEVELOPMENT_MOMENTS}-error`,
+        e.message || 'Unknown error',
+      );
     }
   }
 }

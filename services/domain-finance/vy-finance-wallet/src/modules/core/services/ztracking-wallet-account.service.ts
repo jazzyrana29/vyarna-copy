@@ -26,7 +26,7 @@ export class ZtrackingWalletAccountService {
   async createZtrackingForWalletAccount(
     account: WalletAccount,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingWalletAccount> {
     const entity = await this.walletRepo.save(
       this.walletRepo.create({ ...account, versionDate: new Date() }),
     );
@@ -37,7 +37,7 @@ export class ZtrackingWalletAccountService {
       'createZtrackingForWalletAccount',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForWalletAccount(

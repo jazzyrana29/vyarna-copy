@@ -81,7 +81,7 @@ export class BusinessUnitService {
     this.logger.info(
       `business unit entity updated in database`,
       traceId,
-      'createBusinessUnit',
+      'updateBusinessUnit',
       LogStreamLevel.ProdStandard,
     );
 

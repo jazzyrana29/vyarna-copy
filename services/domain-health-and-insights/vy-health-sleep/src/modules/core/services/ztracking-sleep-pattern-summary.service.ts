@@ -26,7 +26,10 @@ export class ZtrackingSleepPatternSummaryService {
     );
   }
 
-  async createZtrackingForSleepPatternSummary(summary: SleepPatternSummary, traceId: string): Promise<boolean> {
+  async createZtrackingForSleepPatternSummary(
+    summary: SleepPatternSummary,
+    traceId: string,
+  ): Promise<ZtrackingSleepPatternSummary> {
     const entity = await this.ztrackingRepo.save(
       this.ztrackingRepo.create({ ...summary, versionDate: new Date() }),
     );
@@ -36,7 +39,7 @@ export class ZtrackingSleepPatternSummaryService {
       'createZtrackingForSleepPatternSummary',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForSleepPatternSummary(

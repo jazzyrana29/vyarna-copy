@@ -26,7 +26,7 @@ export class ZtrackingOrderService {
   async createZtrackingForOrder(
     order: Order,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingOrder> {
     const entity = await this.ztrackingRepo.save(
       this.ztrackingRepo.create({ ...order, versionDate: new Date() }),
     );
@@ -37,7 +37,7 @@ export class ZtrackingOrderService {
       'createZtrackingForOrder',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForOrder(

@@ -8,6 +8,7 @@ import {
   KT_GET_ZTRACKING_MEDICATION_ADMINISTRATION,
   CreateMedicationAdministrationDto,
   GetManyMedicationAdministrationsDto,
+  GetZtrackingMedicationAdministrationDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -61,7 +62,7 @@ export class MedicationAdministrationKafkaService {
       KT_GET_ZTRACKING_MEDICATION_ADMINISTRATION,
       message,
       key,
-      async (value: { medAdminId?: string }, traceId: string) =>
+      async (value: GetZtrackingMedicationAdministrationDto, traceId: string) =>
         await this.ztrackingService.getZtrackingForMedicationAdministration(value, traceId),
     );
   }

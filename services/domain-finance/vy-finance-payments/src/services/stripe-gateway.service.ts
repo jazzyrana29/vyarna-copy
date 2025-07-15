@@ -108,17 +108,6 @@ export class StripeGatewayService {
     return this.stripe.prices.retrieve(id);
   }
 
-  async createContact(
-    params: Stripe.CustomerCreateParams,
-  ): Promise<Stripe.Customer> {
-    this.logger.debug(
-      `Creating Stripe customer`,
-      '',
-      'createContact',
-      LogStreamLevel.DebugLight,
-    );
-    return this.stripe.customers.create(params);
-  }
 
   async attachPaymentMethod(
     paymentMethodId: string,

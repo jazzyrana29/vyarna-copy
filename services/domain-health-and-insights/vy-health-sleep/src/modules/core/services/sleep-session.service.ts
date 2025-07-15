@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {
+  Repository,
+  Between,
+  MoreThanOrEqual,
+  LessThanOrEqual,
+} from 'typeorm';
 import { SleepSession } from '../../../entities/sleep_session.entity';
 import { ZtrackingSleepSessionService } from './ztracking-sleep-session.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
@@ -72,7 +77,19 @@ export class SleepSessionService {
     getSleepSessionsDto: GetSleepSessionsDto,
     traceId: string,
   ): Promise<SleepSessionDto[]> {
-    const list = await this.sleepRepo.find();
+    const { babyId, startTime, endTime } = getSleepSessionsDto;
+    const where: any = {};
+    if (babyId) {
+      where.babyId = babyId;
+    }
+    if (startTime && endTime) {
+      where.startTime = Between(startTime, endTime);
+    } else if (startTime) {
+      where.startTime = MoreThanOrEqual(startTime);
+    } else if (endTime) {
+      where.startTime = LessThanOrEqual(endTime);
+    }
+    const list = await this.sleepRepo.find({ where });
     this.logger.info(
       `Retrieved ${list.length} sleep sessions`,
       traceId,

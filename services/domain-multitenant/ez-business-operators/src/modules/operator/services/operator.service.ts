@@ -123,7 +123,7 @@ export class OperatorService {
     this.logger.info(
       `operator entity updated in database`,
       traceId,
-      'updatedBusinessUnit',
+      'updateOperator',
       LogStreamLevel.ProdStandard,
     );
 
@@ -164,7 +164,7 @@ export class OperatorService {
     this.logger.info(
       `Operator entity found in database`,
       traceId,
-      'findBusinessUnit',
+      'findOperator',
       LogStreamLevel.ProdStandard,
     );
 

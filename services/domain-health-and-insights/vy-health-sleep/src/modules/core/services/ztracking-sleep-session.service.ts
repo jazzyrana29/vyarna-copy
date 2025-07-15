@@ -26,7 +26,7 @@ export class ZtrackingSleepSessionService {
   async createZtrackingForSleepSession(
     session: SleepSession,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingSleepSession> {
     const entity = await this.ztrackingRepo.save(
       this.ztrackingRepo.create({ ...session, versionDate: new Date() }),
     );
@@ -37,7 +37,7 @@ export class ZtrackingSleepSessionService {
       'createZtrackingForSleepSession',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForSleepSession(

@@ -27,7 +27,6 @@ The `.env-example` file documents all required variables:
 | `TIDB_DATABASE` | Database name |
 | `TIDB_ENABLE_SSL` | `true` to enable SSL connection |
 | `TIDB_CA_PATH` | Path to CA certificate when SSL is enabled |
-| `AUTO_SEED` | Seed initial data on start |
 
 ## Kafka Topics
 

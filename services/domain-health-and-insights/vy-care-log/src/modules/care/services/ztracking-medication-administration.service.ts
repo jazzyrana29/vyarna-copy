@@ -6,6 +6,10 @@ import { LogStreamLevel } from 'ez-logger';
 
 import { MedicationAdministration } from '../../../entities/medication_administration.entity';
 import { ZtrackingMedicationAdministration } from '../../../entities/ztracking_medication_administration.entity';
+import {
+  GetZtrackingMedicationAdministrationDto,
+  ZtrackingMedicationAdministrationDto,
+} from 'ez-utils';
 
 @Injectable()
 export class ZtrackingMedicationAdministrationService {
@@ -26,7 +30,7 @@ export class ZtrackingMedicationAdministrationService {
   async createZtrackingForMedicationAdministration(
     medAdmin: MedicationAdministration,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingMedicationAdministration> {
     const entity = await this.zRepo.save(
       this.zRepo.create({ ...medAdmin, versionDate: new Date() }),
     );
@@ -37,14 +41,14 @@ export class ZtrackingMedicationAdministrationService {
       'createZtrackingForMedicationAdministration',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForMedicationAdministration(
-    { medAdminId = '' }: { medAdminId?: string },
+    getZtrackingMedicationAdministrationDto: GetZtrackingMedicationAdministrationDto,
     traceId: string,
-  ): Promise<ZtrackingMedicationAdministration[]> {
+  ): Promise<ZtrackingMedicationAdministrationDto[]> {
+    const { medAdminId = '' } = getZtrackingMedicationAdministrationDto;
     const list = await this.zRepo.find({ where: { medAdminId } });
 
     if (!list.length) {

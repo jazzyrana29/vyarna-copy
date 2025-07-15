@@ -2,6 +2,7 @@ export const KT_PAID_ORDER = "paid-order";
 export const KT_RENEWED_SUBSCRIPTION = "renewed-subscription";
 export const KT_REFUND_SUCCEEDED_WALLET = "refund-succeeded-wallet";
 export const KT_CREATED_AFFILIATE_COMMISSION = "created-affiliate-commission";
+export const KT_CREATED_INTERNAL_CHARGE = "created-internal-charge";
 export const KT_CREATED_WALLET_ACCOUNT = "created-wallet-account";
 export const KT_RECORDED_TRANSACTION = "recorded-transaction";
 export const KT_SCHEDULED_PROVIDER_PAYOUT = "scheduled-provider-payout";

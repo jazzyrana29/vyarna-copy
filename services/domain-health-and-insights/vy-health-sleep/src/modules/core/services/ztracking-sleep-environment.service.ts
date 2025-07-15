@@ -23,7 +23,10 @@ export class ZtrackingSleepEnvironmentService {
     );
   }
 
-  async createZtrackingForSleepEnvironment(env: SleepEnvironment, traceId: string): Promise<boolean> {
+  async createZtrackingForSleepEnvironment(
+    env: SleepEnvironment,
+    traceId: string,
+  ): Promise<ZtrackingSleepEnvironment> {
     const entity = await this.ztrackingRepo.save(
       this.ztrackingRepo.create({ ...env, versionDate: new Date() }),
     );
@@ -33,7 +36,7 @@ export class ZtrackingSleepEnvironmentService {
       'createZtrackingForSleepEnvironment',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForSleepEnvironment(
