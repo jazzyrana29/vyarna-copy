@@ -27,7 +27,7 @@ export class ZtrackingPersonService {
     person: Person,
     traceId: string,
   ): Promise<boolean> {
-    const ztrackingBusinessUnit = await this.ztrackingPersonRepository.save(
+    const ztrackingPerson = await this.ztrackingPersonRepository.save(
       this.ztrackingPersonRepository.create({
         ...person,
         versionDate: new Date(),
@@ -40,7 +40,7 @@ export class ZtrackingPersonService {
       LogStreamLevel.ProdStandard,
     );
 
-    return Boolean(ztrackingBusinessUnit?.ztrackingVersion);
+    return Boolean(ztrackingPerson?.ztrackingVersion);
   }
 
   async findZtrackingPersonEntity(
