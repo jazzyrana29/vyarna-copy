@@ -217,7 +217,7 @@ Commands:
   fill-env                   generate .env files for services
   list [names...]            list packages (all types)
   run <script> [names...]    run arbitrary npm script in packages
-  update <lib> [--in name]   rebuild lib and reinstall it in packages
+  update-libs <lib...> [--in name]   rebuild libs and reinstall them in packages
   stripe <args...>           run Stripe CLI using STRIPE_SECRET_KEY
 node repo.js install
   node repo.js clean-install
@@ -379,53 +379,53 @@ switch (cmd) {
     }
     runStripe(args);
     break;
-  case "update": {
-    const libName = args.shift();
-    if (!libName) {
-      usage();
-      break;
-    }
+  case "update-libs": {
     const inIndex = args.indexOf("--in");
-    let targets = [...libs, ...services, ...apps].filter(
-      (p) => p.name !== libName,
-    );
-    if (inIndex !== -1) {
-      const t = args[inIndex + 1];
-      if (!t) {
-        usage();
-        break;
+    const libNames = inIndex === -1 ? args : args.slice(0, inIndex);
+    const targetName = inIndex !== -1 ? args[inIndex + 1] : undefined;
+
+    const namesToUpdate = libNames.length
+      ? libNames
+      : libs.map((l) => l.name);
+
+    namesToUpdate.forEach((libName) => {
+      const libPkg = libs.find((l) => l.name === libName);
+      if (!libPkg) {
+        console.log(`Library ${libName} not found`);
+        return;
       }
-      targets = filterPackages(targets, [t]);
-    }
 
-    const libPkg = libs.find((l) => l.name === libName);
-    if (!libPkg) {
-      console.log(`Library ${libName} not found`);
-      break;
-    }
-    runNpm(libPkg, "run build", true);
-
-    function hasDep(pkgPath) {
-      const pkgJson = JSON.parse(
-        fs.readFileSync(path.join(pkgPath, "package.json"), "utf8"),
+      let targets = [...libs, ...services, ...apps].filter(
+        (p) => p.name !== libName,
       );
-      return (
-        (pkgJson.dependencies && pkgJson.dependencies[libName]) ||
-        (pkgJson.devDependencies && pkgJson.devDependencies[libName]) ||
-        (pkgJson.peerDependencies && pkgJson.peerDependencies[libName])
-      );
-    }
+      if (targetName) {
+        targets = filterPackages(targets, [targetName]);
+      }
 
-    targets.forEach((pkg) => {
-      if (!hasDep(pkg.path)) return;
-      const modPath = path.join(pkg.path, "node_modules", libName);
-      console.log(`[${pkg.type}] ${pkg.name} removing ${libName}`);
-      fs.rmSync(modPath, { recursive: true, force: true });
-      const cmd =
-        pkg.type === "app"
-          ? `install ${libName} --legacy-peer-deps`
-          : `install ${libName}`;
-      runNpm(pkg, cmd, true);
+      runNpm(libPkg, "run build", true);
+
+      function hasDep(pkgPath) {
+        const pkgJson = JSON.parse(
+          fs.readFileSync(path.join(pkgPath, "package.json"), "utf8"),
+        );
+        return (
+          (pkgJson.dependencies && pkgJson.dependencies[libName]) ||
+          (pkgJson.devDependencies && pkgJson.devDependencies[libName]) ||
+          (pkgJson.peerDependencies && pkgJson.peerDependencies[libName])
+        );
+      }
+
+      targets.forEach((pkg) => {
+        if (!hasDep(pkg.path)) return;
+        const modPath = path.join(pkg.path, "node_modules", libName);
+        console.log(`[${pkg.type}] ${pkg.name} removing ${libName}`);
+        fs.rmSync(modPath, { recursive: true, force: true });
+        const cmd =
+          pkg.type === "app"
+            ? `install ${libName} --legacy-peer-deps`
+            : `install ${libName}`;
+        runNpm(pkg, cmd, true);
+      });
     });
     break;
   }
