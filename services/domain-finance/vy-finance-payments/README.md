@@ -60,6 +60,17 @@ Run the service in development mode after the environment is configured:
 npm run start:dev
 ```
 
+### Database Migrations
+
+When you change the database schema, generate a new migration file and apply it:
+
+```bash
+npm run migration:init   # generate migration from entity changes
+npm run migration:run    # apply pending migrations
+```
+
+Run these commands whenever the schema evolves to keep the database up to date.
+
 ## REST API
 
 The gateway exposes these endpoints which forward requests to the payments
