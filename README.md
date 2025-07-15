@@ -107,6 +107,16 @@ Baseline project settings live in the repo root:
 Each workspace keeps its own copies of these files so it can be used on its own
 without pulling in unrelated configs.
 
+## 📚 Developer Guides
+
+The `developer-guides/` directory contains in-depth documentation on how we build Vyarna:
+
+- [**Frontend Standards — VYARNA**](developer-guides/Frontend%20Standards%20%20%E2%80%94%20VYARNA.md) – coding conventions and build practices for web and mobile apps.
+- [**Backend Standards — VYARNA**](developer-guides/Backend%20Standards%20%20%E2%80%94%20VYARNA.md) – guidance on service architecture and API development.
+- [**UI_UX Standards — VYARNA**](developer-guides/UI_UX%20Standards%20%20%E2%80%94%20VYARNA.md) – design principles and user‑experience best practices.
+
+These documents outline the standards and best practices that keep all workspaces consistent.
+
 ## 🚀 Getting Started
 
 1. **Clone & install**
