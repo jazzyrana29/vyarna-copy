@@ -52,7 +52,12 @@ export class SalesCommerceKafkaService {
   }
 
   async getProducts(getProductsDto: GetProductsDto, traceId: string) {
-    console.log('getDto', getProductsDto);
+    this.logger.debug(
+      `getProductsDto: ${JSON.stringify(getProductsDto)}`,
+      traceId,
+      'getProducts',
+      LogStreamLevel.DebugLight,
+    );
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_GET_PRODUCTS,
