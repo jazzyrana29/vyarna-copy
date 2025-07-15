@@ -10,14 +10,14 @@ import {
   View,
 } from 'react-native';
 import {
-  useSalesCommerce,
-  socketCreateCart,
   socketAddCartItem,
+  socketCreateCart,
+  useSalesCommerce,
 } from '../hooks/useSalesCommerce';
 import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
-import { usePersonContact } from '../hooks/usePersonContact';
+import { usePersonIdentity } from '../hooks/usePersonIdentity';
 import { useUserStore } from '../store/userStore';
 import UserDetailsModal from './UserDetailsModal';
 import { formatMoney } from '../utils/currency';
@@ -57,8 +57,8 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   const {
     stripeCustomerId,
     loading: contactLoading,
-    getContact,
-  } = usePersonContact('person-contact', {
+    createPerson,
+  } = usePersonIdentity('person-contact', {
     nameFirst: userDetails?.nameFirst!,
     nameMiddle: userDetails?.nameMiddle,
     nameLastFirst: userDetails?.nameLastFirst!,
@@ -84,7 +84,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
         setShowUserModal(true);
         return;
       }
-      await getContact({
+      await createPerson({
         nameFirst: userDetails.nameFirst,
         nameMiddle: userDetails.nameMiddle,
         nameLastFirst: userDetails.nameLastFirst,

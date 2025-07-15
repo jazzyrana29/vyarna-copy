@@ -54,7 +54,6 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-em
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-ztracking-email.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/ztracking-email.dto";
-export * from "./src/DTO/domain-person-and-identity/vy-person-contact/create-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/document.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-identity-verification.dto";

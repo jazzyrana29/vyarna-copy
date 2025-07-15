@@ -15,7 +15,7 @@ export const KT_ADD_CART_ITEM = 'add-cart-item';
 export const KT_ADD_CART_ITEM_RESULT = `${KT_ADD_CART_ITEM}-${RESULT}`;
 export const KT_ADD_CART_ITEM_ERROR = `${KT_ADD_CART_ITEM}-${ERROR}`;
 
-export const SOCKET_NAMESPACE_PERSON_CONTACT = 'person-contact';
-export const KT_GET_CONTACT = 'create-contact';
-export const KT_GET_CONTACT_RESULT = `${KT_GET_CONTACT}-${RESULT}`;
-export const KT_GET_CONTACT_ERROR = `${KT_GET_CONTACT}-${ERROR}`;
+export const SOCKET_NAMESPACE_PERSON_IDENTITY = 'person-identity';
+export const KT_CREATE_PERSON = 'create-person-entity';
+export const KT_CREATE_PERSON_RESULT = `${KT_CREATE_PERSON}-${RESULT}`;
+export const KT_CREATE_PERSON_ERROR = `${KT_CREATE_PERSON}-${ERROR}`;

@@ -1,15 +1,14 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import typeorm from "./config/typeorm/typeorm";
-import { CFG_TOKEN_TYPEORM } from "./config/config.tokens";
-import { getLoggerConfig } from "./utils/common";
-import { ensureDatabaseExists } from "./utils/db-init";
-import { LogStreamLevel } from "ez-logger";
-import { PersonModule } from "./modules/person/person.module";
-import { EmailModule } from "./modules/email/email.module";
-import { VerificationModule } from "./modules/verification/verification.module";
-import { ContactModule } from "./modules/contact/contact.module";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import typeorm from './config/typeorm/typeorm';
+import { CFG_TOKEN_TYPEORM } from './config/config.tokens';
+import { getLoggerConfig } from './utils/common';
+import { ensureDatabaseExists } from './utils/db-init';
+import { LogStreamLevel } from 'ez-logger';
+import { PersonModule } from './modules/person/person.module';
+import { EmailModule } from './modules/email/email.module';
+import { VerificationModule } from './modules/verification/verification.module';
 
 @Module({
   imports: [
@@ -32,7 +31,6 @@ import { ContactModule } from "./modules/contact/contact.module";
     }),
     PersonModule,
     EmailModule,
-    ContactModule,
     VerificationModule,
   ],
   controllers: [],
@@ -40,11 +38,12 @@ import { ContactModule } from "./modules/contact/contact.module";
 })
 export class AppModule {
   private logger = getLoggerConfig(AppModule.name);
+
   constructor() {
     this.logger.debug(
       `${AppModule.name} initialized`,
-      "",
-      "constructor",
+      '',
+      'constructor',
       LogStreamLevel.DebugLight,
     );
   }
