@@ -29,7 +29,7 @@ export class Person extends BaseEntity {
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   @Index()
-  username: string;
+  username: string | null;
 
   @Column({ type: 'varchar', length: 50 })
   @Index()

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import * as SecureStore from 'expo-secure-store';
 
 export interface CartItem {
   id: string;
@@ -27,80 +26,79 @@ interface CartStore {
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
-      cartId: null,
-      items: [],
-      isOpen: false,
+  cartId: null,
+  items: [],
+  isOpen: false,
 
-      addItem: (item) => {
-        const items = get().items;
-        const existing = items.find((i) => i.id === item.id);
-        if (existing) {
-          set({
-            items: items.map((i) =>
-              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
-            ),
-          });
-        } else {
-          set({ items: [...items, { ...item, quantity: 1 }] });
-        }
-      },
+  addItem: (item) => {
+    const items = get().items;
+    const existing = items.find((i) => i.id === item.id);
+    if (existing) {
+      set({
+        items: items.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
+        ),
+      });
+    } else {
+      set({ items: [...items, { ...item, quantity: 1 }] });
+    }
+  },
 
-      removeItem: (id) => {
-        set({ items: get().items.filter((i) => i.id !== id) });
-      },
+  removeItem: (id) => {
+    set({ items: get().items.filter((i) => i.id !== id) });
+  },
 
-      updateQuantity: (id, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(id);
-          return;
-        }
-        set({
-          items: get().items.map((i) =>
-            i.id === id ? { ...i, quantity } : i,
-          ),
-        });
-      },
+  updateQuantity: (id, quantity) => {
+    if (quantity <= 0) {
+      get().removeItem(id);
+      return;
+    }
+    set({
+      items: get().items.map((i) => (i.id === id ? { ...i, quantity } : i)),
+    });
+  },
 
-      resetCart: () => {
-        set({ items: [], cartId: null });
-      },
+  resetCart: () => {
+    set({ items: [], cartId: null });
+  },
 
-      getItemCount: () => get().items.reduce((c, i) => c + i.quantity, 0),
+  getItemCount: () => get().items.reduce((c, i) => c + i.quantity, 0),
 
-      getTotalCents: () =>
-        get().items.reduce((t, i) => t + i.priceCents * i.quantity, 0),
+  getTotalCents: () =>
+    get().items.reduce((t, i) => t + i.priceCents * i.quantity, 0),
 
-      setCartId: (id) => set({ cartId: id }),
+  setCartId: (id) => set({ cartId: id }),
 
-      openCart: () => set({ isOpen: true }),
+  openCart: () => set({ isOpen: true }),
 
-      closeCart: () => set({ isOpen: false }),
+  closeCart: () => set({ isOpen: false }),
 }));
 
 const CART_KEY = 'cart-store';
 
-// Load stored cart on startup
-SecureStore.getItemAsync(CART_KEY)
-  .then((data) => {
+if (typeof localStorage !== 'undefined') {
+  try {
+    const data = localStorage.getItem(CART_KEY);
     if (data) {
-      try {
-        const parsed = JSON.parse(data);
-        useCartStore.setState((state) => ({
-          ...state,
-          items: parsed.items ?? [],
-          cartId: parsed.cartId ?? null,
-        }));
-      } catch (err) {
-        console.warn('Failed to parse stored cart', err);
-      }
+      const parsed = JSON.parse(data);
+      useCartStore.setState((state) => ({
+        ...state,
+        items: parsed.items ?? [],
+        cartId: parsed.cartId ?? null,
+      }));
     }
-  })
-  .catch((err) => console.warn('Failed to load cart', err));
+  } catch (err) {
+    console.warn('Failed to load cart', err);
+  }
 
-// Persist cart whenever items or cartId change
-useCartStore.subscribe((state) => {
-  SecureStore.setItemAsync(
-    CART_KEY,
-    JSON.stringify({ items: state.items, cartId: state.cartId }),
-  ).catch((err) => console.warn('Failed to save cart', err));
-});
+  useCartStore.subscribe((state) => {
+    try {
+      localStorage.setItem(
+        CART_KEY,
+        JSON.stringify({ items: state.items, cartId: state.cartId }),
+      );
+    } catch (err) {
+      console.warn('Failed to save cart', err);
+    }
+  });
+}

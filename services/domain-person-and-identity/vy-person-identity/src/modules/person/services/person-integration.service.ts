@@ -42,7 +42,7 @@ export class PersonIntegrationService {
       firstName,
       lastName,
       email,
-      formId = TagsEnum.SIGNUP_PREORDER_TOP,
+      formId = TagsEnum.SIGNUP_HOME_BOTTOM,
     } = createActiveCampaignContactDto;
 
     // Replace console.log with structured logger

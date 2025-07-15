@@ -76,8 +76,7 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
     email: emailRegex.test(values.email) ? undefined : 'Enter valid email.',
   } as Record<keyof FormValues, string | undefined>;
 
-  const isValid =
-    !errors.nameFirst && !errors.nameLastFirst && !errors.email;
+  const isValid = !errors.nameFirst && !errors.nameLastFirst && !errors.email;
 
   const handleChange = (field: keyof FormValues) => (text: any) => {
     setValues((v) => ({ ...v, [field]: text }));
@@ -103,12 +102,14 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             Your Details
           </Text>
 
-          <Text className="mb-1 text-secondary">First Name</Text>
+          <Text className="mb-1 text-neutralText">
+            First Name<Text className="text-accent">*</Text>
+          </Text>
           <TextInput
             value={values.nameFirst}
             onChangeText={handleChange('nameFirst')}
             onBlur={() => handleBlur('nameFirst')}
-            className="w-full h-11 bg-white rounded px-3 mb-1"
+            className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
             placeholder="First Name"
             placeholderTextColor={colors.paper}
           />
@@ -116,45 +117,51 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
             <Text className="text-accent text-sm mb-2">{errors.nameFirst}</Text>
           )}
 
-          <Text className="mb-1 text-secondary">Middle Name</Text>
+          <Text className="mb-1 text-neutralText">Middle Name</Text>
           <TextInput
             value={values.nameMiddle}
             onChangeText={handleChange('nameMiddle')}
             onBlur={() => handleBlur('nameMiddle')}
-            className="w-full h-11 bg-white rounded px-3 mb-4"
+            className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
             placeholder="Middle Name (optional)"
             placeholderTextColor={colors.paper}
           />
 
-          <Text className="mb-1 text-secondary">Last Name</Text>
+          <Text className="mb-1 text-neutralText">
+            Last Name<Text className="text-accent">*</Text>
+          </Text>
           <TextInput
             value={values.nameLastFirst}
             onChangeText={handleChange('nameLastFirst')}
             onBlur={() => handleBlur('nameLastFirst')}
-            className="w-full h-11 bg-white rounded px-3 mb-1"
+            className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
             placeholder="Last Name"
             placeholderTextColor={colors.paper}
           />
           {touched.nameLastFirst && errors.nameLastFirst && (
-            <Text className="text-accent text-sm mb-2">{errors.nameLastFirst}</Text>
+            <Text className="text-accent text-sm mb-2">
+              {errors.nameLastFirst}
+            </Text>
           )}
 
-          <Text className="mb-1 text-secondary">Second Last Name</Text>
+          <Text className="mb-1 text-neutralText">Second Last Name</Text>
           <TextInput
             value={values.nameLastSecond}
             onChangeText={handleChange('nameLastSecond')}
             onBlur={() => handleBlur('nameLastSecond')}
-            className="w-full h-11 bg-white rounded px-3 mb-4"
+            className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
             placeholder="Second Last Name (optional)"
             placeholderTextColor={colors.paper}
           />
 
-          <Text className="mb-1 text-secondary">Email</Text>
+          <Text className="mb-1 text-neutralText">
+            Email<Text className="text-accent">*</Text>
+          </Text>
           <TextInput
             value={values.email}
             onChangeText={handleChange('email')}
             onBlur={() => handleBlur('email')}
-            className="w-full h-11 bg-white rounded px-3 mb-1"
+            className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
             placeholder="you@example.com"
             placeholderTextColor={colors.paper}
             keyboardType="email-address"
@@ -175,10 +182,14 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
               className="mr-2 mt-1"
             >
               <View
-                className={`w-4 h-4 border rounded ${
+                className={`w-4 h-4 border rounded items-center justify-center ${
                   values.addInActiveCampaign ? 'bg-primary' : 'bg-white'
                 }`}
-              />
+              >
+                {values.addInActiveCampaign && (
+                  <Text className="text-white text-xs">✓</Text>
+                )}
+              </View>
             </Pressable>
             <Text className="flex-1 text-xs text-neutralText">
               I agree to receive emails from Vyarna, including updates, product

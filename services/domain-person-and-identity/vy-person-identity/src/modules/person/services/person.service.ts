@@ -71,12 +71,15 @@ export class PersonService {
           where: { businessUnitId: rootBusinessUnit.parentBusinessUnitId },
         });
       }
-      const conflictUser = await this.personRepository.findOne({
-        where: {
-          username: createPersonDto.username,
-          rootBusinessUnitId: rootBusinessUnit.businessUnitId,
-        },
-      });
+      let conflictUser = null;
+      if (createPersonDto.username) {
+        conflictUser = await this.personRepository.findOne({
+          where: {
+            username: createPersonDto.username,
+            rootBusinessUnitId: rootBusinessUnit.businessUnitId,
+          },
+        });
+      }
       if (conflictUser) {
         throw new BadRequestException(
           `Username "${createPersonDto.username}" already exists in the root business unit "${rootBusinessUnit.businessUnitId}"`,

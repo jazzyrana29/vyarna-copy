@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import * as SecureStore from 'expo-secure-store';
 import { PersonWithoutPasswordDto } from 'ez-utils';
 
 export interface UserDetails
@@ -29,28 +28,28 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
 const USER_KEY = 'user-store';
 
-SecureStore.getItemAsync(USER_KEY)
-  .then((data) => {
+if (typeof localStorage !== 'undefined') {
+  try {
+    const data = localStorage.getItem(USER_KEY);
     if (data) {
-      try {
-        const parsed = JSON.parse(data);
-        useUserStore.setState((state) => ({
-          ...state,
-          userDetails: parsed.userDetails ?? null,
-        }));
-      } catch (err) {
-        console.warn('Failed to parse stored user', err);
-      }
+      const parsed = JSON.parse(data);
+      useUserStore.setState((state) => ({
+        ...state,
+        userDetails: parsed.userDetails ?? null,
+      }));
     }
-  })
-  .catch((err) => console.warn('Failed to load user', err));
+  } catch (err) {
+    console.warn('Failed to load user', err);
+  }
 
-useUserStore.subscribe((state) => {
-  SecureStore.setItemAsync(
-    USER_KEY,
-    JSON.stringify({
-      userDetails: state.userDetails,
-    }),
-  ).catch((err) => console.warn('Failed to save user', err));
-});
-
+  useUserStore.subscribe((state) => {
+    try {
+      localStorage.setItem(
+        USER_KEY,
+        JSON.stringify({ userDetails: state.userDetails }),
+      );
+    } catch (err) {
+      console.warn('Failed to save user', err);
+    }
+  });
+}
