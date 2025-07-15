@@ -59,7 +59,7 @@ export class Person extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @Index()
-  password: string;
+  password: string | null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @Index()

@@ -15,7 +15,7 @@ export declare class PersonDto {
     phones?: PhoneDto[];
     addresses?: PhysicalAddressDto[];
     identityVerifications?: IdentityVerificationDto[];
-    password?: string;
+    password?: string | null;
     stripeCustomerId?: string;
     activeCampaignId?: string;
     isDeleted: boolean;
