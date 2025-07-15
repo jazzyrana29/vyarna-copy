@@ -152,10 +152,55 @@ without pulling in unrelated configs.
    node repo.js stripe customers list
    node repo.js stripe listen --forward-to http://localhost:4040/webhooks/process-stripe-webhook
    node repo.js stripe listen --print-secret            # print your local webhook signing secret
-   node repo.js stripe trigger checkout.session.completed
-   ```
+  node repo.js stripe trigger checkout.session.completed
+  ```
 
 ---
+
+## 🛠️ Setup with `repo.js`
+
+1. **Create env files**
+
+   ```bash
+   cp global.env.local-example global.env.local
+   # edit global.env.local and add credentials
+   node repo.js fill-env              # generate .env for all services
+   # or target one service
+   node repo.js fill-env vy-person-identity
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   node repo.js install                       # install every workspace
+   node repo.js install web-app vy-finance-payments  # install specific ones
+   ```
+
+3. **Update shared libraries**
+
+   ```bash
+   node repo.js update-libs                   # rebuild all libs
+   node repo.js update-libs ez-utils --in web-app  # update one app/service
+   ```
+
+4. **Docker setup**
+
+   Build images using each workspace's Dockerfile or the compose file:
+
+   ```bash
+   docker compose build
+   docker compose up
+   ```
+
+5. **Run apps and services**
+
+   ```bash
+   node repo.js list                   # show all workspace names
+   node repo.js start web-app          # start an app
+   node repo.js start vy-person-identity  # start a service
+   node repo.js start web-app vy-person-identity  # multiple targets
+   ```
+
 
 ## 🧱 Workspace Conventions
 
