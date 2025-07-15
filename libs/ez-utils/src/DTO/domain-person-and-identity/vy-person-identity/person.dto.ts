@@ -132,7 +132,7 @@ export class PersonDto {
   })
   @IsOptional()
   @IsString()
-  password?: string;
+  password?: string | null;
 
   @ApiProperty({
     description: "Stripe customer id associated with the person",
