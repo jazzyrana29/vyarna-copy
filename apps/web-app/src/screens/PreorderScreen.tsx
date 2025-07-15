@@ -23,7 +23,7 @@ const PreorderScreen: FC = () => {
 
   const handlePreorderClick = () => {
     if (!hasUserDetails()) {
-      setProductSelectorVisible(true);
+      setUserDetailsModalVisible(true);
     } else {
       setProductSelectorVisible(true);
     }
@@ -93,7 +93,7 @@ const PreorderScreen: FC = () => {
         {hasUserDetails() && (
           <View className="mb-6 bg-green-50 px-4 py-3 rounded-lg">
             <Text className="text-green-800 font-semibold">
-              Welcome back, {userDetails?.firstName}!
+              Welcome back, {userDetails?.nameFirst}!
             </Text>
             <Text className="text-green-700 text-sm">
               Checking for presale discounts with {userDetails?.email}

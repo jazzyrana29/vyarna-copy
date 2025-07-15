@@ -6,8 +6,20 @@ import {
   KT_GET_PRODUCTS_ERROR,
   KT_GET_PRODUCTS_RESULT,
   SOCKET_NAMESPACE_SALES,
+  KT_CREATE_CART,
+  KT_CREATE_CART_RESULT,
+  KT_CREATE_CART_ERROR,
+  KT_ADD_CART_ITEM,
+  KT_ADD_CART_ITEM_RESULT,
+  KT_ADD_CART_ITEM_ERROR,
 } from '../constants/socketEvents';
-import { GetProductsDto } from 'ez-utils';
+import {
+  GetProductsDto,
+  CreateCartDto,
+  CreateCartItemDto,
+  CartDto,
+  CartItemDto,
+} from 'ez-utils';
 
 export function useSalesCommerce(
   roomId: string,
@@ -46,3 +58,60 @@ export function useSalesCommerce(
 
   return { products, error };
 }
+
+export async function socketCreateCart(
+  roomId: string,
+  dto: CreateCartDto,
+): Promise<CartDto> {
+  const socketSvc = new SocketService({
+    namespace: SOCKET_NAMESPACE_SALES,
+    transports: ['websocket'],
+  });
+
+  return new Promise((resolve, reject) => {
+    socketSvc.connect();
+    socketSvc.joinRoom(roomId);
+
+    const cleanup = () => socketSvc.disconnect();
+
+    socketSvc.on<CartDto>(KT_CREATE_CART_RESULT, (data) => {
+      cleanup();
+      resolve(data);
+    });
+    socketSvc.on<string>(KT_CREATE_CART_ERROR, (msg) => {
+      cleanup();
+      reject(new Error(msg));
+    });
+
+    socketSvc.emit<CreateCartDto>(KT_CREATE_CART, dto);
+  });
+}
+
+export async function socketAddCartItem(
+  roomId: string,
+  dto: CreateCartItemDto,
+): Promise<CartItemDto> {
+  const socketSvc = new SocketService({
+    namespace: SOCKET_NAMESPACE_SALES,
+    transports: ['websocket'],
+  });
+
+  return new Promise((resolve, reject) => {
+    socketSvc.connect();
+    socketSvc.joinRoom(roomId);
+
+    const cleanup = () => socketSvc.disconnect();
+
+    socketSvc.on<CartItemDto>(KT_ADD_CART_ITEM_RESULT, (data) => {
+      cleanup();
+      resolve(data);
+    });
+    socketSvc.on<string>(KT_ADD_CART_ITEM_ERROR, (msg) => {
+      cleanup();
+      reject(new Error(msg));
+    });
+
+    socketSvc.emit<CreateCartItemDto>(KT_ADD_CART_ITEM, dto);
+  });
+}
+

@@ -9,7 +9,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useSalesCommerce } from '../hooks/useSalesCommerce';
+import {
+  useSalesCommerce,
+  socketCreateCart,
+  socketAddCartItem,
+} from '../hooks/useSalesCommerce';
 import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
@@ -46,16 +50,19 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     active: true,
     targetCurrency: currency,
   } as GetProductsDto);
-  const { addItem, openCart } = useCartStore();
+  const { addItem, openCart, cartId, setCartId } = useCartStore();
 
   const userDetails = useUserStore((s) => s.userDetails);
+  const personId = useUserStore((s) => s.personId);
   const {
     stripeCustomerId,
     loading: contactLoading,
     getContact,
   } = usePersonContact('person-contact', {
-    firstName: userDetails?.firstName!,
-    lastName: userDetails?.lastName!,
+    nameFirst: userDetails?.nameFirst!,
+    nameMiddle: userDetails?.nameMiddle,
+    nameLastFirst: userDetails?.nameLastFirst!,
+    nameLastSecond: userDetails?.nameLastSecond,
     email: userDetails?.email!,
   });
   const [loading, setLoading] = useState(true);
@@ -78,13 +85,34 @@ const ProductSelector: FC<ProductSelectorProps> = ({
         return;
       }
       await getContact({
-        firstName: userDetails.firstName,
-        lastName: userDetails.lastName,
+        nameFirst: userDetails.nameFirst,
+        nameMiddle: userDetails.nameMiddle,
+        nameLastFirst: userDetails.nameLastFirst,
+        nameLastSecond: userDetails.nameLastSecond,
         email: userDetails.email,
       });
     }
 
-    // Step 2: add minimal item data to cart
+    // Step 2: ensure cart exists on backend
+    let currentCartId = cartId;
+    try {
+      if (!currentCartId && personId) {
+        const cart = await socketCreateCart('sales-commerce', { personId });
+        currentCartId = cart.cartId;
+        setCartId(cart.cartId);
+      }
+      if (currentCartId) {
+        await socketAddCartItem('sales-commerce', {
+          cartId: currentCartId,
+          variantId: product.productId,
+          quantity: 1,
+        });
+      }
+    } catch (err) {
+      console.error('Cart error', err);
+    }
+
+    // Step 3: add minimal item data locally
     addItem({
       id: product.productId,
       name: product.name,
@@ -92,9 +120,11 @@ const ProductSelector: FC<ProductSelectorProps> = ({
       image: product.images[0]
         ? { uri: product.images[0] }
         : require('../assets/images/preorder/value_proposition.png'),
+      priceCents: product.priceCents,
+      currency: product.targetCurrency,
     });
 
-    // Step 3: close modal & open cart
+    // Step 4: close modal & open cart
     onClose();
     openCart();
   };

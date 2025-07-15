@@ -15,6 +15,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { NAV_ROUTE_HOME } from '../constants/routes';
 import { getBaseUrl } from 'src/utils/env';
+import { useCartStore } from '../store/cartStore';
 
 export interface NavItem {
   key: keyof RootStackParamList;
@@ -48,6 +49,8 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
+  const getItemCount = useCartStore((s) => s.getItemCount);
+  const openCart = useCartStore((s) => s.openCart);
 
   const handleNavigate = (key: keyof RootStackParamList): void => {
     setMenuOpen(false);
@@ -133,12 +136,34 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
         </Pressable>
 
         {isMobile ? (
-          <Pressable onPress={() => setMenuOpen((prev) => !prev)}>
-            <FeatherIcon name={menuOpen ? 'x' : 'menu'} size={28} />
-          </Pressable>
+          <View className="flex-row items-center space-x-4">
+            <Pressable onPress={openCart} className="relative">
+              <FeatherIcon name="shopping-cart" size={24} />
+              {getItemCount() > 0 && (
+                <View className="absolute -top-1 -right-2 bg-red-600 rounded-full w-4 h-4 items-center justify-center">
+                  <Text className="text-white text-[10px]">
+                    {getItemCount()}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+            <Pressable onPress={() => setMenuOpen((prev) => !prev)}>
+              <FeatherIcon name={menuOpen ? 'x' : 'menu'} size={28} />
+            </Pressable>
+          </View>
         ) : (
           <View className="flex-row items-center space-x-4">
             {items.map((group) => renderGroup(group))}
+            <Pressable onPress={openCart} className="relative">
+              <FeatherIcon name="shopping-cart" size={20} />
+              {getItemCount() > 0 && (
+                <View className="absolute -top-1 -right-2 bg-red-600 rounded-full w-4 h-4 items-center justify-center">
+                  <Text className="text-white text-[10px]">
+                    {getItemCount()}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
           </View>
         )}
       </View>

@@ -17,21 +17,35 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
   const userDetails = useUserStore((s) => s.userDetails);
   const setUserDetails = useUserStore((s) => s.setUserDetails);
 
-  const [firstName, setFirstName] = useState(userDetails?.firstName || '');
-  const [lastName, setLastName] = useState(userDetails?.lastName || '');
+  const [nameFirst, setNameFirst] = useState(userDetails?.nameFirst || '');
+  const [nameMiddle, setNameMiddle] = useState(userDetails?.nameMiddle || '');
+  const [nameLastFirst, setNameLastFirst] = useState(
+    userDetails?.nameLastFirst || '',
+  );
+  const [nameLastSecond, setNameLastSecond] = useState(
+    userDetails?.nameLastSecond || '',
+  );
   const [email, setEmail] = useState(userDetails?.email || '');
 
   // Populate inputs whenever the modal opens
   useEffect(() => {
     if (visible) {
-      setFirstName(userDetails?.firstName || '');
-      setLastName(userDetails?.lastName || '');
+      setNameFirst(userDetails?.nameFirst || '');
+      setNameMiddle(userDetails?.nameMiddle || '');
+      setNameLastFirst(userDetails?.nameLastFirst || '');
+      setNameLastSecond(userDetails?.nameLastSecond || '');
       setEmail(userDetails?.email || '');
     }
   }, [visible, userDetails]);
 
   const handleSubmit = () => {
-    const details: UserDetails = { firstName, lastName, email };
+    const details: UserDetails = {
+      nameFirst,
+      nameMiddle,
+      nameLastFirst,
+      nameLastSecond,
+      email,
+    };
     setUserDetails(details);
     onSave(details);
     onClose();
@@ -47,18 +61,34 @@ const UserDetailsModal: FC<UserDetailsModalProps> = ({
 
           <Text className="mb-1 text-secondary">First Name</Text>
           <TextInput
-            value={firstName}
-            onChangeText={setFirstName}
+            value={nameFirst}
+            onChangeText={setNameFirst}
             className="border border-gray-300 rounded p-2 mb-4"
             placeholder="First Name"
           />
 
+          <Text className="mb-1 text-secondary">Middle Name</Text>
+          <TextInput
+            value={nameMiddle}
+            onChangeText={setNameMiddle}
+            className="border border-gray-300 rounded p-2 mb-4"
+            placeholder="Middle Name (optional)"
+          />
+
           <Text className="mb-1 text-secondary">Last Name</Text>
           <TextInput
-            value={lastName}
-            onChangeText={setLastName}
+            value={nameLastFirst}
+            onChangeText={setNameLastFirst}
             className="border border-gray-300 rounded p-2 mb-4"
             placeholder="Last Name"
+          />
+
+          <Text className="mb-1 text-secondary">Second Last Name</Text>
+          <TextInput
+            value={nameLastSecond}
+            onChangeText={setNameLastSecond}
+            className="border border-gray-300 rounded p-2 mb-4"
+            placeholder="Second Last Name (optional)"
           />
 
           <Text className="mb-1 text-secondary">Email</Text>

@@ -291,7 +291,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
               {item.name} x{item.quantity}
             </Text>
             <Text className="text-sm font-semibold">
-              ${(item.currentPrice * item.quantity).toFixed(2)}
+              ${((item.priceCents / 100) * item.quantity).toFixed(2)}
             </Text>
           </View>
         ))}

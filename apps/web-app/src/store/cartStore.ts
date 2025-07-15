@@ -5,10 +5,13 @@ export interface CartItem {
   name: string;
   description: string;
   image: any;
+  priceCents: number;
+  currency: string;
   quantity: number;
 }
 
 interface CartStore {
+  cartId: string | null;
   items: CartItem[];
   isOpen: boolean;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
@@ -16,11 +19,14 @@ interface CartStore {
   updateQuantity: (id: string, quantity: number) => void;
   resetCart: () => void;
   getItemCount: () => number;
+  getTotal: () => number;
+  setCartId: (id: string) => void;
   openCart: () => void;
   closeCart: () => void;
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
+  cartId: null,
   items: [],
   isOpen: false,
 
@@ -61,11 +67,24 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   resetCart: (): void => {
-    set({ items: [] });
+    set({ items: [], cartId: null });
   },
 
   getItemCount: (): number => {
     return get().items.reduce((count, item) => count + item.quantity, 0);
+  },
+
+  getTotal: (): number => {
+    return (
+      get().items.reduce(
+        (total, item) => total + item.priceCents * item.quantity,
+        0,
+      ) / 100
+    );
+  },
+
+  setCartId: (id): void => {
+    set({ cartId: id });
   },
 
   openCart: (): void => {
