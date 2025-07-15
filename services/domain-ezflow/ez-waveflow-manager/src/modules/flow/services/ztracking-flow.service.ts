@@ -25,7 +25,10 @@ export class ZtrackingFlowService {
     );
   }
 
-  async createZtrackingForFlow(flow: Flow, traceId: string): Promise<boolean> {
+  async createZtrackingForFlow(
+    flow: Flow,
+    traceId: string,
+  ): Promise<ZtrackingFlow> {
     const ztrackingEntity = await this.flowRepository.save(
       this.flowRepository.create({
         ...flow,
@@ -39,8 +42,7 @@ export class ZtrackingFlowService {
       'createZtrackingForFlow',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForFlow(

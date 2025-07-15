@@ -31,7 +31,7 @@ export class ZtrackingFilterSubsetService {
   async createZtrackingForFilterSubset(
     filterSubset: FilterSubset,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingFilterSubset> {
     const ztrackingEntity = await this.filterSubsetRepository.save(
       this.filterSubsetRepository.create({
         ...filterSubset,
@@ -45,8 +45,7 @@ export class ZtrackingFilterSubsetService {
       'createZtrackingForFilterSubset',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForFilterSubset(

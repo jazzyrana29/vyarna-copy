@@ -33,7 +33,7 @@ export class ZtrackingWaveTypeGenreCanUtilizeBusinessUnitService {
   async createZtrackingForWaveTypeGenreCanUtilizeBusinessUnit(
     waveTypeGenreCanUtilizeBusinessUnit: WaveTypeGenreCanUtilizeBusinessUnit,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingWaveTypeGenreCanUtilizeBusinessUnit> {
     const ztrackingEntity =
       await this.waveTypeGenreCanUtilizeBusinessUnitRepository.save(
         this.waveTypeGenreCanUtilizeBusinessUnitRepository.create({
@@ -48,8 +48,7 @@ export class ZtrackingWaveTypeGenreCanUtilizeBusinessUnitService {
       'createZtrackingForWaveTypeGenreCanUtilizeBusinessUnit',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForWaveTypeGenreCanUtilizeBusinessUnit(

@@ -26,7 +26,7 @@ export class ZtrackingPaymentIntentService {
   async createZtrackingForPaymentIntent(
     intent: PaymentIntent,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingPaymentIntent> {
     const entity = await this.paymentIntentRepo.save(
       this.paymentIntentRepo.create({ ...intent, versionDate: new Date() }),
     );
@@ -37,7 +37,7 @@ export class ZtrackingPaymentIntentService {
       'createZtrackingForPaymentIntent',
       LogStreamLevel.ProdStandard,
     );
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForPaymentIntent(

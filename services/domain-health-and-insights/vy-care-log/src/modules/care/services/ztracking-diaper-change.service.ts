@@ -31,7 +31,7 @@ export class ZtrackingDiaperChangeService {
   async createZtrackingForDiaperChange(
     diaperChange: DiaperChange,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingDiaperChange> {
     const ztrackingEntity = await this.diaperChangeRepository.save(
       this.diaperChangeRepository.create({
         ...diaperChange,
@@ -45,8 +45,7 @@ export class ZtrackingDiaperChangeService {
       'createZtrackingForDiaperChange',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(ztrackingEntity?.ztrackingVersion);
+    return ztrackingEntity;
   }
 
   async getZtrackingForDiaperChange(

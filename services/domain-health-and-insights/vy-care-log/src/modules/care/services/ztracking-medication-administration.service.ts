@@ -26,7 +26,7 @@ export class ZtrackingMedicationAdministrationService {
   async createZtrackingForMedicationAdministration(
     medAdmin: MedicationAdministration,
     traceId: string,
-  ): Promise<boolean> {
+  ): Promise<ZtrackingMedicationAdministration> {
     const entity = await this.zRepo.save(
       this.zRepo.create({ ...medAdmin, versionDate: new Date() }),
     );
@@ -37,8 +37,7 @@ export class ZtrackingMedicationAdministrationService {
       'createZtrackingForMedicationAdministration',
       LogStreamLevel.ProdStandard,
     );
-
-    return Boolean(entity?.ztrackingVersion);
+    return entity;
   }
 
   async getZtrackingForMedicationAdministration(
