@@ -55,11 +55,16 @@ The `.env-example` file documents required variables:
 
 ## Kafka Topics
 
-The service consumes and produces the following topics via Kafka:
+The service consumes Kafka requests and produces events on separate topics:
+
+### Requests Consumed
 
 - `create-sleep-session`
 - `get-sleep-sessions`
 - `get-ztracking-sleep-session`
+
+### Events Produced
+
 - `start-sleep-session`
 - `log-sleep-event`
 - `interrupt-sleep`
