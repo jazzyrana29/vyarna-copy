@@ -39,7 +39,7 @@ export class ZtrackingPerson extends BaseEntity {
   @Index()
   nameLastSecond: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   password: string;
 
   @Column({ default: false })
