@@ -4,7 +4,10 @@ import { Repository } from 'typeorm';
 import { Person } from '../../entities/person.entity';
 import { ActiveCampaignService } from '../person/services/active-campaign.service';
 import { StripeGatewayService } from '../../services/stripe-gateway.service';
-import { CreatePersonDto, PersonDto } from 'ez-utils';
+import {
+  CreatePersonDto,
+  PersonWithoutPasswordDto,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { Email } from '../../entities/email.entity';
@@ -12,6 +15,11 @@ import { Email } from '../../entities/email.entity';
 @Injectable()
 export class ContactService {
   private logger = getLoggerConfig(ContactService.name);
+
+  private sanitizePerson(person: Person): PersonWithoutPasswordDto {
+    const { password, ...rest } = person;
+    return rest as PersonWithoutPasswordDto;
+  }
 
   constructor(
     @InjectRepository(Person)
@@ -32,7 +40,7 @@ export class ContactService {
   async createContact(
     createContactDto: CreatePersonDto,
     traceId: string,
-  ): Promise<PersonDto> {
+  ): Promise<PersonWithoutPasswordDto> {
     const emailToProcess = createContactDto.email;
     const existing = await this.emailRepo.findOne({
       where: { email: emailToProcess },
@@ -45,12 +53,12 @@ export class ContactService {
         'createContact',
         LogStreamLevel.ProdStandard,
       );
-      return existing.person;
+      return this.sanitizePerson(existing.person);
     }
 
     const { email, roles = [], ...rest } = createContactDto;
     const finalRoles =
-      Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
+      Array.isArray(roles) && roles.length > 0 ? roles : ['Client'];
 
     const entity = this.personRepo.create({
       ...rest,
@@ -129,6 +137,6 @@ export class ContactService {
     //   }),
     // );
 
-    return entity;
+    return this.sanitizePerson(entity);
   }
 }

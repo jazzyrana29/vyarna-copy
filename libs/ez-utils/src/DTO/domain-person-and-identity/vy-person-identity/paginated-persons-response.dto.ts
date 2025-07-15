@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { PersonDto } from "./person.dto";
+import { PersonWithoutPasswordDto } from "./person-without-password.dto";
 
 export class PaginatedPersonsResponseDto {
   @ApiProperty({
-    type: [PersonDto],
+    type: [PersonWithoutPasswordDto],
     description: "List of operator results",
   })
-  data: PersonDto[];
+  data: PersonWithoutPasswordDto[];
 
   @ApiProperty({
     description:

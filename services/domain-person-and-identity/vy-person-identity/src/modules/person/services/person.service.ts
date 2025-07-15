@@ -20,7 +20,7 @@ import {
   KT_PERSON_CREATED,
   KT_PERSON_UPDATED,
   PaginatedPersonsResponseDto,
-  PersonDto,
+  PersonWithoutPasswordDto,
   UpdatePersonDto,
 } from 'ez-utils';
 import { BusinessUnit } from '../../../entities/business-unit.entity';
@@ -30,6 +30,11 @@ import { EzKafkaProducer } from 'ez-kafka-producer';
 @Injectable()
 export class PersonService {
   private logger = getLoggerConfig(PersonService.name);
+
+  private sanitizePerson(person: Person): PersonWithoutPasswordDto {
+    const { password, ...rest } = person;
+    return rest as PersonWithoutPasswordDto;
+  }
 
   constructor(
     @InjectRepository(Person)
@@ -52,7 +57,7 @@ export class PersonService {
   async createPerson(
     createPersonDto: CreatePersonDto,
     traceId: string,
-  ): Promise<any> {
+  ): Promise<PersonWithoutPasswordDto> {
     this.logger.log(
       `createPersonDto : ${JSON.stringify(createPersonDto)}`,
       traceId,
@@ -93,7 +98,7 @@ export class PersonService {
 
     const { email, roles = [], ...rest } = createPersonDto;
     const finalRoles =
-      Array.isArray(roles) && roles.length > 0 ? roles : ['Consumer'];
+      Array.isArray(roles) && roles.length > 0 ? roles : ['Client'];
 
     const person = await this.personRepository.save(
       this.personRepository.create({
@@ -148,13 +153,13 @@ export class PersonService {
         traceId,
       )
     )
-      return person;
+      return this.sanitizePerson(person);
   }
 
   async updatePersonUnit(
     updatePersonDto: UpdatePersonDto,
     traceId: string,
-  ): Promise<any> {
+  ): Promise<PersonWithoutPasswordDto> {
     const person = await this.personRepository.findOne({
       where: { personId: updatePersonDto.personId },
     });
@@ -211,13 +216,13 @@ export class PersonService {
         traceId,
       )
     )
-      return updatedPerson;
+      return this.sanitizePerson(updatedPerson);
   }
 
   async findPerson(
     { personId = '', nameFirst = '', isDeleted = false }: GetOnePersonDto,
     traceId: string,
-  ): Promise<Person> {
+  ): Promise<PersonWithoutPasswordDto> {
     if (!personId && !nameFirst) {
       throw new NotFoundException(
         'At least one parameter (personId or nameFirst) must be provided',
@@ -244,7 +249,7 @@ export class PersonService {
       LogStreamLevel.ProdStandard,
     );
 
-    return person;
+    return this.sanitizePerson(person);
   }
 
   async getManyPersons(
@@ -337,7 +342,7 @@ export class PersonService {
 
     // 7) Return structured pagination & sorting response
     return {
-      data: persons as unknown as PersonDto[],
+      data: persons.map((p) => this.sanitizePerson(p)),
       maxPages,
       currentPage,
       pageSize: usedPageSize,

@@ -1,6 +1,6 @@
-import { PersonDto } from "./person.dto";
+import { PersonWithoutPasswordDto } from "./person-without-password.dto";
 export declare class PaginatedPersonsResponseDto {
-    data: PersonDto[];
+    data: PersonWithoutPasswordDto[];
     maxPages: number | null;
     currentPage: number | null;
     pageSize: number | null;
