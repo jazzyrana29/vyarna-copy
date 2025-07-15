@@ -87,14 +87,14 @@ export class ProductService {
           price = prices.data[0];
           amount = price.unit_amount ?? 0;
 
-          if (price.currency !== targetCurrency) {
-            const rate = await this.stripeGateway.retrieveExchangeRate(
-              price.currency,
-              targetCurrency,
-            );
-            const major = amount / 100;
-            amount = Math.round(major * rate * 100);
-          }
+          // if (price.currency !== targetCurrency) {
+          //   const rate = await this.stripeGateway.retrieveExchangeRate(
+          //     price.currency,
+          //     targetCurrency,
+          //   );
+          //   const major = amount / 100;
+          //   amount = Math.round(major * rate * 100);
+          // }
         }
 
         return {
