@@ -38,6 +38,8 @@ The `.env-example` file documents required variables:
 
 | Variable | Description |
 | --- | --- |
+| `APP` | Application name used in logs |
+| `CONTEXT` | Context identifier for log streams |
 | `APP_PORT` | Port for the NestJS application |
 | `NODE_ENV` | Environment name (`development`, `production`, etc.) |
 | `KAFKA_BROKER` | Kafka broker connection string |
@@ -51,15 +53,20 @@ The `.env-example` file documents required variables:
 | `TIDB_DATABASE` | Database name |
 | `TIDB_ENABLE_SSL` | `true` to enable SSL connection |
 | `TIDB_CA_PATH` | Path to CA certificate when SSL is enabled |
-| `AUTO_SEED` | Seed initial data on start |
+| `AUTO_SEED` | Unused variable reserved for future seeding |
 
 ## Kafka Topics
 
-The service consumes and produces the following topics via Kafka:
+The service consumes Kafka requests and produces events on separate topics:
+
+### Requests Consumed
 
 - `create-sleep-session`
 - `get-sleep-sessions`
 - `get-ztracking-sleep-session`
+
+### Events Produced
+
 - `start-sleep-session`
 - `log-sleep-event`
 - `interrupt-sleep`
@@ -90,11 +97,13 @@ curl http://localhost:4040/sleep/sessions?babyId=<babyId>
 # Get ztracking data for a session
 curl http://localhost:4040/sleep/sessions/<sessionId>
 
-# Log a sleep event
-curl -X POST http://localhost:4040/sleep/sessions/<sessionId>/events \
-  -H 'Content-Type: application/json' \
-  -d '{"eventId":"<eventId>","eventType":"WAKE","eventTime":"2024-01-01T03:00:00Z"}'
+# Log a sleep event (handler pending)
+# curl -X POST http://localhost:4040/sleep/sessions/<sessionId>/events \
+#   -H 'Content-Type: application/json' \
+#   -d '{"eventId":"<eventId>","eventType":"WAKE","eventTime":"2024-01-01T03:00:00Z"}'
 ```
+
+Other operations are planned but not yet available.
 
 All HTTP traffic goes through the gateway; this service only communicates via
 Kafka.

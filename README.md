@@ -13,36 +13,34 @@ This repository houses **all** of Vyarna’s code—front-ends (web site, admin 
 ```text
 vyarna-nucleus/
 ├── repo.js                 # cross-workspace helper script
-├── tsconfig.base.json      # shared TS config, path aliases
-├── .npmrc                  # hoisting / registry overrides
-├── docker-compose.yml      # local-dev overrides
-├── ci/                     # GitHub Actions workflows
-│   └── workflows/
-├── infrastructure/         # k8s/helm/scripts/templates
-│   └── scripts/
-├── packages/               # shareable libraries & models
-│   ├── ui/                 # React components & design tokens
-│   ├── api-client/         # generated OpenAPI / GraphQL clients
-│   └── models/             # TS types & validation schemas
+├── docker-compose.yml      # local overrides
+├── example.env.local
+├── example.env.production
+├── example.env.staging
+├── global.env.local-example
 ├── apps/                   # front-end & mobile workspaces
-│   ├── web-app/            # Next.js universal marketing + app site
-│   ├── admin-portal/       # internal admin UI
-│   └── mobile-app/         # React Native / Expo consumer/provider app
-└── services/               # back-end microservices by domain
-    ├── domain-emotional-and-engagement/
-    ├── domain-ezflow/
-    ├── domain-finance/
-    ├── domain-health-and-insights/
-    ├── domain-infrastructure/
-    ├── domain-milk/
-    ├── domain-multitenant/
-    ├── domain-person-and-identity/
-    │   ├── vy-person-identity/
-    │   ├── vy-person-email/
-    │   ├── vy-person-roles/
-    │   └── …
-    ├── domain-privacy-and-consent/
-    └── domain-sales-and-commerce/
+│   ├── admin-portal/
+│   ├── ez-waveflow-admin/
+│   ├── mobile-app/
+│   ├── web-app/
+│   └── website-foundation-scg/
+├── services/               # back-end microservices by domain
+│   ├── domain-emotional-and-engagement/
+│   ├── domain-ezflow/
+│   ├── domain-finance/
+│   ├── domain-health-and-insights/
+│   ├── domain-infrastructure/
+│   ├── domain-milk/
+│   ├── domain-multitenant/
+│   ├── domain-person-and-identity/
+│   ├── domain-privacy-and-consent/
+│   └── domain-sales-and-commerce/
+├── libs/                    # shared libraries
+│   ├── ez-kafka-producer/
+│   ├── ez-logger/
+│   └── ez-utils/
+├── developer-guides/        # repo standards and guides
+└── (packages/ and other folders may appear in future)
 ```
 
 ---
@@ -55,13 +53,26 @@ A lightweight Node helper script that scans each
 workspace for a `package.json` and forwards common npm commands.
 
 ```bash
-node repo.js install [names...] # install packages (apps use --legacy-peer-deps, libs auto-build)
-node repo.js start <names...>   # run one or more apps or services
-node repo.js build-libs lib     # build a shared library
-node repo.js list               # show all workspaces
-node repo.js run script name    # run an npm script in one or more packages
-node repo.js stripe <args...>   # run the Stripe CLI (requires STRIPE_SECRET_KEY)
+node repo.js install [names...]        # install packages (apps use --legacy-peer-deps)
+node repo.js clean-install [names...]  # remove dist & node_modules directories
+node repo.js start <names...>          # run apps (npm start) or services (npm start:dev)
+                                       # each launches in its own terminal window
+node repo.js lint [names...]           # npm run lint in apps and services
+node repo.js lint:fix [names...]       # npm run lint:fix in apps and services
+node repo.js prettier:check [names...] # npm run prettier:check in apps and services
+node repo.js prettier:fix [names...]   # npm run prettier:fix in apps and services
+node repo.js build-libs <lib...>       # npm run build in libs
+node repo.js test <service...>         # npm run test in services
+node repo.js fill-env                  # generate .env files for services
+node repo.js list [names...]           # list packages (all types)
+node repo.js run <script> [names...]   # run an npm script in packages
+node repo.js update-libs <lib...> [--in name]   # rebuild libs and reinstall them in packages
+node repo.js stripe <args...>          # run the Stripe CLI inside Docker (uses STRIPE_SECRET_KEY)
 ```
+
+- **clean-install** removes each workspace's `node_modules` and `dist` folders.
+- **update-libs** rebuilds libraries and reinstalls them in every dependent package.
+- **stripe** wraps the Stripe CLI in Docker using your `STRIPE_SECRET_KEY` from `global.env.local`.
 
 ### 2. `tsconfig.base.json`
 
@@ -95,6 +106,16 @@ Baseline project settings live in the repo root:
 
 Each workspace keeps its own copies of these files so it can be used on its own
 without pulling in unrelated configs.
+
+## 📚 Developer Guides
+
+The `developer-guides/` directory contains in-depth documentation on how we build Vyarna:
+
+- [**Frontend Standards — VYARNA**](developer-guides/Frontend%20Standards%20%20%E2%80%94%20VYARNA.md) – coding conventions and build practices for web and mobile apps.
+- [**Backend Standards — VYARNA**](developer-guides/Backend%20Standards%20%20%E2%80%94%20VYARNA.md) – guidance on service architecture and API development.
+- [**UI_UX Standards — VYARNA**](developer-guides/UI_UX%20Standards%20%20%E2%80%94%20VYARNA.md) – design principles and user‑experience best practices.
+
+These documents outline the standards and best practices that keep all workspaces consistent.
 
 ## 🚀 Getting Started
 
@@ -148,12 +169,15 @@ without pulling in unrelated configs.
 
 6. **Run the Stripe CLI**
 
+   The command runs the Stripe CLI inside a Docker container and passes your
+   `STRIPE_SECRET_KEY` from `global.env.local`.
+
    ```bash
    node repo.js stripe customers list
    node repo.js stripe listen --forward-to http://localhost:4040/webhooks/process-stripe-webhook
    node repo.js stripe listen --print-secret            # print your local webhook signing secret
-  node repo.js stripe trigger checkout.session.completed
-  ```
+   node repo.js stripe trigger checkout.session.completed
+   ```
 
 ---
 
@@ -257,6 +281,16 @@ Your CI/CD workflows (e.g. `.github/workflows/ci.yml`, `deploy.yml`).
 ## 🐳 Docker & Filtered Installs
 
 Each workspace that needs a Docker image should include a `Dockerfile` like:
+
+The root `docker-compose.yml` provides a few common services for development:
+
+| Service | Ports | Purpose |
+| ------- | ----- | ------- |
+| **Redis** | `6379` | Key/value store |
+| **Kafka + Zookeeper** | `2181` (Zookeeper), `9092` (Kafka) | Local event streaming |
+| **Kafka-UI** | `8080` | Web interface for Kafka |
+
+All containers join the default `my_network` network.
 
 ```dockerfile
 # 1. deps

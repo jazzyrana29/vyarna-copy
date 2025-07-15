@@ -23,6 +23,8 @@ Copy `.env-example` to `.env` and provide values for the following variables:
 
 | Variable | Description |
 | --- | --- |
+| `APP` | Service name |
+| `CONTEXT` | Log context |
 | `APP_PORT` | Port to run the service |
 | `NODE_ENV` | Environment name (e.g. `development`) |
 | `KAFKA_BROKER` | Address of the Kafka broker |
@@ -39,7 +41,6 @@ Copy `.env-example` to `.env` and provide values for the following variables:
 | `TIDB_DATABASE` | Database name |
 | `TIDB_ENABLE_SSL` | Enable SSL connection to the DB (`true`/`false`) |
 | `TIDB_CA_PATH` | Path to CA certificate when SSL is enabled |
-| `AUTO_SEED` | Seed sample data on startup |
 
 When `STRIPE_ATTACH_PAYMENT_METHOD` is `true`, include a `stripeCustomerId` in
 the payload for `POST /payment-methods` to automatically attach the stored
@@ -59,6 +60,17 @@ Run the service in development mode after the environment is configured:
 ```bash
 npm run start:dev
 ```
+
+### Database Migrations
+
+When you change the database schema, generate a new migration file and apply it:
+
+```bash
+npm run migration:init   # generate migration from entity changes
+npm run migration:run    # apply pending migrations
+```
+
+Run these commands whenever the schema evolves to keep the database up to date.
 
 ## REST API
 
@@ -95,6 +107,9 @@ main topics are:
 - `create-payment-method`
 - `list-payment-methods`
 - `delete-payment-method`
+- `get-payment-intent-status`
+- `payment-status-update`
+- `retry-payment-attempt`
 
 The payments service consumes these topics, executes the business logic (Stripe
 operations, persistence, etc.) and publishes the result back on the response
