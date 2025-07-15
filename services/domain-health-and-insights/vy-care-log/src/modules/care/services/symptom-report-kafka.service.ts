@@ -8,6 +8,7 @@ import {
   KT_GET_ZTRACKING_SYMPTOM_REPORT,
   CreateSymptomReportDto,
   GetManySymptomReportsDto,
+  GetZtrackingSymptomReportDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -61,7 +62,7 @@ export class SymptomReportKafkaService {
       KT_GET_ZTRACKING_SYMPTOM_REPORT,
       message,
       key,
-      async (value: { symptomId?: string }, traceId: string) =>
+      async (value: GetZtrackingSymptomReportDto, traceId: string) =>
         await this.ztrackingService.getZtrackingForSymptomReport(value, traceId),
     );
   }

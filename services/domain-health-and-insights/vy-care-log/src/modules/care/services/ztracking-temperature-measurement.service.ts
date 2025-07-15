@@ -6,6 +6,10 @@ import { LogStreamLevel } from 'ez-logger';
 
 import { TemperatureMeasurement } from '../../../entities/temperature_measurement.entity';
 import { ZtrackingTemperatureMeasurement } from '../../../entities/ztracking_temperature_measurement.entity';
+import {
+  GetZtrackingTemperatureMeasurementDto,
+  ZtrackingTemperatureMeasurementDto,
+} from 'ez-utils';
 
 @Injectable()
 export class ZtrackingTemperatureMeasurementService {
@@ -42,9 +46,10 @@ export class ZtrackingTemperatureMeasurementService {
   }
 
   async getZtrackingForTemperatureMeasurement(
-    { tempId = '' }: { tempId?: string },
+    getZtrackingTemperatureMeasurementDto: GetZtrackingTemperatureMeasurementDto,
     traceId: string,
-  ): Promise<ZtrackingTemperatureMeasurement[]> {
+  ): Promise<ZtrackingTemperatureMeasurementDto[]> {
+    const { tempId = '' } = getZtrackingTemperatureMeasurementDto;
     const list = await this.zRepo.find({ where: { tempId } });
 
     if (!list.length) {

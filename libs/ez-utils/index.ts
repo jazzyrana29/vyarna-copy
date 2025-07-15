@@ -93,6 +93,12 @@ export * from "./src/DTO/domain-health-and-insights/vy-care-log/validate-care-ev
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/symptom-report.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/create-symptom-report.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-many-symptom-reports.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/ztracking-medication-administration.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-medication-administration.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/ztracking-temperature-measurement.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-temperature-measurement.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/ztracking-symptom-report.dto";
+export * from "./src/DTO/domain-health-and-insights/vy-care-log/get-ztracking-symptom-report.dto";
 
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/growth-measurement.dto";
 export * from "./src/DTO/domain-health-and-insights/vy-development-log/create-growth-measurement.dto";

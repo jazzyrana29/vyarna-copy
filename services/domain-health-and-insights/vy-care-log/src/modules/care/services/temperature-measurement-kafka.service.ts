@@ -8,6 +8,7 @@ import {
   KT_GET_ZTRACKING_TEMPERATURE_MEASUREMENT,
   CreateTemperatureMeasurementDto,
   GetManyTemperatureMeasurementsDto,
+  GetZtrackingTemperatureMeasurementDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -61,7 +62,7 @@ export class TemperatureMeasurementKafkaService {
       KT_GET_ZTRACKING_TEMPERATURE_MEASUREMENT,
       message,
       key,
-      async (value: { tempId?: string }, traceId: string) =>
+      async (value: GetZtrackingTemperatureMeasurementDto, traceId: string) =>
         await this.ztrackingService.getZtrackingForTemperatureMeasurement(value, traceId),
     );
   }
