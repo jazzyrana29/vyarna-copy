@@ -274,6 +274,16 @@ Your CI/CD workflows (e.g. `.github/workflows/ci.yml`, `deploy.yml`).
 
 Each workspace that needs a Docker image should include a `Dockerfile` like:
 
+The root `docker-compose.yml` provides a few common services for development:
+
+| Service | Ports | Purpose |
+| ------- | ----- | ------- |
+| **Redis** | `6379` | Key/value store |
+| **Kafka + Zookeeper** | `2181` (Zookeeper), `9092` (Kafka) | Local event streaming |
+| **Kafka-UI** | `8080` | Web interface for Kafka |
+
+All containers join the default `my_network` network.
+
 ```dockerfile
 # 1. deps
 FROM node:18-alpine AS deps
