@@ -101,7 +101,7 @@ describe('ProductService', () => {
       searchProducts: jest.fn(),
       retrieveProduct: jest.fn(),
       listPrices: jest.fn().mockResolvedValue({ data: [price] }),
-      retrieveExchangeRate: jest.fn().mockResolvedValue({ rates: { eur: 0.9 } }),
+      retrieveExchangeRate: jest.fn().mockResolvedValue(0.9),
     } as unknown as StripeGatewayService;
 
     const service = new ProductService(stripeGateway);
@@ -111,7 +111,7 @@ describe('ProductService', () => {
       'trace',
     );
 
-    expect(stripeGateway.retrieveExchangeRate).toHaveBeenCalledWith('usd');
+    expect(stripeGateway.retrieveExchangeRate).toHaveBeenCalledWith('usd', 'eur');
     expect(result[0].priceCents).toBe(900);
     expect(result[0].targetCurrency).toBe('eur');
   });

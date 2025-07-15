@@ -214,6 +214,7 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart-item.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/delete-cart-item.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/apply-cart-promotion.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-cart.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/update-order-shipping.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-subscription.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-subscription.dto";

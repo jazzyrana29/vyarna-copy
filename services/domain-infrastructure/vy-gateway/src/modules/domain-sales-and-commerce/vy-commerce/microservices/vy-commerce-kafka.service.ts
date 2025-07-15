@@ -10,6 +10,7 @@ import {
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
   KT_APPLY_CART_PROMOTION,
+  KT_GET_CART,
   KT_CREATE_ORDER,
   KT_GET_ORDERS,
   KT_GET_ZTRACKING_ORDER,
@@ -22,6 +23,7 @@ import {
   CreateCartItemDto,
   DeleteCartItemDto,
   ApplyCartPromotionDto,
+  GetCartDto,
   CreateOrderDto,
   GetOrdersDto,
   GetZtrackingOrderDto,
@@ -115,6 +117,15 @@ export class SalesCommerceKafkaService {
       this.serviceName,
       KT_APPLY_CART_PROMOTION,
       applyCartPromotionDto,
+      traceId,
+    );
+  }
+
+  async getCart(getCartDto: GetCartDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_GET_CART,
+      getCartDto,
       traceId,
     );
   }
