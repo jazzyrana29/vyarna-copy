@@ -1,5 +1,6 @@
-// src/store/userStore.ts
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import * as SecureStore from 'expo-secure-store';
 
 export interface UserDetails {
   nameFirst: string;
@@ -13,7 +14,6 @@ export interface UserDetails {
     postalCode?: string;
     country?: string;
   };
-  // add any other user fields here
 }
 
 interface UserStore {
@@ -27,24 +27,32 @@ interface UserStore {
   hasUserDetails: () => boolean;
 }
 
-export const useUserStore = create<UserStore>((set, get) => ({
-  // initial state
-  userDetails: null,
-  stripeCustomerId: null,
-  personId: null,
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set, get) => ({
+      userDetails: null,
+      stripeCustomerId: null,
+      personId: null,
 
-  // setters
-  setUserDetails: (details): void => set({ userDetails: details }),
-  setStripeCustomerId: (id): void => set({ stripeCustomerId: id }),
-  setPersonId: (id): void => set({ personId: id }),
+      setUserDetails: (details) => set({ userDetails: details }),
+      setStripeCustomerId: (id) => set({ stripeCustomerId: id }),
+      setPersonId: (id) => set({ personId: id }),
 
-  // clear all user info
-  clearUserDetails: (): void =>
-    set({ userDetails: null, stripeCustomerId: null, personId: null }),
+      clearUserDetails: () =>
+        set({ userDetails: null, stripeCustomerId: null, personId: null }),
 
-  // helper to check if required fields are present
-  hasUserDetails: (): boolean => {
-    const d = get().userDetails;
-    return !!(d?.nameFirst && d?.nameLastFirst && d?.email);
-  },
-}));
+      hasUserDetails: () => {
+        const d = get().userDetails;
+        return !!(d?.nameFirst && d?.nameLastFirst && d?.email);
+      },
+    }),
+    {
+      name: 'user-store',
+      storage: createJSONStorage(() => ({
+        getItem: SecureStore.getItemAsync,
+        setItem: SecureStore.setItemAsync,
+        removeItem: SecureStore.deleteItemAsync,
+      })),
+    },
+  ),
+);

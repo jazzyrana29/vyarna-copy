@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import * as SecureStore from 'expo-secure-store';
 
 export interface CartItem {
   id: string;
@@ -19,79 +21,71 @@ interface CartStore {
   updateQuantity: (id: string, quantity: number) => void;
   resetCart: () => void;
   getItemCount: () => number;
-  getTotal: () => number;
+  getTotalCents: () => number;
   setCartId: (id: string) => void;
   openCart: () => void;
   closeCart: () => void;
 }
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  cartId: null,
-  items: [],
-  isOpen: false,
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      cartId: null,
+      items: [],
+      isOpen: false,
 
-  addItem: (item): void => {
-    const items = get().items;
-    const existingItem = items.find((i) => i.id === item.id);
+      addItem: (item) => {
+        const items = get().items;
+        const existing = items.find((i) => i.id === item.id);
+        if (existing) {
+          set({
+            items: items.map((i) =>
+              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
+            ),
+          });
+        } else {
+          set({ items: [...items, { ...item, quantity: 1 }] });
+        }
+      },
 
-    if (existingItem) {
-      set({
-        items: items.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
-        ),
-      });
-    } else {
-      set({
-        items: [...items, { ...item, quantity: 1 }],
-      });
-    }
-  },
+      removeItem: (id) => {
+        set({ items: get().items.filter((i) => i.id !== id) });
+      },
 
-  removeItem: (id): void => {
-    set({
-      items: get().items.filter((item) => item.id !== id),
-    });
-  },
+      updateQuantity: (id, quantity) => {
+        if (quantity <= 0) {
+          get().removeItem(id);
+          return;
+        }
+        set({
+          items: get().items.map((i) =>
+            i.id === id ? { ...i, quantity } : i,
+          ),
+        });
+      },
 
-  updateQuantity: (id, quantity): void => {
-    if (quantity <= 0) {
-      get().removeItem(id);
-      return;
-    }
+      resetCart: () => {
+        set({ items: [], cartId: null });
+      },
 
-    set({
-      items: get().items.map((item) =>
-        item.id === id ? { ...item, quantity } : item,
-      ),
-    });
-  },
+      getItemCount: () => get().items.reduce((c, i) => c + i.quantity, 0),
 
-  resetCart: (): void => {
-    set({ items: [], cartId: null });
-  },
+      getTotalCents: () =>
+        get().items.reduce((t, i) => t + i.priceCents * i.quantity, 0),
 
-  getItemCount: (): number => {
-    return get().items.reduce((count, item) => count + item.quantity, 0);
-  },
+      setCartId: (id) => set({ cartId: id }),
 
-  getTotal: (): number => {
-    return (
-      get().items.reduce(
-        (total, item) => total + item.priceCents * item.quantity,
-        0,
-      ) / 100
-    );
-  },
+      openCart: () => set({ isOpen: true }),
 
-  setCartId: (id): void => {
-    set({ cartId: id });
-  },
-
-  openCart: (): void => {
-    set({ isOpen: true });
-  },
-
-  closeCart: (): void => {
-    set({ isOpen: false });
-  },
-}));
+      closeCart: () => set({ isOpen: false }),
+    }),
+    {
+      name: 'cart-store',
+      storage: createJSONStorage(() => ({
+        getItem: SecureStore.getItemAsync,
+        setItem: SecureStore.setItemAsync,
+        removeItem: SecureStore.deleteItemAsync,
+      })),
+    },
+  ),
+);

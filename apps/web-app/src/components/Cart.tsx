@@ -15,6 +15,7 @@ import {
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
+import { formatMoney } from '../utils/currency';
 
 interface CartProps {
   visible: boolean;
@@ -23,7 +24,14 @@ interface CartProps {
 }
 
 const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
-  const { items, removeItem, updateQuantity, resetCart } = useCartStore();
+  const {
+    items,
+    removeItem,
+    updateQuantity,
+    resetCart,
+    getItemCount,
+    getTotalCents,
+  } = useCartStore();
 
   const { userDetails, hasUserDetails } = useUserStore();
   const { isProcessing, paymentStatus, paymentError, resetPayment } =
@@ -226,7 +234,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
 
                       <View className="flex-row items-center">
                         <Text className="text-base font-bold text-primary mr-3">
-                          {/*${(item.currentPrice * item.quantity).toFixed(2)}*/}
+                          {formatMoney(item.priceCents * item.quantity, item.currency)}
                         </Text>
                         <TouchableOpacity
                           className="bg-red-100 px-2 py-1 rounded"
@@ -242,43 +250,17 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
               </ScrollView>
 
               {/* Cart Summary */}
-              {/*<View className="border-t border-gray-200 pt-4 mb-4">*/}
-              {/*  {getTotalSavings() > 0 && (*/}
-              {/*    <View className="flex-row justify-between items-center mb-2">*/}
-              {/*      <Text className="text-sm text-secondary">*/}
-              {/*        Original Total:*/}
-              {/*      </Text>*/}
-              {/*      <Text className="text-sm text-secondary line-through">*/}
-              {/*        ${getOriginalTotal().toFixed(2)}*/}
-              {/*      </Text>*/}
-              {/*    </View>*/}
-              {/*  )}*/}
-
-              {/*  {getTotalSavings() > 0 && (*/}
-              {/*    <View className="flex-row justify-between items-center mb-2">*/}
-              {/*      <Text className="text-sm text-green-600">*/}
-              {/*        Presale Savings:*/}
-              {/*      </Text>*/}
-              {/*      <Text className="text-sm text-green-600 font-semibold">*/}
-              {/*        -${getTotalSavings().toFixed(2)}*/}
-              {/*      </Text>*/}
-              {/*    </View>*/}
-              {/*  )}*/}
-
-              {/*  <View className="flex-row justify-between items-center mb-2">*/}
-              {/*    <Text className="text-lg font-semibold text-neutralText">*/}
-              {/*      Total:*/}
-              {/*    </Text>*/}
-              {/*    <Text className="text-xl font-bold text-primary">*/}
-              {/*      ${getTotal().toFixed(2)}*/}
-              {/*    </Text>*/}
-              {/*  </View>*/}
-
-              {/*  <Text className="text-sm text-secondary text-center">*/}
-              {/*    {items.reduce((count, item) => count + item.quantity, 0)}{' '}*/}
-              {/*    item(s) in cart*/}
-              {/*  </Text>*/}
-              {/*</View>*/}
+              <View className="border-t border-gray-200 pt-4 mb-4">
+                <View className="flex-row justify-between items-center mb-2">
+                  <Text className="text-lg font-semibold text-neutralText">Total:</Text>
+                  <Text className="text-xl font-bold text-primary">
+                    {formatMoney(getTotalCents(), items[0]?.currency || 'usd')}
+                  </Text>
+                </View>
+                <Text className="text-sm text-secondary text-center">
+                  {getItemCount()} item(s) in cart
+                </Text>
+              </View>
 
               {/* Action Buttons */}
               <View className="space-y-3">
