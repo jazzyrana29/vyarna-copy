@@ -17,7 +17,6 @@ import {
 import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
-import { usePersonIdentity } from '../hooks/usePersonIdentity';
 import { useUserStore } from '../store/userStore';
 import UserDetailsModal from './UserDetailsModal';
 import { formatMoney } from '../utils/currency';
@@ -52,19 +51,8 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   } as GetProductsDto);
   const { addItem, openCart, cartId, setCartId, getItemCount } = useCartStore();
 
-  const userDetails = useUserStore((s) => s.userDetails);
-  const personId = useUserStore((s) => s.personId);
-  const {
-    stripeCustomerId,
-    loading: contactLoading,
-    createPerson,
-  } = usePersonIdentity('person-contact', {
-    nameFirst: userDetails?.nameFirst!,
-    nameMiddle: userDetails?.nameMiddle,
-    nameLastFirst: userDetails?.nameLastFirst!,
-    nameLastSecond: userDetails?.nameLastSecond,
-    email: userDetails?.email!,
-  });
+  const person = useUserStore((s) => s.userDetails);
+  const contactLoading = false;
   const [loading, setLoading] = useState(true);
   const [showUserModal, setShowUserModal] = useState(false);
   const [pendingProduct, setPendingProduct] = useState<Product | null>(null);
@@ -76,28 +64,16 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   }, [productsError, products]);
 
   const handleAddToCart = async (product: Product) => {
-    // Step 1: ensure we have a Stripe customer
-    if (!stripeCustomerId) {
-      if (!userDetails) {
-        // prompt for user details
-        setPendingProduct(product);
-        setShowUserModal(true);
-        return;
-      }
-      await createPerson({
-        nameFirst: userDetails.nameFirst,
-        nameMiddle: userDetails.nameMiddle,
-        nameLastFirst: userDetails.nameLastFirst,
-        nameLastSecond: userDetails.nameLastSecond,
-        email: userDetails.email,
-      });
+    if (!person) {
+      setPendingProduct(product);
+      setShowUserModal(true);
+      return;
     }
 
-    // Step 2: ensure cart exists on backend
     let currentCartId = cartId;
     try {
-      if (!currentCartId && personId) {
-        const cart = await socketCreateCart('sales-commerce', { personId });
+      if (!currentCartId && person.personId) {
+        const cart = await socketCreateCart('sales-commerce', { personId: person.personId });
         currentCartId = cart.cartId;
         setCartId(cart.cartId);
       }

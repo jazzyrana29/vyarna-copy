@@ -10,6 +10,8 @@ import ProductSelector from '../components/ProductSelector';
 import UserDetailsModal from '../components/UserDetailsModal';
 import { useCartStore } from '../store/cartStore';
 import { type UserDetails, useUserStore } from '../store/userStore';
+import { socketCreatePerson } from '../api/person';
+import { CreatePersonDto } from 'ez-utils';
 import { TagsEnum } from '../enums/tags.enum';
 import * as Animatable from 'react-native-animatable';
 
@@ -34,10 +36,18 @@ const PreorderScreen: FC = () => {
   ): Promise<void> => {
     setIsLoadingUserDetails(true);
     try {
-      // Simulate processing time
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const dto: CreatePersonDto = {
+        nameFirst: details.nameFirst,
+        nameMiddle: details.nameMiddle,
+        nameLastFirst: details.nameLastFirst,
+        nameLastSecond: details.nameLastSecond,
+        email: details.email,
+        addInActiveCampaign: details.addInActiveCampaign,
+      };
 
-      setUserDetails(details);
+      const person = await socketCreatePerson('person-contact', dto);
+
+      setUserDetails({ ...person });
       setUserDetailsModalVisible(false);
       setProductSelectorVisible(true);
     } catch (error) {
