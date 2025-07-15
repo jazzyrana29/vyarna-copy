@@ -13,36 +13,34 @@ This repository houses **all** of Vyarna’s code—front-ends (web site, admin 
 ```text
 vyarna-nucleus/
 ├── repo.js                 # cross-workspace helper script
-├── tsconfig.base.json      # shared TS config, path aliases
-├── .npmrc                  # hoisting / registry overrides
-├── docker-compose.yml      # local-dev overrides
-├── ci/                     # GitHub Actions workflows
-│   └── workflows/
-├── infrastructure/         # k8s/helm/scripts/templates
-│   └── scripts/
-├── packages/               # shareable libraries & models
-│   ├── ui/                 # React components & design tokens
-│   ├── api-client/         # generated OpenAPI / GraphQL clients
-│   └── models/             # TS types & validation schemas
+├── docker-compose.yml      # local overrides
+├── example.env.local
+├── example.env.production
+├── example.env.staging
+├── global.env.local-example
 ├── apps/                   # front-end & mobile workspaces
-│   ├── web-app/            # Next.js universal marketing + app site
-│   ├── admin-portal/       # internal admin UI
-│   └── mobile-app/         # React Native / Expo consumer/provider app
-└── services/               # back-end microservices by domain
-    ├── domain-emotional-and-engagement/
-    ├── domain-ezflow/
-    ├── domain-finance/
-    ├── domain-health-and-insights/
-    ├── domain-infrastructure/
-    ├── domain-milk/
-    ├── domain-multitenant/
-    ├── domain-person-and-identity/
-    │   ├── vy-person-identity/
-    │   ├── vy-person-email/
-    │   ├── vy-person-roles/
-    │   └── …
-    ├── domain-privacy-and-consent/
-    └── domain-sales-and-commerce/
+│   ├── admin-portal/
+│   ├── ez-waveflow-admin/
+│   ├── mobile-app/
+│   ├── web-app/
+│   └── website-foundation-scg/
+├── services/               # back-end microservices by domain
+│   ├── domain-emotional-and-engagement/
+│   ├── domain-ezflow/
+│   ├── domain-finance/
+│   ├── domain-health-and-insights/
+│   ├── domain-infrastructure/
+│   ├── domain-milk/
+│   ├── domain-multitenant/
+│   ├── domain-person-and-identity/
+│   ├── domain-privacy-and-consent/
+│   └── domain-sales-and-commerce/
+├── libs/                    # shared libraries
+│   ├── ez-kafka-producer/
+│   ├── ez-logger/
+│   └── ez-utils/
+├── developer-guides/        # repo standards and guides
+└── (packages/ and other folders may appear in future)
 ```
 
 ---
