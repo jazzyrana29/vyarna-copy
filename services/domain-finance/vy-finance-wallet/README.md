@@ -84,5 +84,5 @@ The `.env-example` file documents required variables:
 - `issued-consumer-reward`
 - `redeemed-consumer-reward`
 - `created-affiliate-commission`
-- `InternalChargeCreated`
+- `created-internal-charge`
 

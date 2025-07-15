@@ -4,7 +4,11 @@ import { Repository } from 'typeorm';
 import { InternalCharge } from '../../../entities/internal_charge.entity';
 import { LedgerService } from './ledger.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { encodeKafkaMessage, CreateInternalChargeDto } from 'ez-utils';
+import {
+  encodeKafkaMessage,
+  CreateInternalChargeDto,
+  KT_CREATED_INTERNAL_CHARGE,
+} from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
@@ -52,7 +56,7 @@ export class InternalChargeService {
     });
     await new EzKafkaProducer().produce(
       process.env.KAFKA_BROKER as string,
-      'InternalChargeCreated',
+      KT_CREATED_INTERNAL_CHARGE,
       encodeKafkaMessage(InternalChargeService.name, { chargeId: charge!.chargeId, traceId }),
     );
     this.logger.info('Internal charge created', traceId, 'createCharge', LogStreamLevel.ProdStandard);
