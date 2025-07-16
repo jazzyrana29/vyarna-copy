@@ -1,5 +1,5 @@
 import {
-  SOCKET_NAMESPACE_PERSON_IDENTITY,
+  SOCKET_NAMESPACE_PERSON_SESSION,
   KT_CREATE_SESSION,
   KT_CREATE_SESSION_RESULT,
   KT_CREATE_SESSION_ERROR,
@@ -23,7 +23,7 @@ import {
 } from 'ez-utils';
 
 export async function socketCreateSession(roomId: string, dto: CreateSessionDto): Promise<SessionDto> {
-  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_IDENTITY, transports: ['websocket'] });
+  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   return new Promise((resolve, reject) => {
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
@@ -35,7 +35,7 @@ export async function socketCreateSession(roomId: string, dto: CreateSessionDto)
 }
 
 export async function socketUpdateSession(roomId: string, dto: UpdateSessionDto): Promise<SessionDto> {
-  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_IDENTITY, transports: ['websocket'] });
+  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   return new Promise((resolve, reject) => {
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
@@ -47,7 +47,7 @@ export async function socketUpdateSession(roomId: string, dto: UpdateSessionDto)
 }
 
 export async function socketGetSession(roomId: string, dto: GetOneSessionDto): Promise<SessionDto> {
-  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_IDENTITY, transports: ['websocket'] });
+  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   return new Promise((resolve, reject) => {
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
@@ -59,7 +59,7 @@ export async function socketGetSession(roomId: string, dto: GetOneSessionDto): P
 }
 
 export async function socketDeleteSession(roomId: string, dto: DeleteSessionDto): Promise<void> {
-  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_IDENTITY, transports: ['websocket'] });
+  const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   return new Promise((resolve, reject) => {
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
