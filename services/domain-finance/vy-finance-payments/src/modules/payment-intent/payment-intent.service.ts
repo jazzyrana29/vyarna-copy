@@ -756,8 +756,14 @@ export class PaymentIntentService {
           //   }),
           // );
         }
-        if (updated && internal === 'FAILED') {
-          const _err = (pi as any).last_payment_error;
+          if (updated && internal === 'FAILED') {
+            const err = (pi as any).last_payment_error;
+            this.logger.error(
+              `Stripe payment failed => ${JSON.stringify(err)}`,
+              traceId,
+              'handleStripeWebhook',
+              LogStreamLevel.DebugHeavy,
+            );
           // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
@@ -812,14 +818,20 @@ export class PaymentIntentService {
         const discount = session.discounts?.[0];
         const couponId = discount?.coupon?.id || discount?.coupon;
         const promotionId = discount?.promotion_code || discount?.promotionCode;
-        if (discount && (couponId || promotionId)) {
-          let _orderId: string | undefined;
-          if (session.payment_intent) {
-            const intent = await this.paymentRepo.findOne({
-              where: { externalId: session.payment_intent as string },
-            });
-            _orderId = intent?.orderId;
-          }
+          if (discount && (couponId || promotionId)) {
+            let orderId: string | undefined;
+            if (session.payment_intent) {
+              const intent = await this.paymentRepo.findOne({
+                where: { externalId: session.payment_intent as string },
+              });
+              orderId = intent?.orderId;
+            }
+            this.logger.debug(
+              `Checkout session completed for order ${orderId}`,
+              traceId,
+              'handleStripeWebhook',
+              LogStreamLevel.DebugLight,
+            );
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
           //   KT_USED_COUPON,
