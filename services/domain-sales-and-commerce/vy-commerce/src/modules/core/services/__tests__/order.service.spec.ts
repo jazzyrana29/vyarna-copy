@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { Order } from '../../../../entities/order.entity';
 import { ZtrackingOrderService } from '../ztracking-order.service';
 import { EzKafkaProducer } from 'ez-kafka-producer';
-import { KT_CAPTURE_PAYMENT_INTENT, encodeKafkaMessage } from 'ez-utils';
+import { KT_CAPTURE_PAYMENT_INTENT } from 'ez-utils';
 
 jest.mock('ez-kafka-producer');
 
