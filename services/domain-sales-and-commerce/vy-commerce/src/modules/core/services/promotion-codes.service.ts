@@ -22,7 +22,7 @@ export class PromotionCodesService {
 
   async validatePromotionCode(
     validatePromotionCodeDto: ValidatePromotionCodeDto,
-    _traceId: string,
+    traceId: string,
   ): Promise<ValidatePromotionCodeResponseDto> {
     const { code, cartTotal } = validatePromotionCodeDto;
     if (!code) throw new BadRequestException('Promotion code is required');
@@ -70,7 +70,7 @@ export class PromotionCodesService {
 
     this.logger.info(
       `Promotion code ${code} validated`,
-      _traceId,
+      traceId,
       'validatePromotionCode',
       LogStreamLevel.DebugLight,
     );
