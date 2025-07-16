@@ -9,6 +9,9 @@ import {
   KT_CREATE_CART,
   KT_CREATE_CART_RESULT,
   KT_CREATE_CART_ERROR,
+  KT_CREATE_SESSION,
+  KT_CREATE_SESSION_RESULT,
+  KT_CREATE_SESSION_ERROR,
   KT_ADD_CART_ITEM,
   KT_ADD_CART_ITEM_RESULT,
   KT_ADD_CART_ITEM_ERROR,
@@ -17,6 +20,7 @@ import {
   GetProductsDto,
   CreateCartDto,
   CreateCartItemDto,
+  CreateSessionDto,
   CartDto,
   CartItemDto,
 } from 'ez-utils';
@@ -57,6 +61,34 @@ export function useSalesCommerce(
   }, [roomId, JSON.stringify(query)]);
 
   return { products, error };
+}
+
+export async function socketCreateSession(
+  roomId: string,
+  dto: CreateSessionDto,
+): Promise<{ sessionId: string }> {
+  const socketSvc = new SocketService({
+    namespace: SOCKET_NAMESPACE_SALES,
+    transports: ['websocket'],
+  });
+
+  return new Promise((resolve, reject) => {
+    socketSvc.connect();
+    socketSvc.joinRoom(roomId);
+
+    const cleanup = () => socketSvc.disconnect();
+
+    socketSvc.on<{ sessionId: string }>(KT_CREATE_SESSION_RESULT, (data) => {
+      cleanup();
+      resolve(data);
+    });
+    socketSvc.on<string>(KT_CREATE_SESSION_ERROR, (msg) => {
+      cleanup();
+      reject(new Error(msg));
+    });
+
+    socketSvc.emit<CreateSessionDto>(KT_CREATE_SESSION, dto);
+  });
 }
 
 export async function socketCreateCart(

@@ -18,8 +18,10 @@ import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
+import { usePaymentStore } from '../store/paymentStore';
 import UserDetailsModal from './UserDetailsModal';
 import { formatMoney } from '../utils/currency';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Product {
   productId: string;
@@ -52,6 +54,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   const { addItem, openCart, cartId, setCartId, getItemCount } = useCartStore();
 
   const person = useUserStore((s) => s.userDetails);
+  const { sessionId, setSessionId } = usePaymentStore();
   const contactLoading = false;
   const [loading, setLoading] = useState(true);
   const [showUserModal, setShowUserModal] = useState(false);
@@ -64,16 +67,16 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   }, [productsError, products]);
 
   const handleAddToCart = async (product: Product) => {
-    if (!person) {
-      setPendingProduct(product);
-      setShowUserModal(true);
-      return;
+    let sessId = sessionId;
+    if (!sessId) {
+      sessId = uuidv4();
+      setSessionId(sessId);
     }
 
     let currentCartId = cartId;
     try {
-      if (!currentCartId && person.personId) {
-        const cart = await socketCreateCart('sales-commerce', { personId: person.personId });
+      if (!currentCartId) {
+        const cart = await socketCreateCart('sales-commerce', { sessionId: sessId });
         currentCartId = cart.cartId;
         setCartId(cart.cartId);
       }

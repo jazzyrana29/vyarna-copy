@@ -6,9 +6,9 @@ export class CartDto {
   @IsUUID()
   cartId: string;
 
-  @ApiProperty({ description: "Person identifier", format: "uuid" })
+  @ApiProperty({ description: "Session identifier", format: "uuid" })
   @IsUUID()
-  personId: string;
+  sessionId: string;
 
   @ApiProperty({ description: "Cart status", enum: ["ACTIVE", "CHECKED_OUT"] })
   @IsString()

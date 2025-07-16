@@ -9,14 +9,14 @@ import {
 } from 'typeorm';
 
 @Entity('cart', { schema: process.env.TIDB_DATABASE })
-@Index(['personId', 'status'])
+@Index(['sessionId', 'status'])
 export class Cart extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @Index()
   cartId: string;
 
   @Column('uuid')
-  personId: string;
+  sessionId: string;
 
   @Column({ length: 12 })
   status: 'ACTIVE' | 'CHECKED_OUT';

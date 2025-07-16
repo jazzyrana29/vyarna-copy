@@ -11,6 +11,10 @@ export const KT_CREATE_CART = 'create-cart';
 export const KT_CREATE_CART_RESULT = `${KT_CREATE_CART}-${RESULT}`;
 export const KT_CREATE_CART_ERROR = `${KT_CREATE_CART}-${ERROR}`;
 
+export const KT_CREATE_SESSION = 'create-session';
+export const KT_CREATE_SESSION_RESULT = `${KT_CREATE_SESSION}-${RESULT}`;
+export const KT_CREATE_SESSION_ERROR = `${KT_CREATE_SESSION}-${ERROR}`;
+
 export const KT_ADD_CART_ITEM = 'add-cart-item';
 export const KT_ADD_CART_ITEM_RESULT = `${KT_ADD_CART_ITEM}-${RESULT}`;
 export const KT_ADD_CART_ITEM_ERROR = `${KT_ADD_CART_ITEM}-${ERROR}`;

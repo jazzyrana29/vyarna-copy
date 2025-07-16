@@ -5,6 +5,7 @@ import { ZtrackingOrder } from '../../entities/ztracking_order.entity';
 import { Cart } from '../../entities/cart.entity';
 import { CartItem } from '../../entities/cart_item.entity';
 import { ProductVariant } from '../../entities/product_variant.entity';
+import { Session } from '../../entities/session.entity';
 import { OrderService } from './services/order.service';
 import { OrderKafkaService } from './services/order-kafka.service';
 import { ProductService } from './services/product.service';
@@ -28,6 +29,7 @@ import { LogStreamLevel } from 'ez-logger';
       Cart,
       CartItem,
       ProductVariant,
+      Session,
     ]),
   ],
   controllers: [OrderController, PromotionCodesController, CartController],

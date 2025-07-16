@@ -44,6 +44,7 @@ export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wal
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/product";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/cart";
+export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/session";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/coupon";
 
@@ -215,6 +216,8 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-order.dto"
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-orders.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/session.dto";
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-session.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cart.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cart-item.dto";

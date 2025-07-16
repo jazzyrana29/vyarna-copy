@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Cart } from '../../../entities/cart.entity';
 import { CartItem } from '../../../entities/cart_item.entity';
 import { ProductVariant } from '../../../entities/product_variant.entity';
+import { Session } from '../../../entities/session.entity';
 import {
   CartDto,
   CartItemDto,
@@ -29,6 +30,8 @@ export class CartService {
     private readonly itemRepo: Repository<CartItem>,
     @InjectRepository(ProductVariant)
     private readonly variantRepo: Repository<ProductVariant>,
+    @InjectRepository(Session)
+    private readonly sessionRepo: Repository<Session>,
     private readonly promoService: PromotionCodesService,
   ) {
     this.logger.debug(
@@ -40,8 +43,17 @@ export class CartService {
   }
 
   async createCart(dto: CreateCartDto, traceId: string): Promise<CartDto> {
+    let session = await this.sessionRepo.findOne({ where: { sessionId: dto.sessionId } });
+    if (!session) {
+      session = this.sessionRepo.create({
+        sessionId: dto.sessionId,
+        personId: null,
+      });
+      await this.sessionRepo.save(session);
+    }
+
     const entity = this.cartRepo.create({
-      personId: dto.personId,
+      sessionId: dto.sessionId,
       status: 'ACTIVE',
     });
     await this.cartRepo.save(entity);
