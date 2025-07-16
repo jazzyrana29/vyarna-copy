@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { LedgerService } from './ledger.service';
 import { AffiliateCommissionService } from './affiliate-commission.service';
 import {
+  KafkaMessageResponderService,
   KT_PAID_ORDER,
   KT_RENEWED_SUBSCRIPTION,
   KT_REFUND_SUCCEEDED_WALLET,
@@ -16,11 +17,13 @@ import { LogStreamLevel } from 'ez-logger';
 export class WalletEventsKafkaService {
   public serviceName = WalletEventsKafkaService.name;
   private logger = getLoggerConfig(this.serviceName);
+  private kafkaResponder: KafkaMessageResponderService;
 
   constructor(
     private readonly ledgerService: LedgerService,
     private readonly commissionService: AffiliateCommissionService,
   ) {
+    this.kafkaResponder = new KafkaMessageResponderService(process.env.KAFKA_BROKER);
     this.logger.debug(
       `${WalletEventsKafkaService.name} initialized`,
       '',
@@ -30,66 +33,46 @@ export class WalletEventsKafkaService {
   }
 
   async handleOrderPaid(message: any, key: string): Promise<void> {
-    const { traceId, ...payload } = message as RecordTransactionDto & {
-      traceId: string;
-    };
-    await this.ledgerService.recordTransaction(
-      payload as RecordTransactionDto,
-      traceId,
-    );
-    this.logger.info(
-      'Processed OrderPaid event',
-      traceId,
-      'handleOrderPaid',
-      LogStreamLevel.DebugLight,
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_PAID_ORDER,
+      message,
+      key,
+      async (value: RecordTransactionDto, traceId: string) =>
+        await this.ledgerService.recordTransaction(value, traceId),
     );
   }
 
   async handleSubscriptionRenewed(message: any, key: string): Promise<void> {
-    const { traceId, ...payload } = message as RecordTransactionDto & {
-      traceId: string;
-    };
-    await this.ledgerService.recordTransaction(
-      payload as RecordTransactionDto,
-      traceId,
-    );
-    this.logger.info(
-      'Processed SubscriptionRenewed event',
-      traceId,
-      'handleSubscriptionRenewed',
-      LogStreamLevel.DebugLight,
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_RENEWED_SUBSCRIPTION,
+      message,
+      key,
+      async (value: RecordTransactionDto, traceId: string) =>
+        await this.ledgerService.recordTransaction(value, traceId),
     );
   }
 
   async handleRefundSucceeded(message: any, key: string): Promise<void> {
-    const { traceId, ...payload } = message as RecordTransactionDto & {
-      traceId: string;
-    };
-    await this.ledgerService.recordTransaction(
-      payload as RecordTransactionDto,
-      traceId,
-    );
-    this.logger.info(
-      'Processed RefundSucceeded event',
-      traceId,
-      'handleRefundSucceeded',
-      LogStreamLevel.DebugLight,
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_REFUND_SUCCEEDED_WALLET,
+      message,
+      key,
+      async (value: RecordTransactionDto, traceId: string) =>
+        await this.ledgerService.recordTransaction(value, traceId),
     );
   }
 
   async handleAffiliateCommissionCreated(message: any, key: string): Promise<void> {
-    const { traceId, ...payload } = message as CreateAffiliateCommissionDto & {
-      traceId: string;
-    };
-    await this.commissionService.createCommission(
-      payload as CreateAffiliateCommissionDto,
-      traceId,
-    );
-    this.logger.info(
-      'Processed AffiliateCommissionCreated event',
-      traceId,
-      'handleAffiliateCommissionCreated',
-      LogStreamLevel.DebugLight,
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_CREATED_AFFILIATE_COMMISSION,
+      message,
+      key,
+      async (value: CreateAffiliateCommissionDto, traceId: string) =>
+        await this.commissionService.createCommission(value, traceId),
     );
   }
 }
