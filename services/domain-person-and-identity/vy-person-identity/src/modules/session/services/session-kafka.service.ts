@@ -6,10 +6,12 @@ import {
   KT_UPDATE_SESSION,
   KT_GET_SESSION,
   KT_DELETE_SESSION,
+  KT_LOGIN_SESSION,
   CreateSessionDto,
   UpdateSessionDto,
   GetOneSessionDto,
   DeleteSessionDto,
+  LoginSessionDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -66,6 +68,17 @@ export class SessionKafkaService {
       key,
       async (value: DeleteSessionDto, traceId: string) =>
         await this.sessionService.deleteSession(value, traceId),
+    );
+  }
+
+  async loginSession(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_LOGIN_SESSION,
+      message,
+      key,
+      async (value: LoginSessionDto, traceId: string) =>
+        await this.sessionService.loginSession(value, traceId),
     );
   }
 }

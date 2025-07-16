@@ -23,6 +23,9 @@ export const KT_GET_SESSION_ERROR = `${KT_GET_SESSION}-${ERROR}`;
 export const KT_DELETE_SESSION = 'delete-session';
 export const KT_DELETE_SESSION_RESULT = `${KT_DELETE_SESSION}-${RESULT}`;
 export const KT_DELETE_SESSION_ERROR = `${KT_DELETE_SESSION}-${ERROR}`;
+export const KT_LOGIN_SESSION = 'login-session';
+export const KT_LOGIN_SESSION_RESULT = `${KT_LOGIN_SESSION}-${RESULT}`;
+export const KT_LOGIN_SESSION_ERROR = `${KT_LOGIN_SESSION}-${ERROR}`;
 
 export const KT_ADD_CART_ITEM = 'add-cart-item';
 export const KT_ADD_CART_ITEM_RESULT = `${KT_ADD_CART_ITEM}-${RESULT}`;

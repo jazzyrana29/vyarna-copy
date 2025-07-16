@@ -16,3 +16,5 @@ export const NAV_ROUTE_AUDIENCE = "audience" as const;
 export const NAV_ROUTE_COMPANY = "company" as const;
 export const NAV_ROUTE_SUPPORT = "support" as const;
 export const NAV_ROUTE_PRODUCT = "product" as const;
+export const NAV_ROUTE_LOGIN = "login" as const;
+export const NAV_ROUTE_SIGNUP = "signup" as const;

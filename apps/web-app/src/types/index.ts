@@ -15,6 +15,8 @@ import {
   NAV_ROUTE_PARENTS,
   NAV_ROUTE_PREORDER,
   NAV_ROUTE_PRODUCT,
+  NAV_ROUTE_LOGIN,
+  NAV_ROUTE_SIGNUP,
   NAV_ROUTE_PROVIDERS,
   NAV_ROUTE_SUPPORT,
   NAV_ROUTE_USE,
@@ -39,6 +41,8 @@ export type RootStackParamList = {
   [NAV_ROUTE_COMPANY]: undefined;
   [NAV_ROUTE_SUPPORT]: undefined;
   [NAV_ROUTE_PRODUCT]: undefined;
+  [NAV_ROUTE_LOGIN]: undefined;
+  [NAV_ROUTE_SIGNUP]: undefined;
 };
 
 export type BenefitsNavProp = NativeStackNavigationProp<

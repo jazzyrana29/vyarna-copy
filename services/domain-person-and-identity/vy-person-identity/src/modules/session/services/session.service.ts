@@ -1,12 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Session } from '../../../entities/session.entity';
+import { Person } from '../../../entities/person.entity';
+import { Email } from '../../../entities/email.entity';
 import {
   CreateSessionDto,
   UpdateSessionDto,
   GetOneSessionDto,
   DeleteSessionDto,
+  LoginSessionDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -15,7 +18,11 @@ import { LogStreamLevel } from 'ez-logger';
 export class SessionService {
   private logger = getLoggerConfig(SessionService.name);
 
-  constructor(@InjectRepository(Session) private readonly sessionRepo: Repository<Session>) {
+  constructor(
+    @InjectRepository(Session) private readonly sessionRepo: Repository<Session>,
+    @InjectRepository(Person) private readonly personRepo: Repository<Person>,
+    @InjectRepository(Email) private readonly emailRepo: Repository<Email>,
+  ) {
     this.logger.debug(`${SessionService.name} initialized`, '', 'constructor', LogStreamLevel.DebugLight);
   }
 
@@ -47,5 +54,24 @@ export class SessionService {
     if (!entity) throw new NotFoundException(`session ${dto.sessionId} not found`);
     await this.sessionRepo.delete(dto.sessionId);
     this.logger.info('Session deleted', traceId, 'deleteSession', LogStreamLevel.ProdStandard);
+  }
+
+  async loginSession(dto: LoginSessionDto, traceId: string): Promise<Session> {
+    const emailEntity = await this.emailRepo.findOne({ where: { email: dto.email } });
+    if (!emailEntity) throw new UnauthorizedException('Invalid credentials');
+
+    const person = await this.personRepo.findOne({ where: { personId: emailEntity.personId } });
+    if (!person || person.password !== dto.password) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const session = this.sessionRepo.create({
+      personId: person.personId,
+      ipAddress: dto.ipAddress,
+      location: dto.location,
+    });
+    await this.sessionRepo.save(session);
+    this.logger.info('Person logged in', traceId, 'loginSession', LogStreamLevel.ProdStandard);
+    return session;
   }
 }
