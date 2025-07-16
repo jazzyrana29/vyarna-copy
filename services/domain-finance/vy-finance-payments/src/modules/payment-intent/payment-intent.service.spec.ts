@@ -5,12 +5,7 @@ import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { PaymentRefund } from '../../entities/payment_refund.entity';
 import { PaymentAttempt } from '../../entities/payment_attempt.entity';
 import { WebhookEvent } from '../../entities/webhook_event.entity';
-import {
-  CreateRefundDto,
-  KT_USED_COUPON,
-  KT_LIMIT_REACHED_COUPON,
-  encodeKafkaMessage,
-} from 'ez-utils';
+import { CreateRefundDto } from 'ez-utils';
 import { EzKafkaProducer } from 'ez-kafka-producer';
 
 jest.mock('ez-kafka-producer');

@@ -67,6 +67,14 @@ export class PromotionCodesService {
     const resp: ValidatePromotionCodeResponseDto = { eligible: true };
     if (coupon.amount_off) resp.discountAmount = coupon.amount_off;
     if (coupon.percent_off) resp.percentOff = coupon.percent_off;
+
+    this.logger.info(
+      `Promotion code ${code} validated`,
+      traceId,
+      'validatePromotionCode',
+      LogStreamLevel.DebugLight,
+    );
+
     return resp;
   }
 }
