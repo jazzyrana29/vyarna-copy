@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class LoginSessionDto {
   @ApiProperty({ description: 'Email for the person' })
@@ -10,13 +10,11 @@ export class LoginSessionDto {
   @IsString()
   password: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ description: 'IP address used for login' })
   @IsString()
-  ipAddress?: string;
+  ipAddress: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ description: 'Approximate location of the user' })
   @IsString()
-  location?: string;
+  location: string;
 }

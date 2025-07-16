@@ -11,6 +11,7 @@ import { LogStreamLevel } from 'ez-logger';
   imports: [KafkaModule],
   controllers: [PersonSessionResponseController, PersonSessionController],
   providers: [PersonSessionWebsocket, PersonSessionKafkaService],
+  exports: [PersonSessionKafkaService],
 })
 export class PersonSessionModule {
   private logger = getLoggerConfig(PersonSessionModule.name);

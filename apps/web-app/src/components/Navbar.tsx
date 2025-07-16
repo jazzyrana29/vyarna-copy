@@ -16,6 +16,7 @@ import { RootStackParamList } from '../types';
 import { NAV_ROUTE_HOME } from '../constants/routes';
 import { getBaseUrl } from 'src/utils/env';
 import { useCartStore } from '../store/cartStore';
+import { useUserStore } from '../store/userStore';
 
 export interface NavItem {
   key: keyof RootStackParamList;
@@ -51,6 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
   const getItemCount = useCartStore((s) => s.getItemCount);
   const openCart = useCartStore((s) => s.openCart);
+  const hasUser = useUserStore((s) => s.hasUserDetails());
 
   const handleNavigate = (key: keyof RootStackParamList): void => {
     setMenuOpen(false);
@@ -147,6 +149,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
                 </View>
               )}
             </Pressable>
+            <FeatherIcon name={hasUser ? 'user' : 'user-x'} size={24} />
             <Pressable onPress={() => setMenuOpen((prev) => !prev)}>
               <FeatherIcon name={menuOpen ? 'x' : 'menu'} size={28} />
             </Pressable>
@@ -164,6 +167,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
                 </View>
               )}
             </Pressable>
+            <FeatherIcon name={hasUser ? 'user' : 'user-x'} size={20} />
           </View>
         )}
       </View>

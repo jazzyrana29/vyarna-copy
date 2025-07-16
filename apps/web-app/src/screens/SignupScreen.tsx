@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView, Image, useWindowDimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NAV_ROUTE_LOGIN } from '../constants/routes';
 import { socketCreatePerson } from '../api/person';
 import { CreatePersonDto } from 'ez-utils';
 import { colors } from '../theme/color';
@@ -7,6 +9,9 @@ import { useUserStore } from '../store/userStore';
 
 const SignupScreen = () => {
   const setUserDetails = useUserStore((s) => s.setUserDetails);
+  const navigation = useNavigation();
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
 
   type FormValues = {
     nameFirst: string;
@@ -79,7 +84,17 @@ const SignupScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ flex: 1, flexDirection: isMobile ? 'column' : 'row', padding: 16 }}>
+        <View style={{ flex: 1, alignItems: isMobile ? 'flex-start' : 'center', marginBottom: isMobile ? 16 : 0 }}>
+          <Image
+            source={require('../assets/images/logo-full.png')}
+            style={{ width: 200, height: 200, marginBottom: 16 }}
+            resizeMode="contain"
+          />
+          <Text>Join Vyarna today and discover our features.</Text>
+        </View>
+        <View style={{ flex: 1 }}>
       <Text className="mb-1 text-neutralText">
         First Name<Text className="text-accent">*</Text>
       </Text>
@@ -193,8 +208,16 @@ const SignupScreen = () => {
       >
         <Text className="text-white text-center">Sign Up</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(NAV_ROUTE_LOGIN as never)}
+        className="mt-4"
+      >
+        <Text className="text-primary text-center text-sm">Already have an account? Login</Text>
+      </TouchableOpacity>
 
       {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
+        </View>
+      </View>
     </ScrollView>
   );
 };
