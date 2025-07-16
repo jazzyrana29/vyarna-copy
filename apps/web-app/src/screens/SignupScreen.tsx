@@ -1,27 +1,77 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import { socketCreatePerson } from '../api/person';
 import { CreatePersonDto } from 'ez-utils';
+import { colors } from '../theme/color';
+import { useUserStore } from '../store/userStore';
 
 const SignupScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [first, setFirst] = useState('');
-  const [last, setLast] = useState('');
+  const setUserDetails = useUserStore((s) => s.setUserDetails);
+
+  type FormValues = {
+    nameFirst: string;
+    nameMiddle?: string;
+    nameLastFirst: string;
+    nameLastSecond?: string;
+    email: string;
+    password: string;
+    addInActiveCampaign: boolean;
+  };
+
+  const [values, setValues] = useState<FormValues>({
+    nameFirst: '',
+    nameMiddle: '',
+    nameLastFirst: '',
+    nameLastSecond: '',
+    email: '',
+    password: '',
+    addInActiveCampaign: false,
+  });
+  const [touched, setTouched] = useState<Record<keyof FormValues, boolean>>({
+    nameFirst: false,
+    nameMiddle: false,
+    nameLastFirst: false,
+    nameLastSecond: false,
+    email: false,
+    password: false,
+    addInActiveCampaign: false,
+  });
   const [message, setMessage] = useState<string | null>(null);
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const errors = {
+    nameFirst: values.nameFirst.trim().length === 0 ? 'Enter first name.' : undefined,
+    nameLastFirst: values.nameLastFirst.trim().length === 0 ? 'Enter last name.' : undefined,
+    email: emailRegex.test(values.email) ? undefined : 'Enter valid email.',
+    password: values.password.length < 4 ? 'Enter password.' : undefined,
+  } as Record<keyof FormValues, string | undefined>;
+
+  const isValid = !errors.nameFirst && !errors.nameLastFirst && !errors.email && !errors.password;
+
+  const handleChange = (field: keyof FormValues) => (text: any) => {
+    setValues((v) => ({ ...v, [field]: text }));
+  };
+  const handleBlur = (field: keyof FormValues) => {
+    setTouched((t) => ({ ...t, [field]: true }));
+  };
+
   const submit = async () => {
+    if (!isValid) return;
     setMessage(null);
     const dto: CreatePersonDto = {
-      email,
-      password,
-      nameFirst: first,
-      nameLastFirst: last,
+      nameFirst: values.nameFirst,
+      nameMiddle: values.nameMiddle || undefined,
+      nameLastFirst: values.nameLastFirst,
+      nameLastSecond: values.nameLastSecond || undefined,
+      email: values.email,
+      password: values.password,
       roles: ['client'],
-      isDeleted: false,
-    } as any;
+      addInActiveCampaign: values.addInActiveCampaign,
+    } as CreatePersonDto;
+
     try {
-      await socketCreatePerson('signup', dto);
+      const person = await socketCreatePerson('signup', dto);
+      setUserDetails({ ...person, addInActiveCampaign: values.addInActiveCampaign });
       setMessage('Signup successful');
     } catch (err: any) {
       setMessage(err.message);
@@ -29,16 +79,123 @@ const SignupScreen = () => {
   };
 
   return (
-    <View style={{ padding: 16 }}>
-      <TextInput placeholder="First Name" value={first} onChangeText={setFirst} style={{ borderWidth:1, marginBottom:8,padding:4 }} />
-      <TextInput placeholder="Last Name" value={last} onChangeText={setLast} style={{ borderWidth:1, marginBottom:8,padding:4 }} />
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} autoCapitalize="none" style={{ borderWidth:1, marginBottom:8,padding:4 }} />
-      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={{ borderWidth:1, marginBottom:8,padding:4 }} />
-      <TouchableOpacity onPress={submit} style={{ backgroundColor: '#7ecaf8', padding: 10 }}>
-        <Text style={{ color: 'white', textAlign: 'center' }}>Sign Up</Text>
+    <ScrollView contentContainerStyle={{ padding: 16 }}>
+      <Text className="mb-1 text-neutralText">
+        First Name<Text className="text-accent">*</Text>
+      </Text>
+      <TextInput
+        value={values.nameFirst}
+        onChangeText={handleChange('nameFirst')}
+        onBlur={() => handleBlur('nameFirst')}
+        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+        placeholder="First Name"
+        placeholderTextColor={colors.paper}
+      />
+      {touched.nameFirst && errors.nameFirst && (
+        <Text className="text-accent text-sm mb-2">{errors.nameFirst}</Text>
+      )}
+
+      <Text className="mb-1 text-neutralText">Middle Name</Text>
+      <TextInput
+        value={values.nameMiddle}
+        onChangeText={handleChange('nameMiddle')}
+        onBlur={() => handleBlur('nameMiddle')}
+        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
+        placeholder="Middle Name (optional)"
+        placeholderTextColor={colors.paper}
+      />
+
+      <Text className="mb-1 text-neutralText">
+        Last Name<Text className="text-accent">*</Text>
+      </Text>
+      <TextInput
+        value={values.nameLastFirst}
+        onChangeText={handleChange('nameLastFirst')}
+        onBlur={() => handleBlur('nameLastFirst')}
+        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+        placeholder="Last Name"
+        placeholderTextColor={colors.paper}
+      />
+      {touched.nameLastFirst && errors.nameLastFirst && (
+        <Text className="text-accent text-sm mb-2">{errors.nameLastFirst}</Text>
+      )}
+
+      <Text className="mb-1 text-neutralText">Second Last Name</Text>
+      <TextInput
+        value={values.nameLastSecond}
+        onChangeText={handleChange('nameLastSecond')}
+        onBlur={() => handleBlur('nameLastSecond')}
+        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
+        placeholder="Second Last Name (optional)"
+        placeholderTextColor={colors.paper}
+      />
+
+      <Text className="mb-1 text-neutralText">
+        Email<Text className="text-accent">*</Text>
+      </Text>
+      <TextInput
+        value={values.email}
+        onChangeText={handleChange('email')}
+        onBlur={() => handleBlur('email')}
+        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+        placeholder="you@example.com"
+        placeholderTextColor={colors.paper}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      {touched.email && errors.email && (
+        <Text className="text-accent text-sm mb-2">{errors.email}</Text>
+      )}
+
+      <Text className="mb-1 text-neutralText">
+        Password<Text className="text-accent">*</Text>
+      </Text>
+      <TextInput
+        value={values.password}
+        onChangeText={handleChange('password')}
+        onBlur={() => handleBlur('password')}
+        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+        placeholder="Password"
+        placeholderTextColor={colors.paper}
+        secureTextEntry
+      />
+      {touched.password && errors.password && (
+        <Text className="text-accent text-sm mb-2">{errors.password}</Text>
+      )}
+
+      <View className="flex-row items-start mb-4 mt-2">
+        <Pressable
+          onPress={() =>
+            setValues((v) => ({ ...v, addInActiveCampaign: !v.addInActiveCampaign }))
+          }
+          className="mr-2 mt-1"
+        >
+          <View
+            className={`w-4 h-4 border rounded items-center justify-center ${
+              values.addInActiveCampaign ? 'bg-primary' : 'bg-white'
+            }`}
+          >
+            {values.addInActiveCampaign && (
+              <Text className="text-white text-xs">✓</Text>
+            )}
+          </View>
+        </Pressable>
+        <Text className="flex-1 text-xs text-neutralText">
+          I agree to receive emails from Vyarna, including updates, product
+          announcements, and special offers. I understand I can unsubscribe at any time
+        </Text>
+      </View>
+
+      <TouchableOpacity
+        onPress={submit}
+        className={`px-4 py-2 rounded-lg ${isValid ? 'bg-primary' : 'bg-secondary'}`}
+        disabled={!isValid}
+      >
+        <Text className="text-white text-center">Sign Up</Text>
       </TouchableOpacity>
+
       {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
-    </View>
+    </ScrollView>
   );
 };
 
