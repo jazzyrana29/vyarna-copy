@@ -384,9 +384,7 @@ switch (cmd) {
     const libNames = inIndex === -1 ? args : args.slice(0, inIndex);
     const targetName = inIndex !== -1 ? args[inIndex + 1] : undefined;
 
-    const namesToUpdate = libNames.length
-      ? libNames
-      : libs.map((l) => l.name);
+    const namesToUpdate = libNames.length ? libNames : libs.map((l) => l.name);
 
     namesToUpdate.forEach((libName) => {
       const libPkg = libs.find((l) => l.name === libName);
