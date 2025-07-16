@@ -11,10 +11,12 @@ import {
   KT_UPDATE_SESSION,
   KT_GET_SESSION,
   KT_DELETE_SESSION,
+  KT_LOGIN_SESSION,
   CreateSessionDto,
   UpdateSessionDto,
   GetOneSessionDto,
   DeleteSessionDto,
+  LoginSessionDto,
 } from 'ez-utils';
 import { ValidateCreateSessionDtoPipe } from './pipes/validate-create-session-dto.pipe';
 import { ValidateUpdateSessionDtoPipe } from './pipes/validate-update-session-dto.pipe';
@@ -96,6 +98,22 @@ export class PersonSessionController {
       HttpStatus.OK,
       await this.sessionKafkaService.deleteSession(dto, traceId),
       'Session deleted',
+      traceId,
+    );
+  }
+
+  @Post(KT_LOGIN_SESSION)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: LoginSessionDto })
+  async loginSession(
+    @Body() dto: LoginSessionDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('loginSession');
+    this.logger.info('traceId generated successfully', traceId, 'loginSession', LogStreamLevel.ProdStandard);
+    return new ResponseDTO(
+      HttpStatus.OK,
+      await this.sessionKafkaService.loginSession(dto, traceId),
+      'Session login',
       traceId,
     );
   }

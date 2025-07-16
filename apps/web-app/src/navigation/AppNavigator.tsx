@@ -13,6 +13,8 @@ import PreorderScreen from '../screens/PreorderScreen';
 import InvestorsScreen from '../screens/InvestorsScreen';
 import ContactScreen from '../screens/ContactScreen';
 import HowVyarnaIsMadeScreen from '../screens/HowVyarnaIsMadeScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 import Navbar, { NavItem } from '../components/Navbar';
 import {
   NAV_ROUTE_ABOUT,
@@ -28,6 +30,8 @@ import {
   NAV_ROUTE_PROVIDERS,
   NAV_ROUTE_USE,
   NAV_ROUTE_VALUES,
+  NAV_ROUTE_LOGIN,
+  NAV_ROUTE_SIGNUP,
 } from '../constants/routes';
 import { RootStackParamList } from '../types';
 import { Text, View } from 'react-native';
@@ -56,6 +60,8 @@ export const AppNavigator: FC = (): JSX.Element => {
         [NAV_ROUTE_INVESTORS]: 'for-investors',
         [NAV_ROUTE_ABOUT]: 'about-us',
         [NAV_ROUTE_CONTACT]: 'contact',
+        [NAV_ROUTE_LOGIN]: 'login',
+        [NAV_ROUTE_SIGNUP]: 'signup',
       },
     },
   };
@@ -148,6 +154,8 @@ export const AppNavigator: FC = (): JSX.Element => {
             />
             <Stack.Screen name={NAV_ROUTE_ABOUT} component={AboutScreen} />
             <Stack.Screen name={NAV_ROUTE_CONTACT} component={ContactScreen} />
+            <Stack.Screen name={NAV_ROUTE_LOGIN} component={LoginScreen} />
+            <Stack.Screen name={NAV_ROUTE_SIGNUP} component={SignupScreen} />
           </Stack.Navigator>
         </View>
       </View>

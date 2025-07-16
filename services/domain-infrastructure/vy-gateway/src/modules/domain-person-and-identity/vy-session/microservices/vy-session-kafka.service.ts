@@ -7,10 +7,12 @@ import {
   KT_UPDATE_SESSION,
   KT_GET_SESSION,
   KT_DELETE_SESSION,
+  KT_LOGIN_SESSION,
   CreateSessionDto,
   UpdateSessionDto,
   GetOneSessionDto,
   DeleteSessionDto,
+  LoginSessionDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -58,6 +60,15 @@ export class PersonSessionKafkaService {
     return await this.kafkaResponder.sendMessageAndWaitForResponse(
       this.serviceName,
       KT_DELETE_SESSION,
+      dto,
+      traceId,
+    );
+  }
+
+  async loginSession(dto: LoginSessionDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_LOGIN_SESSION,
       dto,
       traceId,
     );

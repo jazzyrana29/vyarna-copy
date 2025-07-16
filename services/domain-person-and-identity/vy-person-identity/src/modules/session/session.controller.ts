@@ -6,6 +6,7 @@ import {
   KT_UPDATE_SESSION,
   KT_GET_SESSION,
   KT_DELETE_SESSION,
+  KT_LOGIN_SESSION,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -69,5 +70,17 @@ export class SessionController {
       LogStreamLevel.DebugLight,
     );
     await this.sessionKafkaService.deleteSession(message, key);
+  }
+
+  @MessagePattern(KT_LOGIN_SESSION)
+  async login(@Payload() message: any, @Ctx() context: KafkaContext): Promise<void> {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_LOGIN_SESSION}`,
+      '',
+      'login',
+      LogStreamLevel.DebugLight,
+    );
+    await this.sessionKafkaService.loginSession(message, key);
   }
 }

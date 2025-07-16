@@ -14,10 +14,12 @@ import {
   UpdateSessionDto,
   GetOneSessionDto,
   DeleteSessionDto,
+  LoginSessionDto,
   KT_CREATE_SESSION,
   KT_UPDATE_SESSION,
   KT_GET_SESSION,
   KT_DELETE_SESSION,
+  KT_LOGIN_SESSION,
   JoinRoomDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
@@ -123,6 +125,20 @@ export class PersonSessionWebsocket implements OnGatewayInit {
       socket.emit(`${KT_DELETE_SESSION}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_DELETE_SESSION}-error`, e.message || 'Unknown error');
+    }
+  }
+
+  @SubscribeMessage(KT_LOGIN_SESSION)
+  async handleLogin(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: LoginSessionDto,
+  ) {
+    const traceId = generateTraceId('person-session-login');
+    try {
+      const result = await this.sessionKafka.loginSession(dto, traceId);
+      socket.emit(`${KT_LOGIN_SESSION}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_LOGIN_SESSION}-error`, e.message || 'Unknown error');
     }
   }
 }

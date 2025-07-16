@@ -6,6 +6,7 @@ import {
   KT_UPDATE_SESSION,
   KT_GET_SESSION,
   KT_DELETE_SESSION,
+  KT_LOGIN_SESSION,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -66,6 +67,18 @@ export class PersonSessionResponseController {
       `Kafka response for ${KT_DELETE_SESSION} | key: ${key}`,
       '',
       'handleDelete',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_LOGIN_SESSION + '-response')
+  handleLogin(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_LOGIN_SESSION} | key: ${key}`,
+      '',
+      'handleLogin',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);
