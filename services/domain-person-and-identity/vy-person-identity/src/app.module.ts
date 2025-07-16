@@ -9,6 +9,7 @@ import { LogStreamLevel } from 'ez-logger';
 import { PersonModule } from './modules/person/person.module';
 import { EmailModule } from './modules/email/email.module';
 import { VerificationModule } from './modules/verification/verification.module';
+import { SessionModule } from './modules/session/session.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { VerificationModule } from './modules/verification/verification.module';
     PersonModule,
     EmailModule,
     VerificationModule,
+    SessionModule,
   ],
   controllers: [],
   providers: [],

@@ -19,6 +19,7 @@ export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/verification";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events";
+export * from './src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/session';
 /* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/medication-administration";
@@ -44,7 +45,6 @@ export * from "./src/constants/kafka-topics/domain-finance/vy-finance-wallet/wal
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/order";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/product";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/cart";
-export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/session";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/subscription";
 export * from "./src/constants/kafka-topics/domain-sales-and-commerce/vy-commerce/coupon";
 
@@ -71,8 +71,12 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-ide
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/review-identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/phone.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/physical-address.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/session.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-session.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-session.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-session.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/delete-session.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
-export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-active-campaign-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto";
@@ -216,8 +220,6 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-order.dto"
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-orders.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/ztracking-order.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-ztracking-order.dto";
-export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/session.dto";
-export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-session.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/create-cart.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cart.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/cart-item.dto";

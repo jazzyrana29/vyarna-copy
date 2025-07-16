@@ -14,14 +14,12 @@ import {
   socketCreateCart,
   useSalesCommerce,
 } from '../hooks/useSalesCommerce';
+import { socketCreateSession } from '../api/session';
 import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
-import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
-import UserDetailsModal from './UserDetailsModal';
 import { formatMoney } from '../utils/currency';
-import { v4 as uuidv4 } from 'uuid';
 
 interface Product {
   productId: string;
@@ -53,12 +51,8 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   } as GetProductsDto);
   const { addItem, openCart, cartId, setCartId, getItemCount } = useCartStore();
 
-  const person = useUserStore((s) => s.userDetails);
   const { sessionId, setSessionId } = usePaymentStore();
-  const contactLoading = false;
   const [loading, setLoading] = useState(true);
-  const [showUserModal, setShowUserModal] = useState(false);
-  const [pendingProduct, setPendingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     if (productsError || products.length > 0) {
@@ -69,8 +63,14 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   const handleAddToCart = async (product: Product) => {
     let sessId = sessionId;
     if (!sessId) {
-      sessId = uuidv4();
-      setSessionId(sessId);
+      try {
+        const session = await socketCreateSession('person-session', { personId: null });
+        sessId = session.sessionId;
+        setSessionId(sessId);
+      } catch (e) {
+        console.error('Session error', e);
+        return;
+      }
     }
 
     let currentCartId = cartId;
@@ -108,14 +108,6 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     openCart();
   };
 
-  // when user details are saved, retry pending product
-  const handleUserSaved = () => {
-    setShowUserModal(false);
-    if (pendingProduct) {
-      handleAddToCart(pendingProduct);
-      setPendingProduct(null);
-    }
-  };
 
   return (
     <>
@@ -192,15 +184,8 @@ const ProductSelector: FC<ProductSelectorProps> = ({
                       <TouchableOpacity
                         className="bg-primary px-4 py-2 rounded-lg"
                         onPress={() => handleAddToCart(p)}
-                        disabled={contactLoading}
                       >
-                        {contactLoading ? (
-                          <ActivityIndicator color="#fff" />
-                        ) : (
-                          <Text className="text-white font-semibold">
-                            Add to Cart
-                          </Text>
-                        )}
+                        <Text className="text-white font-semibold">Add to Cart</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -227,12 +212,6 @@ const ProductSelector: FC<ProductSelectorProps> = ({
         </View>
       </Modal>
 
-      {/* User Details Modal */}
-      <UserDetailsModal
-        visible={showUserModal}
-        onSave={handleUserSaved}
-        onClose={() => setShowUserModal(false)}
-      />
     </>
   );
 };

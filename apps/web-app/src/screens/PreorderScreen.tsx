@@ -7,54 +7,16 @@ import Footer from '../components/Footer';
 import Section from '../components/Section';
 import Cart from '../components/Cart';
 import ProductSelector from '../components/ProductSelector';
-import UserDetailsModal from '../components/UserDetailsModal';
 import { useCartStore } from '../store/cartStore';
-import { type UserDetails, useUserStore } from '../store/userStore';
-import { socketCreatePerson } from '../api/person';
-import { CreatePersonDto } from 'ez-utils';
 import { TagsEnum } from '../enums/tags.enum';
 import * as Animatable from 'react-native-animatable';
 
 const PreorderScreen: FC = () => {
   const [productSelectorVisible, setProductSelectorVisible] = useState(false);
-  const [userDetailsModalVisible, setUserDetailsModalVisible] = useState(false);
-  const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(false);
 
   const { isOpen, closeCart, getItemCount } = useCartStore();
-  const { userDetails, hasUserDetails, setUserDetails } = useUserStore();
-
   const handlePreorderClick = () => {
-    if (!hasUserDetails()) {
-      setUserDetailsModalVisible(true);
-    } else {
-      setProductSelectorVisible(true);
-    }
-  };
-
-  const handleUserDetailsSubmit = async (
-    details: UserDetails,
-  ): Promise<void> => {
-    setIsLoadingUserDetails(true);
-    try {
-      const dto: CreatePersonDto = {
-        nameFirst: details.nameFirst,
-        nameMiddle: details.nameMiddle,
-        nameLastFirst: details.nameLastFirst,
-        nameLastSecond: details.nameLastSecond,
-        email: details.email,
-        addInActiveCampaign: details.addInActiveCampaign,
-      };
-
-      const person = await socketCreatePerson('person-contact', dto);
-
-      setUserDetails({ ...person });
-      setUserDetailsModalVisible(false);
-      setProductSelectorVisible(true);
-    } catch (error) {
-      console.error('Error saving user details:', error);
-    } finally {
-      setIsLoadingUserDetails(false);
-    }
+    setProductSelectorVisible(true);
   };
 
   const handleBackToProducts = () => {
@@ -88,9 +50,7 @@ const PreorderScreen: FC = () => {
                 className="bg-[#7ecaf8] px-6 py-3 rounded-full mt-6"
                 onPress={handlePreorderClick}
               >
-                <Text className="text-white font-bold text-base">
-                  {hasUserDetails() ? 'Shop Now' : 'Get Started'}
-                </Text>
+                <Text className="text-white font-bold text-base">Shop Now</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -99,17 +59,6 @@ const PreorderScreen: FC = () => {
         {/* Spacer */}
         <View className="h-16 md:h-20" />
 
-        {/* User Status Display */}
-        {hasUserDetails() && (
-          <View className="mb-6 bg-green-50 px-4 py-3 rounded-lg">
-            <Text className="text-green-800 font-semibold">
-              Welcome back, {userDetails?.nameFirst}!
-            </Text>
-            <Text className="text-green-700 text-sm">
-              Checking for presale discounts with {userDetails?.email}
-            </Text>
-          </View>
-        )}
 
         {/* Cart Summary (if items in cart) */}
         {getItemCount() > 0 && (
@@ -175,9 +124,7 @@ const PreorderScreen: FC = () => {
             className="bg-[#7ecaf8] px-6 py-3 rounded-full"
             onPress={handlePreorderClick}
           >
-            <Text className="text-white font-bold text-base">
-              {hasUserDetails() ? 'Shop Now' : 'Start Your Order'}
-            </Text>
+            <Text className="text-white font-bold text-base">Start Your Order</Text>
           </TouchableOpacity>
         </View>
 
@@ -190,14 +137,6 @@ const PreorderScreen: FC = () => {
           />
         </View>
       </View>
-
-      {/* User Details Modal */}
-      <UserDetailsModal
-        visible={userDetailsModalVisible}
-        onClose={() => setUserDetailsModalVisible(false)}
-        onSave={handleUserDetailsSubmit}
-      />
-
       {/* Product Selector Modal */}
       {productSelectorVisible && (
         <ProductSelector
