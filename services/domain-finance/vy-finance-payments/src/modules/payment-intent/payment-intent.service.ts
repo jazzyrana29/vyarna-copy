@@ -31,14 +31,6 @@ import {
   PaymentIntentNextAction,
   RetryPaymentAttemptDto,
   PaymentStatusUpdateDto,
-  KT_CREATED_PAYMENT_INTENT,
-  KT_SUCCEEDED_PAYMENT,
-  KT_FAILED_PAYMENT,
-  KT_CREATED_REFUND,
-  KT_REFUND_SUCCEEDED_PAYMENT,
-  KT_FAILED_REFUND,
-  KT_USED_COUPON,
-  KT_LIMIT_REACHED_COUPON,
   KT_CREATE_CONTACT,
   encodeKafkaMessage,
 } from 'ez-utils';
@@ -765,7 +757,7 @@ export class PaymentIntentService {
           // );
         }
         if (updated && internal === 'FAILED') {
-          const err = (pi as any).last_payment_error;
+          const _err = (pi as any).last_payment_error;
           // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
@@ -821,12 +813,12 @@ export class PaymentIntentService {
         const couponId = discount?.coupon?.id || discount?.coupon;
         const promotionId = discount?.promotion_code || discount?.promotionCode;
         if (discount && (couponId || promotionId)) {
-          let orderId: string | undefined;
+          let _orderId: string | undefined;
           if (session.payment_intent) {
             const intent = await this.paymentRepo.findOne({
               where: { externalId: session.payment_intent as string },
             });
-            orderId = intent?.orderId;
+            _orderId = intent?.orderId;
           }
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
