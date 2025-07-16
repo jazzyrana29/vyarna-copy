@@ -11,7 +11,12 @@ export function computeBottleIntake(events: BottleEvent[], type: string): number
   return events
     .filter(e => e.contentType === type)
     .reduce((sum, e) => {
-      if (e.volumeStartMl != null && e.volumeEndMl != null) {
+      if (
+        e.volumeStartMl !== undefined &&
+        e.volumeStartMl !== null &&
+        e.volumeEndMl !== undefined &&
+        e.volumeEndMl !== null
+      ) {
         return sum + Math.max(0, e.volumeStartMl - e.volumeEndMl);
       }
       return sum;
