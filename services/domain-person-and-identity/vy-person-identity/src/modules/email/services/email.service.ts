@@ -11,7 +11,6 @@ import {
   GetZtrackingEmailDto,
   ZtrackingEmailDto,
   encodeKafkaMessage,
-  KT_CONTACT_CREATED,
   KT_CONTACT_UPDATED,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
