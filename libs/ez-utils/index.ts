@@ -19,7 +19,7 @@ export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/verification";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events";
-export * from './src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/session';
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/session";
 /* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/medication-administration";
@@ -79,6 +79,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/delete-se
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-active-campaign-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-tag.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/contact-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/lists-response.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/tags-response.dto";
