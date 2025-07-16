@@ -21,8 +21,6 @@ import {
   SleepRatingDto,
   SleepScheduleDto,
   SleepNotificationDto,
-  SleepPatternSummaryDto,
-  SleepSummaryDto,
   DeleteSleepSessionDto,
   GetSleepEventsDto,
   GetSleepInterruptionReasonsDto,
