@@ -24,7 +24,6 @@ import {
   CapturePaymentIntentDto,
   ConfirmPaymentIntentDto,
   StripeWebhookDto,
-  RefundDto,
   CreatePaymentMethodDto,
   GetPaymentMethodsDto,
   DeletePaymentMethodDto,
