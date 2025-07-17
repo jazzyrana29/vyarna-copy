@@ -24,9 +24,9 @@ const SignupScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
     if (isLoggedIn) {
-      navigation.navigate(NAV_ROUTE_HOME as never);
+      navigation.replace(NAV_ROUTE_HOME as never);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigation]);
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 

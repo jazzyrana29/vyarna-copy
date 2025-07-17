@@ -33,12 +33,16 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
   const prevRoute = useNavigationState((state) => state?.routes[state.index - 1]?.name);
-  const { login, isLoggedIn } = useUserStore((s) => ({ login: s.login, isLoggedIn: s.isLoggedIn }));
+  const { login, isLoggedIn } = useUserStore((s) => ({
+    login: s.login,
+    isLoggedIn: s.isLoggedIn,
+  }));
+
   useEffect(() => {
     if (isLoggedIn) {
-      navigation.navigate(NAV_ROUTE_HOME as never);
+      navigation.replace(NAV_ROUTE_HOME as never);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigation]);
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -82,7 +86,7 @@ const LoginScreen = () => {
 
     try {
       await socketLoginSession('login', dto);
-      login({ email: values.email });
+      login();
       setMessage('Login successful');
       if (prevRoute && prevRoute !== NAV_ROUTE_SIGNUP) {
         navigation.goBack();
