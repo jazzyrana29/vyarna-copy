@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity('cart_item', { schema: process.env.TIDB_DATABASE })
-@Index(['cartId', 'variantId'], { unique: true })
+@Index(['cartId', 'productId'], { unique: true })
 export class CartItem extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @Index()
@@ -19,7 +19,7 @@ export class CartItem extends BaseEntity {
   cartId: string;
 
   @Column('uuid')
-  variantId: string;
+  productId: string;
 
   @Column('int')
   quantity: number;

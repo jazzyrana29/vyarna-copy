@@ -51,13 +51,16 @@ export class CartService {
   }
 
   async addCartItem(dto: CreateCartItemDto, traceId: string): Promise<CartItemDto> {
-    const variant = await this.variantRepo.findOne({ where: { variantId: dto.variantId } });
+    const variant = await this.variantRepo.findOne({
+      where: { productId: dto.productId },
+      order: { createdAt: 'ASC' },
+    });
     if (!variant) {
-      throw new NotFoundException(`Variant ${dto.variantId} not found`);
+      throw new NotFoundException(`Product ${dto.productId} not found`);
     }
     const entity = this.itemRepo.create({
       cartId: dto.cartId,
-      variantId: dto.variantId,
+      productId: dto.productId,
       quantity: dto.quantity,
       unitPriceCents: variant.priceCents,
     });
@@ -67,11 +70,11 @@ export class CartService {
   }
 
   async removeCartItem(dto: DeleteCartItemDto, traceId: string): Promise<void> {
-    const item = await this.itemRepo.findOne({ where: { cartId: dto.cartId, itemId: dto.itemId } });
+    const item = await this.itemRepo.findOne({ where: { cartId: dto.cartId, productId: dto.productId } });
     if (!item) {
       throw new NotFoundException('Item not found');
     }
-    await this.itemRepo.delete({ itemId: dto.itemId });
+    await this.itemRepo.delete({ cartId: dto.cartId, productId: dto.productId });
     this.logger.info('Cart item removed', traceId, 'removeCartItem', LogStreamLevel.DebugLight);
   }
 

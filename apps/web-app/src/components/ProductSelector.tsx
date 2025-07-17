@@ -88,7 +88,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
           'sales-commerce',
           {
             cartId: currentCartId,
-            variantId: product.productId,
+            productId: product.productId,
             quantity: 1,
           },
           { skipLoading: true },

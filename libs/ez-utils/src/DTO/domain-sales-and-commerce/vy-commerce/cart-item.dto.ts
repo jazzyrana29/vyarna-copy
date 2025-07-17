@@ -10,9 +10,9 @@ export class CartItemDto {
   @IsUUID()
   cartId: string;
 
-  @ApiProperty({ description: "Variant identifier", format: "uuid" })
+  @ApiProperty({ description: "Product identifier", format: "uuid" })
   @IsUUID()
-  variantId: string;
+  productId: string;
 
   @ApiProperty({ description: "Quantity" })
   @IsInt()
