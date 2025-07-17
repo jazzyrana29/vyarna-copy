@@ -46,7 +46,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigation.replace(NAV_ROUTE_HOME as never);
+      navigation.replace(NAV_ROUTE_HOME);
     }
   }, [isLoggedIn, navigation]);
   const { width } = useWindowDimensions();
@@ -97,7 +97,7 @@ const LoginScreen = () => {
       if (prevRoute && prevRoute !== NAV_ROUTE_SIGNUP) {
         navigation.goBack();
       } else {
-        navigation.navigate(NAV_ROUTE_HOME as never);
+        navigation.navigate(NAV_ROUTE_HOME);
       }
     } catch (err: any) {
       setMessage(err.message);
@@ -228,7 +228,7 @@ const LoginScreen = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate(NAV_ROUTE_SIGNUP as never)}
+              onPress={() => navigation.navigate(NAV_ROUTE_SIGNUP)}
               className="mt-4"
             >
               <Text className="text-primary text-center text-sm">

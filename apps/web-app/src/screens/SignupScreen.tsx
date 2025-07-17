@@ -30,7 +30,7 @@ const SignupScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isLoggedIn) {
-      navigation.replace(NAV_ROUTE_HOME as never);
+      navigation.replace(NAV_ROUTE_HOME);
     }
   }, [isLoggedIn, navigation]);
   const { width } = useWindowDimensions();
@@ -110,7 +110,7 @@ const SignupScreen = () => {
         addInActiveCampaign: values.addInActiveCampaign,
       });
       setMessage('Signup successful');
-      navigation.navigate(NAV_ROUTE_LOGIN as never);
+      navigation.navigate(NAV_ROUTE_LOGIN);
     } catch (err: any) {
       setMessage(err.message);
     }
@@ -305,7 +305,7 @@ const SignupScreen = () => {
               <Text className="text-white text-center">Sign Up</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate(NAV_ROUTE_LOGIN as never)}
+              onPress={() => navigation.navigate(NAV_ROUTE_LOGIN)}
               className="mt-4"
             >
               <Text className="text-primary text-center text-sm">

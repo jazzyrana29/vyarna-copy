@@ -14,7 +14,10 @@ const useWebSocket = (showMessages = true): ServerMessage[] => {
   const [messages, setMessages] = useState<ServerMessage[]>([]);
 
   useEffect(() => {
-    const socket = io(`${EXPO_PUBLIC_API_URL}`, { transports: ['websocket'] });
+    const socket = io(`${EXPO_PUBLIC_API_URL}`, {
+      transports: ['websocket'],
+      reconnectionAttempts: 3,
+    });
 
     socket.on('connect', () => {
       if (showMessages) {
@@ -29,6 +32,12 @@ const useWebSocket = (showMessages = true): ServerMessage[] => {
     socket.on('disconnect', () => {
       if (showMessages) {
         console.log('Disconnected from WebSocket server');
+      }
+    });
+
+    socket.io.on('reconnect_failed', () => {
+      if (showMessages) {
+        console.log('WebSocket reconnection failed after 3 attempts');
       }
     });
 
