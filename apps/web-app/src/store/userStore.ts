@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { PersonWithoutPasswordDto } from 'ez-utils';
+import { PersonWithoutPasswordDto, PhysicalAddressDto } from 'ez-utils';
 
 export interface UserDetails
   extends Omit<PersonWithoutPasswordDto, 'personId' | 'stripeCustomerId'> {
@@ -11,9 +11,11 @@ interface UserStore {
   isLoggedIn: boolean;
   setUserDetails: (details: UserDetails) => void;
   clearUserDetails: () => void;
+  setAddress: (address: PhysicalAddressDto) => void;
   login: (details?: Partial<UserDetails>) => void;
   logout: () => void;
   hasUserDetails: () => boolean;
+  hasAddress: () => boolean;
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
@@ -23,6 +25,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
   setUserDetails: (details) => set({ userDetails: details }),
 
   clearUserDetails: () => set({ userDetails: null }),
+
+  setAddress: (address) =>
+    set((state) => ({
+      userDetails: state.userDetails
+        ? { ...state.userDetails, addresses: [address] }
+        : { addresses: [address] } as any,
+    })),
 
   login: (details) =>
     set((state) => ({
@@ -35,6 +44,11 @@ export const useUserStore = create<UserStore>((set, get) => ({
   hasUserDetails: () => {
     const d = get().userDetails;
     return !!(d?.nameFirst && d?.nameLastFirst && d?.email);
+  },
+
+  hasAddress: () => {
+    const a = get().userDetails?.addresses?.find((addr) => addr.isPrimary);
+    return !!a;
   },
 }));
 

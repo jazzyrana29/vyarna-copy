@@ -20,6 +20,7 @@ export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/person-events";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/contact-events";
 export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/session";
+export * from "./src/constants/kafka-topics/domain-person-and-identity/vy-person-identity/physical-address";
 /* ------------------------------------- domain-health-and-insights ---------------------------------------------*/
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/diaper-change";
 export * from "./src/constants/kafka-topics/domain-health-and-insights/vy-care-log/medication-administration";
@@ -71,6 +72,8 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/start-ide
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/review-identity-verification.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/phone.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/physical-address.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-physical-address.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-physical-address.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/session.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/create-session.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-session.dto";
