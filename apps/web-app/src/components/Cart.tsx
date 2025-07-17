@@ -41,10 +41,8 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     cartId,
   } = useCartStore();
 
-  const userDetails = useUserStore((s) => s.userDetails);
   const hasUserDetails = useUserStore((s) => s.hasUserDetails);
-  const { isProcessing, paymentStatus, paymentError, resetPayment } =
-    usePaymentStore();
+  const { isProcessing, paymentError, resetPayment } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
 
   const showAlert = (title: string, message: string): void => {
@@ -65,12 +63,6 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     }
 
     setShowPaymentForm(true);
-  };
-
-  const handlePaymentSuccess = () => {
-    setShowPaymentForm(false);
-    onClose();
-    resetPayment();
   };
 
   const handlePaymentCancel = () => {
