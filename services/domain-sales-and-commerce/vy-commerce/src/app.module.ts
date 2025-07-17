@@ -8,6 +8,7 @@ import { getLoggerConfig } from './utils/common';
 import { ensureDatabaseExists } from './utils/db-init';
 import { LogStreamLevel } from 'ez-logger';
 import { SeedService } from './seeds/seed.service';
+import { StripeGatewayService } from './services/stripe-gateway.service';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { SeedService } from './seeds/seed.service';
     CoreModule,
   ],
   controllers: [],
-  providers: [SeedService],
+  providers: [SeedService, StripeGatewayService],
 })
 export class AppModule {
   private logger = getLoggerConfig(AppModule.name);
