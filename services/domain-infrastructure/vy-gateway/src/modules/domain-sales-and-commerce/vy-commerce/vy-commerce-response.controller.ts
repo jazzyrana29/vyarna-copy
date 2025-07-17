@@ -8,6 +8,7 @@ import {
   KT_CREATE_CART,
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
+  KT_RESET_CART,
   KT_APPLY_CART_PROMOTION,
   KT_GET_CART,
   KT_CREATE_ORDER,
@@ -102,6 +103,18 @@ export class SalesCommerceResponseController {
       `Kafka response for ${KT_REMOVE_CART_ITEM} | key: ${key}`,
       '',
       'handleRemoveCartItem',
+      LogStreamLevel.DebugLight,
+    );
+    this.kafkaResponder.handleIncomingMessage(message);
+  }
+
+  @MessagePattern(KT_RESET_CART + '-response')
+  handleResetCart(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Kafka response for ${KT_RESET_CART} | key: ${key}`,
+      '',
+      'handleResetCart',
       LogStreamLevel.DebugLight,
     );
     this.kafkaResponder.handleIncomingMessage(message);

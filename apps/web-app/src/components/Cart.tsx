@@ -18,6 +18,7 @@ import { useCartStore } from '../store/cartStore';
 import {
   socketAddCartItem,
   socketRemoveCartItem,
+  socketResetCart,
 } from '../hooks/useSalesCommerce';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
@@ -118,17 +119,12 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   };
 
   const handleResetCart = async () => {
-    const ids = items.map((i) => i.id);
     if (!cartId) {
       resetCart();
       return;
     }
     try {
-      await Promise.all(
-        ids.map((pid) =>
-          socketRemoveCartItem('sales-commerce', { cartId, productId: pid }),
-        ),
-      );
+      await socketResetCart('sales-commerce', { cartId });
       resetCart();
     } catch (e: any) {
       console.error('Reset cart failed', e);

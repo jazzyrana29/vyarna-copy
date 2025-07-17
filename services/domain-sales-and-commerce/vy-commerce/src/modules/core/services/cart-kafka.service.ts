@@ -4,11 +4,13 @@ import {
   KT_CREATE_CART,
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
+  KT_RESET_CART,
   KT_APPLY_CART_PROMOTION,
   KT_GET_CART,
   CreateCartDto,
   CreateCartItemDto,
   DeleteCartItemDto,
+  ResetCartDto,
   ApplyCartPromotionDto,
   GetCartDto,
 } from 'ez-utils';
@@ -86,6 +88,17 @@ export class CartKafkaService {
       key,
       async (value: GetCartDto, traceId: string) =>
         await this.cartService.getCart(value, traceId),
+    );
+  }
+
+  async resetCart(message: any, key: string): Promise<void> {
+    await this.kafkaResponder.produceKafkaResponse(
+      this.serviceName,
+      KT_RESET_CART,
+      message,
+      key,
+      async (value: ResetCartDto, traceId: string) =>
+        await this.cartService.resetCart(value, traceId),
     );
   }
 }

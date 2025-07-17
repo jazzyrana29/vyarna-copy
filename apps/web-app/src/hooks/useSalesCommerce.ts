@@ -15,12 +15,16 @@ import {
   KT_REMOVE_CART_ITEM,
   KT_REMOVE_CART_ITEM_RESULT,
   KT_REMOVE_CART_ITEM_ERROR,
+  KT_RESET_CART,
+  KT_RESET_CART_RESULT,
+  KT_RESET_CART_ERROR,
 } from '../constants/socketEvents';
 import {
   GetProductsDto,
   CreateCartDto,
   CreateCartItemDto,
   DeleteCartItemDto,
+  ResetCartDto,
   CartDto,
   CartItemDto,
   ProductDto,
@@ -180,6 +184,39 @@ export async function socketRemoveCartItem(
     });
 
     socketSvc.emit<DeleteCartItemDto>(KT_REMOVE_CART_ITEM, dto);
+  });
+}
+
+export async function socketResetCart(
+  roomId: string,
+  dto: ResetCartDto,
+  opts?: { skipLoading?: boolean },
+): Promise<void> {
+  const socketSvc = new SocketService({
+    namespace: SOCKET_NAMESPACE_SALES,
+    transports: ['websocket'],
+  });
+  const { start, stop } = useLoadingStore.getState();
+
+  return new Promise((resolve, reject) => {
+    if (!opts?.skipLoading) start();
+    socketSvc.connect();
+    socketSvc.joinRoom(roomId);
+
+    const cleanup = () => socketSvc.disconnect();
+
+    socketSvc.on<void>(KT_RESET_CART_RESULT, () => {
+      cleanup();
+      if (!opts?.skipLoading) stop();
+      resolve();
+    });
+    socketSvc.on<string>(KT_RESET_CART_ERROR, (msg) => {
+      cleanup();
+      if (!opts?.skipLoading) stop();
+      reject(new Error(msg));
+    });
+
+    socketSvc.emit<ResetCartDto>(KT_RESET_CART, dto);
   });
 }
 

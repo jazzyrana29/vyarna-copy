@@ -4,6 +4,7 @@ import {
   KT_CREATE_CART,
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
+  KT_RESET_CART,
   KT_APPLY_CART_PROMOTION,
   KT_GET_CART,
 } from 'ez-utils';
@@ -58,6 +59,18 @@ export class CartController {
       LogStreamLevel.DebugLight,
     );
     await this.cartKafkaService.removeCartItem(message, key);
+  }
+
+  @MessagePattern(KT_RESET_CART)
+  async resetCart(@Payload() message: any, @Ctx() context: KafkaContext) {
+    const key = context.getMessage().key.toString();
+    this.logger.debug(
+      `Message Pattern hit for kafka topic : ${KT_RESET_CART}`,
+      '',
+      'resetCart',
+      LogStreamLevel.DebugLight,
+    );
+    await this.cartKafkaService.resetCart(message, key);
   }
 
   @MessagePattern(KT_APPLY_CART_PROMOTION)

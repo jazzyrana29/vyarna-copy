@@ -9,6 +9,7 @@ import {
   KT_CREATE_CART,
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
+  KT_RESET_CART,
   KT_APPLY_CART_PROMOTION,
   KT_GET_CART,
   KT_CREATE_ORDER,
@@ -22,6 +23,7 @@ import {
   CreateCartDto,
   CreateCartItemDto,
   DeleteCartItemDto,
+  ResetCartDto,
   ApplyCartPromotionDto,
   GetCartDto,
   CreateOrderDto,
@@ -110,6 +112,15 @@ export class SalesCommerceKafkaService {
       this.serviceName,
       KT_REMOVE_CART_ITEM,
       deleteCartItemDto,
+      traceId,
+    );
+  }
+
+  async resetCart(resetCartDto: ResetCartDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_RESET_CART,
+      resetCartDto,
       traceId,
     );
   }

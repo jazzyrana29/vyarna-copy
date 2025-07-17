@@ -10,6 +10,7 @@ import {
   CreateCartDto,
   CreateCartItemDto,
   DeleteCartItemDto,
+  ResetCartDto,
   ApplyCartPromotionDto,
   GetCartDto,
   ValidatePromotionCodeDto,
@@ -51,6 +52,17 @@ export class CartService {
   }
 
   async addCartItem(dto: CreateCartItemDto, traceId: string): Promise<CartItemDto> {
+    const existing = await this.itemRepo.findOne({
+      where: { cartId: dto.cartId, productId: dto.productId },
+    });
+
+    if (existing) {
+      existing.quantity += 1;
+      await this.itemRepo.save(existing);
+      this.logger.info('Cart item quantity updated', traceId, 'addCartItem', LogStreamLevel.DebugLight);
+      return existing;
+    }
+
     const variant = await this.variantRepo.findOne({
       where: { productId: dto.productId },
       order: { createdAt: 'ASC' },
@@ -61,7 +73,7 @@ export class CartService {
     const entity = this.itemRepo.create({
       cartId: dto.cartId,
       productId: dto.productId,
-      quantity: dto.quantity,
+      quantity: 1,
       unitPriceCents: variant.priceCents,
     });
     await this.itemRepo.save(entity);
@@ -74,8 +86,18 @@ export class CartService {
     if (!item) {
       throw new NotFoundException('Item not found');
     }
-    await this.itemRepo.delete({ cartId: dto.cartId, productId: dto.productId });
-    this.logger.info('Cart item removed', traceId, 'removeCartItem', LogStreamLevel.DebugLight);
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+      await this.itemRepo.save(item);
+    } else {
+      await this.itemRepo.delete({ cartId: dto.cartId, productId: dto.productId });
+    }
+    this.logger.info('Cart item updated/removed', traceId, 'removeCartItem', LogStreamLevel.DebugLight);
+  }
+
+  async resetCart(dto: ResetCartDto, traceId: string): Promise<void> {
+    await this.itemRepo.delete({ cartId: dto.cartId });
+    this.logger.info('Cart reset', traceId, 'resetCart', LogStreamLevel.DebugLight);
   }
 
   async applyCartPromotion(dto: ApplyCartPromotionDto, traceId: string) {

@@ -10,6 +10,7 @@ import {
   CreateCartDto,
   CreateCartItemDto,
   DeleteCartItemDto,
+  ResetCartDto,
   ApplyCartPromotionDto,
   CreateOrderDto,
   GetZtrackingOrderDto,
@@ -27,6 +28,7 @@ import {
   KT_CREATE_CART,
   KT_ADD_CART_ITEM,
   KT_REMOVE_CART_ITEM,
+  KT_RESET_CART,
   KT_APPLY_CART_PROMOTION,
   KT_CREATE_ORDER,
   KT_GET_ZTRACKING_ORDER,
@@ -39,6 +41,7 @@ import {
 import { ValidateCreateCartDtoPipe } from './pipes/validate-create-cart-dto.pipe';
 import { ValidateAddCartItemDtoPipe } from './pipes/validate-add-cart-item-dto.pipe';
 import { ValidateRemoveCartItemDtoPipe } from './pipes/validate-remove-cart-item-dto.pipe';
+import { ValidateResetCartDtoPipe } from './pipes/validate-reset-cart-dto.pipe';
 import { ValidateApplyCartPromotionDtoPipe } from './pipes/validate-apply-cart-promotion-dto.pipe';
 import { ValidateCreateOrderDtoPipe } from './pipes/validate-create-order-dto.pipe';
 import { ValidateGetOrderDtoPipe } from './pipes/validate-get-order-dto.pipe';
@@ -141,6 +144,17 @@ export class SalesCommerceController {
       traceId,
     );
     return new ResponseDTO(HttpStatus.OK, data, 'Item removed', traceId);
+  }
+
+  @Post(KT_RESET_CART)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: ResetCartDto })
+  async resetCart(
+    @Body(new ValidateResetCartDtoPipe()) resetCartDto: ResetCartDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('resetCart');
+    const data = await this.commerceKafka.resetCart(resetCartDto, traceId);
+    return new ResponseDTO(HttpStatus.OK, data, 'Cart reset', traceId);
   }
 
   @Post(KT_APPLY_CART_PROMOTION)

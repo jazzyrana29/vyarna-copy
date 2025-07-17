@@ -43,6 +43,10 @@ export const KT_GET_CART = 'get-cart';
 export const KT_GET_CART_RESULT = `${KT_GET_CART}-${RESULT}`;
 export const KT_GET_CART_ERROR = `${KT_GET_CART}-${ERROR}`;
 
+export const KT_RESET_CART = 'reset-cart';
+export const KT_RESET_CART_RESULT = `${KT_RESET_CART}-${RESULT}`;
+export const KT_RESET_CART_ERROR = `${KT_RESET_CART}-${ERROR}`;
+
 export const SOCKET_NAMESPACE_PERSON_IDENTITY = 'person-identity';
 export const SOCKET_NAMESPACE_PERSON_SESSION = 'person-session';
 export const KT_CREATE_PERSON = 'create-person-entity';

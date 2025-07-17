@@ -15,6 +15,7 @@ import {
   CreateOrderDto,
   CreateSubscriptionDto,
   DeleteCartItemDto,
+  ResetCartDto,
   DeleteSubscriptionDto,
   generateTraceId,
   GetCategoriesDto,
@@ -37,6 +38,7 @@ import {
   KT_GET_SUBSCRIPTION,
   KT_GET_ZTRACKING_ORDER,
   KT_REMOVE_CART_ITEM,
+  KT_RESET_CART,
   KT_UPDATE_ORDER_SHIPPING,
   KT_VALIDATE_PROMOTION_CODE,
   UpdateOrderShippingDto,
@@ -199,6 +201,20 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       socket.emit(`${KT_REMOVE_CART_ITEM}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_REMOVE_CART_ITEM}-error`, e.message || 'Unknown error');
+    }
+  }
+
+  @SubscribeMessage(KT_RESET_CART)
+  async resetCart(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() resetCartDto: ResetCartDto,
+  ) {
+    const traceId = generateTraceId('sales-commerce-reset-cart');
+    try {
+      const result = await this.kafkaService.resetCart(resetCartDto, traceId);
+      socket.emit(`${KT_RESET_CART}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_RESET_CART}-error`, e.message || 'Unknown error');
     }
   }
 
