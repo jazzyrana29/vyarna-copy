@@ -36,13 +36,8 @@ const LoginScreen = () => {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const prevRoute = useNavigationState((state) => state?.routes[state.index - 1]?.name);
-  const { login, isLoggedIn } = useUserStore(
-    (s) => ({
-      login: s.login,
-      isLoggedIn: s.isLoggedIn,
-    }),
-    shallow,
-  );
+  const login = useUserStore((s) => s.login);
+  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
 
   useEffect(() => {
     if (isLoggedIn) {

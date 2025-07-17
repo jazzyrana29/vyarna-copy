@@ -33,7 +33,8 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     getTotalCents,
   } = useCartStore();
 
-  const { userDetails, hasUserDetails } = useUserStore();
+  const userDetails = useUserStore((s) => s.userDetails);
+  const hasUserDetails = useUserStore((s) => s.hasUserDetails);
   const { isProcessing, paymentStatus, paymentError, resetPayment } =
     usePaymentStore();
 

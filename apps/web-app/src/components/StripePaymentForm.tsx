@@ -37,7 +37,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
   const paymentElementRef = useRef<HTMLDivElement>(null);
 
   const { items, resetCart, getTotalCents, getTotalSavings } = useCartStore();
-  const { userDetails } = useUserStore();
+  const userDetails = useUserStore((s) => s.userDetails);
   const { setProcessing, setPaymentStatus, setPaymentError } =
     usePaymentStore();
 

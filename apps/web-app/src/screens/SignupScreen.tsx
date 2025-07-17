@@ -20,13 +20,8 @@ import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 
 const SignupScreen = () => {
-  const { setUserDetails, isLoggedIn } = useUserStore(
-    (s) => ({
-      setUserDetails: s.setUserDetails,
-      isLoggedIn: s.isLoggedIn,
-    }),
-    shallow,
-  );
+  const setUserDetails = useUserStore((s) => s.setUserDetails);
+  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isLoggedIn) {
