@@ -7,6 +7,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import LoadingOverlay from './src/components/LoadingOverlay';
 import WebsocketsMessages from './src/components/WebsocketsMessages';
 import Cart from './src/components/Cart';
+// Toast displays brief messages on screen.
+//
+// <View style={{ position: 'absolute', bottom: 20, left: 0, right: 0 }}>
+//   <View style={{ backgroundColor: 'rgba(0,0,0,0.7)', padding: 8, borderRadius: 4 }}>
+//     <Text style={{ color: 'white' }}>Message here</Text>
+//   </View>
+// </View>
+import Toast from './src/components/Toast';
 import { useCartStore } from './src/store/cartStore';
 import { useProductSelectorStore } from './src/store/productSelectorStore';
 
@@ -51,6 +59,8 @@ const App: FC<AppProps> = ({ showSocketMessages = true }) => {
         onBackToProducts={openSelector}
       />
       <LoadingOverlay />
+      {/** Toasts appear at the bottom of the screen */}
+      <Toast />
     </HelmetProvider>
   );
 };

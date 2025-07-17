@@ -11,8 +11,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
-  Platform,
 } from 'react-native';
 import { useCartStore } from '../store/cartStore';
 import {
@@ -23,6 +21,7 @@ import {
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
 import { useLoadingStore } from '../store/loadingStore';
+import { showToast } from '../store/toastStore';
 import { formatMoney } from '../utils/currency';
 
 interface CartProps {
@@ -46,13 +45,6 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const { isProcessing, paymentError, resetPayment } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
 
-  const showAlert = (title: string, message: string): void => {
-    if (Platform.OS === 'web') {
-      window.alert(`${title}: ${message}`);
-    } else {
-      Alert.alert(title, message);
-    }
-  };
 
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
@@ -81,26 +73,27 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     newQuantity: number,
   ) => {
     const existing = items.find((i) => i.id === productId);
+    if (!existing) return;
     if (!cartId) {
       if (newQuantity > 0) updateQuantity(productId, newQuantity);
-      else if (existing) removeItem(productId);
+      else removeItem(productId);
       return;
     }
     try {
-      if (newQuantity > 0) {
+      if (newQuantity > existing.quantity) {
         await socketAddCartItem('sales-commerce', {
           cartId,
           productId,
           quantity: newQuantity,
         });
-        updateQuantity(productId, newQuantity);
-      } else if (existing) {
+      } else if (newQuantity < existing.quantity) {
         await socketRemoveCartItem('sales-commerce', { cartId, productId });
-        removeItem(productId);
       }
+      if (newQuantity > 0) updateQuantity(productId, newQuantity);
+      else removeItem(productId);
     } catch (e: any) {
       console.error('Quantity change failed', e);
-      showAlert('Cart Error', e.message || 'Quantity change failed');
+      showToast(e.message || 'Quantity change failed');
     }
   };
 
@@ -114,7 +107,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       removeItem(productId);
     } catch (e: any) {
       console.error('Remove item failed', e);
-      showAlert('Cart Error', e.message || 'Failed to remove item');
+      showToast(e.message || 'Failed to remove item');
     }
   };
 
@@ -128,7 +121,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       resetCart();
     } catch (e: any) {
       console.error('Reset cart failed', e);
-      showAlert('Cart Error', e.message || 'Failed to reset cart');
+      showToast(e.message || 'Failed to reset cart');
     }
   };
 
