@@ -16,7 +16,6 @@ import { NAV_ROUTE_SIGNUP, NAV_ROUTE_HOME } from '../constants/routes';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { shallow } from 'zustand/shallow';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 

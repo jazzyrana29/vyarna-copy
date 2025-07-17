@@ -1,6 +1,4 @@
-export const createContact = async (
-  createContactPayload: any,
-): Promise<void> => {
+export const createContact = async (): Promise<void> => {
   try {
     // const response = await wsApiService.createContact(createContactPayload);
     const response = { success: true };

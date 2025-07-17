@@ -21,9 +21,6 @@ const PreorderScreen: FC = () => {
     openSelector();
   };
 
-  const handleBackToProducts = () => {
-    openSelector();
-  };
 
   return (
     <ScrollView className="flex-1 bg-white">

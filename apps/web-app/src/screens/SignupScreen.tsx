@@ -12,7 +12,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { shallow } from 'zustand/shallow';
 import { NAV_ROUTE_LOGIN, NAV_ROUTE_HOME } from '../constants/routes';
 import { socketCreatePerson } from '../api/person';
 import { CreatePersonDto } from 'ez-utils';
