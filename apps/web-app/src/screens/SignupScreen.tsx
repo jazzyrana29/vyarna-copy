@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView, Image, useWindowDimensions } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  ScrollView,
+  Image,
+  useWindowDimensions,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NAV_ROUTE_LOGIN } from '../constants/routes';
 import { socketCreatePerson } from '../api/person';
@@ -85,16 +94,36 @@ const SignupScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={{ flex: 1, flexDirection: isMobile ? 'column' : 'row', padding: 16 }}>
-        <View style={{ flex: 1, alignItems: isMobile ? 'flex-start' : 'center', marginBottom: isMobile ? 16 : 0 }}>
-          <Image
-            source={require('../assets/images/logo-full.png')}
-            style={{ width: 200, height: 200, marginBottom: 16 }}
-            resizeMode="contain"
-          />
-          <Text>Join Vyarna today and discover our features.</Text>
-        </View>
-        <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, alignItems: 'center', padding: 16 }}>
+        <View
+          style={{
+            width: '100%',
+            maxWidth: 800,
+            flexDirection: isMobile ? 'column' : 'row',
+            backgroundColor: '#fff',
+            borderRadius: 8,
+            overflow: 'hidden',
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: colors.primary,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 24,
+            }}
+          >
+            <Image
+              source={require('../assets/images/logo-full.png')}
+              style={{ width: 180, height: 180, marginBottom: 16 }}
+              resizeMode="contain"
+            />
+            <Text className="text-white text-center">
+              Join Vyarna today and discover our features.
+            </Text>
+          </View>
+          <View style={{ flex: 1, padding: 24 }}>
       <Text className="mb-1 text-neutralText">
         First Name<Text className="text-accent">*</Text>
       </Text>
@@ -217,6 +246,7 @@ const SignupScreen = () => {
 
       {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
         </View>
+      </View>
       </View>
     </ScrollView>
   );

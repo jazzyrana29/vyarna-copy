@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, Image, useWindowDimensions } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Image,
+  useWindowDimensions,
+} from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { socketLoginSession } from '../api/session';
 import { LoginSessionDto } from 'ez-utils';
 import { NAV_ROUTE_SIGNUP } from '../constants/routes';
 import { useNavigation } from '@react-navigation/native';
+import { colors } from '../theme/color';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -37,47 +45,82 @@ const LoginScreen = () => {
   };
 
   return (
-    <View
-      style={{ flex: 1, flexDirection: isMobile ? 'column' : 'row', padding: 16 }}
-    >
-      <View style={{ flex: 1, alignItems: isMobile ? 'flex-start' : 'center' }}>
-        <Image
-          source={require('../assets/images/logo-full.png')}
-          style={{ width: 200, height: 200, marginBottom: 16 }}
-          resizeMode="contain"
-        />
-        <Text>Welcome to Vyarna. Enter your credentials to continue.</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          style={{ borderWidth: 1, marginBottom: 8, padding: 4 }}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={{ borderWidth: 1, marginBottom: 8, padding: 4 }}
-        />
-        <TouchableOpacity
-          onPress={submit}
-          style={{ backgroundColor: '#7ecaf8', padding: 10 }}
+    <View className="flex-1 items-center justify-center bg-background px-4">
+      <View
+        style={{
+          width: '100%',
+          maxWidth: 800,
+          flexDirection: isMobile ? 'column' : 'row',
+          backgroundColor: '#fff',
+          borderRadius: 8,
+          overflow: 'hidden',
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.primary,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 24,
+          }}
         >
-          <Text style={{ color: 'white', textAlign: 'center' }}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(NAV_ROUTE_SIGNUP as never)}
-          style={{ marginTop: 12 }}
-        >
-          <Text style={{ color: '#5AC8FA', textAlign: 'center' }}>
-            Don't have an account? Sign up
+          <Image
+            source={require('../assets/images/logo-full.png')}
+            style={{ width: 180, height: 180, marginBottom: 16 }}
+            resizeMode="contain"
+          />
+          <Text className="text-white text-center">
+            Welcome to Vyarna. Enter your credentials to continue.
           </Text>
-        </TouchableOpacity>
-        {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
+        </View>
+        <View style={{ flex: 1, padding: 24 }}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            style={{
+              borderWidth: 1,
+              borderColor: '#ccc',
+              marginBottom: 12,
+              padding: 8,
+              borderRadius: 4,
+            }}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={{
+              borderWidth: 1,
+              borderColor: '#ccc',
+              marginBottom: 12,
+              padding: 8,
+              borderRadius: 4,
+            }}
+          />
+          <TouchableOpacity
+            onPress={submit}
+            style={{
+              backgroundColor: colors.primary,
+              paddingVertical: 12,
+              borderRadius: 4,
+            }}
+          >
+            <Text style={{ color: 'white', textAlign: 'center' }}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NAV_ROUTE_SIGNUP as never)}
+            style={{ marginTop: 12 }}
+          >
+            <Text style={{ color: colors.primary, textAlign: 'center' }}>
+              Don't have an account? Sign up
+            </Text>
+          </TouchableOpacity>
+          {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
+        </View>
       </View>
     </View>
   );
