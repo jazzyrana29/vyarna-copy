@@ -7,6 +7,7 @@ import { CoreModule } from './modules/core/core.module';
 import { getLoggerConfig } from './utils/common';
 import { ensureDatabaseExists } from './utils/db-init';
 import { LogStreamLevel } from 'ez-logger';
+import { SeedService } from './seeds/seed.service';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { LogStreamLevel } from 'ez-logger';
     CoreModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SeedService],
 })
 export class AppModule {
   private logger = getLoggerConfig(AppModule.name);

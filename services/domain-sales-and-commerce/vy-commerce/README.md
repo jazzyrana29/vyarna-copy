@@ -73,6 +73,16 @@ Run pending migrations:
 npm run migration:run
 ```
 
+### 5. Seeding the Catalog
+
+When `AUTO_SEED` is set to `true`, the service will load products and prices
+from Stripe on startup and upsert them into the local database.  To trigger the
+seeding process during development:
+
+```bash
+AUTO_SEED=true npm run start:dev
+```
+
 ## Kafka Topics
 
 Messages are exchanged over Kafka.  The most relevant topics are:
