@@ -11,6 +11,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
+  Platform,
 } from 'react-native';
 import { useCartStore } from '../store/cartStore';
 import {
@@ -19,6 +21,7 @@ import {
 } from '../hooks/useSalesCommerce';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
+import { useLoadingStore } from '../store/loadingStore';
 import { formatMoney } from '../utils/currency';
 
 interface CartProps {
@@ -42,6 +45,15 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const hasUserDetails = useUserStore((s) => s.hasUserDetails);
   const { isProcessing, paymentStatus, paymentError, resetPayment } =
     usePaymentStore();
+  const isLoading = useLoadingStore((s) => s.isLoading);
+
+  const showAlert = (title: string, message: string): void => {
+    if (Platform.OS === 'web') {
+      window.alert(`${title}: ${message}`);
+    } else {
+      Alert.alert(title, message);
+    }
+  };
 
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
@@ -76,58 +88,59 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     newQuantity: number,
   ) => {
     const existing = items.find((i) => i.id === productId);
-    updateQuantity(productId, newQuantity);
-    if (!cartId) return;
+    if (!cartId) {
+      if (newQuantity > 0) updateQuantity(productId, newQuantity);
+      else if (existing) removeItem(productId);
+      return;
+    }
     try {
       if (newQuantity > 0) {
-        await socketAddCartItem(
-          'sales-commerce',
-          { cartId, productId, quantity: newQuantity },
-          { skipLoading: true },
-        );
+        await socketAddCartItem('sales-commerce', {
+          cartId,
+          productId,
+          quantity: newQuantity,
+        });
+        updateQuantity(productId, newQuantity);
+      } else if (existing) {
+        await socketRemoveCartItem('sales-commerce', { cartId, productId });
+        removeItem(productId);
       }
-      if (newQuantity === 0 && existing && existing.quantity > 0) {
-        await socketRemoveCartItem(
-          'sales-commerce',
-          { cartId, productId },
-          { skipLoading: true },
-        );
-      }
-    } catch (e) {
+    } catch (e: any) {
       console.error('Quantity change failed', e);
+      showAlert('Cart Error', e.message || 'Quantity change failed');
     }
   };
 
   const handleRemoveItem = async (productId: string) => {
-    removeItem(productId);
-    if (!cartId) return;
+    if (!cartId) {
+      removeItem(productId);
+      return;
+    }
     try {
-      await socketRemoveCartItem(
-        'sales-commerce',
-        { cartId, productId },
-        { skipLoading: true },
-      );
-    } catch (e) {
+      await socketRemoveCartItem('sales-commerce', { cartId, productId });
+      removeItem(productId);
+    } catch (e: any) {
       console.error('Remove item failed', e);
+      showAlert('Cart Error', e.message || 'Failed to remove item');
     }
   };
 
   const handleResetCart = async () => {
     const ids = items.map((i) => i.id);
-    resetCart();
-    if (!cartId) return;
+    if (!cartId) {
+      resetCart();
+      return;
+    }
     try {
       await Promise.all(
         ids.map((pid) =>
-          socketRemoveCartItem(
-            'sales-commerce',
-            { cartId, productId: pid },
-            { skipLoading: true },
-          ),
+          socketRemoveCartItem('sales-commerce', { cartId, productId: pid }),
         ),
       );
-    } catch (e) {
+      resetCart();
+    } catch (e: any) {
       console.error('Reset cart failed', e);
+      showAlert('Cart Error', e.message || 'Failed to reset cart');
     }
   };
 
@@ -280,7 +293,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                           onPress={() =>
                             handleQuantityChange(item.id, item.quantity - 1)
                           }
-                          disabled={isProcessing}
+                          disabled={isProcessing || isLoading}
                         >
                           <Text className="text-lg font-bold">-</Text>
                         </TouchableOpacity>
@@ -292,7 +305,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                           onPress={() =>
                             handleQuantityChange(item.id, item.quantity + 1)
                           }
-                          disabled={isProcessing}
+                          disabled={isProcessing || isLoading}
                         >
                           <Text className="text-lg font-bold">+</Text>
                         </TouchableOpacity>
@@ -305,7 +318,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                         <TouchableOpacity
                           className="bg-red-100 px-2 py-1 rounded"
                           onPress={() => handleRemoveItem(item.id)}
-                          disabled={isProcessing}
+                          disabled={isProcessing || isLoading}
                         >
                           <Text className="text-red-600 text-xs">Remove</Text>
                         </TouchableOpacity>
@@ -352,7 +365,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                 <TouchableOpacity
                   className="bg-gray-200 w-full py-3 rounded-lg"
                   onPress={handleResetCart}
-                  disabled={isProcessing}
+                  disabled={isProcessing || isLoading}
                 >
                   <Text className="text-neutralText font-semibold text-center text-base">
                     Reset Cart
