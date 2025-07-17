@@ -10,6 +10,9 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
+import { shallow } from 'zustand/shallow';
 import { NAV_ROUTE_LOGIN, NAV_ROUTE_HOME } from '../constants/routes';
 import { socketCreatePerson } from '../api/person';
 import { CreatePersonDto } from 'ez-utils';
@@ -17,11 +20,14 @@ import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 
 const SignupScreen = () => {
-  const { setUserDetails, isLoggedIn } = useUserStore((s) => ({
-    setUserDetails: s.setUserDetails,
-    isLoggedIn: s.isLoggedIn,
-  }));
-  const navigation = useNavigation();
+  const { setUserDetails, isLoggedIn } = useUserStore(
+    (s) => ({
+      setUserDetails: s.setUserDetails,
+      isLoggedIn: s.isLoggedIn,
+    }),
+    shallow,
+  );
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isLoggedIn) {
       navigation.replace(NAV_ROUTE_HOME as never);

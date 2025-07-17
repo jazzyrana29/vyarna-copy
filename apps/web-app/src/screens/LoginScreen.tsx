@@ -14,6 +14,9 @@ import { socketLoginSession } from '../api/session';
 import { LoginSessionDto } from 'ez-utils';
 import { NAV_ROUTE_SIGNUP, NAV_ROUTE_HOME } from '../constants/routes';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
+import { shallow } from 'zustand/shallow';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 
@@ -31,12 +34,15 @@ const LoginScreen = () => {
   );
   const [message, setMessage] = useState<string | null>(null);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const prevRoute = useNavigationState((state) => state?.routes[state.index - 1]?.name);
-  const { login, isLoggedIn } = useUserStore((s) => ({
-    login: s.login,
-    isLoggedIn: s.isLoggedIn,
-  }));
+  const { login, isLoggedIn } = useUserStore(
+    (s) => ({
+      login: s.login,
+      isLoggedIn: s.isLoggedIn,
+    }),
+    shallow,
+  );
 
   useEffect(() => {
     if (isLoggedIn) {

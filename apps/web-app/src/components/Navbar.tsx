@@ -18,6 +18,7 @@ import { NAV_ROUTE_HOME, NAV_ROUTE_LOGIN } from '../constants/routes';
 import { getBaseUrl } from 'src/utils/env';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
+import { shallow } from 'zustand/shallow';
 
 export interface NavItem {
   key: keyof RootStackParamList;
@@ -54,11 +55,14 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
   const getItemCount = useCartStore((s) => s.getItemCount);
   const openCart = useCartStore((s) => s.openCart);
-  const { isLoggedIn, userDetails, logout } = useUserStore((s) => ({
-    isLoggedIn: s.isLoggedIn,
-    userDetails: s.userDetails,
-    logout: s.logout,
-  }));
+  const { isLoggedIn, userDetails, logout } = useUserStore(
+    (s) => ({
+      isLoggedIn: s.isLoggedIn,
+      userDetails: s.userDetails,
+      logout: s.logout,
+    }),
+    shallow,
+  );
   const hasUser = isLoggedIn;
 
   const handleNavigate = (key: keyof RootStackParamList): void => {
