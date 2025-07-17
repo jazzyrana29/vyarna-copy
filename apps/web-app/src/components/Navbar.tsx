@@ -15,7 +15,7 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { NAV_ROUTE_HOME, NAV_ROUTE_LOGIN } from '../constants/routes';
-import { getBaseUrl } from 'src/utils/env';
+import { getBaseUrl, joinUrlParts } from 'src/utils/env';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
 import { shallow } from 'zustand/shallow';
@@ -23,7 +23,7 @@ import { shallow } from 'zustand/shallow';
 export interface NavItem {
   key: keyof RootStackParamList;
   label: string;
-  path: string;
+  path?: string;
   children?: NavItem[];
 }
 
@@ -66,6 +66,17 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
     navigation.navigate(key);
   };
 
+  const getPathFromKey = (key: keyof RootStackParamList): string => {
+    if (key === NAV_ROUTE_HOME) {
+      return '';
+    }
+    return String(key)
+      .toLowerCase()
+      .replace('vyarna - ', '')
+      .replace(/\s+/g, '-')
+      .replace(/^\/+/, '');
+  };
+
   const renderGroup = (group: NavItem): JSX.Element => {
     const isActive = currentRoute === group.key && !!currentRoute;
     const isOpen = hoveredGroup === group.label;
@@ -89,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
             <Text
               onPress={() => handleNavigate(group.key)}
               accessibilityRole="link"
-              href={`${baseUrl}/${group.path}`}
+              href={joinUrlParts(baseUrl, group.path ?? getPathFromKey(group.key))}
               className={isActive ? 'font-bold text-primary' : 'font-medium'}
             >
               {group.label}
@@ -115,7 +126,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
               >
                 <Text
                   accessibilityRole="link"
-                  href={`${baseUrl}/${child.path}`}
+                  href={joinUrlParts(baseUrl, child.path ?? getPathFromKey(child.key))}
                   className={`px-4 py-2 text-sm ${
                     currentRoute === child.key
                       ? 'text-primary font-semibold'
