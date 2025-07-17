@@ -27,16 +27,28 @@ import {
   SessionDto,
 } from 'ez-utils';
 
-export async function socketCreateSession(roomId: string, dto: CreateSessionDto): Promise<SessionDto> {
+export async function socketCreateSession(
+  roomId: string,
+  dto: CreateSessionDto,
+  opts?: { skipLoading?: boolean },
+): Promise<SessionDto> {
   const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   const { start, stop } = useLoadingStore.getState();
   return new Promise((resolve, reject) => {
-    start();
+    if (!opts?.skipLoading) start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
     const cleanup = () => socketSvc.disconnect();
-    socketSvc.on<SessionDto>(KT_CREATE_SESSION_RESULT, (data) => { cleanup(); stop(); resolve(data); });
-    socketSvc.on<string>(KT_CREATE_SESSION_ERROR, (msg) => { cleanup(); stop(); reject(new Error(msg)); });
+    socketSvc.on<SessionDto>(KT_CREATE_SESSION_RESULT, (data) => {
+      cleanup();
+      if (!opts?.skipLoading) stop();
+      resolve(data);
+    });
+    socketSvc.on<string>(KT_CREATE_SESSION_ERROR, (msg) => {
+      cleanup();
+      if (!opts?.skipLoading) stop();
+      reject(new Error(msg));
+    });
     socketSvc.emit<CreateSessionDto>(KT_CREATE_SESSION, dto);
   });
 }

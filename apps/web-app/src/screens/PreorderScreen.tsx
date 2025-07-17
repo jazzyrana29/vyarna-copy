@@ -1,25 +1,28 @@
 'use client';
 
-import { type FC, useState } from 'react';
+import { type FC } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Email from '../components/Email';
 import Footer from '../components/Footer';
 import Section from '../components/Section';
 import ProductSelector from '../components/ProductSelector';
 import { useCartStore } from '../store/cartStore';
+import { useProductSelectorStore } from '../store/productSelectorStore';
 import { TagsEnum } from '../enums/tags.enum';
 import * as Animatable from 'react-native-animatable';
 
 const PreorderScreen: FC = () => {
-  const [productSelectorVisible, setProductSelectorVisible] = useState(false);
-
   const { getItemCount } = useCartStore();
+  const visible = useProductSelectorStore((s) => s.visible);
+  const openSelector = useProductSelectorStore((s) => s.open);
+  const closeSelector = useProductSelectorStore((s) => s.close);
+
   const handlePreorderClick = () => {
-    setProductSelectorVisible(true);
+    openSelector();
   };
 
   const handleBackToProducts = () => {
-    setProductSelectorVisible(true);
+    openSelector();
   };
 
   return (
@@ -137,11 +140,11 @@ const PreorderScreen: FC = () => {
         </View>
       </View>
       {/* Product Selector Modal */}
-      {productSelectorVisible && (
+      {visible && (
         <ProductSelector
           room={'get-products'}
-          visible={productSelectorVisible}
-          onClose={() => setProductSelectorVisible(false)}
+          visible={visible}
+          onClose={closeSelector}
         />
       )}
 

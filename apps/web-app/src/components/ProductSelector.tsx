@@ -54,6 +54,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   const { sessionId, setSessionId } = usePaymentStore();
   const [loading, setLoading] = useState(true);
   const [addError, setAddError] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     if (productsError || products.length > 0) {
@@ -63,15 +64,17 @@ const ProductSelector: FC<ProductSelectorProps> = ({
 
   const handleAddToCart = async (product: Product) => {
     setAddError(null);
+    setIsAdding(true);
 
     let sessId = sessionId;
     if (!sessId) {
       try {
-        const session = await socketCreateSession('person-session', { personId: null });
+        const session = await socketCreateSession('person-session', { personId: null }, { skipLoading: true });
         sessId = session.sessionId;
         setSessionId(sessId);
       } catch (e) {
         console.error('Session error', e);
+        setIsAdding(false);
         return;
       }
     }
@@ -79,20 +82,25 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     let currentCartId = cartId;
     try {
       if (!currentCartId) {
-        const cart = await socketCreateCart('sales-commerce', { sessionId: sessId });
+        const cart = await socketCreateCart('sales-commerce', { sessionId: sessId }, { skipLoading: true });
         currentCartId = cart.cartId;
         setCartId(cart.cartId);
       }
       if (currentCartId) {
-        await socketAddCartItem('sales-commerce', {
-          cartId: currentCartId,
-          variantId: product.productId,
-          quantity: 1,
-        });
+        await socketAddCartItem(
+          'sales-commerce',
+          {
+            cartId: currentCartId,
+            variantId: product.productId,
+            quantity: 1,
+          },
+          { skipLoading: true },
+        );
       }
     } catch (err: any) {
       console.error('Cart error', err);
       setAddError(err.message || 'Failed to add item');
+      setIsAdding(false);
       return;
     }
 
@@ -111,6 +119,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     // Step 4: close modal & open cart
     onClose();
     openCart();
+    setIsAdding(false);
   };
 
 
@@ -118,7 +127,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     <>
       <Modal visible={visible} animationType="slide" transparent>
         <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
-          <View className="bg-white rounded-xl p-6 mx-6 w-full max-w-md">
+          <View className="bg-white rounded-xl p-6 mx-6 w-full max-w-md" style={{ position: 'relative' }}>
             {/* Header */}
             <View className="flex-row justify-between items-center mb-6">
               <Text className="text-xl font-bold text-primary">
@@ -221,6 +230,11 @@ const ProductSelector: FC<ProductSelectorProps> = ({
               </View>
             )}
           </View>
+          {isAdding && (
+            <View className="absolute inset-0 bg-white bg-opacity-60 rounded-xl items-center justify-center">
+              <ActivityIndicator size="large" color="#5AC8FA" />
+            </View>
+          )}
         </View>
       </Modal>
 

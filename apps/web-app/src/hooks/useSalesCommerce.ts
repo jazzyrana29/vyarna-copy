@@ -83,6 +83,7 @@ export async function socketGetProducts(
 export async function socketCreateCart(
   roomId: string,
   dto: CreateCartDto,
+  opts?: { skipLoading?: boolean },
 ): Promise<CartDto> {
   const socketSvc = new SocketService({
     namespace: SOCKET_NAMESPACE_SALES,
@@ -91,7 +92,7 @@ export async function socketCreateCart(
   const { start, stop } = useLoadingStore.getState();
 
   return new Promise((resolve, reject) => {
-    start();
+    if (!opts?.skipLoading) start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
 
@@ -99,12 +100,12 @@ export async function socketCreateCart(
 
     socketSvc.on<CartDto>(KT_CREATE_CART_RESULT, (data) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       resolve(data);
     });
     socketSvc.on<string>(KT_CREATE_CART_ERROR, (msg) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       reject(new Error(msg));
     });
 
@@ -115,6 +116,7 @@ export async function socketCreateCart(
 export async function socketAddCartItem(
   roomId: string,
   dto: CreateCartItemDto,
+  opts?: { skipLoading?: boolean },
 ): Promise<CartItemDto> {
   const socketSvc = new SocketService({
     namespace: SOCKET_NAMESPACE_SALES,
@@ -123,7 +125,7 @@ export async function socketAddCartItem(
   const { start, stop } = useLoadingStore.getState();
 
   return new Promise((resolve, reject) => {
-    start();
+    if (!opts?.skipLoading) start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
 
@@ -131,12 +133,12 @@ export async function socketAddCartItem(
 
     socketSvc.on<CartItemDto>(KT_ADD_CART_ITEM_RESULT, (data) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       resolve(data);
     });
     socketSvc.on<string>(KT_ADD_CART_ITEM_ERROR, (msg) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       reject(new Error(msg));
     });
 

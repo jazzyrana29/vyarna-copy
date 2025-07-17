@@ -8,6 +8,7 @@ import LoadingOverlay from './src/components/LoadingOverlay';
 import WebsocketsMessages from './src/components/WebsocketsMessages';
 import Cart from './src/components/Cart';
 import { useCartStore } from './src/store/cartStore';
+import { useProductSelectorStore } from './src/store/productSelectorStore';
 
 interface AppProps {
   showSocketMessages?: boolean;
@@ -18,6 +19,7 @@ const App: FC<AppProps> = ({ showSocketMessages = true }) => {
   // const { connectionError } = useWebSocketConnection();
 
   const { isOpen, closeCart } = useCartStore();
+  const openSelector = useProductSelectorStore((s) => s.open);
 
   return (
     <HelmetProvider>
@@ -46,7 +48,7 @@ const App: FC<AppProps> = ({ showSocketMessages = true }) => {
       <Cart
         visible={isOpen}
         onClose={closeCart}
-        onBackToProducts={() => {}}
+        onBackToProducts={openSelector}
       />
       <LoadingOverlay />
     </HelmetProvider>
