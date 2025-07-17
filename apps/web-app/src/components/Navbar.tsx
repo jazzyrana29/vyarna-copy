@@ -55,14 +55,9 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
   const getItemCount = useCartStore((s) => s.getItemCount);
   const openCart = useCartStore((s) => s.openCart);
-  const { isLoggedIn, userDetails, logout } = useUserStore(
-    (s) => ({
-      isLoggedIn: s.isLoggedIn,
-      userDetails: s.userDetails,
-      logout: s.logout,
-    }),
-    shallow,
-  );
+  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
+  const userDetails = useUserStore((s) => s.userDetails, shallow);
+  const logout = useUserStore((s) => s.logout);
   const hasUser = isLoggedIn;
 
   const handleNavigate = (key: keyof RootStackParamList): void => {
