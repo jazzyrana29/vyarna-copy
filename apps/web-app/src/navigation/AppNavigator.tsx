@@ -16,6 +16,7 @@ import HowVyarnaIsMadeScreen from '../screens/HowVyarnaIsMadeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import Navbar, { NavItem } from '../components/Navbar';
+import WebsocketsMessages from '../components/WebsocketsMessages';
 import {
   NAV_ROUTE_ABOUT,
   NAV_ROUTE_BENEFITS,
@@ -112,7 +113,7 @@ export const AppNavigator: FC = (): JSX.Element => {
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-      {/*<WebsocketsMessages />*/}
+      <WebsocketsMessages />
       <View style={{ flex: 1 }}>
         <Navbar items={navItems} />
         <View style={{ flex: 1 }}>

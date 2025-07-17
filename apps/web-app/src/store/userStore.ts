@@ -8,17 +8,29 @@ export interface UserDetails
 
 interface UserStore {
   userDetails: UserDetails | null;
+  isLoggedIn: boolean;
   setUserDetails: (details: UserDetails) => void;
   clearUserDetails: () => void;
+  login: (details?: Partial<UserDetails>) => void;
+  logout: () => void;
   hasUserDetails: () => boolean;
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
   userDetails: null,
+  isLoggedIn: false,
 
   setUserDetails: (details) => set({ userDetails: details }),
 
   clearUserDetails: () => set({ userDetails: null }),
+
+  login: (details) =>
+    set((state) => ({
+      isLoggedIn: true,
+      userDetails: details ? { ...(state.userDetails ?? {}), ...details } : state.userDetails,
+    })),
+
+  logout: () => set({ isLoggedIn: false, userDetails: null }),
 
   hasUserDetails: () => {
     const d = get().userDetails;
@@ -36,6 +48,7 @@ if (typeof localStorage !== 'undefined') {
       useUserStore.setState((state) => ({
         ...state,
         userDetails: parsed.userDetails ?? null,
+        isLoggedIn: parsed.isLoggedIn ?? false,
       }));
     }
   } catch (err) {
@@ -46,7 +59,10 @@ if (typeof localStorage !== 'undefined') {
     try {
       localStorage.setItem(
         USER_KEY,
-        JSON.stringify({ userDetails: state.userDetails }),
+        JSON.stringify({
+          userDetails: state.userDetails,
+          isLoggedIn: state.isLoggedIn,
+        }),
       );
     } catch (err) {
       console.warn('Failed to save user', err);

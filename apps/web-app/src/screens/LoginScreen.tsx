@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   ScrollView,
@@ -12,9 +12,10 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import { socketLoginSession } from '../api/session';
 import { LoginSessionDto } from 'ez-utils';
-import { NAV_ROUTE_SIGNUP } from '../constants/routes';
-import { useNavigation } from '@react-navigation/native';
+import { NAV_ROUTE_SIGNUP, NAV_ROUTE_HOME } from '../constants/routes';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { colors } from '../theme/color';
+import { useUserStore } from '../store/userStore';
 
 const LoginScreen = () => {
   // form state
@@ -31,6 +32,13 @@ const LoginScreen = () => {
   const [message, setMessage] = useState<string | null>(null);
 
   const navigation = useNavigation();
+  const prevRoute = useNavigationState((state) => state?.routes[state.index - 1]?.name);
+  const { login, isLoggedIn } = useUserStore((s) => ({ login: s.login, isLoggedIn: s.isLoggedIn }));
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate(NAV_ROUTE_HOME as never);
+    }
+  }, [isLoggedIn]);
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -74,7 +82,13 @@ const LoginScreen = () => {
 
     try {
       await socketLoginSession('login', dto);
+      login({ email: values.email });
       setMessage('Login successful');
+      if (prevRoute && prevRoute !== NAV_ROUTE_SIGNUP) {
+        navigation.goBack();
+      } else {
+        navigation.navigate(NAV_ROUTE_HOME as never);
+      }
     } catch (err: any) {
       setMessage(err.message);
     }

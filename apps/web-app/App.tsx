@@ -5,8 +5,13 @@ import 'react-native-get-random-values';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingOverlay from './src/components/LoadingOverlay';
+import WebsocketsMessages from './src/components/WebsocketsMessages';
 
-const App: FC = () => {
+interface AppProps {
+  showSocketMessages?: boolean;
+}
+
+const App: FC<AppProps> = ({ showSocketMessages = true }) => {
   // Initialize WebSocket connection and listeners
   // const { connectionError } = useWebSocketConnection();
 
@@ -32,6 +37,7 @@ const App: FC = () => {
       {/*  </div>*/}
       {/*)}*/}
 
+      {showSocketMessages && <WebsocketsMessages />}
       <AppNavigator />
       <LoadingOverlay />
     </HelmetProvider>

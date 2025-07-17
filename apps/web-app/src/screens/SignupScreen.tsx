@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   Pressable,
@@ -10,15 +10,23 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NAV_ROUTE_LOGIN } from '../constants/routes';
+import { NAV_ROUTE_LOGIN, NAV_ROUTE_HOME } from '../constants/routes';
 import { socketCreatePerson } from '../api/person';
 import { CreatePersonDto } from 'ez-utils';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 
 const SignupScreen = () => {
-  const setUserDetails = useUserStore((s) => s.setUserDetails);
+  const { setUserDetails, isLoggedIn } = useUserStore((s) => ({
+    setUserDetails: s.setUserDetails,
+    isLoggedIn: s.isLoggedIn,
+  }));
   const navigation = useNavigation();
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate(NAV_ROUTE_HOME as never);
+    }
+  }, [isLoggedIn]);
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -96,6 +104,7 @@ const SignupScreen = () => {
         addInActiveCampaign: values.addInActiveCampaign,
       });
       setMessage('Signup successful');
+      navigation.navigate(NAV_ROUTE_LOGIN as never);
     } catch (err: any) {
       setMessage(err.message);
     }
