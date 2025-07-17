@@ -28,12 +28,8 @@ export class ProductService {
       name,
       active,
       limit: dtoLimit,
-      targetCurrency,
     } = getProductsDto;
 
-    if (!targetCurrency) {
-      throw new Error('targetCurrency must be defined');
-    }
 
     const requestedLimit = dtoLimit ?? this.defaultLimit;
     let stripeProducts: Stripe.Product[] = [];
@@ -78,24 +74,9 @@ export class ProductService {
           active: true,
           limit: 100,
         });
-        let price = prices.data.find(
-          (pr) => pr.currency === targetCurrency.toLowerCase(),
-        );
-        let amount = price?.unit_amount ?? 0;
-
-        if (!price && prices.data.length) {
-          price = prices.data[0];
-          amount = price.unit_amount ?? 0;
-
-          // if (price.currency !== targetCurrency) {
-          //   const rate = await this.stripeGateway.retrieveExchangeRate(
-          //     price.currency,
-          //     targetCurrency,
-          //   );
-          //   const major = amount / 100;
-          //   amount = Math.round(major * rate * 100);
-          // }
-        }
+        const price = prices.data[0];
+        const amount = price?.unit_amount ?? 0;
+        const currency = price?.currency.toLowerCase() ?? 'usd';
 
         return {
           productId: p.id,
@@ -105,7 +86,7 @@ export class ProductService {
           images: p.images ?? [],
           active: p.active,
           priceCents: amount,
-          targetCurrency: targetCurrency,
+          currency,
           createdAt: new Date((p.created ?? 0) * 1000),
           updatedAt: p.updated
             ? new Date((p.updated as number) * 1000)

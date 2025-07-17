@@ -15,7 +15,6 @@ import {
   useSalesCommerce,
 } from '../hooks/useSalesCommerce';
 import { socketCreateSession } from '../api/session';
-import { useCurrency } from '../hooks/useCurrency';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
 import { usePaymentStore } from '../store/paymentStore';
@@ -28,7 +27,7 @@ interface Product {
   images: string[];
   active: boolean;
   priceCents: number;
-  targetCurrency: string;
+  currency: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -44,10 +43,8 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   room,
   onClose,
 }) => {
-  const currency = useCurrency();
   const { products, error: productsError } = useSalesCommerce(room, {
     active: true,
-    targetCurrency: currency,
   } as GetProductsDto);
   const { addItem, openCart, cartId, setCartId, getItemCount } = useCartStore();
 
@@ -113,7 +110,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
         ? { uri: product.images[0] }
         : require('../assets/images/preorder/value_proposition.png'),
       priceCents: product.priceCents,
-      currency: product.targetCurrency,
+      currency: product.currency,
     });
 
     // Step 4: close modal & open cart
@@ -197,7 +194,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
                           {p.description}
                         </Text>
                         <Text className="text-base font-bold text-primary mt-1">
-                          {formatMoney(p.priceCents, p.targetCurrency)}
+                          {formatMoney(p.priceCents, p.currency)}
                         </Text>
                       </View>
                     </View>

@@ -22,10 +22,7 @@ describe('ProductService', () => {
 
     const service = new ProductService(stripeGateway);
 
-    const result = await service.getProducts(
-      { targetCurrency: 'usd' } as GetProductsDto,
-      'trace',
-    );
+    const result = await service.getProducts({} as GetProductsDto, 'trace');
 
     expect(stripeGateway.listProducts).toHaveBeenCalled();
     expect(result).toEqual([
@@ -37,7 +34,7 @@ describe('ProductService', () => {
         url: undefined,
         images: [],
         priceCents: 500,
-        targetCurrency: 'usd',
+        currency: 'usd',
         createdAt: new Date(1000),
         updatedAt: new Date(2000),
       },
@@ -65,7 +62,6 @@ describe('ProductService', () => {
     const dto: GetProductsDto = {
       active: true,
       name: 'test',
-      targetCurrency: 'usd',
     } as any;
 
     const result = await service.getProducts(dto, 'trace');
@@ -80,39 +76,11 @@ describe('ProductService', () => {
         url: undefined,
         images: [],
         priceCents: 700,
-        targetCurrency: 'usd',
+        currency: 'usd',
         createdAt: new Date(1000),
         updatedAt: new Date(2000),
       },
     ]);
   });
 
-  it('converts price when target currency differs', async () => {
-    const product = {
-      id: 'prod_1',
-      name: 'Test 2',
-      active: true,
-      created: 1,
-      updated: 2,
-    };
-    const price = { unit_amount: 1000, currency: 'usd' };
-    const stripeGateway = {
-      listProducts: jest.fn().mockResolvedValue({ data: [product] }),
-      searchProducts: jest.fn(),
-      retrieveProduct: jest.fn(),
-      listPrices: jest.fn().mockResolvedValue({ data: [price] }),
-      retrieveExchangeRate: jest.fn().mockResolvedValue(0.9),
-    } as unknown as StripeGatewayService;
-
-    const service = new ProductService(stripeGateway);
-
-    const result = await service.getProducts(
-      { targetCurrency: 'eur' } as GetProductsDto,
-      'trace',
-    );
-
-    expect(stripeGateway.retrieveExchangeRate).toHaveBeenCalledWith('usd', 'eur');
-    expect(result[0].priceCents).toBe(900);
-    expect(result[0].targetCurrency).toBe('eur');
-  });
 });

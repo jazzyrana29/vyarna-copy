@@ -1,10 +1,9 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import {
   IsOptional,
   IsUUID,
   IsBoolean,
   IsString,
-  IsISO4217CurrencyCode,
 } from "class-validator";
 
 export class GetProductsDto {
@@ -31,8 +30,4 @@ export class GetProductsDto {
   @ApiPropertyOptional()
   @IsOptional()
   limit?: number;
-
-  @ApiProperty({ description: 'Target currency code (ISO 4217)' })
-  @IsISO4217CurrencyCode()
-  targetCurrency: string;
 }

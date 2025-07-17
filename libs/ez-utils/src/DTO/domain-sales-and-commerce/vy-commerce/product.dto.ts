@@ -32,7 +32,7 @@ export class ProductDto {
 
   @ApiProperty({ description: "Currency code" })
   @IsString()
-  targetCurrency: string;
+  currency: string;
 
   @ApiProperty({ description: "Creation timestamp", required: false })
   @IsOptional()
