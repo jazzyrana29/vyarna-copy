@@ -5,7 +5,6 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Email from '../components/Email';
 import Footer from '../components/Footer';
 import Section from '../components/Section';
-import Cart from '../components/Cart';
 import ProductSelector from '../components/ProductSelector';
 import { useCartStore } from '../store/cartStore';
 import { TagsEnum } from '../enums/tags.enum';
@@ -14,7 +13,7 @@ import * as Animatable from 'react-native-animatable';
 const PreorderScreen: FC = () => {
   const [productSelectorVisible, setProductSelectorVisible] = useState(false);
 
-  const { isOpen, closeCart, getItemCount } = useCartStore();
+  const { getItemCount } = useCartStore();
   const handlePreorderClick = () => {
     setProductSelectorVisible(true);
   };
@@ -145,13 +144,6 @@ const PreorderScreen: FC = () => {
           onClose={() => setProductSelectorVisible(false)}
         />
       )}
-
-      {/* Cart Modal */}
-      <Cart
-        visible={isOpen}
-        onClose={closeCart}
-        onBackToProducts={handleBackToProducts}
-      />
 
       <Footer />
     </ScrollView>

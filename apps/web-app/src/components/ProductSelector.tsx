@@ -53,6 +53,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
 
   const { sessionId, setSessionId } = usePaymentStore();
   const [loading, setLoading] = useState(true);
+  const [addError, setAddError] = useState<string | null>(null);
 
   useEffect(() => {
     if (productsError || products.length > 0) {
@@ -61,6 +62,8 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   }, [productsError, products]);
 
   const handleAddToCart = async (product: Product) => {
+    setAddError(null);
+
     let sessId = sessionId;
     if (!sessId) {
       try {
@@ -87,8 +90,10 @@ const ProductSelector: FC<ProductSelectorProps> = ({
           quantity: 1,
         });
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Cart error', err);
+      setAddError(err.message || 'Failed to add item');
+      return;
     }
 
     // Step 3: add minimal item data locally
@@ -141,6 +146,13 @@ const ProductSelector: FC<ProductSelectorProps> = ({
                     Retry
                   </Text>
                 </TouchableOpacity>
+              </View>
+            )}
+
+            {addError && (
+              <View className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <Text className="text-red-800 font-semibold mb-1">Failed to add item</Text>
+                <Text className="text-red-700 text-sm">{addError}</Text>
               </View>
             )}
 

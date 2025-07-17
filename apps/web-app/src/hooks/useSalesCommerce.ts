@@ -19,7 +19,9 @@ import {
   CreateCartItemDto,
   CartDto,
   CartItemDto,
+  ProductDto,
 } from 'ez-utils';
+import { useLoadingStore } from '../store/loadingStore';
 
 export function useSalesCommerce(
   roomId: string,
@@ -29,34 +31,52 @@ export function useSalesCommerce(
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const socketSvc = new SocketService({
-      namespace: SOCKET_NAMESPACE_SALES,
-      transports: ['websocket'],
-    });
-
-    socketSvc.connect();
-    socketSvc.joinRoom(roomId);
-
-    socketSvc.on<any[]>(KT_GET_PRODUCTS_RESULT, (data) => {
-      console.log('Products received ', data);
-      setProducts(data);
-    });
-    socketSvc.on<string>(KT_GET_PRODUCTS_ERROR, (msg) => {
-      console.log('Error received ', msg);
-      setError(msg);
-    });
-
-    // ask for products
-    socketSvc.emit<GetProductsDto>(KT_GET_PRODUCTS, { ...query });
-
-    //...add more connection of this name space here
-
-    return (): void => {
-      socketSvc.disconnect();
+    let ignore = false;
+    socketGetProducts(roomId, query)
+      .then((data) => {
+        if (!ignore) setProducts(data);
+      })
+      .catch((e) => {
+        if (!ignore) setError(e.message || String(e));
+      });
+    return () => {
+      ignore = true;
     };
   }, [roomId, JSON.stringify(query)]);
 
   return { products, error };
+}
+
+export async function socketGetProducts(
+  roomId: string,
+  query: GetProductsDto,
+): Promise<ProductDto[]> {
+  const socketSvc = new SocketService({
+    namespace: SOCKET_NAMESPACE_SALES,
+    transports: ['websocket'],
+  });
+  const { start, stop } = useLoadingStore.getState();
+
+  return new Promise((resolve, reject) => {
+    start();
+    socketSvc.connect();
+    socketSvc.joinRoom(roomId);
+
+    const cleanup = () => socketSvc.disconnect();
+
+    socketSvc.on<ProductDto[]>(KT_GET_PRODUCTS_RESULT, (data) => {
+      cleanup();
+      stop();
+      resolve(data);
+    });
+    socketSvc.on<string>(KT_GET_PRODUCTS_ERROR, (msg) => {
+      cleanup();
+      stop();
+      reject(new Error(msg));
+    });
+
+    socketSvc.emit<GetProductsDto>(KT_GET_PRODUCTS, { ...query });
+  });
 }
 
 
@@ -68,8 +88,10 @@ export async function socketCreateCart(
     namespace: SOCKET_NAMESPACE_SALES,
     transports: ['websocket'],
   });
+  const { start, stop } = useLoadingStore.getState();
 
   return new Promise((resolve, reject) => {
+    start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
 
@@ -77,10 +99,12 @@ export async function socketCreateCart(
 
     socketSvc.on<CartDto>(KT_CREATE_CART_RESULT, (data) => {
       cleanup();
+      stop();
       resolve(data);
     });
     socketSvc.on<string>(KT_CREATE_CART_ERROR, (msg) => {
       cleanup();
+      stop();
       reject(new Error(msg));
     });
 
@@ -96,8 +120,10 @@ export async function socketAddCartItem(
     namespace: SOCKET_NAMESPACE_SALES,
     transports: ['websocket'],
   });
+  const { start, stop } = useLoadingStore.getState();
 
   return new Promise((resolve, reject) => {
+    start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
 
@@ -105,10 +131,12 @@ export async function socketAddCartItem(
 
     socketSvc.on<CartItemDto>(KT_ADD_CART_ITEM_RESULT, (data) => {
       cleanup();
+      stop();
       resolve(data);
     });
     socketSvc.on<string>(KT_ADD_CART_ITEM_ERROR, (msg) => {
       cleanup();
+      stop();
       reject(new Error(msg));
     });
 

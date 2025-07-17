@@ -6,6 +6,8 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingOverlay from './src/components/LoadingOverlay';
 import WebsocketsMessages from './src/components/WebsocketsMessages';
+import Cart from './src/components/Cart';
+import { useCartStore } from './src/store/cartStore';
 
 interface AppProps {
   showSocketMessages?: boolean;
@@ -14,6 +16,8 @@ interface AppProps {
 const App: FC<AppProps> = ({ showSocketMessages = true }) => {
   // Initialize WebSocket connection and listeners
   // const { connectionError } = useWebSocketConnection();
+
+  const { isOpen, closeCart } = useCartStore();
 
   return (
     <HelmetProvider>
@@ -39,6 +43,11 @@ const App: FC<AppProps> = ({ showSocketMessages = true }) => {
 
       {showSocketMessages && <WebsocketsMessages />}
       <AppNavigator />
+      <Cart
+        visible={isOpen}
+        onClose={closeCart}
+        onBackToProducts={() => {}}
+      />
       <LoadingOverlay />
     </HelmetProvider>
   );
