@@ -4,6 +4,7 @@ import './global.css';
 import 'react-native-get-random-values';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { HelmetProvider } from 'react-helmet-async';
+import LoadingOverlay from './src/components/LoadingOverlay';
 
 const App: FC = () => {
   // Initialize WebSocket connection and listeners
@@ -32,6 +33,7 @@ const App: FC = () => {
       {/*)}*/}
 
       <AppNavigator />
+      <LoadingOverlay />
     </HelmetProvider>
   );
 };

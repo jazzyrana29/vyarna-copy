@@ -54,6 +54,7 @@ import { SalesAffiliateProductsModule } from './modules/domain-sales-and-commerc
 import { SalesReferralsModule } from './modules/domain-sales-and-commerce/vy-sales-referrals/vy-sales-referrals.module';
 import { SalesSubscriptionsModule } from './modules/domain-sales-and-commerce/vy-sales-subscriptions/vy-sales-subscriptions.module';
 import { SalesCommerceModule } from './modules/domain-sales-and-commerce/vy-commerce/vy-commerce.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 import { KafkaModule } from './utils/kafka/kafka.module';
 
@@ -115,6 +116,7 @@ import { KafkaModule } from './utils/kafka/kafka.module';
     SalesReferralsModule,
     SalesSubscriptionsModule,
     SalesCommerceModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
