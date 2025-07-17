@@ -15,15 +15,14 @@ import {
   CreateOrderDto,
   CreateSubscriptionDto,
   DeleteCartItemDto,
-  ResetCartDto,
   DeleteSubscriptionDto,
   generateTraceId,
+  GetCartDto,
   GetCategoriesDto,
   GetProductsDto,
   GetProductVariantsDto,
   GetSubscriptionDto,
   GetZtrackingOrderDto,
-  GetCartDto,
   JoinRoomDto,
   KT_ADD_CART_ITEM,
   KT_APPLY_CART_PROMOTION,
@@ -31,16 +30,17 @@ import {
   KT_CREATE_CART,
   KT_CREATE_ORDER,
   KT_CREATE_SUBSCRIPTION,
+  KT_GET_CART,
   KT_GET_CATEGORIES,
   KT_GET_PRODUCT_VARIANTS,
   KT_GET_PRODUCTS,
-  KT_GET_CART,
   KT_GET_SUBSCRIPTION,
   KT_GET_ZTRACKING_ORDER,
   KT_REMOVE_CART_ITEM,
   KT_RESET_CART,
   KT_UPDATE_ORDER_SHIPPING,
   KT_VALIDATE_PROMOTION_CODE,
+  ResetCartDto,
   UpdateOrderShippingDto,
   ValidatePromotionCodeDto,
 } from 'ez-utils';
@@ -200,6 +200,12 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
       );
       socket.emit(`${KT_REMOVE_CART_ITEM}-result`, result);
     } catch (e: any) {
+      this.logger.error(
+        `Error: ${e}`,
+        traceId,
+        'removeCartItem',
+        LogStreamLevel.DebugLight,
+      );
       socket.emit(`${KT_REMOVE_CART_ITEM}-error`, e.message || 'Unknown error');
     }
   }
