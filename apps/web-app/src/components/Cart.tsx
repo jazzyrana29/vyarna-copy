@@ -78,15 +78,16 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     updateQuantity(productId, newQuantity);
     if (!cartId) return;
     try {
-      await socketRemoveCartItem(
-        'sales-commerce',
-        { cartId, productId },
-        { skipLoading: true },
-      );
       if (newQuantity > 0) {
         await socketAddCartItem(
           'sales-commerce',
           { cartId, productId, quantity: newQuantity },
+          { skipLoading: true },
+        );
+      } else {
+        await socketRemoveCartItem(
+          'sales-commerce',
+          { cartId, productId },
           { skipLoading: true },
         );
       }
