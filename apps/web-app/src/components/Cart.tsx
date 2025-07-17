@@ -75,19 +75,21 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     productId: string,
     newQuantity: number,
   ) => {
+    const existing = items.find((i) => i.id === productId);
     updateQuantity(productId, newQuantity);
     if (!cartId) return;
     try {
+      if (existing && existing.quantity > 0) {
+        await socketRemoveCartItem(
+          'sales-commerce',
+          { cartId, productId },
+          { skipLoading: true },
+        );
+      }
       if (newQuantity > 0) {
         await socketAddCartItem(
           'sales-commerce',
           { cartId, productId, quantity: newQuantity },
-          { skipLoading: true },
-        );
-      } else {
-        await socketRemoveCartItem(
-          'sales-commerce',
-          { cartId, productId },
           { skipLoading: true },
         );
       }
