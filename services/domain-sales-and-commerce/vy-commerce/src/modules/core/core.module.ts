@@ -4,7 +4,9 @@ import { Order } from '../../entities/order.entity';
 import { ZtrackingOrder } from '../../entities/ztracking_order.entity';
 import { Cart } from '../../entities/cart.entity';
 import { CartItem } from '../../entities/cart_item.entity';
+import { Product } from '../../entities/product.entity';
 import { ProductVariant } from '../../entities/product_variant.entity';
+import { ProductImage } from '../../entities/product_image.entity';
 import { OrderService } from './services/order.service';
 import { OrderKafkaService } from './services/order-kafka.service';
 import { ProductService } from './services/product.service';
@@ -27,7 +29,9 @@ import { LogStreamLevel } from 'ez-logger';
       ZtrackingOrder,
       Cart,
       CartItem,
+      Product,
       ProductVariant,
+      ProductImage,
     ]),
   ],
   controllers: [OrderController, PromotionCodesController, CartController],

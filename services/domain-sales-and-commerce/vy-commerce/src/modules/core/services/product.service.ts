@@ -1,16 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Like } from 'typeorm';
 import { GetProductsDto, ProductDto } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
-import { StripeGatewayService } from '../../../services/stripe-gateway.service';
-import Stripe from 'stripe';
+import { Product } from '../../../entities/product.entity';
+import { ProductVariant } from '../../../entities/product_variant.entity';
+import { ProductImage } from '../../../entities/product_image.entity';
 
 @Injectable()
 export class ProductService {
   private logger = getLoggerConfig(ProductService.name);
   private readonly defaultLimit = 100;
 
-  constructor(private readonly stripeGateway: StripeGatewayService) {
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepo: Repository<Product>,
+    @InjectRepository(ProductVariant)
+    private readonly variantRepo: Repository<ProductVariant>,
+    @InjectRepository(ProductImage)
+    private readonly imageRepo: Repository<ProductImage>,
+  ) {
     this.logger.debug(
       `${ProductService.name} initialized`,
       '',
@@ -32,68 +42,46 @@ export class ProductService {
 
 
     const requestedLimit = dtoLimit ?? this.defaultLimit;
-    let stripeProducts: Stripe.Product[] = [];
 
-    if (productId) {
-      try {
-        const prod = await this.stripeGateway.retrieveProduct(productId);
-        stripeProducts = [prod];
-      } catch {
-        stripeProducts = [];
-      }
-    } else if (typeof active === 'boolean' || name) {
-      const clauses = [
-        typeof active === 'boolean' ? `active:"${active}"` : null,
-        name ? `name~"${name}"` : null,
-      ]
-        .filter(Boolean)
-        .join(' AND ');
-      const searchRes = await this.stripeGateway.searchProducts({
-        query: clauses,
-        limit: requestedLimit,
-      });
-      stripeProducts = searchRes.data;
-    } else {
-      const listRes = await this.stripeGateway.listProducts({
-        limit: requestedLimit,
-      });
-      stripeProducts = listRes.data;
-    }
+    const where: any = {};
+    if (productId) where.productId = productId;
+    if (typeof active === 'boolean') where.active = active;
+    if (name) where.name = Like(`%${name}%`);
+
+    const products = await this.productRepo.find({ where, take: requestedLimit });
 
     this.logger.info(
-      `Retrieved ${stripeProducts.length} products`,
+      `Retrieved ${products.length} products`,
       traceId,
       'getProducts',
       LogStreamLevel.DebugLight,
     );
 
-    const withPrices = await Promise.all(
-      stripeProducts.map(async (p) => {
-        const prices = await this.stripeGateway.listPrices({
-          product: p.id,
-          active: true,
-          limit: 100,
+    const withVariants = await Promise.all(
+      products.map(async (p) => {
+        const variant = await this.variantRepo.findOne({
+          where: { productId: p.productId },
+          order: { createdAt: 'ASC' },
         });
-        const price = prices.data[0];
-        const amount = price?.unit_amount ?? 0;
-        const currency = price?.currency.toLowerCase() ?? 'usd';
+        const images = await this.imageRepo.find({
+          where: { productId: p.productId },
+          order: { sortOrder: 'ASC' },
+        });
 
         return {
-          productId: p.id,
+          productId: p.productId,
           name: p.name,
           description: p.description ?? undefined,
-          url: p.url ?? undefined,
-          images: p.images ?? [],
+          url: undefined,
+          images: images.map((img) => img.url),
           active: p.active,
-          priceCents: amount,
-          currency,
-          createdAt: new Date((p.created ?? 0) * 1000),
-          updatedAt: p.updated
-            ? new Date((p.updated as number) * 1000)
-            : undefined,
+          priceCents: variant?.priceCents ?? 0,
+          currency: (variant?.currency || 'USD').toLowerCase(),
+          createdAt: p.createdAt,
+          updatedAt: p.updatedAt,
         } as ProductDto;
       }),
     );
-    return withPrices;
+    return withVariants;
   }
 }
