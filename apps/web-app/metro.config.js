@@ -3,10 +3,11 @@ const { withNativeWind } = require("nativewind/metro");
 const path = require("path");
 
 const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, "../..");
 const config = getDefaultConfig(projectRoot);
 
-// Restrict file watching to this workspace to avoid permission errors on some systems
-config.watchFolders = [projectRoot];
+// Allow Metro to resolve packages from the monorepo libs directory
+config.watchFolders = [projectRoot, path.join(workspaceRoot, "libs")];
 
 // Change Metro server port to avoid conflicts with the default 8081
 config.server = {
