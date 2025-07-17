@@ -13,6 +13,10 @@ import {
   View,
 } from 'react-native';
 import { useCartStore } from '../store/cartStore';
+import {
+  socketAddCartItem,
+  socketRemoveCartItem,
+} from '../hooks/useSalesCommerce';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
 import { formatMoney } from '../utils/currency';
@@ -31,6 +35,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     resetCart,
     getItemCount,
     getTotalCents,
+    cartId,
   } = useCartStore();
 
   const userDetails = useUserStore((s) => s.userDetails);
@@ -64,6 +69,63 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const handleBackToProducts = () => {
     onClose(); // Close cart first
     onBackToProducts(); // Then open product selector
+  };
+
+  const handleQuantityChange = async (
+    productId: string,
+    newQuantity: number,
+  ) => {
+    updateQuantity(productId, newQuantity);
+    if (!cartId) return;
+    try {
+      await socketRemoveCartItem(
+        'sales-commerce',
+        { cartId, productId },
+        { skipLoading: true },
+      );
+      if (newQuantity > 0) {
+        await socketAddCartItem(
+          'sales-commerce',
+          { cartId, productId, quantity: newQuantity },
+          { skipLoading: true },
+        );
+      }
+    } catch (e) {
+      console.error('Quantity change failed', e);
+    }
+  };
+
+  const handleRemoveItem = async (productId: string) => {
+    removeItem(productId);
+    if (!cartId) return;
+    try {
+      await socketRemoveCartItem(
+        'sales-commerce',
+        { cartId, productId },
+        { skipLoading: true },
+      );
+    } catch (e) {
+      console.error('Remove item failed', e);
+    }
+  };
+
+  const handleResetCart = async () => {
+    const ids = items.map((i) => i.id);
+    resetCart();
+    if (!cartId) return;
+    try {
+      await Promise.all(
+        ids.map((pid) =>
+          socketRemoveCartItem(
+            'sales-commerce',
+            { cartId, productId: pid },
+            { skipLoading: true },
+          ),
+        ),
+      );
+    } catch (e) {
+      console.error('Reset cart failed', e);
+    }
   };
 
   // Show payment form if requested
@@ -213,7 +275,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                         <TouchableOpacity
                           className="bg-gray-200 w-8 h-8 rounded-full items-center justify-center"
                           onPress={() =>
-                            updateQuantity(item.id, item.quantity - 1)
+                            handleQuantityChange(item.id, item.quantity - 1)
                           }
                           disabled={isProcessing}
                         >
@@ -225,7 +287,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                         <TouchableOpacity
                           className="bg-gray-200 w-8 h-8 rounded-full items-center justify-center"
                           onPress={() =>
-                            updateQuantity(item.id, item.quantity + 1)
+                            handleQuantityChange(item.id, item.quantity + 1)
                           }
                           disabled={isProcessing}
                         >
@@ -239,7 +301,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
                         </Text>
                         <TouchableOpacity
                           className="bg-red-100 px-2 py-1 rounded"
-                          onPress={() => removeItem(item.id)}
+                          onPress={() => handleRemoveItem(item.id)}
                           disabled={isProcessing}
                         >
                           <Text className="text-red-600 text-xs">Remove</Text>
@@ -286,7 +348,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
 
                 <TouchableOpacity
                   className="bg-gray-200 w-full py-3 rounded-lg"
-                  onPress={resetCart}
+                  onPress={handleResetCart}
                   disabled={isProcessing}
                 >
                   <Text className="text-neutralText font-semibold text-center text-base">
