@@ -20,10 +20,9 @@ import {
 } from '../hooks/useSalesCommerce';
 import { socketCreateAddress, socketUpdateAddress } from '../api/address';
 import { useUserStore } from '../store/userStore';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Linking } from 'react-native';
+import { getBaseUrl, joinUrlParts } from '../utils/env';
 import { NAV_ROUTE_LOGIN } from '../constants/routes';
-import type { RootStackParamList } from '../types';
 import StripePaymentForm from './StripePaymentForm';
 import { usePaymentStore } from '../store/paymentStore';
 import { useLoadingStore } from '../store/loadingStore';
@@ -49,15 +48,10 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     cartId,
   } = useCartStore();
 
-  const hasUserDetails = useUserStore((s) => s.hasUserDetails);
-  const hasAddress = useUserStore((s) => s.hasAddress());
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
   const setAddress = useUserStore((s) => s.setAddress);
   const { isProcessing, paymentError, resetPayment } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
-
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
@@ -66,7 +60,14 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const handleProceedToPayment = () => {
     if (!isLoggedIn) {
       onClose();
-      navigation.navigate(NAV_ROUTE_LOGIN);
+      const loginUrl = joinUrlParts(getBaseUrl(), NAV_ROUTE_LOGIN);
+      if (typeof window !== 'undefined') {
+        window.location.assign(loginUrl);
+      } else {
+        Linking.openURL(loginUrl).catch((err) =>
+          console.warn('Failed to open login URL', err),
+        );
+      }
       return;
     }
 
