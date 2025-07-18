@@ -18,10 +18,13 @@ import {
   socketRemoveCartItem,
   socketResetCart,
 } from '../hooks/useSalesCommerce';
+import { socketCreateAddress, socketUpdateAddress } from '../api/address';
 import { useUserStore } from '../store/userStore';
 import { usePaymentStore } from '../store/paymentStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { showToast } from '../store/toastStore';
+import UserAddressModal from './UserAddressModal';
+import { PhysicalAddressDto } from 'ez-utils';
 import { formatMoney } from '../utils/currency';
 
 interface CartProps {
@@ -42,25 +45,47 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   } = useCartStore();
 
   const hasUserDetails = useUserStore((s) => s.hasUserDetails);
+  const hasAddress = useUserStore((s) => s.hasAddress());
+  const setAddress = useUserStore((s) => s.setAddress);
   const { isProcessing, paymentError, resetPayment } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
 
 
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
   const handleProceedToPayment = () => {
     if (!hasUserDetails()) {
       setShowUserDetailsNeeded(true);
       return;
     }
-
+    if (!hasAddress()) {
+      setShowAddressModal(true);
+      return;
+    }
     setShowPaymentForm(true);
   };
 
   const handlePaymentCancel = () => {
     setShowPaymentForm(false);
     resetPayment();
+  };
+
+  const handleAddressSave = async (address: PhysicalAddressDto) => {
+    try {
+      if (address.addressId) {
+        await socketUpdateAddress('person-identity', address);
+      } else {
+        const created = await socketCreateAddress('person-identity', address);
+        address = created;
+      }
+      setAddress(address);
+    } catch (e) {
+      console.error('Address save failed', e);
+    }
+    setShowAddressModal(false);
+    setShowPaymentForm(true);
   };
 
   const handleBackToProducts = () => {
@@ -146,6 +171,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   }
 
   return (
+    <>
     <Modal
       animationType="slide"
       transparent={true}
@@ -358,6 +384,12 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
         </View>
       </View>
     </Modal>
+    <UserAddressModal
+      visible={showAddressModal}
+      onSave={handleAddressSave}
+      onClose={() => setShowAddressModal(false)}
+    />
+    </>
   );
 };
 

@@ -2,7 +2,15 @@ import React, { FC, useEffect, useState } from 'react';
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
-import { AddressType, PhysicalAddressDto } from 'ez-utils';
+import { PhysicalAddressDto } from 'ez-utils';
+
+// Local copy of AddressType so we don't depend on ez-utils enums
+enum AddressType {
+  HOME = 'HOME',
+  WORK = 'WORK',
+  BILLING = 'BILLING',
+  SHIPPING = 'SHIPPING',
+}
 
 export interface UserAddressModalProps {
   visible: boolean;
