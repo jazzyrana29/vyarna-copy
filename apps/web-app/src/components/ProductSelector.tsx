@@ -15,12 +15,9 @@ import {
   useSalesCommerce,
 } from '../hooks/useSalesCommerce';
 import { socketCreateSession } from '../api/session';
-import { socketCreateAddress, socketUpdateAddress } from '../api/address';
 import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
 import { usePaymentStore } from '../store/paymentStore';
-import { useUserStore } from '../store/userStore';
-import UserAddressModal from './UserAddressModal';
 import { formatMoney } from '../utils/currency';
 
 interface Product {
@@ -52,12 +49,9 @@ const ProductSelector: FC<ProductSelectorProps> = ({
   const { addItem, openCart, cartId, setCartId, getItemCount } = useCartStore();
 
   const { sessionId, setSessionId } = usePaymentStore();
-  const hasAddress = useUserStore((s) => s.hasAddress());
-  const setAddress = useUserStore((s) => s.setAddress);
   const [loading, setLoading] = useState(true);
   const [addError, setAddError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [showAddressModal, setShowAddressModal] = useState(false);
 
   useEffect(() => {
     if (productsError || products.length > 0) {
@@ -119,29 +113,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
       currency: product.currency,
     });
 
-    // Step 4: address collection or open cart
     setIsAdding(false);
-    if (hasAddress) {
-      onClose();
-      openCart();
-    } else {
-      setShowAddressModal(true);
-    }
-  };
-
-  const handleAddressSave = async (address: any) => {
-    try {
-      if (address.addressId) {
-        await socketUpdateAddress('person-identity', address);
-      } else {
-        const created = await socketCreateAddress('person-identity', address);
-        address = created;
-      }
-      setAddress(address);
-    } catch (e) {
-      console.error('Address save failed', e);
-    }
-    setShowAddressModal(false);
     onClose();
     openCart();
   };
@@ -261,16 +233,6 @@ const ProductSelector: FC<ProductSelectorProps> = ({
           )}
         </View>
       </Modal>
-      <UserAddressModal
-        visible={showAddressModal}
-        onSave={handleAddressSave}
-        onClose={() => {
-          setShowAddressModal(false);
-          onClose();
-          openCart();
-        }}
-      />
-
     </>
   );
 };

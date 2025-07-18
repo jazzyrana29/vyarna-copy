@@ -1,6 +1,5 @@
 export * from "./src/utils/kafka";
 export * from "./src/types/kafka";
-export * from "./src/utils/unitTests";
 export * from "./src/services/kafka-message-responder.service";
 export * from "./src/config";
 /**************************************** Enums **************************************************************/
