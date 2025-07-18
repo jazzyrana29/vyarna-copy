@@ -48,6 +48,7 @@ import { PersonProviderModule } from './modules/domain-person-and-identity/vy-pe
 import { PersonRolesModule } from './modules/domain-person-and-identity/vy-person-roles/vy-person-roles.module';
 import { PersonEmailModule } from './modules/domain-person-and-identity/vy-person-email/vy-person-email.module';
 import { PersonSessionModule } from './modules/domain-person-and-identity/vy-session/vy-session.module';
+import { PersonPhysicalAddressModule } from './modules/domain-person-and-identity/vy-physical-address/vy-physical-address.module';
 import { DataVaultModule } from './modules/domain-privacy-and-consent/vy-data-vault/vy-data-vault.module';
 import { ResearchConsentModule } from './modules/domain-privacy-and-consent/vy-research-consent/vy-research-consent.module';
 import { SalesAffiliateProductsModule } from './modules/domain-sales-and-commerce/vy-sales-affiliate-products/vy-sales-affiliate-products.module';
@@ -108,6 +109,7 @@ import { KafkaModule } from './utils/kafka/kafka.module';
     PersonParentModule,
     PersonProviderModule,
     PersonRolesModule,
+    PersonPhysicalAddressModule,
     PersonEmailModule,
     PersonSessionModule,
     DataVaultModule,
