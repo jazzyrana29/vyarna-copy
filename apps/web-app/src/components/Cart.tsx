@@ -20,6 +20,11 @@ import {
 } from '../hooks/useSalesCommerce';
 import { socketCreateAddress, socketUpdateAddress } from '../api/address';
 import { useUserStore } from '../store/userStore';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NAV_ROUTE_LOGIN } from '../constants/routes';
+import type { RootStackParamList } from '../types';
+import StripePaymentForm from './StripePaymentForm';
 import { usePaymentStore } from '../store/paymentStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { showToast } from '../store/toastStore';
@@ -46,27 +51,37 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
 
   const hasUserDetails = useUserStore((s) => s.hasUserDetails);
   const hasAddress = useUserStore((s) => s.hasAddress());
+  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
   const setAddress = useUserStore((s) => s.setAddress);
   const { isProcessing, paymentError, resetPayment } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
 
   const handleProceedToPayment = () => {
-    console.log('Here i am');
-
-    if (!hasAddress) {
-      setShowAddressModal(true);
+    if (!isLoggedIn) {
+      onClose();
+      navigation.navigate(NAV_ROUTE_LOGIN);
       return;
     }
-    setShowPaymentForm(true);
+
+    setShowAddressModal(true);
   };
 
   const handlePaymentCancel = () => {
     setShowPaymentForm(false);
     resetPayment();
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowPaymentForm(false);
+    onClose();
+    showToast('Payment successful');
   };
 
   const handleAddressSave = async (address: PhysicalAddressDto) => {
@@ -157,11 +172,11 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
         onRequestClose={handlePaymentCancel}
       >
         <View className="flex-1 justify-center items-center bg-black bg-opacity-50 p-4">
-          {/*<StripePaymentForm*/}
-          {/*  visible={showPaymentForm}*/}
-          {/*  onSuccess={handlePaymentSuccess}*/}
-          {/*  onCancel={handlePaymentCancel}*/}
-          {/*/>*/}
+          <StripePaymentForm
+            visible={showPaymentForm}
+            onSuccess={handlePaymentSuccess}
+            onCancel={handlePaymentCancel}
+          />
         </View>
       </Modal>
     );
