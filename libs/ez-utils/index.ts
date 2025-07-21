@@ -79,6 +79,7 @@ export * from "./src/DTO/domain-person-and-identity/vy-person-identity/update-se
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/get-one-session.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/delete-session.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-person-identity/login-session.dto";
+export * from "./src/DTO/domain-person-and-identity/vy-person-identity/login-session-response.dto";
 /* ------------------------------------- vy-active-campaign ---------------------------------------------------------*/
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-active-campaign-contact.dto";
 export * from "./src/DTO/domain-person-and-identity/vy-active-campaign/create-contact-list.dto";

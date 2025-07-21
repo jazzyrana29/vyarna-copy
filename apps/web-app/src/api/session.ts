@@ -25,6 +25,7 @@ import {
   DeleteSessionDto,
   LoginSessionDto,
   SessionDto,
+  LoginSessionResponseDto,
 } from 'ez-utils';
 
 export async function socketCreateSession(
@@ -95,7 +96,10 @@ export async function socketDeleteSession(roomId: string, dto: DeleteSessionDto)
   });
 }
 
-export async function socketLoginSession(roomId: string, dto: LoginSessionDto): Promise<SessionDto> {
+export async function socketLoginSession(
+  roomId: string,
+  dto: LoginSessionDto,
+): Promise<LoginSessionResponseDto> {
   const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   const { start, stop } = useLoadingStore.getState();
   return new Promise((resolve, reject) => {
@@ -103,7 +107,11 @@ export async function socketLoginSession(roomId: string, dto: LoginSessionDto): 
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
     const cleanup = () => socketSvc.disconnect();
-    socketSvc.on<SessionDto>(KT_LOGIN_SESSION_RESULT, (data) => { cleanup(); stop(); resolve(data); });
+    socketSvc.on<LoginSessionResponseDto>(KT_LOGIN_SESSION_RESULT, (data) => {
+      cleanup();
+      stop();
+      resolve(data);
+    });
     socketSvc.on<string>(KT_LOGIN_SESSION_ERROR, (msg) => { cleanup(); stop(); reject(new Error(msg)); });
     socketSvc.emit<LoginSessionDto>(KT_LOGIN_SESSION, dto);
   });

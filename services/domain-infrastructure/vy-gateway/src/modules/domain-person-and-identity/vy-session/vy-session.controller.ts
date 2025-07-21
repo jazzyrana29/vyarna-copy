@@ -17,6 +17,7 @@ import {
   GetOneSessionDto,
   DeleteSessionDto,
   LoginSessionDto,
+  LoginSessionResponseDto,
 } from 'ez-utils';
 import { ValidateCreateSessionDtoPipe } from './pipes/validate-create-session-dto.pipe';
 import { ValidateUpdateSessionDtoPipe } from './pipes/validate-update-session-dto.pipe';
@@ -103,11 +104,11 @@ export class PersonSessionController {
   }
 
   @Post(KT_LOGIN_SESSION)
-  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiCreatedResponse({ type: ResponseDTO<LoginSessionResponseDto> })
   @ApiBody({ type: LoginSessionDto })
   async loginSession(
     @Body() dto: LoginSessionDto,
-  ): Promise<ResponseDTO<any>> {
+  ): Promise<ResponseDTO<LoginSessionResponseDto>> {
     const traceId = generateTraceId('loginSession');
     this.logger.info('traceId generated successfully', traceId, 'loginSession', LogStreamLevel.ProdStandard);
     return new ResponseDTO(
