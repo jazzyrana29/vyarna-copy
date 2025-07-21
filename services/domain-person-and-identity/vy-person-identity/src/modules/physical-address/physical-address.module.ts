@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhysicalAddress } from '../../entities/physical-address.entity';
+import { Person } from '../../entities/person.entity';
 import { PhysicalAddressController } from './physical-address.controller';
 import { PhysicalAddressKafkaService } from './services/physical-address-kafka.service';
 import { PhysicalAddressService } from './services/physical-address.service';
@@ -9,7 +10,7 @@ import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../utils/common';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PhysicalAddress])],
+  imports: [TypeOrmModule.forFeature([PhysicalAddress, Person])],
   controllers: [PhysicalAddressController],
   providers: [PhysicalAddressService, PhysicalAddressKafkaService],
 })
