@@ -23,7 +23,7 @@ export class ZtrackingPerson extends BaseEntity {
   @Index()
   username: string | null;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true  })
   @Index()
   nameFirst: string;
 
@@ -31,18 +31,18 @@ export class ZtrackingPerson extends BaseEntity {
   @Index()
   nameMiddle: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true  })
   @Index()
   nameLastFirst: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true  })
   @Index()
   nameLastSecond: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   password: string;
 
-  @Column({ default: false })
+  @Column({  nullable: true  })
   @Index()
   isDeleted: boolean;
 
@@ -56,6 +56,6 @@ export class ZtrackingPerson extends BaseEntity {
   updatedAt?: Date;
 
   @Index()
-  @Column()
+  @Column({ nullable: true })
   versionDate: Date;
 }

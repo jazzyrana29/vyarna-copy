@@ -21,17 +21,17 @@ export class ZtrackingPhone extends BaseEntity {
   @Column('uuid')
   personId: string;
 
-  @Column({ type: 'enum', enum: PhoneType, default: PhoneType.MOBILE })
+  @Column({ type: 'enum', enum: PhoneType, default: PhoneType.MOBILE,nullable: true })
   @Index()
   type: PhoneType;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   phoneNumber: string;
 
-  @Column({ default: false })
+  @Column({ nullable: true })
   isVerified: boolean;
 
-  @Column({ default: false })
+  @Column({ nullable: true })
   isPrimary: boolean;
 
   @Column({ nullable: true })
@@ -41,6 +41,6 @@ export class ZtrackingPhone extends BaseEntity {
   updatedAt?: Date;
 
   @Index()
-  @Column()
+  @Column({ nullable: true })
   versionDate: Date;
 }

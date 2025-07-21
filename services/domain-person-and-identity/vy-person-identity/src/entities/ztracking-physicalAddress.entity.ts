@@ -24,30 +24,30 @@ export class ZtrackingPhysicalAddress extends BaseEntity {
   @Column({
     type: 'enum',
     enum: AddressType,
-    default: AddressType.HOME,
+    default: AddressType.HOME,nullable: true
   })
   @Index()
   addressType: AddressType;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   addressLine1: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   addressLine2?: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100,nullable: true  })
   city: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100,nullable: true  })
   state: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'varchar', length: 20,nullable: true  })
   postalCode: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100,nullable: true  })
   country: string;
 
-  @Column({ default: false })
+  @Column({ nullable: true })
   isPrimary: boolean;
 
   @Column({ nullable: true })
@@ -57,6 +57,6 @@ export class ZtrackingPhysicalAddress extends BaseEntity {
   updatedAt?: Date;
 
   @Index()
-  @Column()
+  @Column({ nullable: true })
   versionDate: Date;
 }
