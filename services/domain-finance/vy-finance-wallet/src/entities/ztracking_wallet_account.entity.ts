@@ -6,20 +6,20 @@ export class ZtrackingWalletAccount extends BaseEntity {
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
-  accountId: string;
+  @Column('uuid', { nullable: true })
+  accountId?: string;
 
-  @Column('uuid')
-  personId: string;
+  @Column('uuid', { nullable: true })
+  personId?: string;
 
-  @Column({ type: 'varchar', length: 20 })
-  type: 'PROVIDER' | 'CONSUMER' | 'AFFILIATE' | 'INTERNAL';
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  type?: 'PROVIDER' | 'CONSUMER' | 'AFFILIATE' | 'INTERNAL';
 
-  @Column({ length: 3 })
-  currency: string;
+  @Column({ length: 3, nullable: true })
+  currency?: string;
 
-  @Column('bigint', { default: 0 })
-  balanceCents: number;
+  @Column('bigint', { nullable: true })
+  balanceCents?: number;
 
   @Column({ nullable: true })
   createdAt?: Date;
@@ -27,6 +27,6 @@ export class ZtrackingWalletAccount extends BaseEntity {
   @Column({ nullable: true })
   updatedAt?: Date;
 
-  @Column()
-  versionDate: Date;
+  @Column({ nullable: true })
+  versionDate?: Date;
 }

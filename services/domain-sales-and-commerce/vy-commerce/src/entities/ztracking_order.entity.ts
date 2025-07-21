@@ -6,20 +6,20 @@ export class ZtrackingOrder extends BaseEntity {
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
-  orderId: string;
+  @Column('uuid', { nullable: true })
+  orderId?: string;
 
-  @Column('uuid')
-  personId: string;
+  @Column('uuid', { nullable: true })
+  personId?: string;
 
-  @Column('int')
-  totalCents: number;
+  @Column('int', { nullable: true })
+  totalCents?: number;
 
-  @Column({ length: 30 })
-  status: string;
+  @Column({ length: 30, nullable: true })
+  status?: string;
 
-  @Column({ length: 3 })
-  currency: string;
+  @Column({ length: 3, nullable: true })
+  currency?: string;
 
   @Column({ length: 100, nullable: true })
   paymentIntentId?: string;
@@ -30,6 +30,6 @@ export class ZtrackingOrder extends BaseEntity {
   @Column({ nullable: true })
   updatedAt?: Date;
 
-  @Column()
-  versionDate: Date;
+  @Column({ nullable: true })
+  versionDate?: Date;
 }
