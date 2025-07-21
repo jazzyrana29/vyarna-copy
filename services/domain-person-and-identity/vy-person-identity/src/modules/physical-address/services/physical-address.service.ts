@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import {
   CreatePhysicalAddressDto,
   GetOnePersonDto,
@@ -9,6 +10,7 @@ import {
 import { LogStreamLevel } from 'ez-logger';
 import { getLoggerConfig } from '../../../utils/common';
 import { PhysicalAddress } from '../../../entities/physical-address.entity';
+import { Person } from '../../../entities/person.entity';
 
 @Injectable()
 export class PhysicalAddressService {
@@ -17,6 +19,8 @@ export class PhysicalAddressService {
   constructor(
     @InjectRepository(PhysicalAddress)
     private readonly addressRepo: Repository<PhysicalAddress>,
+    @InjectRepository(Person)
+    private readonly personRepo: Repository<Person>,
   ) {
     this.logger.debug(
       `${PhysicalAddressService.name} initialized`,
@@ -30,6 +34,12 @@ export class PhysicalAddressService {
     dto: CreatePhysicalAddressDto,
     traceId: string,
   ): Promise<PhysicalAddress> {
+    const person = await this.personRepo.findOne({
+      where: { personId: dto.personId },
+    });
+    if (!person) {
+      throw new NotFoundException(`person ${dto.personId} not found`);
+    }
     const existing = await this.addressRepo.find({
       where: { personId: dto.personId },
     });
