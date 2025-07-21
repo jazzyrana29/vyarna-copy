@@ -3,6 +3,8 @@ import { PersonWithoutPasswordDto, PhysicalAddressDto } from 'ez-utils';
 
 export interface UserDetails
   extends Omit<PersonWithoutPasswordDto, 'personId' | 'stripeCustomerId'> {
+  /** Optional identifier of the logged in person */
+  personId?: string;
   addInActiveCampaign?: boolean;
 }
 
