@@ -6,12 +6,12 @@ import { ZtrackingEmailService } from './ztracking-email.service';
 import {
   CreateEmailDto,
   EmailDto,
-  GetOneEmailDto,
-  UpdateEmailDto,
-  GetZtrackingEmailDto,
-  ZtrackingEmailDto,
   encodeKafkaMessage,
+  GetOneEmailDto,
+  GetZtrackingEmailDto,
   KT_CONTACT_UPDATED,
+  UpdateEmailDto,
+  ZtrackingEmailDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -40,7 +40,12 @@ export class EmailService {
   ): Promise<EmailDto> {
     const entity = this.emailRepo.create(createEmailDto);
     await this.emailRepo.save(entity);
-    this.logger.info('Email created', traceId, 'createEmail', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Email created',
+      traceId,
+      'createEmail',
+      LogStreamLevel.ProdStandard,
+    );
 
     // The current implementation of CREATED broadcasts to all connected
     // sockets which is inefficient and insecure as it exposes user
@@ -81,7 +86,12 @@ export class EmailService {
     const updated = await this.emailRepo.findOne({
       where: { emailId: updateEmailDto.emailId },
     });
-    this.logger.info('Email updated', traceId, 'updateEmail', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Email updated',
+      traceId,
+      'updateEmail',
+      LogStreamLevel.ProdStandard,
+    );
     if (updated) {
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
@@ -109,7 +119,12 @@ export class EmailService {
         `no email exists with id => ${getOneEmailDto.emailId}`,
       );
     }
-    this.logger.info('Email retrieved', traceId, 'getEmail', LogStreamLevel.ProdStandard);
+    this.logger.info(
+      'Email retrieved',
+      traceId,
+      'getEmail',
+      LogStreamLevel.ProdStandard,
+    );
     return entity;
   }
 
@@ -117,6 +132,7 @@ export class EmailService {
     getZtrackingEmailDto: GetZtrackingEmailDto,
     traceId: string,
   ): Promise<ZtrackingEmailDto[]> {
+    //@ts-ignore
     return this.ztrackingEmailService.getZtrackingEmail(
       getZtrackingEmailDto,
       traceId,
