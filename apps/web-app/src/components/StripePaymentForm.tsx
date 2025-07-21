@@ -11,8 +11,21 @@ import {
 import { usePaymentStore } from '../store/paymentStore';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
-// import { wsApiService } from '../services/websocketApiService';
-import type { PaymentIntentCreatedPayload } from '../constants/websocket-messages';
+import {
+  socketCreatePaymentIntent,
+  socketConfirmPaymentIntent,
+} from '../api/payments';
+import {
+  createEmbeddedPaymentForm,
+  confirmEmbeddedPayment,
+} from '../utils/stripe';
+import {
+  SOCKET_NAMESPACE_FINANCE_PAYMENTS,
+} from '../constants/socketEvents';
+import type {
+  CreatePaymentIntentPayloadDto,
+  ConfirmPaymentIntentDto,
+} from 'ez-utils';
 
 interface StripePaymentFormProps {
   visible: boolean;
@@ -69,24 +82,31 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
     setError(null);
 
     try {
-      console.log('Creating payment intent for items:', items);
+      const primary = userDetails.addresses?.find((a) => a.isPrimary);
 
-      const response: PaymentIntentCreatedPayload =
-        await wsApiService.createPaymentIntent(items, userDetails);
+      const payload: CreatePaymentIntentPayloadDto = {
+        items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
+        customerDetails: {
+          firstName: userDetails.nameFirst,
+          lastName: userDetails.nameLastFirst,
+          email: userDetails.email,
+          address: {
+            street: primary?.addressLine1 || '',
+            city: primary?.city || '',
+            state: primary?.state || '',
+            zip: primary?.postalCode || '',
+            country: primary?.country || '',
+          },
+        },
+      };
 
-      if (response.success) {
-        setClientSecret(response.clientSecret);
-        setPaymentIntentId(response.paymentIntentId);
+      const response = await socketCreatePaymentIntent(
+        SOCKET_NAMESPACE_FINANCE_PAYMENTS,
+        payload,
+      );
 
-        console.log('Payment Intent Created:', {
-          paymentIntentId: response.paymentIntentId,
-          clientSecret: response.clientSecret.substring(0, 30) + '...',
-          totalAmount: response.totalAmount,
-          appliedCoupons: response.appliedCoupons,
-        });
-      } else {
-        throw new Error('Failed to create payment intent');
-      }
+      setClientSecret(response.clientSecret);
+      setPaymentIntentId(response.paymentIntentId);
     } catch (error: any) {
       console.error('Error creating payment intent:', error);
       setError(error.message || 'Failed to initialize payment');
@@ -102,10 +122,8 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
     setError(null);
 
     try {
-      console.log('Initializing Stripe Elements...');
-
       const { elements, paymentElement, stripe } =
-        await wsApiService.createEmbeddedPaymentForm(clientSecret);
+        await createEmbeddedPaymentForm(clientSecret);
 
       setStripeElements(elements);
       setPaymentElement(paymentElement);
@@ -157,7 +175,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
 
         // Real Stripe payment processing
         const returnUrl = `${window.location.origin}/payment-success`;
-        const result = await wsApiService.confirmEmbeddedPayment(
+        const result = await confirmEmbeddedPayment(
           stripe,
           stripeElements,
           returnUrl,
@@ -172,9 +190,16 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
           result.paymentIntent.status === 'succeeded'
         ) {
           // Confirm with backend
-          const confirmResponse = await wsApiService.confirmPayment(
+          const confirmDto: ConfirmPaymentIntentDto = {
             paymentIntentId,
-            userDetails.email,
+            paymentMethodId: result.paymentIntent
+              ?.payment_method as string,
+            receiptEmail: userDetails.email,
+            returnUrl,
+          };
+          const confirmResponse = await socketConfirmPaymentIntent(
+            SOCKET_NAMESPACE_FINANCE_PAYMENTS,
+            confirmDto,
           );
 
           if (confirmResponse.success) {
@@ -205,9 +230,14 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
                   // Simulate processing delay
                   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-                  const confirmResponse = await wsApiService.confirmPayment(
+                  const confirmDto: ConfirmPaymentIntentDto = {
                     paymentIntentId,
-                    userDetails.email,
+                    paymentMethodId: 'simulated',
+                    receiptEmail: userDetails.email,
+                  };
+                  const confirmResponse = await socketConfirmPaymentIntent(
+                    SOCKET_NAMESPACE_FINANCE_PAYMENTS,
+                    confirmDto,
                   );
 
                   if (confirmResponse.success) {
