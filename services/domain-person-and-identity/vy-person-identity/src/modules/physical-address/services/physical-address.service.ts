@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PhysicalAddress } from '../../entities/physical-address.entity';
 import {
   CreatePhysicalAddressDto,
-  UpdatePhysicalAddressDto,
   GetOnePersonDto,
+  UpdatePhysicalAddressDto,
 } from 'ez-utils';
-import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { getLoggerConfig } from '../../../utils/common';
+import { PhysicalAddress } from '../../../entities/physical-address.entity';
 
 @Injectable()
 export class PhysicalAddressService {
