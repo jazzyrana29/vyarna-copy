@@ -49,6 +49,7 @@ export class HealthCryAnalyzerWebsocket implements OnGatewayInit {
       'handleConnection',
       LogStreamLevel.DebugLight,
     );
+    (socket.data as any).logger = this.logger;
   }
 
   handleDisconnect(socket: Socket) {

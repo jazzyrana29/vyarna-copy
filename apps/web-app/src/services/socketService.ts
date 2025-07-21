@@ -43,6 +43,10 @@ export class SocketService {
    */
   joinRoom(room: string) {
     if (!this.socket) this.connect();
+    console.log(
+      `[SocketService:${this.opts.namespace}] emit join`,
+      { room },
+    );
     this.socket.emit('join', { room });
   }
 
@@ -51,6 +55,10 @@ export class SocketService {
    */
   emit<T = any>(event: string, payload?: T) {
     if (!this.socket) this.connect();
+    console.log(
+      `[SocketService:${this.opts.namespace}] emit ${event}`,
+      payload,
+    );
     this.socket.emit(event, payload);
   }
 
@@ -59,7 +67,13 @@ export class SocketService {
    */
   on<T = any>(event: string, handler: (data: T) => void) {
     if (!this.socket) this.connect();
-    this.socket.on(event, handler);
+    this.socket.on(event, (data: T) => {
+      console.log(
+        `[SocketService:${this.opts.namespace}] on ${event}`,
+        data,
+      );
+      handler(data);
+    });
   }
 
   /**

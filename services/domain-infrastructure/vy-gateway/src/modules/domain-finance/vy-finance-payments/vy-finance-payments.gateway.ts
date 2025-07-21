@@ -68,6 +68,7 @@ export class FinancePaymentsWebsocket implements OnGatewayInit {
       'handleConnection',
       LogStreamLevel.DebugLight,
     );
+    (socket.data as any).logger = this.logger;
     const queryUser = socket.handshake.query['userId'];
     if (typeof queryUser === 'string' && queryUser) {
       socket.join(queryUser);
