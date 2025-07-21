@@ -92,9 +92,9 @@ export class PaymentIntentService {
       LogStreamLevel.DebugLight,
     );
 
-    const existing = await this.stripeGateway.findCustomerByEmail(
-      createPaymentIntentPayloadDto.customerDetails.email,
-    );
+    const customerEmail =
+      createPaymentIntentPayloadDto.customerDetails?.email;
+    const existing = await this.stripeGateway.findCustomerByEmail(customerEmail);
     this.logger.info(
       `Found existing customer: ${existing?.id || 'none'}`,
       traceId,

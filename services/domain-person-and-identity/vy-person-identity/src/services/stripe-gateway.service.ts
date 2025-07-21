@@ -18,7 +18,19 @@ export class StripeGatewayService {
   }
 
 
-  async findCustomerByEmail(email: string): Promise<Stripe.Customer | null> {
+  async findCustomerByEmail(
+    email?: string,
+  ): Promise<Stripe.Customer | null> {
+    if (!email) {
+      this.logger.debug(
+        'No email provided for findCustomerByEmail',
+        '',
+        'findCustomerByEmail',
+        LogStreamLevel.DebugLight,
+      );
+      return null;
+    }
+
     if (typeof this.stripe.customers.search === 'function') {
       const res = await this.stripe.customers.search({
         query: `email:'${email.replace("'", "\\'")}'`,
