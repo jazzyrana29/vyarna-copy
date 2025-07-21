@@ -69,15 +69,14 @@ export class PaymentIntentService {
     let originalAmount = 0;
 
     for (const item of items) {
-      if (!item.stripePriceId) {
-        throw new Error(`Missing stripePriceId on item ${item.id}`);
+      if (typeof item.priceCents !== 'number' || !item.currency) {
+        throw new Error(`Missing price or currency on item ${item.id}`);
       }
-      const price = await this.stripeGateway.retrievePrice(item.stripePriceId);
-      if (!currency) currency = price.currency;
-      if (price.currency !== currency) {
+      if (!currency) currency = item.currency;
+      if (item.currency !== currency) {
         throw new Error('Mixed currencies are not allowed in a PaymentIntent');
       }
-      originalAmount += (price.unit_amount ?? 0) * item.quantity;
+      originalAmount += item.priceCents * item.quantity;
     }
     return { originalAmount, currency: currency! };
   }

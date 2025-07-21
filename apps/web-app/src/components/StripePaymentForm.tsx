@@ -85,7 +85,12 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
       const primary = userDetails.addresses?.find((a) => a.isPrimary);
 
       const payload: CreatePaymentIntentPayloadDto = {
-        items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
+        items: items.map((i) => ({
+          id: i.id,
+          quantity: i.quantity,
+          priceCents: i.priceCents,
+          currency: i.currency,
+        })),
         customerDetails: {
           firstName: userDetails.nameFirst,
           lastName: userDetails.nameLastFirst,

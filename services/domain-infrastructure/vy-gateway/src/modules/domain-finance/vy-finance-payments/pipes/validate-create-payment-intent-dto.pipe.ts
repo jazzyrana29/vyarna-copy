@@ -8,6 +8,14 @@ export class ValidateCreatePaymentIntentDtoPipe implements PipeTransform {
     if (!Array.isArray(items) || items.length === 0 || !customerDetails) {
       throw new BadRequestException('Missing required fields');
     }
+    for (const item of items) {
+      if (
+        typeof item.priceCents !== 'number' ||
+        typeof item.currency !== 'string'
+      ) {
+        throw new BadRequestException('Invalid item payload');
+      }
+    }
     return value;
   }
 }

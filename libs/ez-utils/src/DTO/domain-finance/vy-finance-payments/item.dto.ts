@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID, IsInt, Min, IsOptional, IsString } from 'class-validator';
+import { IsUUID, IsInt, Min, IsString } from 'class-validator';
 
 export class ItemDto {
   @ApiProperty({ description: 'Internal product ID' })
@@ -11,8 +11,11 @@ export class ItemDto {
   @Min(1)
   quantity: number;
 
-  @ApiProperty({ description: 'Optional Stripe Price ID', required: false })
-  @IsOptional()
+  @ApiProperty({ description: 'Unit price in cents' })
+  @IsInt()
+  priceCents: number;
+
+  @ApiProperty({ description: 'Currency code (ISO 4217)' })
   @IsString()
-  stripePriceId?: string;
+  currency: string;
 }
