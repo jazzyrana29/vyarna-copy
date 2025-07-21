@@ -200,6 +200,23 @@ function startPackages(packages) {
   });
 }
 
+function updateMigrations(packages) {
+  packages.forEach((pkg) => {
+    const pkgJson = JSON.parse(
+      fs.readFileSync(path.join(pkg.path, "package.json"), "utf8"),
+    );
+    if (
+      !pkgJson.scripts ||
+      !pkgJson.scripts["migration:init"] ||
+      !pkgJson.scripts["migration:run"]
+    ) {
+      return;
+    }
+    runNpm(pkg, "run migration:init");
+    runNpm(pkg, "run migration:run");
+  });
+}
+
 function usage() {
   console.log(`Usage: node repo.js <command> [names...]
 Commands:
@@ -218,6 +235,7 @@ Commands:
   list [names...]            list packages (all types)
   run <script> [names...]    run arbitrary npm script in packages
   update-libs <lib...> [--in name]   rebuild libs and reinstall them in packages
+  update-migrations [names...]       run migration:init and migration:run in services
   stripe <args...>           run Stripe CLI using STRIPE_SECRET_KEY
 node repo.js install
   node repo.js clean-install
@@ -427,6 +445,9 @@ switch (cmd) {
     });
     break;
   }
+  case "update-migrations":
+    updateMigrations(filterPackages(services, args));
+    break;
   case "run":
     const script = args.shift();
     if (!script) {
