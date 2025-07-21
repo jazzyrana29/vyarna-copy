@@ -12,8 +12,8 @@ export class ZtrackingAction extends BaseEntity {
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
-  actionId: string;
+  @Column('uuid', { nullable: true })
+  actionId?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   @Index()
@@ -25,7 +25,7 @@ export class ZtrackingAction extends BaseEntity {
   @Column({ type: 'varchar', length: 500, nullable: true })
   description?: string;
 
-  @Column({ default: false, nullable: true })
+  @Column({ nullable: true })
   @Index()
   isDeleted?: boolean;
 
@@ -39,6 +39,6 @@ export class ZtrackingAction extends BaseEntity {
   updatedAt?: Date;
 
   @Index()
-  @Column()
-  versionDate: Date;
+  @Column({ nullable: true })
+  versionDate?: Date;
 }
