@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,24 +15,24 @@ import { EzKafkaProducer } from 'ez-kafka-producer';
 import { mapStripeIntentStatus } from './payment-intent.utils';
 import Stripe from 'stripe';
 import {
+  CapturePaymentIntentDto,
+  ConfirmedPaymentIntentDto,
+  ConfirmPaymentIntentDto,
   CreatePaymentIntentPayloadDto,
+  CreateRefundDto,
+  encodeKafkaMessage,
   GetPaymentIntentDto,
   GetPaymentIntentStatusDto,
+  GetPaymentRefundDto,
   GetZtrackingPaymentIntentDto,
+  KT_CREATE_CONTACT,
   PaymentIntentCreatedDto,
   PaymentIntentDto,
-  ZtrackingPaymentIntentDto,
-  CreateRefundDto,
-  GetPaymentRefundDto,
-  CapturePaymentIntentDto,
-  ConfirmPaymentIntentDto,
-  ConfirmedPaymentIntentDto,
-  StripeWebhookDto,
   PaymentIntentNextAction,
-  RetryPaymentAttemptDto,
   PaymentStatusUpdateDto,
-  KT_CREATE_CONTACT,
-  encodeKafkaMessage,
+  RetryPaymentAttemptDto,
+  StripeWebhookDto,
+  ZtrackingPaymentIntentDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../utils/common';
 import { v4 as uuid } from 'uuid';
@@ -62,36 +62,6 @@ export class PaymentIntentService {
     );
   }
 
-  private async calculateAmounts(
-    items: CreatePaymentIntentPayloadDto['items'],
-  ): Promise<{ originalAmount: number; currency: string }> {
-    let currency: string | undefined;
-    let originalAmount = 0;
-
-    for (const item of items) {
-      if (typeof item.priceCents !== 'number' || !item.currency) {
-        throw new Error(`Missing price or currency on item ${item.id}`);
-      }
-      if (!currency) currency = item.currency;
-      if (item.currency !== currency) {
-        throw new Error('Mixed currencies are not allowed in a PaymentIntent');
-      }
-      originalAmount += item.priceCents * item.quantity;
-    }
-    return { originalAmount, currency: currency! };
-  }
-
-
-  private getAmountUnit(currency: string): string {
-    const units: Record<string, string> = {
-      jpy: 'yen',
-      usd: 'cents',
-      eur: 'cents',
-      gbp: 'pence',
-    };
-    return units[currency.toLowerCase()] || 'cents';
-  }
-
   async createPaymentIntent(
     createPaymentIntentPayloadDto: CreatePaymentIntentPayloadDto,
     traceId: string,
@@ -99,14 +69,41 @@ export class PaymentIntentService {
     const { originalAmount, currency } = await this.calculateAmounts(
       createPaymentIntentPayloadDto.items,
     );
+    this.logger.info(
+      `Calculated originalAmount=${originalAmount}, currency=${currency}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+
     const appliedCoupons: any[] = [];
+    this.logger.info(
+      `Initialized appliedCoupons=[]`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
 
     const totalAmount = originalAmount;
+    this.logger.info(
+      `Set totalAmount=${totalAmount}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
 
     const existing = await this.stripeGateway.findCustomerByEmail(
       createPaymentIntentPayloadDto.customerDetails.email,
     );
+    this.logger.info(
+      `Found existing customer: ${existing?.id || 'none'}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+
     let newCustomerCreated = false;
+
     const customer =
       existing ??
       (await this.stripeGateway.createCustomer({
@@ -123,8 +120,21 @@ export class PaymentIntentService {
         },
         metadata: { source: 'my-backend' },
       }));
+    this.logger.info(
+      `Customer object: ${customer.id}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+
     if (!existing) {
       newCustomerCreated = true;
+      this.logger.info(
+        `newCustomerCreated set to true`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
     }
 
     if (
@@ -145,11 +155,19 @@ export class PaymentIntentService {
         'createPaymentIntent',
         LogStreamLevel.DebugLight,
       );
+
       await new EzKafkaProducer().produce(
         process.env.KAFKA_BROKER as string,
         KT_CREATE_CONTACT,
         encodeKafkaMessage(PaymentIntentService.name, contactPayload),
       );
+      this.logger.info(
+        `Kafka message produced to ${KT_CREATE_CONTACT}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+
       this.logger.info(
         `Kafka message sent to ${KT_CREATE_CONTACT} | payload: ${JSON.stringify(contactPayload)}`,
         traceId,
@@ -166,8 +184,20 @@ export class PaymentIntentService {
       status: 'REQUIRES_PAYMENT_METHOD',
       metadata: { itemsCount: createPaymentIntentPayloadDto.items.length },
     });
+    this.logger.info(
+      `Payment entity created: ${JSON.stringify(entity)}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
 
     entity = await this.paymentRepo.save(entity);
+    this.logger.info(
+      `Entity saved with paymentIntentId=${entity.paymentIntentId}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
 
     const attempt = await this.attemptRepo.save(
       this.attemptRepo.create({
@@ -178,6 +208,12 @@ export class PaymentIntentService {
           })) + 1,
         status: 'PENDING',
       }),
+    );
+    this.logger.info(
+      `Attempt created: attemptId=${attempt.attemptId}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
     );
 
     let clientSecret: string | undefined;
@@ -196,17 +232,42 @@ export class PaymentIntentService {
         },
         { idempotencyKey: createPaymentIntentPayloadDto.idempotencyKey },
       );
+      this.logger.info(
+        `Stripe createPaymentIntent response: ${JSON.stringify(stripeIntent)}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
 
       clientSecret = stripeIntent.client_secret || undefined;
+      this.logger.info(
+        `Extracted clientSecret`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
 
       entity.externalId = stripeIntent.id;
       entity.status = mapStripeIntentStatus(stripeIntent.status) as any;
 
       await this.paymentRepo.save(entity);
+      this.logger.info(
+        `Entity updated with externalId=${entity.externalId}, status=${entity.status}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
+
       await this.attemptRepo.update(attempt.attemptId, {
         status: 'SUCCESS',
         gatewayResponse: stripeIntent as any,
       });
+      this.logger.info(
+        `Attempt updated to SUCCESS`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
 
       this.logger.info(
         'PaymentIntent created',
@@ -214,18 +275,6 @@ export class PaymentIntentService {
         'createPaymentIntent',
         LogStreamLevel.ProdStandard,
       );
-      // await new EzKafkaProducer().produce(
-      //   process.env.KAFKA_BROKER as string,
-      //   KT_CREATED_PAYMENT_INTENT,
-      //   encodeKafkaMessage(PaymentIntentService.name, {
-      //     paymentIntentId: entity.paymentIntentId,
-      //     orderId: entity.orderId,
-      //     subscriptionId: entity.subscriptionId,
-      //     amountCents: entity.amountCents,
-      //     currency: entity.currency,
-      //     traceId,
-      //   }),
-      // );
     } catch (error) {
       this.logger.error(
         `Failed to persist PaymentIntent => ${error}`,
@@ -233,9 +282,16 @@ export class PaymentIntentService {
         'createPaymentIntent',
         LogStreamLevel.DebugHeavy,
       );
+
       entity.nextRetryAt = new Date(Date.now() + 5 * 60 * 1000);
       try {
         await this.paymentRepo.save(entity);
+        this.logger.info(
+          `Entity nextRetryAt set and saved`,
+          traceId,
+          'createPaymentIntent',
+          LogStreamLevel.DebugLight,
+        );
       } catch (saveErr) {
         this.logger.error(
           `Failed to save PaymentIntent for retry => ${saveErr}`,
@@ -244,27 +300,30 @@ export class PaymentIntentService {
           LogStreamLevel.DebugHeavy,
         );
       }
+
       await this.attemptRepo.update(attempt.attemptId, {
         status: 'FAILED',
         errorCode: (error as any)?.code,
         errorMessage: (error as any)?.message,
         gatewayResponse: error as any,
       });
-      // await new EzKafkaProducer().produce(
-      //   process.env.KAFKA_BROKER as string,
-      //   KT_FAILED_PAYMENT,
-      //   encodeKafkaMessage(PaymentIntentService.name, {
-      //     paymentIntentId: entity.paymentIntentId,
-      //     errorCode: (error as any)?.code,
-      //     errorMessage: (error as any)?.message,
-      //     traceId,
-      //   }),
-      // );
+      this.logger.error(
+        `Attempt updated to FAILED with errorCode=${(error as any)?.code}`,
+        traceId,
+        'createPaymentIntent',
+        LogStreamLevel.DebugLight,
+      );
     }
 
     await this.ztrackingPaymentIntentService.createZtrackingForPaymentIntent(
       entity,
       traceId,
+    );
+    this.logger.info(
+      `Ztracking created for paymentIntentId=${entity.paymentIntentId}`,
+      traceId,
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
     );
 
     return {
@@ -691,6 +750,7 @@ export class PaymentIntentService {
   ): Promise<void> {
     const { payload, signature } = stripeWebhookDto;
     let event: Stripe.Event;
+
     try {
       event = this.stripeGateway.constructWebhookEvent(
         payload,
@@ -733,7 +793,7 @@ export class PaymentIntentService {
     try {
       if (event.type.startsWith('payment_intent.')) {
         const pi = event.data.object as Stripe.PaymentIntent;
-        const status = event.type.replace('payment_intent.', '') as any;
+        const status = event?.type?.replace('payment_intent.', '') as any;
         const internal = mapStripeIntentStatus(status);
         await this.paymentRepo.update(
           { externalId: pi.id },
@@ -755,14 +815,14 @@ export class PaymentIntentService {
           //   }),
           // );
         }
-          if (updated && internal === 'FAILED') {
-            const err = (pi as any).last_payment_error;
-            this.logger.error(
-              `Stripe payment failed => ${JSON.stringify(err)}`,
-              traceId,
-              'handleStripeWebhook',
-              LogStreamLevel.DebugHeavy,
-            );
+        if (updated && internal === 'FAILED') {
+          const err = (pi as any).last_payment_error;
+          this.logger.error(
+            `Stripe payment failed => ${JSON.stringify(err)}`,
+            traceId,
+            'handleStripeWebhook',
+            LogStreamLevel.DebugHeavy,
+          );
           // Inactive: requires evaluation before implementation
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
@@ -817,20 +877,20 @@ export class PaymentIntentService {
         const discount = session.discounts?.[0];
         const couponId = discount?.coupon?.id || discount?.coupon;
         const promotionId = discount?.promotion_code || discount?.promotionCode;
-          if (discount && (couponId || promotionId)) {
-            let orderId: string | undefined;
-            if (session.payment_intent) {
-              const intent = await this.paymentRepo.findOne({
-                where: { externalId: session.payment_intent as string },
-              });
-              orderId = intent?.orderId;
-            }
-            this.logger.debug(
-              `Checkout session completed for order ${orderId}`,
-              traceId,
-              'handleStripeWebhook',
-              LogStreamLevel.DebugLight,
-            );
+        if (discount && (couponId || promotionId)) {
+          let orderId: string | undefined;
+          if (session.payment_intent) {
+            const intent = await this.paymentRepo.findOne({
+              where: { externalId: session.payment_intent as string },
+            });
+            orderId = intent?.orderId;
+          }
+          this.logger.debug(
+            `Checkout session completed for order ${orderId}`,
+            traceId,
+            'handleStripeWebhook',
+            LogStreamLevel.DebugLight,
+          );
           // await new EzKafkaProducer().produce(
           //   process.env.KAFKA_BROKER as string,
           //   KT_USED_COUPON,
@@ -881,5 +941,34 @@ export class PaymentIntentService {
       });
       throw err;
     }
+  }
+
+  private async calculateAmounts(
+    items: CreatePaymentIntentPayloadDto['items'],
+  ): Promise<{ originalAmount: number; currency: string }> {
+    let currency: string | undefined;
+    let originalAmount = 0;
+
+    for (const item of items) {
+      if (typeof item.priceCents !== 'number' || !item.currency) {
+        throw new Error(`Missing price or currency on item ${item.id}`);
+      }
+      if (!currency) currency = item.currency;
+      if (item.currency !== currency) {
+        throw new Error('Mixed currencies are not allowed in a PaymentIntent');
+      }
+      originalAmount += item.priceCents * item.quantity;
+    }
+    return { originalAmount, currency: currency! };
+  }
+
+  private getAmountUnit(currency: string): string {
+    const units: Record<string, string> = {
+      jpy: 'yen',
+      usd: 'cents',
+      eur: 'cents',
+      gbp: 'pence',
+    };
+    return units[currency.toLowerCase()] || 'cents';
   }
 }

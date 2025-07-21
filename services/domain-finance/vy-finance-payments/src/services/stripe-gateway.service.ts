@@ -27,7 +27,14 @@ export class StripeGatewayService {
       'createPaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentIntents.create(params, options);
+    const intent = await this.stripe.paymentIntents.create(params, options);
+    this.logger.info(
+      `Stripe createPaymentIntent response: ${JSON.stringify(intent)}`,
+      '',
+      'createPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    return intent;
   }
 
   async retrievePaymentIntent(id: string): Promise<Stripe.PaymentIntent> {
@@ -37,7 +44,14 @@ export class StripeGatewayService {
       'retrievePaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentIntents.retrieve(id);
+    const paymentIntent = await this.stripe.paymentIntents.retrieve(id);
+    this.logger.info(
+      `Stripe retrievePaymentIntent response: ${JSON.stringify(paymentIntent)}`,
+      '',
+      'retrievePaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    return paymentIntent;
   }
 
   async capturePaymentIntent(paymentIntentId: string) {
@@ -47,7 +61,14 @@ export class StripeGatewayService {
       'capturePaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentIntents.capture(paymentIntentId);
+    const captured = await this.stripe.paymentIntents.capture(paymentIntentId);
+    this.logger.info(
+      `Stripe capturePaymentIntent response: ${JSON.stringify(captured)}`,
+      '',
+      'capturePaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    return captured;
   }
 
   async confirmPaymentIntent(
@@ -61,7 +82,18 @@ export class StripeGatewayService {
       'confirmPaymentIntent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentIntents.confirm(paymentIntentId, params, options);
+    const confirmed = await this.stripe.paymentIntents.confirm(
+      paymentIntentId,
+      params,
+      options,
+    );
+    this.logger.info(
+      `Stripe confirmPaymentIntent response: ${JSON.stringify(confirmed)}`,
+      '',
+      'confirmPaymentIntent',
+      LogStreamLevel.DebugLight,
+    );
+    return confirmed;
   }
 
   async createRefund(params: Stripe.RefundCreateParams) {
@@ -71,19 +103,35 @@ export class StripeGatewayService {
       'createRefund',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.refunds.create(params);
+    const refund = await this.stripe.refunds.create(params);
+    this.logger.info(
+      `Stripe createRefund response: ${JSON.stringify(refund)}`,
+      '',
+      'createRefund',
+      LogStreamLevel.DebugLight,
+    );
+    return refund;
   }
 
   async findCustomerByEmail(email: string): Promise<Stripe.Customer | null> {
+    let customer: Stripe.Customer | null = null;
     if (typeof this.stripe.customers.search === 'function') {
       const res = await this.stripe.customers.search({
         query: `email:'${email.replace("'", "\\'")}'`,
         limit: 1,
       });
-      return res.data[0] ?? null;
+      customer = res.data[0] ?? null;
+    } else {
+      const list = await this.stripe.customers.list({ email, limit: 1 });
+      customer = list.data[0] ?? null;
     }
-    const list = await this.stripe.customers.list({ email, limit: 1 });
-    return list.data[0] ?? null;
+    this.logger.info(
+      `Stripe findCustomerByEmail response: ${customer?.id ?? 'none'}`,
+      '',
+      'findCustomerByEmail',
+      LogStreamLevel.DebugLight,
+    );
+    return customer;
   }
 
   async createCustomer(
@@ -95,7 +143,14 @@ export class StripeGatewayService {
       'createCustomer',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.customers.create(params);
+    const customer = await this.stripe.customers.create(params);
+    this.logger.info(
+      `Stripe createCustomer response: ${JSON.stringify(customer)}`,
+      '',
+      'createCustomer',
+      LogStreamLevel.DebugLight,
+    );
+    return customer;
   }
 
   async retrievePrice(id: string): Promise<Stripe.Price> {
@@ -105,9 +160,15 @@ export class StripeGatewayService {
       'retrievePrice',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.prices.retrieve(id);
+    const price = await this.stripe.prices.retrieve(id);
+    this.logger.info(
+      `Stripe retrievePrice response: ${JSON.stringify(price)}`,
+      '',
+      'retrievePrice',
+      LogStreamLevel.DebugLight,
+    );
+    return price;
   }
-
 
   async attachPaymentMethod(
     paymentMethodId: string,
@@ -120,9 +181,16 @@ export class StripeGatewayService {
       'attachPaymentMethod',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.paymentMethods.attach(paymentMethodId, {
+    const method = await this.stripe.paymentMethods.attach(paymentMethodId, {
       customer: customerId,
     });
+    this.logger.info(
+      `Stripe attachPaymentMethod response: ${JSON.stringify(method)}`,
+      traceId || '',
+      'attachPaymentMethod',
+      LogStreamLevel.DebugLight,
+    );
+    return method;
   }
 
   constructWebhookEvent(
@@ -136,6 +204,17 @@ export class StripeGatewayService {
       'constructWebhookEvent',
       LogStreamLevel.DebugLight,
     );
-    return this.stripe.webhooks.constructEvent(payload, signature, secret);
+    const event = this.stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      secret,
+    );
+    this.logger.info(
+      `Stripe constructWebhookEvent response: ${JSON.stringify(event)}`,
+      '',
+      'constructWebhookEvent',
+      LogStreamLevel.DebugLight,
+    );
+    return event;
   }
 }
