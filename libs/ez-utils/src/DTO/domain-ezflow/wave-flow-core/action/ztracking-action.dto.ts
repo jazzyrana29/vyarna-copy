@@ -18,9 +18,11 @@ export class ZtrackingActionDto {
   @ApiProperty({
     description: "Links back to Action.actionId",
     format: "uuid",
+    required: false,
   })
+  @IsOptional()
   @IsUUID()
-  actionId: string;
+  actionId?: string;
 
   @ApiProperty({
     description: 'Action type at the time of snapshot (e.g. "SendEmail")',
@@ -81,7 +83,9 @@ export class ZtrackingActionDto {
 
   @ApiProperty({
     description: "When this ztracking snapshot was recorded",
+    required: false,
   })
+  @IsOptional()
   @IsDate()
-  versionDate: Date;
+  versionDate?: Date;
 }

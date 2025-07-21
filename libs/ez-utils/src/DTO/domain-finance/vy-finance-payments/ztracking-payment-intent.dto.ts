@@ -13,25 +13,30 @@ export class ZtrackingPaymentIntentDto {
   @IsUUID()
   ztrackingVersion: string;
 
-  @ApiProperty({ description: 'Original payment intent id' })
+  @ApiProperty({ description: 'Original payment intent id', required: false })
+  @IsOptional()
   @IsUUID()
-  paymentIntentId: string;
+  paymentIntentId?: string;
 
-  @ApiProperty({ description: 'External id for idempotency' })
+  @ApiProperty({ description: 'External id for idempotency', required: false })
+  @IsOptional()
   @IsString()
-  externalId: string;
+  externalId?: string;
 
-  @ApiProperty({ description: 'Amount in cents' })
+  @ApiProperty({ description: 'Amount in cents', required: false })
+  @IsOptional()
   @IsInt()
-  amountCents: number;
+  amountCents?: number;
 
-  @ApiProperty({ description: 'Currency code' })
+  @ApiProperty({ description: 'Currency code', required: false })
+  @IsOptional()
   @IsString()
-  currency: string;
+  currency?: string;
 
-  @ApiProperty({ description: 'Status of the intent' })
+  @ApiProperty({ description: 'Status of the intent', required: false })
+  @IsOptional()
   @IsString()
-  status: string;
+  status?: string;
 
   @ApiProperty({ description: 'Optional metadata', required: false })
   @IsOptional()
@@ -63,7 +68,8 @@ export class ZtrackingPaymentIntentDto {
   @IsDate()
   updatedAt?: Date;
 
-  @ApiProperty({ description: 'Version date' })
+  @ApiProperty({ description: 'Version date', required: false })
+  @IsOptional()
   @IsDate()
-  versionDate: Date;
+  versionDate?: Date;
 }
