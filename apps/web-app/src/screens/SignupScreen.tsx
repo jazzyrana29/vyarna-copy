@@ -101,6 +101,7 @@ const SignupScreen = () => {
       const person = await socketCreatePerson('signup', dto);
       setUserDetails({
         ...person,
+        email: values.email,
         addInActiveCampaign: values.addInActiveCampaign,
       });
       setMessage('Signup successful');
