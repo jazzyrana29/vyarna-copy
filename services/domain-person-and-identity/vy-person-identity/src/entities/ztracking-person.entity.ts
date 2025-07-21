@@ -13,38 +13,38 @@ export class ZtrackingPerson extends BaseEntity {
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
-  personId: string;
+  @Column('uuid', { nullable: true })
+  personId?: string;
 
   @Column('uuid', { nullable: true })
-  rootBusinessUnitId: string;
+  rootBusinessUnitId?: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   @Index()
-  username: string | null;
-
-  @Column({ type: 'varchar', length: 50, nullable: true  })
-  @Index()
-  nameFirst: string;
+  username?: string | null;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   @Index()
-  nameMiddle: string;
+  nameFirst?: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true  })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   @Index()
-  nameLastFirst: string;
+  nameMiddle?: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true  })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   @Index()
-  nameLastSecond: string;
+  nameLastFirst?: string;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Index()
+  nameLastSecond?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  password: string;
+  password?: string;
 
-  @Column({  nullable: true  })
+  @Column({ nullable: true })
   @Index()
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
   @Column({ nullable: true })
   updatedBy?: string;
@@ -57,5 +57,5 @@ export class ZtrackingPerson extends BaseEntity {
 
   @Index()
   @Column({ nullable: true })
-  versionDate: Date;
+  versionDate?: Date;
 }

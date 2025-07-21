@@ -6,14 +6,14 @@ export class ZtrackingPumpingEvent extends BaseEntity {
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
-  eventId: string;
+  @Column('uuid', { nullable: true })
+  eventId?: string;
 
-  @Column('uuid')
-  sessionId: string;
+  @Column('uuid', { nullable: true })
+  sessionId?: string;
 
-  @Column({ type: 'varchar', length: 15 })
-  action: string;
+  @Column({ type: 'varchar', length: 15, nullable: true })
+  action?: string;
 
   @Column({ type: 'varchar', length: 10, nullable: true })
   pumpType?: string;
@@ -33,8 +33,8 @@ export class ZtrackingPumpingEvent extends BaseEntity {
   @Column('date', { nullable: true })
   expirationDate?: string | Date;
 
-  @Column('timestamp')
-  eventTime: Date;
+  @Column('timestamp', { nullable: true })
+  eventTime?: Date;
 
   @Column('text', { nullable: true })
   notes?: string;
@@ -42,6 +42,6 @@ export class ZtrackingPumpingEvent extends BaseEntity {
   @Column({ nullable: true })
   createdAt?: Date;
 
-  @Column()
-  versionDate: Date;
+  @Column({ nullable: true })
+  versionDate?: Date;
 }

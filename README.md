@@ -67,11 +67,13 @@ node repo.js fill-env                  # generate .env files for services
 node repo.js list [names...]           # list packages (all types)
 node repo.js run <script> [names...]   # run an npm script in packages
 node repo.js update-libs <lib...> [--in name]   # rebuild libs and reinstall them in packages
+node repo.js update-migrations [names...]       # run migration:init and migration:run
 node repo.js stripe <args...>          # run the Stripe CLI inside Docker (uses STRIPE_SECRET_KEY)
 ```
 
 - **clean-install** removes each workspace's `node_modules` and `dist` folders.
 - **update-libs** rebuilds libraries and reinstalls them in every dependent package.
+- **update-migrations** runs TypeORM migrations for services.
 - **stripe** wraps the Stripe CLI in Docker using your `STRIPE_SECRET_KEY` from `global.env.local`.
 
 ### 2. `tsconfig.base.json`
@@ -207,7 +209,13 @@ These documents outline the standards and best practices that keep all workspace
    node repo.js update-libs ez-utils --in web-app  # update one app/service
    ```
 
-4. **Docker setup**
+4. **Run migrations**
+
+   ```bash
+   node repo.js update-migrations
+   ```
+
+5. **Docker setup**
 
    Build images using each workspace's Dockerfile or the compose file:
 
@@ -216,7 +224,7 @@ These documents outline the standards and best practices that keep all workspace
    docker compose up
    ```
 
-5. **Run apps and services**
+6. **Run apps and services**
 
    ```bash
    node repo.js list                   # show all workspace names

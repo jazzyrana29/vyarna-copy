@@ -12,20 +12,20 @@ export class ZtrackingPaymentIntent extends BaseEntity {
   ztrackingVersion: string;
 
   @Index()
-  @Column('uuid')
-  paymentIntentId: string;
+  @Column('uuid', { nullable: true })
+  paymentIntentId?: string;
 
-  @Column({ unique: true })
-  externalId: string;
+  @Column({ nullable: true })
+  externalId?: string;
 
-  @Column('int')
-  amountCents: number;
+  @Column('int', { nullable: true })
+  amountCents?: number;
 
-  @Column({ length: 3 })
-  currency: string;
+  @Column({ length: 3, nullable: true })
+  currency?: string;
 
-  @Column({ length: 30 })
-  status: string;
+  @Column({ length: 30, nullable: true })
+  status?: string;
 
   @Column('json', { nullable: true })
   metadata?: Record<string, unknown>;
@@ -45,6 +45,6 @@ export class ZtrackingPaymentIntent extends BaseEntity {
   @Column({ nullable: true })
   updatedAt?: Date;
 
-  @Column()
-  versionDate: Date;
+  @Column({ nullable: true })
+  versionDate?: Date;
 }
