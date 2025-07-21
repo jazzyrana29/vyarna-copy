@@ -113,7 +113,19 @@ export class StripeGatewayService {
     return refund;
   }
 
-  async findCustomerByEmail(email: string): Promise<Stripe.Customer | null> {
+  async findCustomerByEmail(
+    email?: string,
+  ): Promise<Stripe.Customer | null> {
+    if (!email) {
+      this.logger.debug(
+        'No email provided for findCustomerByEmail',
+        '',
+        'findCustomerByEmail',
+        LogStreamLevel.DebugLight,
+      );
+      return null;
+    }
+
     let customer: Stripe.Customer | null = null;
     if (typeof this.stripe.customers.search === 'function') {
       const res = await this.stripe.customers.search({
