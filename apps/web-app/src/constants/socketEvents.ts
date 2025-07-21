@@ -49,6 +49,8 @@ export const KT_RESET_CART_ERROR = `${KT_RESET_CART}-${ERROR}`;
 
 export const SOCKET_NAMESPACE_PERSON_IDENTITY = 'person-identity';
 export const SOCKET_NAMESPACE_PERSON_SESSION = 'person-session';
+export const SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS =
+  'person-physical-address';
 export const KT_CREATE_PERSON = 'create-person-entity';
 export const KT_CREATE_PERSON_RESULT = `${KT_CREATE_PERSON}-${RESULT}`;
 export const KT_CREATE_PERSON_ERROR = `${KT_CREATE_PERSON}-${ERROR}`;

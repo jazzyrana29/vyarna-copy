@@ -19,6 +19,7 @@ import {
   socketResetCart,
 } from '../hooks/useSalesCommerce';
 import { socketCreateAddress, socketUpdateAddress } from '../api/address';
+import { SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS } from '../constants/socketEvents';
 import { useUserStore } from '../store/userStore';
 import { Linking } from 'react-native';
 import { getBaseUrl, joinUrlParts } from '../utils/env';
@@ -88,9 +89,15 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const handleAddressSave = async (address: PhysicalAddressDto) => {
     try {
       if (address.addressId) {
-        await socketUpdateAddress('person-identity', address);
+        await socketUpdateAddress(
+          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
+          address,
+        );
       } else {
-        const created = await socketCreateAddress('person-identity', address);
+        const created = await socketCreateAddress(
+          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
+          address,
+        );
         address = created;
       }
       setAddress(address);

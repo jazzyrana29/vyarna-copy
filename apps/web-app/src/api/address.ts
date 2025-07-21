@@ -1,5 +1,5 @@
 import {
-  SOCKET_NAMESPACE_PERSON_IDENTITY,
+  SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
   KT_CREATE_ADDRESS,
   KT_CREATE_ADDRESS_RESULT,
   KT_CREATE_ADDRESS_ERROR,
@@ -20,7 +20,7 @@ export async function socketCreateAddress(
   dto: CreatePhysicalAddressDto,
 ): Promise<PhysicalAddressDto> {
   const socketSvc = new SocketService({
-    namespace: SOCKET_NAMESPACE_PERSON_IDENTITY,
+    namespace: SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
     transports: ['websocket'],
   });
   const { start, stop } = useLoadingStore.getState();
@@ -48,7 +48,7 @@ export async function socketUpdateAddress(
   dto: UpdatePhysicalAddressDto,
 ): Promise<PhysicalAddressDto> {
   const socketSvc = new SocketService({
-    namespace: SOCKET_NAMESPACE_PERSON_IDENTITY,
+    namespace: SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
     transports: ['websocket'],
   });
   const { start, stop } = useLoadingStore.getState();

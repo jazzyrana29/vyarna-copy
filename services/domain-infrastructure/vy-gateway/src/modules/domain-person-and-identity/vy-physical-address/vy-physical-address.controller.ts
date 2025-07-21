@@ -25,8 +25,8 @@ import { ValidateUpdateAddressDtoPipe } from './pipes/validate-update-address-dt
 import { ValidateGetAddressDtoPipe } from './pipes/validate-get-address-dto.pipe';
 
 @UseInterceptors(SentryInterceptor)
-@ApiTags('vy-physical-address')
-@Controller('vy-physical-address')
+@ApiTags('person-physical-address')
+@Controller('person-physical-address')
 export class PersonPhysicalAddressController {
   private logger = getLoggerConfig(PersonPhysicalAddressController.name);
 

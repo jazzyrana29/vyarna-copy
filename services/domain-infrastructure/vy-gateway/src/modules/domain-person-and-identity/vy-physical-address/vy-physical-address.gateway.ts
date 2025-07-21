@@ -21,7 +21,7 @@ import {
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
-@WebSocketGateway({ namespace: 'person-identity', cors: CORS_ALLOW })
+@WebSocketGateway({ namespace: 'person-physical-address', cors: CORS_ALLOW })
 export class PersonPhysicalAddressWebsocket implements OnGatewayInit {
   @WebSocketServer()
   server: Server;
