@@ -11,13 +11,14 @@ import {
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { socketLoginSession } from '../api/session';
-import { LoginSessionDto } from 'ez-utils';
+import { LoginSessionDto, LoginSessionResponseDto } from 'ez-utils';
 import { NAV_ROUTE_SIGNUP, NAV_ROUTE_HOME } from '../constants/routes';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
+import { useSessionStore } from '../store/sessionStore';
 
 const LoginScreen = () => {
   // form state
@@ -37,6 +38,7 @@ const LoginScreen = () => {
   const prevRoute = useNavigationState((state) => state?.routes[state.index - 1]?.name);
   const login = useUserStore((s) => s.login);
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
+  const setSession = useSessionStore((s) => s.setSession);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -85,8 +87,9 @@ const LoginScreen = () => {
     } as any;
 
     try {
-      await socketLoginSession('login', dto);
-      login();
+      const result: LoginSessionResponseDto = await socketLoginSession('login', dto);
+      setSession(result.session);
+      login(result.person);
       setMessage('Login successful');
       if (prevRoute && prevRoute !== NAV_ROUTE_SIGNUP) {
         navigation.goBack();

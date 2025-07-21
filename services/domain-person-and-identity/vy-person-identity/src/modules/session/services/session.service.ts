@@ -10,6 +10,8 @@ import {
   GetOneSessionDto,
   DeleteSessionDto,
   LoginSessionDto,
+  LoginSessionResponseDto,
+  PersonWithoutPasswordDto,
 } from 'ez-utils';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
@@ -56,11 +58,17 @@ export class SessionService {
     this.logger.info('Session deleted', traceId, 'deleteSession', LogStreamLevel.ProdStandard);
   }
 
-  async loginSession(dto: LoginSessionDto, traceId: string): Promise<Session> {
+  async loginSession(
+    dto: LoginSessionDto,
+    traceId: string,
+  ): Promise<LoginSessionResponseDto> {
     const emailEntity = await this.emailRepo.findOne({ where: { email: dto.email } });
     if (!emailEntity) throw new UnauthorizedException('Invalid credentials');
 
-    const person = await this.personRepo.findOne({ where: { personId: emailEntity.personId } });
+    const person = await this.personRepo.findOne({
+      where: { personId: emailEntity.personId },
+      relations: { emails: true, addresses: true },
+    });
     if (!person || person.password !== dto.password) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -72,6 +80,12 @@ export class SessionService {
     });
     await this.sessionRepo.save(session);
     this.logger.info('Person logged in', traceId, 'loginSession', LogStreamLevel.ProdStandard);
-    return session;
+
+    const { password, ...rest } = person;
+
+    return {
+      session,
+      person: rest as PersonWithoutPasswordDto,
+    };
   }
 }

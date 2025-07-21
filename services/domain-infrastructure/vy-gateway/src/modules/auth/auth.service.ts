@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginSessionDto, generateTraceId } from 'ez-utils';
+import {
+  LoginSessionDto,
+  LoginSessionResponseDto,
+  generateTraceId,
+} from 'ez-utils';
 import { PersonSessionKafkaService } from '../domain-person-and-identity/vy-session/microservices/vy-session-kafka.service';
 
 @Injectable()
@@ -12,8 +16,11 @@ export class AuthService {
 
   async validateUser(dto: LoginSessionDto) {
     const traceId = generateTraceId('authLogin');
-    const session = await this.sessionKafka.loginSession(dto, traceId);
-    return session;
+    const result: LoginSessionResponseDto = await this.sessionKafka.loginSession(
+      dto,
+      traceId,
+    );
+    return result.session;
   }
 
   async login(session: any) {
