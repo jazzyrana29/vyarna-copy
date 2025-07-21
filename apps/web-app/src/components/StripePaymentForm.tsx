@@ -12,19 +12,17 @@ import { usePaymentStore } from '../store/paymentStore';
 import { useCartStore } from '../store/cartStore';
 import { useUserStore } from '../store/userStore';
 import {
-  socketCreatePaymentIntent,
   socketConfirmPaymentIntent,
+  socketCreatePaymentIntent,
 } from '../api/payments';
 import {
-  createEmbeddedPaymentForm,
   confirmEmbeddedPayment,
+  createEmbeddedPaymentForm,
 } from '../utils/stripe';
-import {
-  SOCKET_NAMESPACE_FINANCE_PAYMENTS,
-} from '../constants/socketEvents';
+import { SOCKET_NAMESPACE_FINANCE_PAYMENTS } from '../constants/socketEvents';
 import type {
-  CreatePaymentIntentPayloadDto,
   ConfirmPaymentIntentDto,
+  CreatePaymentIntentPayloadDto,
 } from 'ez-utils';
 
 interface StripePaymentFormProps {
@@ -94,7 +92,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
         customerDetails: {
           firstName: userDetails.nameFirst,
           lastName: userDetails.nameLastFirst,
-          email: userDetails.email,
+          email: userDetails?.email!,
           address: {
             street: primary?.addressLine1 || '',
             city: primary?.city || '',
@@ -192,13 +190,12 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
 
         if (
           'paymentIntent' in result &&
-          result.paymentIntent?.status === 'succeeded'
+          result?.paymentIntent?.status === 'succeeded'
         ) {
           // Confirm with backend
           const confirmDto: ConfirmPaymentIntentDto = {
             paymentIntentId,
-            paymentMethodId: result.paymentIntent
-              ?.payment_method as string,
+            paymentMethodId: result?.paymentIntent?.payment_method as string,
             receiptEmail: userDetails.email,
             returnUrl,
           };
