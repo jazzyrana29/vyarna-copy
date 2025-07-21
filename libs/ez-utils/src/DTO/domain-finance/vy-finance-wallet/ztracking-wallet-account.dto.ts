@@ -1,40 +1,48 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID, IsInt, IsDate, IsString } from 'class-validator';
+import { IsUUID, IsInt, IsDate, IsString, IsOptional } from 'class-validator';
 
 export class ZtrackingWalletAccountDto {
   @ApiProperty({ description: 'Version identifier' })
   @IsUUID()
   ztrackingVersion: string;
 
-  @ApiProperty({ description: 'Account identifier' })
+  @ApiProperty({ description: 'Account identifier', required: false })
+  @IsOptional()
   @IsUUID()
-  accountId: string;
+  accountId?: string;
 
-  @ApiProperty({ description: 'Person identifier' })
+  @ApiProperty({ description: 'Person identifier', required: false })
+  @IsOptional()
   @IsUUID()
-  personId: string;
+  personId?: string;
 
-  @ApiProperty({ description: 'Balance in cents' })
+  @ApiProperty({ description: 'Balance in cents', required: false })
+  @IsOptional()
   @IsInt()
-  balanceCents: number;
+  balanceCents?: number;
 
-  @ApiProperty({ description: 'Account type', enum: ['PROVIDER','CONSUMER','AFFILIATE','INTERNAL'] })
+  @ApiProperty({ description: 'Account type', enum: ['PROVIDER','CONSUMER','AFFILIATE','INTERNAL'], required: false })
+  @IsOptional()
   @IsString()
-  type: 'PROVIDER' | 'CONSUMER' | 'AFFILIATE' | 'INTERNAL';
+  type?: 'PROVIDER' | 'CONSUMER' | 'AFFILIATE' | 'INTERNAL';
 
-  @ApiProperty({ description: 'Currency code' })
+  @ApiProperty({ description: 'Currency code', required: false })
+  @IsOptional()
   @IsString()
-  currency: string;
+  currency?: string;
 
   @ApiProperty({ description: 'Creation timestamp', required: false })
+  @IsOptional()
   @IsDate()
   createdAt?: Date;
 
   @ApiProperty({ description: 'Last update timestamp', required: false })
+  @IsOptional()
   @IsDate()
   updatedAt?: Date;
 
-  @ApiProperty({ description: 'Version date' })
+  @ApiProperty({ description: 'Version date', required: false })
+  @IsOptional()
   @IsDate()
-  versionDate: Date;
+  versionDate?: Date;
 }

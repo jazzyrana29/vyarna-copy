@@ -1,32 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsEmail, IsUUID } from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsUUID, IsOptional } from 'class-validator';
 
 export class ZtrackingEmailDto {
   @ApiProperty()
   @IsUUID()
   ztrackingVersion: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsUUID()
-  emailId: string;
+  emailId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsUUID()
-  personId: string;
+  personId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsBoolean()
-  isVerified: boolean;
+  isVerified?: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsBoolean()
-  isPrimary: boolean;
+  isPrimary?: boolean;
 
-  @ApiProperty({ type: String, format: 'date-time' })
+  @ApiProperty({ type: String, format: 'date-time', required: false })
+  @IsOptional()
   @IsDate()
-  versionDate: Date;
+  versionDate?: Date;
 }
