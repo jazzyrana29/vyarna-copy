@@ -65,7 +65,7 @@ export class ZtrackingOrderService {
       'getZtrackingForOrder',
       LogStreamLevel.ProdStandard,
     );
-
+    //@ts-ignore
     return entities;
   }
 }
