@@ -20,6 +20,12 @@ interface CartStore {
   resetCart: () => void;
   getItemCount: () => number;
   getTotalCents: () => number;
+  /**
+   * Calculate the total amount saved across all items in the cart.  This
+   * project does not yet implement any discounting logic so the current
+   * implementation simply returns `0` to satisfy type expectations.
+   */
+  getTotalSavings: () => number;
   setCartId: (id: string) => void;
   openCart: () => void;
   closeCart: () => void;
@@ -66,6 +72,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   getTotalCents: () =>
     get().items.reduce((t, i) => t + i.priceCents * i.quantity, 0),
+
+  // Placeholder implementation until discount logic is introduced
+  getTotalSavings: () => 0,
 
   setCartId: (id) => set({ cartId: id }),
 

@@ -186,8 +186,8 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
         }
 
         if (
-          result.paymentIntent &&
-          result.paymentIntent.status === 'succeeded'
+          'paymentIntent' in result &&
+          result.paymentIntent?.status === 'succeeded'
         ) {
           // Confirm with backend
           const confirmDto: ConfirmPaymentIntentDto = {

@@ -5,6 +5,8 @@ export interface UserDetails
   extends Omit<PersonWithoutPasswordDto, 'personId' | 'stripeCustomerId'> {
   /** Optional identifier of the logged in person */
   personId?: string;
+  /** Convenience field for a primary email address. */
+  email?: string;
   addInActiveCampaign?: boolean;
 }
 
