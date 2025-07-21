@@ -5,7 +5,10 @@ import { getLoggerConfig } from '../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { PaymentIntent } from '../../entities/payment_intent.entity';
 import { ZtrackingPaymentIntent } from '../../entities/ztracking_payment_intent.entity';
-import { GetZtrackingPaymentIntentDto, ZtrackingPaymentIntentDto } from 'ez-utils';
+import {
+  GetZtrackingPaymentIntentDto,
+  ZtrackingPaymentIntentDto,
+} from 'ez-utils';
 
 @Injectable()
 export class ZtrackingPaymentIntentService {
@@ -45,7 +48,9 @@ export class ZtrackingPaymentIntentService {
     traceId: string,
   ): Promise<ZtrackingPaymentIntentDto[]> {
     const { paymentIntentId = '' } = getZtrackingPaymentIntentDto;
-    const entities = await this.paymentIntentRepo.find({ where: { paymentIntentId } });
+    const entities = await this.paymentIntentRepo.find({
+      where: { paymentIntentId },
+    });
 
     if (!entities.length) {
       this.logger.error(
@@ -65,7 +70,7 @@ export class ZtrackingPaymentIntentService {
       'getZtrackingForPaymentIntent',
       LogStreamLevel.ProdStandard,
     );
-
+    // @ts-ignore
     return entities;
   }
 }
