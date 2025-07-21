@@ -12,6 +12,7 @@ import * as express from 'express';
 import { AppModule } from './app.module';
 import { getLoggerConfig, CORS_ALLOW } from './utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { SocketLoggingAdapter } from './utils/socket-logging.adapter';
 
 async function bootstrap(): Promise<void> {
   // Configure custom logger
@@ -23,6 +24,9 @@ async function bootstrap(): Promise<void> {
     bufferLogs: true,
     logger,
   });
+
+  // Attach WebSocket logging adapter
+  app.useWebSocketAdapter(new SocketLoggingAdapter(app));
 
   app.use(
     '/webhooks/process-stripe-webhook',
