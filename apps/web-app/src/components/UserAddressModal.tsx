@@ -18,9 +18,9 @@ export interface UserAddressModalProps {
   onClose: () => void;
 }
 
-const emptyAddress: PhysicalAddressDto = {
+const createEmptyAddress = (personId: string): PhysicalAddressDto => ({
   addressId: '',
-  personId: '',
+  personId,
   addressType: AddressType.HOME,
   addressLine1: '',
   addressLine2: '',
@@ -29,19 +29,22 @@ const emptyAddress: PhysicalAddressDto = {
   postalCode: '',
   country: '',
   isPrimary: true,
-};
+});
 
 const UserAddressModal: FC<UserAddressModalProps> = ({ visible, onSave, onClose }) => {
+  const personId = useUserStore((s) => (s.userDetails as any)?.personId || '');
   const existing = useUserStore((s) => s.userDetails?.addresses?.find((a) => a.isPrimary));
-  const [values, setValues] = useState<PhysicalAddressDto>(existing || emptyAddress);
+  const [values, setValues] = useState<PhysicalAddressDto>(
+    existing || createEmptyAddress(personId),
+  );
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (visible) {
-      setValues(existing || emptyAddress);
+      setValues(existing || createEmptyAddress(personId));
       setTouched({});
     }
-  }, [visible, existing]);
+  }, [visible, existing, personId]);
 
   const errors = {
     addressLine1: values.addressLine1.trim() ? undefined : 'Enter address line 1',

@@ -51,6 +51,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
 
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
   const setAddress = useUserStore((s) => s.setAddress);
+  const personId = useUserStore((s) => (s.userDetails as any)?.personId || '');
   const { isProcessing, paymentError, resetPayment } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
 
@@ -87,6 +88,9 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   };
 
   const handleAddressSave = async (address: PhysicalAddressDto) => {
+    if (!address.personId && personId) {
+      address.personId = personId;
+    }
     try {
       if (address.addressId) {
         await socketUpdateAddress(
