@@ -21,8 +21,9 @@ export class ZtrackingPersonDto {
     type: String,
     required: true,
   })
+  @IsOptional()
   @IsUUID()
-  operatorId: string;
+  operatorId?: string;
 
   @ApiProperty({
     description: "Login identifier for the operator",
@@ -31,7 +32,7 @@ export class ZtrackingPersonDto {
   })
   @IsString()
   @IsOptional()
-  login: string;
+  login?: string;
 
   @ApiProperty({
     description: "First name of the operator",
@@ -40,7 +41,7 @@ export class ZtrackingPersonDto {
   })
   @IsString()
   @IsOptional()
-  nameFirst: string;
+  nameFirst?: string;
 
   @ApiProperty({
     description: "Middle name of the operator",
@@ -49,7 +50,7 @@ export class ZtrackingPersonDto {
   })
   @IsString()
   @IsOptional()
-  nameMiddle: string;
+  nameMiddle?: string;
 
   @ApiProperty({
     description: "Last name of the operator",
@@ -58,7 +59,7 @@ export class ZtrackingPersonDto {
   })
   @IsString()
   @IsOptional()
-  nameLast: string;
+  nameLast?: string;
 
   @ApiProperty({
     description: "Email address of the operator",
@@ -67,7 +68,7 @@ export class ZtrackingPersonDto {
   })
   @IsString()
   @IsOptional()
-  email: string;
+  email?: string;
 
   @ApiProperty({
     description: "Business unit identifier associated with the operator",
@@ -76,7 +77,7 @@ export class ZtrackingPersonDto {
   })
   @IsUUID()
   @IsOptional()
-  businessUnitId: string;
+  businessUnitId?: string;
 
   @ApiProperty({
     description: "Roles assigned to the person in this version",
@@ -85,7 +86,7 @@ export class ZtrackingPersonDto {
   })
   @IsString({ each: true })
   @IsOptional()
-  roles: string[];
+  roles?: string[];
 
   @ApiProperty({
     description: "Indicates if the operator is marked as deleted",
@@ -93,7 +94,7 @@ export class ZtrackingPersonDto {
   })
   @IsBoolean()
   @IsOptional()
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
   @ApiProperty({
     description: "The date when the record was created",
@@ -116,8 +117,9 @@ export class ZtrackingPersonDto {
   @ApiProperty({
     description: "Version date of the ztracking operator",
     type: Date,
-    required: true,
+    required: false,
   })
+  @IsOptional()
   @IsDate()
-  versionDate: Date;
+  versionDate?: Date;
 }
