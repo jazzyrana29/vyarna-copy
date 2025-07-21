@@ -12,6 +12,7 @@ interface UserStore {
   setUserDetails: (details: UserDetails) => void;
   clearUserDetails: () => void;
   setAddress: (address: PhysicalAddressDto) => void;
+  setAddresses: (addresses: PhysicalAddressDto[]) => void;
   login: (details?: Partial<UserDetails>) => void;
   logout: () => void;
   hasUserDetails: () => boolean;
@@ -27,16 +28,39 @@ export const useUserStore = create<UserStore>((set, get) => ({
   clearUserDetails: () => set({ userDetails: null }),
 
   setAddress: (address) =>
+    set((state) => {
+      const existing = state.userDetails?.addresses ?? [];
+      let updated = existing.filter((a) => a.addressId !== address.addressId);
+      if (address.isPrimary) {
+        updated = updated.map((a) => ({ ...a, isPrimary: false }));
+      }
+      updated.push(address);
+      updated.sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0));
+      return {
+        userDetails: state.userDetails
+          ? { ...state.userDetails, addresses: updated }
+          : ({ addresses: updated } as any),
+      };
+    }),
+
+  setAddresses: (addresses) =>
     set((state) => ({
       userDetails: state.userDetails
-        ? { ...state.userDetails, addresses: [address] }
-        : { addresses: [address] } as any,
+        ? {
+            ...state.userDetails,
+            addresses: addresses.sort(
+              (a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0),
+            ),
+          }
+        : ({ addresses } as any),
     })),
 
   login: (details) =>
     set((state) => ({
       isLoggedIn: true,
-      userDetails: details ? { ...(state.userDetails ?? {}), ...details } : state.userDetails,
+      userDetails: details
+        ? { ...(state.userDetails ?? {}), ...details }
+        : state.userDetails,
     })),
 
   logout: () => set({ isLoggedIn: false, userDetails: null }),

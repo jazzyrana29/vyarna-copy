@@ -103,6 +103,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       setAddress(address);
     } catch (e) {
       console.error('Address save failed', e);
+      showToast((e as Error).message || 'Address save failed');
     }
     setShowAddressModal(false);
     setShowPaymentForm(true);

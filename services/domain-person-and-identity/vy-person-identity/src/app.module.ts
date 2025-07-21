@@ -10,6 +10,7 @@ import { PersonModule } from './modules/person/person.module';
 import { EmailModule } from './modules/email/email.module';
 import { VerificationModule } from './modules/verification/verification.module';
 import { SessionModule } from './modules/session/session.module';
+import { PhysicalAddressModule } from './modules/physical-address/physical-address.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SessionModule } from './modules/session/session.module';
     EmailModule,
     VerificationModule,
     SessionModule,
+    PhysicalAddressModule,
   ],
   controllers: [],
   providers: [],

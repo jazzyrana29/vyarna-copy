@@ -60,3 +60,6 @@ export const KT_CREATE_ADDRESS_ERROR = `${KT_CREATE_ADDRESS}-${ERROR}`;
 export const KT_UPDATE_ADDRESS = 'update-physical-address';
 export const KT_UPDATE_ADDRESS_RESULT = `${KT_UPDATE_ADDRESS}-${RESULT}`;
 export const KT_UPDATE_ADDRESS_ERROR = `${KT_UPDATE_ADDRESS}-${ERROR}`;
+export const KT_GET_ADDRESS = 'get-physical-address';
+export const KT_GET_ADDRESS_RESULT = `${KT_GET_ADDRESS}-${RESULT}`;
+export const KT_GET_ADDRESS_ERROR = `${KT_GET_ADDRESS}-${ERROR}`;
