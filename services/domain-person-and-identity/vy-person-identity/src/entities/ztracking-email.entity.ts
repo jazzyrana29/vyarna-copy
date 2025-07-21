@@ -20,14 +20,14 @@ export class ZtrackingEmail extends BaseEntity {
   @Column("uuid")
   personId: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 255, nullable: true })
   @Index()
   email: string;
 
-  @Column({ default: false })
+  @Column({  nullable: true })
   isVerified: boolean;
 
-  @Column({ default: false })
+  @Column({  nullable: true })
   isPrimary: boolean;
 
   @Column({ nullable: true })
@@ -37,6 +37,6 @@ export class ZtrackingEmail extends BaseEntity {
   updatedAt?: Date;
 
   @Index()
-  @Column()
+  @Column({ nullable: true })
   versionDate: Date;
 }
