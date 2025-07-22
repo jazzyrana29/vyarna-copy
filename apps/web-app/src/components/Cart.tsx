@@ -128,8 +128,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     const existing = items.find((i) => i.id === productId);
     if (!existing) return;
     if (!cartId) {
-      if (newQuantity > 0) updateQuantity(productId, newQuantity);
-      else removeItem(productId);
+      if (newQuantity > 0) {
+        updateQuantity(productId, newQuantity);
+        showToast('Quantity updated', 'success');
+      } else {
+        removeItem(productId);
+        showToast('Item removed from cart', 'success');
+      }
       return;
     }
     try {
@@ -142,8 +147,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       } else if (newQuantity < existing.quantity) {
         await socketRemoveCartItem('sales-commerce', { cartId, productId });
       }
-      if (newQuantity > 0) updateQuantity(productId, newQuantity);
-      else removeItem(productId);
+      if (newQuantity > 0) {
+        updateQuantity(productId, newQuantity);
+        showToast('Quantity updated', 'success');
+      } else {
+        removeItem(productId);
+        showToast('Item removed from cart', 'success');
+      }
     } catch (e: any) {
       console.error('Quantity change failed', e);
       showToast(e.message || 'Quantity change failed', 'error');

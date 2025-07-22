@@ -17,7 +17,7 @@ const LoadingOverlay = () => {
         backgroundColor: 'rgba(0,0,0,0.3)',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
+        zIndex: 9999,
       }}
     >
       <ActivityIndicator size="large" color="#fff" />
