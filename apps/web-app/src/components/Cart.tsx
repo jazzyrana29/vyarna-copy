@@ -111,6 +111,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       showToast((e as Error).message || 'Address save failed', 'error');
       return;
     }
+    showToast('Address saved', 'success');
     setShowAddressModal(false);
     setShowPaymentForm(true);
   };
@@ -152,11 +153,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const handleRemoveItem = async (productId: string) => {
     if (!cartId) {
       removeItem(productId);
+      showToast('Item removed from cart', 'success');
       return;
     }
     try {
       await socketRemoveCartItem('sales-commerce', { cartId, productId });
       removeItem(productId);
+      showToast('Item removed from cart', 'success');
     } catch (e: any) {
       console.error('Remove item failed', e);
       showToast(e.message || 'Failed to remove item', 'error');
@@ -166,11 +169,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const handleResetCart = async () => {
     if (!cartId) {
       resetCart();
+      showToast('Cart reset', 'success');
       return;
     }
     try {
       await socketResetCart('sales-commerce', { cartId });
       resetCart();
+      showToast('Cart reset', 'success');
     } catch (e: any) {
       console.error('Reset cart failed', e);
       showToast(e.message || 'Failed to reset cart', 'error');
