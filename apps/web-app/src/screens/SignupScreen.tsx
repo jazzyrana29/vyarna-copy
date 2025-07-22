@@ -14,13 +14,22 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { NAV_ROUTE_LOGIN, NAV_ROUTE_HOME } from '../constants/routes';
 import { socketCreatePerson } from '../api/person';
-import { CreatePersonDto } from 'ez-utils';
+import { socketLoginSession } from '../api/session';
+import { CreatePersonDto, LoginSessionDto, LoginSessionResponseDto } from 'ez-utils';
+import * as Location from 'expo-location';
+import axios from 'axios';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
+import { useSessionStore } from '../store/sessionStore';
+import { useLoadingStore } from '../store/loadingStore';
+import { showToast } from '../store/toastStore';
 
 const SignupScreen = () => {
   const setUserDetails = useUserStore((s) => s.setUserDetails);
+  const login = useUserStore((s) => s.login);
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
+  const { start: startLoading, stop: stopLoading } = useLoadingStore.getState();
+  const setSession = useSessionStore((s) => s.setSession);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   useEffect(() => {
     if (isLoggedIn) {
@@ -47,7 +56,7 @@ const SignupScreen = () => {
     nameLastSecond: '',
     email: '',
     password: '',
-    addInActiveCampaign: false,
+    addInActiveCampaign: true,
   });
   const [touched, setTouched] = useState<Record<keyof FormValues, boolean>>({
     nameFirst: false,
@@ -98,16 +107,46 @@ const SignupScreen = () => {
     } as CreatePersonDto;
 
     try {
-      const person = await socketCreatePerson('signup', dto);
+      startLoading();
+      const person = await socketCreatePerson('signup', dto, { skipLoading: true });
       setUserDetails({
         ...person,
         email: values.email,
         addInActiveCampaign: values.addInActiveCampaign,
       });
-      setMessage('Signup successful');
-      navigation.navigate(NAV_ROUTE_LOGIN);
+
+      let ip = '';
+      let loc = '';
+      try {
+        const ipRes = await axios.get('https://api.ipify.org/?format=json');
+        ip = ipRes.data.ip;
+        const locRes = await Location.getCurrentPositionAsync({});
+        loc = `${locRes.coords.latitude},${locRes.coords.longitude}`;
+      } catch (err) {
+        console.warn('Failed to get location or IP', err);
+      }
+
+      const loginDto: LoginSessionDto = {
+        email: values.email,
+        password: values.password,
+        ipAddress: ip,
+        location: loc,
+      } as any;
+
+      const result: LoginSessionResponseDto = await socketLoginSession(
+        'login',
+        loginDto,
+        { skipLoading: true },
+      );
+      setSession(result.session);
+      login(result.person);
+      showToast('Signup successful', 'success');
+      navigation.replace(NAV_ROUTE_HOME);
     } catch (err: any) {
       setMessage(err.message);
+      showToast(err.message || 'Signup failed', 'error');
+    } finally {
+      stopLoading();
     }
   };
 

@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BenefitsNavProp } from "../types";
 import * as Animatable from "react-native-animatable";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
+import BoosterCartButton from "../components/BoosterCartButton";
 
 export const ForProvidersScreen: FC = () => {
   const navigation = useNavigation<BenefitsNavProp>();
@@ -58,12 +59,7 @@ export const ForProvidersScreen: FC = () => {
           <Text className="text-base text-neutral-700 mb-4">
             Your purchase helps equip and compensate verified milk providers.
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">Preorder Now</Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Preorder Now" />
         </View>
 
         {/* Why Providers Join */}

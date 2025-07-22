@@ -19,6 +19,7 @@ import { GetProductsDto } from 'ez-utils';
 import { useCartStore } from '../store/cartStore';
 import { usePaymentStore } from '../store/paymentStore';
 import { formatMoney } from '../utils/currency';
+import { showToast } from '../store/toastStore';
 
 interface Product {
   productId: string;
@@ -97,6 +98,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     } catch (err: any) {
       console.error('Cart error', err);
       setAddError(err.message || 'Failed to add item');
+      showToast(err.message || 'Failed to add item', 'error');
       setIsAdding(false);
       return;
     }
@@ -114,6 +116,7 @@ const ProductSelector: FC<ProductSelectorProps> = ({
     });
 
     setIsAdding(false);
+    showToast('Item added to cart', 'success');
     onClose();
     openCart();
   };

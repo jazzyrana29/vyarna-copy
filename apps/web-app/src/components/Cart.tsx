@@ -85,7 +85,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
   const handlePaymentSuccess = () => {
     setShowPaymentForm(false);
     onClose();
-    showToast('Payment successful');
+    showToast('Payment successful', 'success');
   };
 
   const handleAddressSave = async (address: PhysicalAddressDto) => {
@@ -108,9 +108,10 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       setAddress(address);
     } catch (e) {
       console.error('Address save failed', e);
-      showToast((e as Error).message || 'Address save failed');
+      showToast((e as Error).message || 'Address save failed', 'error');
       return;
     }
+    showToast('Address saved', 'success');
     setShowAddressModal(false);
     setShowPaymentForm(true);
   };
@@ -127,8 +128,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     const existing = items.find((i) => i.id === productId);
     if (!existing) return;
     if (!cartId) {
-      if (newQuantity > 0) updateQuantity(productId, newQuantity);
-      else removeItem(productId);
+      if (newQuantity > 0) {
+        updateQuantity(productId, newQuantity);
+        showToast('Quantity updated', 'success');
+      } else {
+        removeItem(productId);
+        showToast('Item removed from cart', 'success');
+      }
       return;
     }
     try {
@@ -141,39 +147,48 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
       } else if (newQuantity < existing.quantity) {
         await socketRemoveCartItem('sales-commerce', { cartId, productId });
       }
-      if (newQuantity > 0) updateQuantity(productId, newQuantity);
-      else removeItem(productId);
+      if (newQuantity > 0) {
+        updateQuantity(productId, newQuantity);
+        showToast('Quantity updated', 'success');
+      } else {
+        removeItem(productId);
+        showToast('Item removed from cart', 'success');
+      }
     } catch (e: any) {
       console.error('Quantity change failed', e);
-      showToast(e.message || 'Quantity change failed');
+      showToast(e.message || 'Quantity change failed', 'error');
     }
   };
 
   const handleRemoveItem = async (productId: string) => {
     if (!cartId) {
       removeItem(productId);
+      showToast('Item removed from cart', 'success');
       return;
     }
     try {
       await socketRemoveCartItem('sales-commerce', { cartId, productId });
       removeItem(productId);
+      showToast('Item removed from cart', 'success');
     } catch (e: any) {
       console.error('Remove item failed', e);
-      showToast(e.message || 'Failed to remove item');
+      showToast(e.message || 'Failed to remove item', 'error');
     }
   };
 
   const handleResetCart = async () => {
     if (!cartId) {
       resetCart();
+      showToast('Cart reset', 'success');
       return;
     }
     try {
       await socketResetCart('sales-commerce', { cartId });
       resetCart();
+      showToast('Cart reset', 'success');
     } catch (e: any) {
       console.error('Reset cart failed', e);
-      showToast(e.message || 'Failed to reset cart');
+      showToast(e.message || 'Failed to reset cart', 'error');
     }
   };
 

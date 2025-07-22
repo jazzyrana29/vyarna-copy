@@ -7,6 +7,7 @@ import { TagsEnum } from "../enums/tags.enum";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
 import { useNavigation } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
+import BoosterCartButton from "../components/BoosterCartButton";
 
 export const HowToUseVyarnaScreen: FC = (): JSX.Element => {
   const navigation = useNavigation<BenefitsNavProp>();
@@ -75,14 +76,7 @@ export const HowToUseVyarnaScreen: FC = (): JSX.Element => {
             support our launch. 💸 Early preorder = launch discount ⏳ Limited
             quantities for our first run
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">
-              Reserve My Pack
-            </Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Reserve My Pack" />
         </View>
 
         {/* Visual Steps */}

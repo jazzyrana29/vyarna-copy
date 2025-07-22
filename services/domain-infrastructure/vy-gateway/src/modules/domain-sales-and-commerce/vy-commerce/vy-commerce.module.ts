@@ -4,13 +4,15 @@ import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.ser
 import { SalesCommerceWebsocket } from './vy-commerce.gateway';
 import { SalesCommerceController } from './vy-commerce.controller';
 import { SalesCommerceResponseController } from './vy-commerce-response.controller';
+import { AddBoosterPackService } from './add-booster-pack.service';
+import { PersonSessionModule } from '../../domain-person-and-identity/vy-session/vy-session.module';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 
 @Module({
-  imports: [KafkaModule],
+  imports: [KafkaModule, PersonSessionModule],
   controllers: [SalesCommerceResponseController, SalesCommerceController],
-  providers: [SalesCommerceWebsocket, SalesCommerceKafkaService],
+  providers: [SalesCommerceWebsocket, SalesCommerceKafkaService, AddBoosterPackService],
 })
 export class SalesCommerceModule {
   private logger = getLoggerConfig(SalesCommerceModule.name);

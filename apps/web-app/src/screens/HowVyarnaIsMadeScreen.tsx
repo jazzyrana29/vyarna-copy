@@ -8,6 +8,7 @@ import { NAV_ROUTE_PREORDER } from "../constants/routes";
 import { useNavigation } from "@react-navigation/native";
 import { BenefitsNavProp } from "src/types";
 import Section from "src/components/Section";
+import BoosterCartButton from "../components/BoosterCartButton";
 
 export const HowVyarnaIsMadeScreen: FC = () => {
   const navigation = useNavigation<BenefitsNavProp>();
@@ -83,14 +84,7 @@ export const HowVyarnaIsMadeScreen: FC = () => {
             Your preorder helps us scale our ethical testing and preparation
             infrastructure. Be among the first to receive your Booster pack.
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">
-              Reserve My First Pack
-            </Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Reserve My First Pack" />
         </View>
 
         <View className="px-6 py-8 max-w-3xl mx-auto">

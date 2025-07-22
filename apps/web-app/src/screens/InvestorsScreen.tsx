@@ -13,6 +13,7 @@ import Section from "../components/Section";
 import { TagsEnum } from "../enums/tags.enum";
 import * as Animatable from "react-native-animatable";
 import { BenefitsNavProp } from "../types";
+import BoosterCartButton from "../components/BoosterCartButton";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
 import { useNavigation } from "@react-navigation/native";
 
@@ -66,12 +67,7 @@ const InvestorsScreen: FC = () => {
             Every preorder helps us validate demand, grow our provider network,
             and scale safely.
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">Preorder Now</Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Preorder Now" />
         </View>
 
         {/* Market Opportunity */}
