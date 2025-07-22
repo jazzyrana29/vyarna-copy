@@ -7,6 +7,8 @@ import {
   CreateCartItemDto,
   CreateSessionDto,
   GetProductsDto,
+  GetCartDto,
+  CartDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -38,10 +40,18 @@ export class AddBoosterPackService {
     );
     if (!booster) throw new NotFoundException('Booster product not found');
 
-    const cart = await this.commerceKafka.createCart(
-      { sessionId } as CreateCartDto,
-      traceId,
-    );
+    let cart: CartDto;
+    if (dto.cartId) {
+      cart = await this.commerceKafka.getCart(
+        { cartId: dto.cartId } as GetCartDto,
+        traceId,
+      );
+    } else {
+      cart = await this.commerceKafka.createCart(
+        { sessionId } as CreateCartDto,
+        traceId,
+      );
+    }
 
     await this.commerceKafka.addCartItem(
       { cartId: cart.cartId, productId: booster.productId, quantity: 1 } as CreateCartItemDto,
