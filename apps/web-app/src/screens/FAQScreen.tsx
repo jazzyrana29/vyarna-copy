@@ -7,6 +7,7 @@ import * as Animatable from "react-native-animatable";
 import { BenefitsNavProp } from "../types";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
 import { useNavigation } from "@react-navigation/native";
+import BoosterCartButton from "../components/BoosterCartButton";
 
 const categorizedFaqs = [
   {
@@ -235,12 +236,7 @@ export const FAQScreen: FC = () => {
             Your preorder helps us scale ethical sourcing, testing, and provider
             support.
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">Preorder Now</Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Preorder Now" />
         </View>
 
         <View className="max-w-screen-xl mx-auto px-4 py-8">

@@ -5,6 +5,7 @@ import { SentryInterceptor } from '../../../interceptors/sentry.interceptor';
 import { getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
 import { SalesCommerceKafkaService } from './microservices/vy-commerce-kafka.service';
+import { AddBoosterPackService } from './add-booster-pack.service';
 import {
   generateTraceId,
   CreateCartDto,
@@ -37,6 +38,8 @@ import {
   KT_GET_SUBSCRIPTION,
   KT_CANCEL_SUBSCRIPTION,
   KT_VALIDATE_PROMOTION_CODE,
+  KT_ADD_BOOSTER_PACK_IN_CART,
+  AddBoosterPackInCartDto,
 } from 'ez-utils';
 import { ValidateCreateCartDtoPipe } from './pipes/validate-create-cart-dto.pipe';
 import { ValidateAddCartItemDtoPipe } from './pipes/validate-add-cart-item-dto.pipe';
@@ -60,7 +63,10 @@ import { ValidatePromotionCodeDtoPipe } from './pipes/validate-promotion-code-dt
 export class SalesCommerceController {
   private logger = getLoggerConfig(SalesCommerceController.name);
 
-  constructor(private readonly commerceKafka: SalesCommerceKafkaService) {
+  constructor(
+    private readonly commerceKafka: SalesCommerceKafkaService,
+    private readonly boosterService: AddBoosterPackService,
+  ) {
     this.logger.debug(
       `${SalesCommerceController.name} initialized`,
       '',
@@ -266,5 +272,16 @@ export class SalesCommerceController {
       traceId,
     );
     return new ResponseDTO(HttpStatus.OK, data, 'Promotion code validation', traceId);
+  }
+
+  @Post(KT_ADD_BOOSTER_PACK_IN_CART)
+  @ApiCreatedResponse({ type: ResponseDTO<any> })
+  @ApiBody({ type: AddBoosterPackInCartDto })
+  async addBoosterPackInCart(
+    @Body() dto: AddBoosterPackInCartDto,
+  ): Promise<ResponseDTO<any>> {
+    const traceId = generateTraceId('addBoosterPackInCart');
+    const data = await this.boosterService.addBoosterPackInCart(dto, traceId);
+    return new ResponseDTO(HttpStatus.OK, data, 'Booster added to cart', traceId);
   }
 }

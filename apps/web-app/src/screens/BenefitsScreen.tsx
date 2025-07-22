@@ -13,6 +13,7 @@ import Email from "../components/Email";
 import Footer from "../components/Footer";
 import { TagsEnum } from "../enums/tags.enum";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
+import BoosterCartButton from "../components/BoosterCartButton";
 import { useNavigation } from "@react-navigation/native";
 import { BenefitsNavProp } from "src/types";
 
@@ -71,14 +72,7 @@ const BenefitsScreen: FC = (): JSX.Element => {
               Preorder your first Vyarna Booster pack and be part of a new era
               in infant nutrition.
             </Text>
-            <TouchableOpacity
-              className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-              onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-            >
-              <Text className="text-white font-bold text-base">
-                Preorder Now
-              </Text>
-            </TouchableOpacity>
+            <BoosterCartButton label="Preorder Now" />
           </View>
 
           {/* Section 1 */}

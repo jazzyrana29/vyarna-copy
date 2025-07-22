@@ -14,6 +14,7 @@ import Email from '../components/Email';
 import Footer from '../components/Footer';
 import { JSX } from 'react/jsx-runtime';
 import Section from '../components/Section';
+import BoosterCartButton from '../components/BoosterCartButton';
 import { Helmet } from 'react-helmet-async';
 import { TagsEnum } from '../enums/tags.enum';
 import { EXPO_PUBLIC_BASE_URL } from '@env';
@@ -133,14 +134,7 @@ const HomeScreen: FC = (): JSX.Element => {
               faster. Lock in your Booster pack, refer a friend, or spread the
               word.
             </Text>
-            <TouchableOpacity
-              className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-              onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-            >
-              <Text className="text-white font-bold text-base">
-                Reserve My First Pack
-              </Text>
-            </TouchableOpacity>
+            <BoosterCartButton label="Reserve My First Pack" />
           </View>
 
           {/* How to Use */}

@@ -13,6 +13,7 @@ import { TagsEnum } from "../enums/tags.enum";
 import * as Animatable from "react-native-animatable";
 import { BenefitsNavProp } from "../types";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
+import BoosterCartButton from "../components/BoosterCartButton";
 import { useNavigation } from "@react-navigation/native";
 
 const ContactScreen: FC = () => {
@@ -67,12 +68,7 @@ const ContactScreen: FC = () => {
             your routine. Early supporters get priority access and launch
             pricing.
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">Preorder Now</Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Preorder Now" />
         </View>
 
         <View className="bg-[#f9fafb] p-6 rounded-xl shadow-sm mb-12 max-w-2xl mx-auto">

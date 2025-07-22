@@ -13,6 +13,7 @@ import Email from "../components/Email";
 import Section from "../components/Section";
 import { TagsEnum } from "../enums/tags.enum";
 import { BenefitsNavProp } from "../types";
+import BoosterCartButton from "../components/BoosterCartButton";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
 import { useNavigation } from "@react-navigation/native";
 
@@ -67,12 +68,7 @@ const AboutScreen: FC = () => {
             Your preorder helps us scale ethical sourcing, testing, and provider
             support.
           </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-          >
-            <Text className="text-white font-bold text-base">Preorder Now</Text>
-          </TouchableOpacity>
+          <BoosterCartButton label="Preorder Now" />
         </View>
 
         <View className="mb-12 py-4 md:py-6 rounded-lg shadow-sm ">

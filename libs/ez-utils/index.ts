@@ -242,5 +242,7 @@ export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/product.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-product-variants.dto";
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/get-categories.dto";
 
+export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/add-booster-pack-in-cart.dto";
+
 export * from "./src/DTO/domain-sales-and-commerce/vy-commerce/validate-promotion-code.dto";
 export * from "./src/DTO/shared-dtos/socket/join-room.dto";
