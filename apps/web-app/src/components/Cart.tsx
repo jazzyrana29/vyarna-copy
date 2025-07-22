@@ -25,6 +25,7 @@ import { Linking } from 'react-native';
 import { getBaseUrl, joinUrlParts } from '../utils/env';
 import { NAV_ROUTE_LOGIN } from '../constants/routes';
 import StripePaymentForm from './StripePaymentForm';
+import ErrorBoundary from './ErrorBoundary';
 import { usePaymentStore } from '../store/paymentStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { showToast } from '../store/toastStore';
@@ -186,11 +187,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
         onRequestClose={handlePaymentCancel}
       >
         <View className="flex-1 justify-center items-center bg-black bg-opacity-50 p-4">
-          <StripePaymentForm
-            visible={showPaymentForm}
-            onSuccess={handlePaymentSuccess}
-            onCancel={handlePaymentCancel}
-          />
+          <ErrorBoundary>
+            <StripePaymentForm
+              visible={showPaymentForm}
+              onSuccess={handlePaymentSuccess}
+              onCancel={handlePaymentCancel}
+            />
+          </ErrorBoundary>
         </View>
       </Modal>
     );

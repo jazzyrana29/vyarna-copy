@@ -108,6 +108,8 @@ npm run build:ios # runs: eas build --platform ios
 
   ```bash
   npx expo run:web
+  # To test payment flows locally ensure HTTPS is used
+  npm run web
   ```
 
 - **Clear Metro cache**
