@@ -40,12 +40,15 @@ import {
   KT_RESET_CART,
   KT_UPDATE_ORDER_SHIPPING,
   KT_VALIDATE_PROMOTION_CODE,
+  KT_ADD_BOOSTER_PACK_IN_CART,
   ResetCartDto,
   UpdateOrderShippingDto,
   ValidatePromotionCodeDto,
+  AddBoosterPackInCartDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
 import { LogStreamLevel } from 'ez-logger';
+import { AddBoosterPackService } from './add-booster-pack.service';
 
 @WebSocketGateway({ namespace: 'sales-commerce', cors: CORS_ALLOW })
 export class SalesCommerceWebsocket implements OnGatewayInit {
@@ -53,7 +56,10 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
   server: Server;
   private logger = getLoggerConfig(SalesCommerceWebsocket.name);
 
-  constructor(private readonly kafkaService: SalesCommerceKafkaService) {}
+  constructor(
+    private readonly kafkaService: SalesCommerceKafkaService,
+    private readonly boosterService: AddBoosterPackService,
+  ) {}
 
   afterInit() {
     this.logger.debug(
@@ -388,6 +394,23 @@ export class SalesCommerceWebsocket implements OnGatewayInit {
     } catch (e: any) {
       socket.emit(
         `${KT_VALIDATE_PROMOTION_CODE}-error`,
+        e.message || 'Unknown error',
+      );
+    }
+  }
+
+  @SubscribeMessage(KT_ADD_BOOSTER_PACK_IN_CART)
+  async addBoosterPackInCart(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: AddBoosterPackInCartDto,
+  ) {
+    const traceId = generateTraceId('sales-commerce-add-booster-pack');
+    try {
+      const result = await this.boosterService.addBoosterPackInCart(dto, traceId);
+      socket.emit(`${KT_ADD_BOOSTER_PACK_IN_CART}-result`, result);
+    } catch (e: any) {
+      socket.emit(
+        `${KT_ADD_BOOSTER_PACK_IN_CART}-error`,
         e.message || 'Unknown error',
       );
     }

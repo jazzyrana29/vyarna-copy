@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { addBoosterPackInCart } from '../api/commerce';
+import { socketAddBoosterPackInCart } from '../api/commerce';
 import { useCartStore } from '../store/cartStore';
 import { usePaymentStore } from '../store/paymentStore';
 import { showToast } from '../store/toastStore';
@@ -15,7 +15,7 @@ export default function BoosterCartButton({ label = 'Reserve My First Pack' }: P
 
   const handlePress = async () => {
     try {
-      const result = await addBoosterPackInCart({ sessionId });
+      const result = await socketAddBoosterPackInCart('sales-commerce', { sessionId });
       if (result.sessionId && !sessionId) setSessionId(result.sessionId);
       if (result.cart) setCartId(result.cart.cartId);
       if (result.product) {

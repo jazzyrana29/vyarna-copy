@@ -47,6 +47,10 @@ export const KT_RESET_CART = 'reset-cart';
 export const KT_RESET_CART_RESULT = `${KT_RESET_CART}-${RESULT}`;
 export const KT_RESET_CART_ERROR = `${KT_RESET_CART}-${ERROR}`;
 
+export const KT_ADD_BOOSTER_PACK_IN_CART = 'add-booster-pack-in-cart';
+export const KT_ADD_BOOSTER_PACK_IN_CART_RESULT = `${KT_ADD_BOOSTER_PACK_IN_CART}-${RESULT}`;
+export const KT_ADD_BOOSTER_PACK_IN_CART_ERROR = `${KT_ADD_BOOSTER_PACK_IN_CART}-${ERROR}`;
+
 export const SOCKET_NAMESPACE_PERSON_IDENTITY = 'person-identity';
 export const SOCKET_NAMESPACE_PERSON_SESSION = 'person-session';
 export const SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS =
