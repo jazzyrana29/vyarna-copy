@@ -11,4 +11,9 @@ export class AddBoosterPackInCartDto {
   @IsOptional()
   @IsUUID()
   personId?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsUUID()
+  cartId?: string;
 }

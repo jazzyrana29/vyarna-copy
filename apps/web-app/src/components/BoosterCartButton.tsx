@@ -15,7 +15,10 @@ export default function BoosterCartButton({ label = 'Reserve My First Pack' }: P
 
   const handlePress = async () => {
     try {
-      const result = await socketAddBoosterPackInCart('sales-commerce', { sessionId });
+      const result = await socketAddBoosterPackInCart('sales-commerce', {
+        sessionId,
+        cartId: useCartStore.getState().cartId || undefined,
+      });
       if (result.sessionId && !sessionId) setSessionId(result.sessionId);
       if (result.cart) setCartId(result.cart.cartId);
       if (result.product) {
