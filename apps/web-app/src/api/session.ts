@@ -99,20 +99,25 @@ export async function socketDeleteSession(roomId: string, dto: DeleteSessionDto)
 export async function socketLoginSession(
   roomId: string,
   dto: LoginSessionDto,
+  opts?: { skipLoading?: boolean },
 ): Promise<LoginSessionResponseDto> {
   const socketSvc = new SocketService({ namespace: SOCKET_NAMESPACE_PERSON_SESSION, transports: ['websocket'] });
   const { start, stop } = useLoadingStore.getState();
   return new Promise((resolve, reject) => {
-    start();
+    if (!opts?.skipLoading) start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
     const cleanup = () => socketSvc.disconnect();
     socketSvc.on<LoginSessionResponseDto>(KT_LOGIN_SESSION_RESULT, (data) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       resolve(data);
     });
-    socketSvc.on<string>(KT_LOGIN_SESSION_ERROR, (msg) => { cleanup(); stop(); reject(new Error(msg)); });
+    socketSvc.on<string>(KT_LOGIN_SESSION_ERROR, (msg) => {
+      cleanup();
+      if (!opts?.skipLoading) stop();
+      reject(new Error(msg));
+    });
     socketSvc.emit<LoginSessionDto>(KT_LOGIN_SESSION, dto);
   });
 }

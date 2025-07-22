@@ -1,20 +1,27 @@
 import { create } from 'zustand';
 
+export type ToastType = 'success' | 'error' | 'info' | 'warning';
+
+export interface Toast {
+  message: string;
+  type: ToastType;
+}
+
 interface ToastState {
-  message: string | null;
-  show: (msg: string) => void;
+  toast: Toast | null;
+  show: (msg: string, type?: ToastType) => void;
   hide: () => void;
 }
 
 export const useToastStore = create<ToastState>((set) => ({
-  message: null,
-  show: (msg: string) => {
-    set({ message: msg });
-    setTimeout(() => set({ message: null }), 3000);
+  toast: null,
+  show: (msg: string, type: ToastType = 'info') => {
+    set({ toast: { message: msg, type } });
+    setTimeout(() => set({ toast: null }), 3000);
   },
-  hide: () => set({ message: null }),
+  hide: () => set({ toast: null }),
 }));
 
-export const showToast = (msg: string): void => {
-  useToastStore.getState().show(msg);
+export const showToast = (msg: string, type?: ToastType): void => {
+  useToastStore.getState().show(msg, type);
 };

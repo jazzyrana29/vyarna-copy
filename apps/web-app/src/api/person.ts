@@ -11,6 +11,7 @@ import { useLoadingStore } from '../store/loadingStore';
 export async function socketCreatePerson(
   roomId: string,
   dto: CreatePersonDto,
+  opts?: { skipLoading?: boolean },
 ): Promise<PersonWithoutPasswordDto> {
   const socketSvc = new SocketService({
     namespace: SOCKET_NAMESPACE_PERSON_IDENTITY,
@@ -19,7 +20,7 @@ export async function socketCreatePerson(
   const { start, stop } = useLoadingStore.getState();
 
   return new Promise((resolve, reject) => {
-    start();
+    if (!opts?.skipLoading) start();
     socketSvc.connect();
     socketSvc.joinRoom(roomId);
 
@@ -27,13 +28,13 @@ export async function socketCreatePerson(
 
     socketSvc.on<PersonWithoutPasswordDto>(KT_CREATE_PERSON_RESULT, (data) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       resolve(data);
     });
 
     socketSvc.on<string>(KT_CREATE_PERSON_ERROR, (msg) => {
       cleanup();
-      stop();
+      if (!opts?.skipLoading) stop();
       reject(new Error(msg));
     });
 
