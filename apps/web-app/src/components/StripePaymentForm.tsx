@@ -140,7 +140,11 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
       ) {
         try {
           console.log('Mounting payment element to DOM...');
-          await paymentElement.mount(paymentElementRef.current);
+          const container = paymentElementRef.current;
+          if (container.children.length > 0) {
+            container.innerHTML = '';
+          }
+          await paymentElement.mount(container);
           setIsStripeReady(true);
           console.log('Stripe Elements mounted successfully');
         } catch (mountError) {
@@ -308,6 +312,25 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
     }
   };
 
+  // Cleanup mounted Stripe element on unmount or when a new element is created
+  useEffect(() => {
+    return () => {
+      if (
+        typeof window !== 'undefined' &&
+        paymentElement &&
+        paymentElementRef.current &&
+        paymentElementRef.current.firstChild
+      ) {
+        try {
+          paymentElement.unmount();
+          paymentElementRef.current.innerHTML = '';
+        } catch (cleanupError) {
+          console.error('Error unmounting Stripe element:', cleanupError);
+        }
+      }
+    };
+  }, [paymentElement]);
+
   if (!visible) return null;
 
   return (
@@ -387,6 +410,16 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
 
           {typeof window !== 'undefined' ? (
             <div className="mb-4">
+              {!isStripeReady && (
+                <div style={{ textAlign: 'center', color: '#6b7280' }}>
+                  <div style={{ marginBottom: '8px' }}>
+                    Loading payment form...
+                  </div>
+                  <div style={{ fontSize: '12px' }}>
+                    Please wait while we initialize Stripe Elements
+                  </div>
+                </div>
+              )}
               <div
                 ref={paymentElementRef}
                 style={{
@@ -395,22 +428,8 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                   backgroundColor: '#f9fafb',
-                  display: 'flex',
-                  alignItems: isStripeReady ? 'stretch' : 'center',
-                  justifyContent: isStripeReady ? 'stretch' : 'center',
                 }}
-              >
-                {!isStripeReady && (
-                  <div style={{ textAlign: 'center', color: '#6b7280' }}>
-                    <div style={{ marginBottom: '8px' }}>
-                      Loading payment form...
-                    </div>
-                    <div style={{ fontSize: '12px' }}>
-                      Please wait while we initialize Stripe Elements
-                    </div>
-                  </div>
-                )}
-              </div>
+              />
             </div>
           ) : (
             <View className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
