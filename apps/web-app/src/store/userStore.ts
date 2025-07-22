@@ -27,7 +27,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
   userDetails: null,
   isLoggedIn: false,
 
-  setUserDetails: (details) => set({ userDetails: details }),
+  setUserDetails: (details) =>
+    set({
+      userDetails: {
+        ...details,
+        email: details.email ?? details.emails?.[0]?.email,
+      },
+    }),
 
   clearUserDetails: () => set({ userDetails: null }),
 
@@ -63,7 +69,11 @@ export const useUserStore = create<UserStore>((set, get) => ({
     set((state) => ({
       isLoggedIn: true,
       userDetails: details
-        ? { ...(state.userDetails ?? {}), ...details }
+        ? {
+            ...(state.userDetails ?? {}),
+            ...details,
+            email: details.email ?? details.emails?.[0]?.email,
+          }
         : state.userDetails,
     })),
 
