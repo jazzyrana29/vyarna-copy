@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -66,25 +65,49 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>('');
   const [selectedStateCode, setSelectedStateCode] = useState<string>('');
 
+  // Reset form when existing changes
   useEffect(() => {
     setValues(existing || createEmptyAddress(personId));
     setTouched({});
   }, [existing, personId]);
 
+  // Load countries once
   useEffect(() => {
     setCountries(Country.getAllCountries());
   }, []);
 
+  // After countries load, if we have an existing country, select its code
+  useEffect(() => {
+    if (values.country && countries.length) {
+      const match = countries.find((c) => c.name === values.country);
+      if (match) {
+        setSelectedCountryCode(match.isoCode);
+      }
+    }
+  }, [countries, values.country]);
+
+  // When country changes, load states
   useEffect(() => {
     if (selectedCountryCode) {
       setStates(State.getStatesOfCountry(selectedCountryCode));
     } else {
       setStates([]);
     }
-    setSelectedStateCode('');
+    setSelectedStateCode(''); // reset state selection
     setCities([]);
   }, [selectedCountryCode]);
 
+  // After states load, if we have an existing state, select its code
+  useEffect(() => {
+    if (values.state && states.length) {
+      const match = states.find((s) => s.name === values.state);
+      if (match) {
+        setSelectedStateCode(match.isoCode);
+      }
+    }
+  }, [states, values.state]);
+
+  // When state changes, load cities
   useEffect(() => {
     if (selectedCountryCode && selectedStateCode) {
       setCities(City.getCitiesOfState(selectedCountryCode, selectedStateCode));
@@ -93,23 +116,24 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
     }
   }, [selectedCountryCode, selectedStateCode]);
 
+  // Validation
   const errors = {
     addressLine1: values.addressLine1.trim()
       ? undefined
       : 'Enter address line 1',
-    city: values.city.trim() ? undefined : 'Enter city',
-    state: values.state.trim() ? undefined : 'Enter state',
-    postalCode: values.postalCode.trim() ? undefined : 'Enter postal code',
     country: values.country.trim() ? undefined : 'Enter country',
+    state: values.state.trim() ? undefined : 'Enter state',
+    city: values.city.trim() ? undefined : 'Enter city',
+    postalCode: values.postalCode.trim() ? undefined : 'Enter postal code',
   };
-
   const isValid =
     !errors.addressLine1 &&
-    !errors.city &&
+    !errors.country &&
     !errors.state &&
-    !errors.postalCode &&
-    !errors.country;
+    !errors.city &&
+    !errors.postalCode;
 
+  // Handlers
   const handleChange = (field: keyof PhysicalAddressDto) => (text: string) =>
     setValues((v) => ({ ...v, [field]: text }));
 
@@ -137,17 +161,10 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
       values.personId = personId;
     }
     try {
-      if (values.addressId) {
-        await socketCreateAddress(
-          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
-          values,
-        );
-      } else {
-        await socketCreateAddress(
-          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
-          values,
-        );
-      }
+      await socketCreateAddress(
+        SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
+        values,
+      );
       setAddress(values);
     } catch (e) {
       console.error('Address save failed', e);
@@ -171,13 +188,15 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           </Text>
         )}
 
+        {/* Address Type */}
         <Text className="mb-1 text-neutralText">Address Type</Text>
-        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-4 justify-center">
+        <View className="w-full h-11 bg-white rounded mb-4 justify-center px-2 border border-gray-300">
           <Picker
             selectedValue={values.addressType}
             onValueChange={(val) =>
               setValues((v) => ({ ...v, addressType: val as AddressType }))
             }
+            className={'bg-white'}
           >
             {Object.values(AddressType).map((t) => (
               <Picker.Item key={t} label={t} value={t} />
@@ -185,6 +204,7 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           </Picker>
         </View>
 
+        {/* Address Line 1 */}
         <Text className="mb-1 text-neutralText">
           Address Line 1<Text className="text-accent">*</Text>
         </Text>
@@ -192,7 +212,7 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           value={values.addressLine1}
           onChangeText={handleChange('addressLine1')}
           onBlur={() => handleBlur('addressLine1')}
-          className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+          className="w-full h-11 bg-white rounded px-3 border border-gray-300 mb-4"
           placeholder="Street address"
           placeholderTextColor={colors.paper}
         />
@@ -202,23 +222,26 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           </Text>
         )}
 
+        {/* Address Line 2 */}
         <Text className="mb-1 text-neutralText">Address Line 2</Text>
         <TextInput
-          value={values.addressLine2 || ''}
+          value={values.addressLine2}
           onChangeText={handleChange('addressLine2')}
           onBlur={() => handleBlur('addressLine2')}
-          className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
+          className="w-full h-11 bg-white rounded px-3 border border-gray-300 mb-4"
           placeholder="Apartment, suite, etc."
           placeholderTextColor={colors.paper}
         />
 
+        {/* Country */}
         <Text className="mb-1 text-neutralText">
           Country<Text className="text-accent">*</Text>
         </Text>
-        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-1 justify-center">
+        <View className="w-full h-11 bg-white rounded mb-4 justify-center px-2 border border-gray-300">
           <Picker
             selectedValue={selectedCountryCode}
             onValueChange={handleCountrySelect}
+            className={'bg-white'}
           >
             <Picker.Item label="Select Country" value="" />
             {countries.map((c) => (
@@ -230,13 +253,15 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           <Text className="text-accent text-sm mb-2">{errors.country}</Text>
         )}
 
+        {/* State */}
         <Text className="mb-1 text-neutralText">
           State<Text className="text-accent">*</Text>
         </Text>
-        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-1 justify-center">
+        <View className="w-full h-11 bg-white rounded mb-4 justify-center px-2 border border-gray-300">
           <Picker
             selectedValue={selectedStateCode}
             onValueChange={handleStateSelect}
+            className={'bg-white'}
           >
             <Picker.Item label="Select State" value="" />
             {states.map((s) => (
@@ -248,11 +273,16 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           <Text className="text-accent text-sm mb-2">{errors.state}</Text>
         )}
 
+        {/* City */}
         <Text className="mb-1 text-neutralText">
           City<Text className="text-accent">*</Text>
         </Text>
-        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-1 justify-center">
-          <Picker selectedValue={values.city} onValueChange={handleCitySelect}>
+        <View className="w-full h-11 bg-white rounded mb-4 justify-center px-2 border border-gray-300">
+          <Picker
+            selectedValue={values.city}
+            onValueChange={handleCitySelect}
+            className={'bg-white'}
+          >
             <Picker.Item label="Select City" value="" />
             {cities.map((ct) => (
               <Picker.Item key={ct.name} label={ct.name} value={ct.name} />
@@ -263,6 +293,7 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           <Text className="text-accent text-sm mb-2">{errors.city}</Text>
         )}
 
+        {/* Postal Code */}
         <Text className="mb-1 text-neutralText">
           Postal Code<Text className="text-accent">*</Text>
         </Text>
@@ -270,25 +301,16 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           value={values.postalCode}
           onChangeText={handleChange('postalCode')}
           onBlur={() => handleBlur('postalCode')}
-          className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+          className="w-full h-11 bg-white rounded px-3 border border-gray-300 mb-1"
           placeholder="Postal Code"
           placeholderTextColor={colors.paper}
         />
         {touched.postalCode && errors.postalCode && (
           <Text className="text-accent text-sm mb-2">{errors.postalCode}</Text>
         )}
-
-        <View className="flex-row items-center mb-4 mt-2">
-          <Text className="mr-2 text-neutralText">Primary Address</Text>
-          <Switch
-            value={values.isPrimary}
-            onValueChange={(val) =>
-              setValues((v) => ({ ...v, isPrimary: val }))
-            }
-          />
-        </View>
       </ScrollView>
 
+      {/* Actions */}
       <View className="p-6 border-t border-gray-200">
         <View className="flex-row space-x-3">
           <TouchableOpacity
@@ -301,7 +323,9 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            className={`flex-1 py-3 rounded-lg ${isValid ? 'bg-primary' : 'bg-secondary'}`}
+            className={`flex-1 py-3 rounded-lg ${
+              isValid ? 'bg-primary' : 'bg-secondary opacity-50'
+            }`}
             onPress={handleSubmit}
             disabled={!isValid}
           >

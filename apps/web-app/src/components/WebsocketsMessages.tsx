@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { JSX, useEffect } from 'react';
 import useWebSocket from '../hooks/useWebSocket';
 import { ServerMessagesMode } from '../constants/server-messages-mode';
 import { showToast } from '../store/toastStore';
@@ -16,7 +16,9 @@ const WebsocketsMessages = ({ show = true }: Props): JSX.Element => {
       const latestMessage = messages[0];
       if (latestMessage?.mode === ServerMessagesMode.CONNECTION_ESTABLISHED) {
         showToast('Web socket connected', 'success');
-      } else if (latestMessage?.mode === ServerMessagesMode.NEW_CONTACT_CREATED) {
+      } else if (
+        latestMessage?.mode === ServerMessagesMode.NEW_CONTACT_CREATED
+      ) {
         showToast('New contact created', 'info');
       } else if (latestMessage?.message) {
         showToast(latestMessage.message, 'info');
