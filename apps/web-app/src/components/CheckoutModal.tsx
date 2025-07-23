@@ -31,15 +31,11 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
   const isLoggedIn = useUserStore((s) => s.isLoggedIn);
   const hasAddress = useUserStore((s) => s.hasAddress());
 
-  const [showAddressStep, setShowAddressStep] = useState(!hasAddress);
-
   const [step, setStep] = useState<Step>(Step.ACCOUNT);
   const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup');
 
   useEffect(() => {
     if (visible) {
-      setShowAddressStep(!hasAddress);
-
       if (isLoggedIn) {
         if (hasAddress) {
           setStep(Step.PAYMENT);
@@ -53,9 +49,7 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
     }
   }, [visible, isLoggedIn]);
 
-  const breadcrumbs = [Step.ACCOUNT];
-  if (showAddressStep) breadcrumbs.push(Step.ADDRESS);
-  breadcrumbs.push(Step.PAYMENT);
+  const breadcrumbs = [Step.ACCOUNT, Step.ADDRESS, Step.PAYMENT];
 
   const renderBreadcrumbs = () => (
     <View className="flex-row justify-center items-center space-x-2 mt-2">
@@ -121,10 +115,7 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
               visible
               onSuccess={closeAll}
               onCancel={closeAll}
-              onEditAddress={() => {
-                setShowAddressStep(true);
-                setStep(Step.ADDRESS);
-              }}
+              onEditAddress={() => setStep(Step.ADDRESS)}
             />
           </View>
         );
