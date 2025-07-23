@@ -5,6 +5,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Email from '../components/Email';
 import Footer from '../components/Footer';
 import Section from '../components/Section';
+import PreorderCTA from '../components/PreorderCTA';
 import ProductSelector from '../components/ProductSelector';
 import { useCartStore } from '../store/cartStore';
 import { useProductSelectorStore } from '../store/productSelectorStore';
@@ -111,21 +112,7 @@ const PreorderScreen: FC = () => {
         />
 
         {/* Final CTA */}
-        <View className="text-center mb-12">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            Reserve Your Booster Pack
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4 max-w-2xl mx-auto">
-            We are producing limited launch inventory for 2026. Preorder now to
-            lock your place—and your discount.
-          </Text>
-          <TouchableOpacity
-            className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-            onPress={handlePreorderClick}
-          >
-            <Text className="text-white font-bold text-base">Start Your Order</Text>
-          </TouchableOpacity>
-        </View>
+        <PreorderCTA />
 
         {/* Email fallback CTA */}
         <View className="px-6 py-8 max-w-3xl mx-auto">

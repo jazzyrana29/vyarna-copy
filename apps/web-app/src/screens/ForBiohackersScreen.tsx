@@ -8,7 +8,7 @@ import { BenefitsNavProp } from "../types";
 import { NAV_ROUTE_USE, NAV_ROUTE_PREORDER } from "../constants/routes";
 import { TagsEnum } from "../enums/tags.enum";
 import * as Animatable from "react-native-animatable";
-import BoosterCartButton from "../components/BoosterCartButton";
+import PreorderCTA from "../components/PreorderCTA";
 
 export const ForBiohackersScreen: FC = () => {
   const navigation = useNavigation<BenefitsNavProp>();
@@ -51,16 +51,7 @@ export const ForBiohackersScreen: FC = () => {
         <View className="h-16 md:h-20" />
 
         {/* Preorder CTA */}
-        <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            Real milk. Lab-tested. Functional.
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4">
-            Preorder your first Vyarna pack and be part of the future of smart
-            supplementation.
-          </Text>
-          <BoosterCartButton label="Preorder Now" />
-        </View>
+        <PreorderCTA />
 
         {/* Why Biohackers Use Vyarna */}
         <View className="mb-12">

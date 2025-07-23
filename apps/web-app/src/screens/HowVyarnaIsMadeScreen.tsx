@@ -4,14 +4,10 @@ import Email from "../components/Email";
 import Footer from "../components/Footer";
 import { TagsEnum } from "../enums/tags.enum";
 import * as Animatable from "react-native-animatable";
-import { NAV_ROUTE_PREORDER } from "../constants/routes";
-import { useNavigation } from "@react-navigation/native";
-import { BenefitsNavProp } from "src/types";
 import Section from "src/components/Section";
-import BoosterCartButton from "../components/BoosterCartButton";
+import PreorderCTA from "../components/PreorderCTA";
 
 export const HowVyarnaIsMadeScreen: FC = () => {
-  const navigation = useNavigation<BenefitsNavProp>();
 
   const steps = [
     {
@@ -76,16 +72,7 @@ export const HowVyarnaIsMadeScreen: FC = () => {
         <View className="h-16 md:h-20" />
 
         {/* Preorder CTA */}
-        <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            🔬 Help us bring this to market
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4">
-            Your preorder helps us scale our ethical testing and preparation
-            infrastructure. Be among the first to receive your Booster pack.
-          </Text>
-          <BoosterCartButton label="Reserve My First Pack" />
-        </View>
+        <PreorderCTA />
 
         <View className="px-6 py-8 max-w-3xl mx-auto">
           <Text className="text-lg text-gray-700 text-center">

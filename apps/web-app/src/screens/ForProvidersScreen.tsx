@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BenefitsNavProp } from "../types";
 import * as Animatable from "react-native-animatable";
 import { NAV_ROUTE_PREORDER } from "../constants/routes";
-import BoosterCartButton from "../components/BoosterCartButton";
+import PreorderCTA from "../components/PreorderCTA";
 
 export const ForProvidersScreen: FC = () => {
   const navigation = useNavigation<BenefitsNavProp>();
@@ -52,15 +52,7 @@ export const ForProvidersScreen: FC = () => {
         <View className="h-16 md:h-20" />
 
         {/* Preorder CTA */}
-        <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            Support Our Provider Network
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4">
-            Your purchase helps equip and compensate verified milk providers.
-          </Text>
-          <BoosterCartButton label="Preorder Now" />
-        </View>
+        <PreorderCTA />
 
         {/* Why Providers Join */}
         <View className="mb-12">

@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import {
   NAV_ROUTE_BENEFITS,
   NAV_ROUTE_IS_MADE,
   NAV_ROUTE_PARENTS,
-  NAV_ROUTE_PREORDER,
   NAV_ROUTE_VALUES,
 } from '../constants/routes';
 import { BenefitsNavProp } from '../types';
@@ -14,6 +13,7 @@ import Email from '../components/Email';
 import Footer from '../components/Footer';
 import { JSX } from 'react/jsx-runtime';
 import Section from '../components/Section';
+import PreorderCTA from '../components/PreorderCTA';
 import { Helmet } from 'react-helmet-async';
 import { TagsEnum } from '../enums/tags.enum';
 import { EXPO_PUBLIC_BASE_URL } from '@env';
@@ -123,24 +123,7 @@ const HomeScreen: FC = (): JSX.Element => {
           <View className="h-16 md:h-20" />
 
           {/* Pre-Purchase CTA Section */}
-          <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-            <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-              💸 Support the Movement
-            </Text>
-            <Text className="text-base text-neutral-700 mb-4">
-              We’re months from launch—but your support helps us get there
-              faster. Lock in your Booster pack, refer a friend, or spread the
-              word.
-            </Text>
-            <TouchableOpacity
-              className="bg-[#7ecaf8] px-6 py-3 rounded-full"
-              onPress={() => navigation.navigate(NAV_ROUTE_PREORDER)}
-            >
-              <Text className="text-white font-bold text-base">
-                Reserve My First Pack
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <PreorderCTA />
 
           {/* How to Use */}
           <Animatable.View
