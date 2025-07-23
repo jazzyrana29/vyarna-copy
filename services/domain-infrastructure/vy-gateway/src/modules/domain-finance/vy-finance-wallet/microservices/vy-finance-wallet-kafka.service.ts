@@ -8,11 +8,13 @@ import {
   KT_ISSUE_CONSUMER_REWARD,
   KT_CREATE_AFFILIATE_COMMISSION,
   KT_CREATE_INTERNAL_CHARGE,
+  KT_RECORD_TRANSACTION,
   CreateWalletAccountDto,
   ScheduleProviderPayoutDto,
   IssueConsumerRewardDto,
   CreateAffiliateCommissionDto,
   CreateInternalChargeDto,
+  RecordTransactionDto,
 } from 'ez-utils';
 
 @Injectable()
@@ -85,6 +87,15 @@ export class FinanceWalletKafkaService {
       this.serviceName,
       KT_CREATE_INTERNAL_CHARGE,
       createInternalChargeDto,
+      traceId,
+    );
+  }
+
+  async recordTransaction(recordTransactionDto: RecordTransactionDto, traceId: string) {
+    return await this.kafkaResponder.sendMessageAndWaitForResponse(
+      this.serviceName,
+      KT_RECORD_TRANSACTION,
+      recordTransactionDto,
       traceId,
     );
   }

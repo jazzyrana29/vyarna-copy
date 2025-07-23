@@ -20,11 +20,16 @@ import {
   confirmEmbeddedPayment,
   createEmbeddedPaymentForm,
 } from '../utils/stripe';
-import { SOCKET_NAMESPACE_FINANCE_PAYMENTS } from '../constants/socketEvents';
+import {
+  SOCKET_NAMESPACE_FINANCE_PAYMENTS,
+  SOCKET_NAMESPACE_FINANCE_WALLET,
+} from '../constants/socketEvents';
 import type {
   ConfirmPaymentIntentDto,
   CreatePaymentIntentPayloadDto,
+  RecordTransactionDto,
 } from 'ez-utils';
+import { socketRecordTransaction } from '../api/wallet';
 import OrderSummary from './OrderSummary';
 
 interface StripePaymentFormProps {
@@ -212,6 +217,23 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
           );
 
           if (confirmResponse.success) {
+            try {
+              const txDto: RecordTransactionDto = {
+                accountId: userDetails.personId ?? '',
+                amountCents: getTotalCents(),
+                transactionType: 'ADJUSTMENT',
+                relatedType: 'PaymentIntent',
+                relatedId: paymentIntentId,
+                description: 'Checkout payment',
+              };
+              await socketRecordTransaction(
+                SOCKET_NAMESPACE_FINANCE_WALLET,
+                txDto,
+              );
+            } catch (recErr) {
+              console.error('Failed to record transaction:', recErr);
+            }
+
             setPaymentStatus('succeeded');
             resetCart();
             onSuccess();
@@ -250,6 +272,23 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
                   );
 
                   if (confirmResponse.success) {
+                    try {
+                      const txDto: RecordTransactionDto = {
+                        accountId: userDetails.personId ?? '',
+                        amountCents: getTotalCents(),
+                        transactionType: 'ADJUSTMENT',
+                        relatedType: 'PaymentIntent',
+                        relatedId: paymentIntentId,
+                        description: 'Checkout payment',
+                      };
+                      await socketRecordTransaction(
+                        SOCKET_NAMESPACE_FINANCE_WALLET,
+                        txDto,
+                      );
+                    } catch (recErr) {
+                      console.error('Failed to record transaction:', recErr);
+                    }
+
                     setPaymentStatus('succeeded');
                     resetCart();
                     onSuccess();
