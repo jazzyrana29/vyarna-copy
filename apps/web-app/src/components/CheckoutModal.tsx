@@ -11,7 +11,6 @@ import SignupForm from './SignupForm';
 import LoginForm from './LoginForm';
 import UserAddressForm from './UserAddressForm';
 import StripePaymentForm from './StripePaymentForm';
-import OrderSummary from './OrderSummary';
 import { useUserStore } from '../store/userStore';
 
 export interface CheckoutModalProps {
@@ -106,7 +105,6 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
       case Step.ADDRESS:
         return (
           <ScrollView className="p-4">
-            <OrderSummary />
             <UserAddressForm onSave={handleAddressSaved} />
           </ScrollView>
         );

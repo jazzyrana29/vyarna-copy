@@ -1,13 +1,13 @@
 'use client';
 
-import { type FC, useEffect, useRef, useState } from 'react';
+import React, { type FC, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
 } from 'react-native';
 import { usePaymentStore } from '../store/paymentStore';
 import { useCartStore } from '../store/cartStore';
@@ -25,6 +25,7 @@ import type {
   ConfirmPaymentIntentDto,
   CreatePaymentIntentPayloadDto,
 } from 'ez-utils';
+import OrderSummary from './OrderSummary';
 
 interface StripePaymentFormProps {
   visible: boolean;
@@ -337,18 +338,16 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
 
   return (
     <View className="flex-1">
-      <ScrollView className="flex-1 p-6">
+      <ScrollView className="flex-1">
+        <OrderSummary />
         <Text className="text-xl font-bold text-primary mb-4">
-          Complete Your Payment
+          Shipping Address
         </Text>
 
         {/* Shipping Address */}
         {primary && (
           <View className="bg-gray-50 p-4 rounded-lg mb-4 flex-row justify-between">
             <View className="flex-1 mr-2">
-              <Text className="font-semibold text-neutralText mb-1">
-                Shipping Address
-              </Text>
               <Text className="text-sm text-neutralText">
                 {primary.addressLine1}
               </Text>
@@ -399,7 +398,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
         {/* Stripe Elements Payment Form */}
         {clientSecret && !isLoading && !isInitializingStripe && (
           <View className="mb-6">
-            <Text className="text-sm font-semibold text-neutralText mb-2">
+            <Text className="text-xl font-bold text-primary mb-4">
               Payment Details
             </Text>
 
@@ -444,7 +443,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
       </ScrollView>
 
       {/* Action Buttons */}
-      <View className="p-6 pt-0 border-t border-gray-200">
+      <View className="p-6 border-t border-gray-200">
         <View className="flex-row space-x-3">
           <TouchableOpacity
             className="flex-1 bg-gray-200 py-3 rounded-lg"
