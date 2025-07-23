@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import { usePaymentStore } from '../store/paymentStore';
 import { useCartStore } from '../store/cartStore';
@@ -335,138 +336,144 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
   if (!visible) return null;
 
   return (
-    <View className=" p-6 rounded-lg shadow-lg  w-full">
-      <Text className="text-xl font-bold text-primary mb-4">
-        Complete Your Payment
-      </Text>
+    <View className="flex-1">
+      <ScrollView className="flex-1 p-6">
+        <Text className="text-xl font-bold text-primary mb-4">
+          Complete Your Payment
+        </Text>
 
-      {/* Shipping Address */}
-      {primary && (
-        <View className="bg-gray-50 p-4 rounded-lg mb-4 flex-row justify-between">
-          <View className="flex-1 mr-2">
-            <Text className="font-semibold text-neutralText mb-1">
-              Shipping Address
-            </Text>
-            <Text className="text-sm text-neutralText">
-              {primary.addressLine1}
-            </Text>
-            {primary.addressLine2 ? (
+        {/* Shipping Address */}
+        {primary && (
+          <View className="bg-gray-50 p-4 rounded-lg mb-4 flex-row justify-between">
+            <View className="flex-1 mr-2">
+              <Text className="font-semibold text-neutralText mb-1">
+                Shipping Address
+              </Text>
               <Text className="text-sm text-neutralText">
-                {primary.addressLine2}
+                {primary.addressLine1}
               </Text>
-            ) : null}
-            <Text className="text-sm text-neutralText">
-              {primary.city}, {primary.state} {primary.postalCode}
-            </Text>
-            <Text className="text-sm text-neutralText">{primary.country}</Text>
-          </View>
-          <TouchableOpacity onPress={onEditAddress} className="ml-2">
-            <Text className="text-primary text-lg">✎</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Error Display */}
-      {error && (
-        <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <Text className="text-red-800 font-semibold">Payment Error</Text>
-          <Text className="text-red-700 text-sm mt-1">{error}</Text>
-          <TouchableOpacity
-            className="mt-2 bg-red-600 px-3 py-1 rounded"
-            onPress={handleRetry}
-          >
-            <Text className="text-white text-sm font-semibold">Retry</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Loading State */}
-      {(isLoading || isInitializingStripe) && (
-        <View className="flex-row items-center justify-center py-8">
-          <ActivityIndicator size="large" color="#5AC8FA" />
-          <Text className="ml-3 text-secondary">
-            {isLoading
-              ? 'Creating payment intent...'
-              : 'Loading payment form...'}
-          </Text>
-        </View>
-      )}
-
-      {/* Stripe Elements Payment Form */}
-      {clientSecret && !isLoading && !isInitializingStripe && (
-        <View className="mb-6">
-          <Text className="text-sm font-semibold text-neutralText mb-2">
-            Payment Details
-          </Text>
-
-          {typeof window !== 'undefined' ? (
-            <div className="mb-4">
-              {!isStripeReady && (
-                <div style={{ textAlign: 'center', color: '#6b7280' }}>
-                  <div style={{ marginBottom: '8px' }}>
-                    Loading payment form...
-                  </div>
-                  <div style={{ fontSize: '12px' }}>
-                    Please wait while we initialize Stripe Elements
-                  </div>
-                </div>
-              )}
-              <div
-                ref={paymentElementRef}
-                style={{
-                  minHeight: '200px',
-                  padding: '16px',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  backgroundColor: '#f9fafb',
-                }}
-              />
-            </div>
-          ) : (
-            <View className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <Text className="text-blue-800 font-semibold mb-2">
-                💳 Payment Simulation Mode
+              {primary.addressLine2 ? (
+                <Text className="text-sm text-neutralText">
+                  {primary.addressLine2}
+                </Text>
+              ) : null}
+              <Text className="text-sm text-neutralText">
+                {primary.city}, {primary.state} {primary.postalCode}
               </Text>
-              <Text className="text-blue-700 text-sm">
-                Real Stripe payment form is available on web platforms. On
-                mobile, we'll simulate the payment process for demo purposes.
+              <Text className="text-sm text-neutralText">
+                {primary.country}
               </Text>
             </View>
-          )}
+            <TouchableOpacity onPress={onEditAddress} className="ml-2">
+              <Text className="text-primary text-lg">✎</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
-          <View className="mt-4" />
-        </View>
-      )}
+        {/* Error Display */}
+        {error && (
+          <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+            <Text className="text-red-800 font-semibold">Payment Error</Text>
+            <Text className="text-red-700 text-sm mt-1">{error}</Text>
+            <TouchableOpacity
+              className="mt-2 bg-red-600 px-3 py-1 rounded"
+              onPress={handleRetry}
+            >
+              <Text className="text-white text-sm font-semibold">Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Loading State */}
+        {(isLoading || isInitializingStripe) && (
+          <View className="flex-row items-center justify-center py-8">
+            <ActivityIndicator size="large" color="#5AC8FA" />
+            <Text className="ml-3 text-secondary">
+              {isLoading
+                ? 'Creating payment intent...'
+                : 'Loading payment form...'}
+            </Text>
+          </View>
+        )}
+
+        {/* Stripe Elements Payment Form */}
+        {clientSecret && !isLoading && !isInitializingStripe && (
+          <View className="mb-6">
+            <Text className="text-sm font-semibold text-neutralText mb-2">
+              Payment Details
+            </Text>
+
+            {typeof window !== 'undefined' ? (
+              <div className="mb-4">
+                {!isStripeReady && (
+                  <div style={{ textAlign: 'center', color: '#6b7280' }}>
+                    <div style={{ marginBottom: '8px' }}>
+                      Loading payment form...
+                    </div>
+                    <div style={{ fontSize: '12px' }}>
+                      Please wait while we initialize Stripe Elements
+                    </div>
+                  </div>
+                )}
+                <div
+                  ref={paymentElementRef}
+                  style={{
+                    minHeight: '200px',
+                    padding: '16px',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    backgroundColor: '#f9fafb',
+                  }}
+                />
+              </div>
+            ) : (
+              <View className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <Text className="text-blue-800 font-semibold mb-2">
+                  💳 Payment Simulation Mode
+                </Text>
+                <Text className="text-blue-700 text-sm">
+                  Real Stripe payment form is available on web platforms. On
+                  mobile, we'll simulate the payment process for demo purposes.
+                </Text>
+              </View>
+            )}
+
+            <View className="mt-4" />
+          </View>
+        )}
+      </ScrollView>
 
       {/* Action Buttons */}
-      <View className="flex-row space-x-3">
-        <TouchableOpacity
-          className="flex-1 bg-gray-200 py-3 rounded-lg"
-          onPress={onCancel}
-          disabled={isLoading || isInitializingStripe}
-        >
-          <Text className="text-neutralText font-semibold text-center">
-            Cancel
-          </Text>
-        </TouchableOpacity>
+      <View className="p-6 pt-0 border-t border-gray-200">
+        <View className="flex-row space-x-3">
+          <TouchableOpacity
+            className="flex-1 bg-gray-200 py-3 rounded-lg"
+            onPress={onCancel}
+            disabled={isLoading || isInitializingStripe}
+          >
+            <Text className="text-neutralText font-semibold text-center">
+              Cancel
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          className={`flex-1 py-3 rounded-lg ${
-            clientSecret && !isLoading && !isInitializingStripe && !error
-              ? 'bg-accent'
-              : 'bg-gray-400'
-          }`}
-          onPress={handlePaymentSubmit}
-          disabled={
-            !clientSecret || isLoading || isInitializingStripe || !!error
-          }
-        >
-          <Text className="text-white font-bold text-center">
-            {isLoading || isInitializingStripe
-              ? 'Loading...'
-              : `Pay $${(getTotalCents() / 100).toFixed(2)}`}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            className={`flex-1 py-3 rounded-lg ${
+              clientSecret && !isLoading && !isInitializingStripe && !error
+                ? 'bg-accent'
+                : 'bg-gray-400'
+            }`}
+            onPress={handlePaymentSubmit}
+            disabled={
+              !clientSecret || isLoading || isInitializingStripe || !!error
+            }
+          >
+            <Text className="text-white font-bold text-center">
+              {isLoading || isInitializingStripe
+                ? 'Loading...'
+                : `Pay $${(getTotalCents() / 100).toFixed(2)}`}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
