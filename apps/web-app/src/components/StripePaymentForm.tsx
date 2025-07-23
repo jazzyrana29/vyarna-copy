@@ -83,7 +83,6 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
     setError(null);
 
     try {
-
       const payload: CreatePaymentIntentPayloadDto = {
         items: items.map((i) => ({
           id: i.id,
@@ -336,7 +335,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
   if (!visible) return null;
 
   return (
-    <View className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-auto">
+    <View className=" p-6 rounded-lg shadow-lg  w-full">
       <Text className="text-xl font-bold text-primary mb-4">
         Complete Your Payment
       </Text>

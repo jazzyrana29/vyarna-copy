@@ -110,7 +110,7 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
         );
       case Step.PAYMENT:
         return (
-          <View className="flex-1 p-4">
+          <View className="p-4">
             <StripePaymentForm
               visible
               onSuccess={closeAll}
