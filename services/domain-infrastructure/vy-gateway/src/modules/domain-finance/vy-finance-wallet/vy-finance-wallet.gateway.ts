@@ -15,11 +15,13 @@ import {
   IssueConsumerRewardDto,
   CreateAffiliateCommissionDto,
   CreateInternalChargeDto,
+  RecordTransactionDto,
   KT_CREATE_WALLET_ACCOUNT,
   KT_SCHEDULE_PROVIDER_PAYOUT,
   KT_ISSUE_CONSUMER_REWARD,
   KT_CREATE_AFFILIATE_COMMISSION,
   KT_CREATE_INTERNAL_CHARGE,
+  KT_RECORD_TRANSACTION,
   JoinRoomDto,
 } from 'ez-utils';
 import { CORS_ALLOW, getLoggerConfig } from '../../../utils/common';
@@ -143,6 +145,20 @@ export class FinanceWalletWebsocket implements OnGatewayInit {
       socket.emit(`${KT_CREATE_INTERNAL_CHARGE}-result`, result);
     } catch (e: any) {
       socket.emit(`${KT_CREATE_INTERNAL_CHARGE}-error`, e.message || 'Unknown error');
+    }
+  }
+
+  @SubscribeMessage(KT_RECORD_TRANSACTION)
+  async handleRecordTransaction(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() recordTransactionDto: RecordTransactionDto,
+  ) {
+    const traceId = generateTraceId('wallet-record-transaction');
+    try {
+      const result = await this.walletKafka.recordTransaction(recordTransactionDto, traceId);
+      socket.emit(`${KT_RECORD_TRANSACTION}-result`, result);
+    } catch (e: any) {
+      socket.emit(`${KT_RECORD_TRANSACTION}-error`, e.message || 'Unknown error');
     }
   }
 }
