@@ -14,7 +14,7 @@ import Email from '../components/Email';
 import Footer from '../components/Footer';
 import { JSX } from 'react/jsx-runtime';
 import Section from '../components/Section';
-import BoosterCartButton from '../components/BoosterCartButton';
+import PreorderCTA from '../components/PreorderCTA';
 import { Helmet } from 'react-helmet-async';
 import { TagsEnum } from '../enums/tags.enum';
 import { EXPO_PUBLIC_BASE_URL } from '@env';
@@ -125,17 +125,7 @@ const HomeScreen: FC = (): JSX.Element => {
           <View className="h-16 md:h-20" />
 
           {/* Pre-Purchase CTA Section */}
-          <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-            <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-              💸 Support the Movement
-            </Text>
-            <Text className="text-base text-neutral-700 mb-4">
-              We’re months from launch—but your support helps us get there
-              faster. Lock in your Booster pack, refer a friend, or spread the
-              word.
-            </Text>
-            <BoosterCartButton label="Reserve My First Pack" />
-          </View>
+          <PreorderCTA />
 
           {/* How to Use */}
           <Animatable.View

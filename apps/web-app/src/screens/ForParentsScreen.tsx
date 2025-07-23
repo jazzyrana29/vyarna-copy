@@ -8,7 +8,7 @@ import { BenefitsNavProp } from "../types";
 import { NAV_ROUTE_USE, NAV_ROUTE_PREORDER } from "../constants/routes";
 import { TagsEnum } from "../enums/tags.enum";
 import * as Animatable from "react-native-animatable";
-import BoosterCartButton from "../components/BoosterCartButton";
+import PreorderCTA from "../components/PreorderCTA";
 
 export const ForParentsScreen: FC = () => {
   const navigation = useNavigation<BenefitsNavProp>();
@@ -56,15 +56,7 @@ export const ForParentsScreen: FC = () => {
         <View className="h-16 md:h-20" />
 
         {/* Preorder CTA */}
-        <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            Support Our Provider Network.
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4">
-            Your purchase helps equip and compensate verified milk providers.
-          </Text>
-          <BoosterCartButton label="Preorder Now" />
-        </View>
+        <PreorderCTA />
 
         {/* Why Parents Use Vyarna */}
         <View className="mb-12">

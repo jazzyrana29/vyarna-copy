@@ -4,13 +4,10 @@ import Email from "../components/Email";
 import Footer from "../components/Footer";
 import Section from "../components/Section";
 import { TagsEnum } from "../enums/tags.enum";
-import { NAV_ROUTE_PREORDER } from "../constants/routes";
-import { useNavigation } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
-import BoosterCartButton from "../components/BoosterCartButton";
+import PreorderCTA from "../components/PreorderCTA";
 
 export const HowToUseVyarnaScreen: FC = (): JSX.Element => {
-  const navigation = useNavigation<BenefitsNavProp>();
   const steps = [
     {
       img: require("../assets/images/steps/step_1.jpg"),
@@ -66,18 +63,7 @@ export const HowToUseVyarnaScreen: FC = (): JSX.Element => {
         <View className="h-16 md:h-20" />
 
         {/* Preorder CTA */}
-        <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            🍼 Ready When You Are
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4">
-            Vyarna makes feeding easier—whether you're using formula, mixed
-            feeding, or weaning. Preorder now to reserve your first pack and
-            support our launch. 💸 Early preorder = launch discount ⏳ Limited
-            quantities for our first run
-          </Text>
-          <BoosterCartButton label="Reserve My Pack" />
-        </View>
+        <PreorderCTA />
 
         {/* Visual Steps */}
         <View className="max-w-screen-xl mx-auto px-4">

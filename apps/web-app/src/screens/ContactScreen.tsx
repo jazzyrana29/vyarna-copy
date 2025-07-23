@@ -12,12 +12,9 @@ import Email from "../components/Email";
 import { TagsEnum } from "../enums/tags.enum";
 import * as Animatable from "react-native-animatable";
 import { BenefitsNavProp } from "../types";
-import { NAV_ROUTE_PREORDER } from "../constants/routes";
-import BoosterCartButton from "../components/BoosterCartButton";
-import { useNavigation } from "@react-navigation/native";
+import PreorderCTA from "../components/PreorderCTA";
 
 const ContactScreen: FC = () => {
-  const navigation = useNavigation<BenefitsNavProp>();
   return (
     <ScrollView className="flex-1 bg-white">
       <View className="max-w-screen-xl mx-auto px-4 py-8">
@@ -58,18 +55,7 @@ const ContactScreen: FC = () => {
         <View className="h-16 md:h-20" />
 
         {/* Preorder CTA */}
-        <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-          <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-            🎁 Reserve Your First Booster Pack
-          </Text>
-          <Text className="text-base text-neutral-700 mb-4">
-            Vyarna is launching soon. Be among the first to experience the
-            benefits of real breast milk—preserved, safe, and ready to add to
-            your routine. Early supporters get priority access and launch
-            pricing.
-          </Text>
-          <BoosterCartButton label="Preorder Now" />
-        </View>
+        <PreorderCTA />
 
         <View className="bg-[#f9fafb] p-6 rounded-xl shadow-sm mb-12 max-w-2xl mx-auto">
           <Text className="text-lg font-semibold text-[#7ecaf8] mb-4 text-center">

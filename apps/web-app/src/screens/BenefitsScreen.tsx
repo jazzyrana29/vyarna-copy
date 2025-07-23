@@ -12,17 +12,13 @@ import * as Animatable from "react-native-animatable";
 import Email from "../components/Email";
 import Footer from "../components/Footer";
 import { TagsEnum } from "../enums/tags.enum";
-import { NAV_ROUTE_PREORDER } from "../constants/routes";
-import BoosterCartButton from "../components/BoosterCartButton";
-import { useNavigation } from "@react-navigation/native";
-import { BenefitsNavProp } from "src/types";
+import PreorderCTA from "../components/PreorderCTA";
 
 const IFRAME_LINK = "https://www.youtube.com/embed/1PgHmLarU7c";
 const IFRAME_LINK_2 = "https://youtube.com/embed/8G8zWXWNFeA";
 const IFRAME_LINK_3 = "https://youtube.com/embed/gDJFxi17WV0";
 
 const BenefitsScreen: FC = (): JSX.Element => {
-  const navigation = useNavigation<BenefitsNavProp>();
   return (
     <>
       <ScrollView className="flex-1 bg-white">
@@ -64,16 +60,7 @@ const BenefitsScreen: FC = (): JSX.Element => {
           <View className="h-16 md:h-20" />
 
           {/* Preorder CTA */}
-          <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
-            <Text className="text-2xl font-bold text-[#d6336c] mb-2">
-              Real milk. Real benefits. Reserved just for you.
-            </Text>
-            <Text className="text-base text-neutral-700 mb-4">
-              Preorder your first Vyarna Booster pack and be part of a new era
-              in infant nutrition.
-            </Text>
-            <BoosterCartButton label="Preorder Now" />
-          </View>
+          <PreorderCTA />
 
           {/* Section 1 */}
           <Animatable.View animation="fadeInDown" delay={200}>
