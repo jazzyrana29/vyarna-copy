@@ -47,11 +47,9 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
         setAuthMode('signup');
       }
     }
-  }, [visible, isLoggedIn, hasAddress]);
+  }, [visible, isLoggedIn]);
 
-  const breadcrumbs = [Step.ACCOUNT];
-  if (!hasAddress) breadcrumbs.push(Step.ADDRESS);
-  breadcrumbs.push(Step.PAYMENT);
+  const breadcrumbs = [Step.ACCOUNT, Step.ADDRESS, Step.PAYMENT];
 
   const renderBreadcrumbs = () => (
     <View className="flex-row justify-center items-center space-x-2 mt-2">
