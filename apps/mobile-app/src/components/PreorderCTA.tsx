@@ -1,10 +1,15 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import BoosterCartButton from './BoosterCartButton';
 
-export default function PreorderCTA() {
+export default function PreorderCTA(): JSX.Element {
   return (
     <View className="mb-12 bg-[#fff5f7] px-6 py-8 rounded-xl shadow-md text-center max-w-3xl mx-auto">
+      <Image
+        source={require('../assets/images/preorder/box_contents.jpg')}
+        style={{ width: '100%', height: 200, resizeMode: 'cover' }}
+        className="rounded-lg mb-4"
+      />
       <Text className="text-2xl font-bold text-[#d6336c] mb-2">
         🎁 Preorder Your Vyarna Booster Box
       </Text>
