@@ -9,12 +9,23 @@ interface Props {
   label?: string;
 }
 
-export default function BoosterCartButton({ label = 'Reserve My First Pack' }: Props) {
+export default function BoosterCartButton({
+  label = 'Reserve My First Pack',
+}: Props) {
   const { addItem, openCart, setCartId } = useCartStore();
   const { sessionId, setSessionId } = usePaymentStore();
 
   const handlePress = async () => {
     try {
+      const hasBoosterBox = useCartStore
+        .getState()
+        .items.some((item) => item.name.toLowerCase().includes('booster box'));
+
+      if (hasBoosterBox) {
+        openCart();
+        return;
+      }
+
       const result = await socketAddBoosterPackInCart('sales-commerce', {
         sessionId,
         cartId: useCartStore.getState().cartId || undefined,
@@ -26,9 +37,10 @@ export default function BoosterCartButton({ label = 'Reserve My First Pack' }: P
           id: result.product.productId,
           name: result.product.name,
           description: result.product.description,
-          image: result.product.images && result.product.images[0]
-            ? { uri: result.product.images[0] }
-            : undefined,
+          image:
+            result.product.images && result.product.images[0]
+              ? { uri: result.product.images[0] }
+              : undefined,
           priceCents: result.product.priceCents,
           currency: result.product.currency,
         });
@@ -40,7 +52,10 @@ export default function BoosterCartButton({ label = 'Reserve My First Pack' }: P
   };
 
   return (
-    <TouchableOpacity className="bg-[#7ecaf8] px-6 py-3 rounded-full" onPress={handlePress}>
+    <TouchableOpacity
+      className="bg-[#7ecaf8] px-6 py-3 rounded-full"
+      onPress={handlePress}
+    >
       <Text className="text-white font-bold text-base">{label}</Text>
     </TouchableOpacity>
   );
