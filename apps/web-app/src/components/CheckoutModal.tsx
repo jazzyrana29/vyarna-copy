@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
   Modal,
-  View,
-  Text,
+  Pressable,
   ScrollView,
-  TouchableOpacity,
+  Text,
   useWindowDimensions,
+  View,
 } from 'react-native';
 import SignupForm from './SignupForm';
 import LoginForm from './LoginForm';
@@ -59,12 +59,20 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
         <React.Fragment key={s}>
           <View
             className={`w-6 h-6 rounded-full border-2 items-center justify-center ${
-              step === s ? 'bg-primary border-primary' : 'bg-white border-gray-300'
+              step === s
+                ? 'bg-primary border-primary'
+                : 'bg-white border-gray-300'
             }`}
           >
-            <Text className={`text-xs ${step === s ? 'text-white' : 'text-gray-500'}`}>{idx + 1}</Text>
+            <Text
+              className={`text-xs ${step === s ? 'text-white' : 'text-gray-500'}`}
+            >
+              {idx + 1}
+            </Text>
           </View>
-          {idx < breadcrumbs.length - 1 && <View className="w-8 h-px bg-gray-300" />}
+          {idx < breadcrumbs.length - 1 && (
+            <View className="w-8 h-px bg-gray-300" />
+          )}
         </React.Fragment>
       ))}
     </View>
@@ -86,13 +94,19 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
     switch (step) {
       case Step.ACCOUNT:
         return authMode === 'signup' ? (
-          <SignupForm onComplete={handleAuthComplete} onShowLogin={() => setAuthMode('login')} />
+          <SignupForm
+            onComplete={handleAuthComplete}
+            onShowLogin={() => setAuthMode('login')}
+          />
         ) : (
-          <LoginForm onComplete={handleAuthComplete} onShowSignup={() => setAuthMode('signup')} />
+          <LoginForm
+            onComplete={handleAuthComplete}
+            onShowSignup={() => setAuthMode('signup')}
+          />
         );
       case Step.ADDRESS:
         return (
-          <ScrollView className="flex-1 p-4">
+          <ScrollView className="p-4">
             <UserAddressForm onSave={handleAddressSaved} />
           </ScrollView>
         );
@@ -123,9 +137,9 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
               <Text className="text-lg font-bold text-center">{step}</Text>
               {renderBreadcrumbs()}
             </View>
-            <TouchableOpacity onPress={closeAll} className="ml-2">
-              <Text className="text-2xl text-secondary">×</Text>
-            </TouchableOpacity>
+            <Pressable onPress={closeAll} className="p-1">
+              <Text className="text-2xl text-secondary cursor-pointer">×</Text>
+            </Pressable>
           </View>
           <View className="flex-1">{renderContent()}</View>
         </View>
