@@ -59,38 +59,91 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     productId: string,
     newQuantity: number,
   ) => {
+    console.log(
+      `[handleQuantityChange] Called with productId=${productId}, newQuantity=${newQuantity}`,
+    );
+
     const existing = items.find((i) => i.id === productId);
-    if (!existing) return;
-    if (!cartId) {
-      if (newQuantity > 0) {
-        updateQuantity(productId, newQuantity);
-        showToast('Quantity updated', 'success');
-      } else {
-        removeItem(productId);
-        showToast('Item removed from cart', 'success');
-      }
+    console.log('[handleQuantityChange] existing item:', existing);
+
+    if (!existing) {
+      console.log('[handleQuantityChange] No existing item found, aborting');
       return;
     }
+
+    if (!cartId) {
+      console.log('[handleQuantityChange] No cartId, updating local state');
+      if (newQuantity > 0) {
+        updateQuantity(productId, newQuantity);
+        console.log(
+          `[handleQuantityChange] updateQuantity() called for ${productId}, quantity=${newQuantity}`,
+        );
+        showToast('Quantity updated', 'success');
+        console.log(
+          '[handleQuantityChange] showToast() called: Quantity updated',
+        );
+      } else {
+        removeItem(productId);
+        console.log(
+          `[handleQuantityChange] removeItem() called for ${productId}`,
+        );
+        showToast('Item removed from cart', 'success');
+        console.log(
+          '[handleQuantityChange] showToast() called: Item removed from cart',
+        );
+      }
+      console.log('[handleQuantityChange] Exiting local-only branch');
+      return;
+    }
+
+    console.log(
+      `[handleQuantityChange] cartId=${cartId} exists, syncing with server`,
+    );
     try {
       if (newQuantity > existing.quantity) {
+        console.log('[handleQuantityChange] Increasing quantity on server');
         await socketAddCartItem('sales-commerce', {
           cartId,
           productId,
           quantity: newQuantity,
         });
+        console.log('[handleQuantityChange] socketAddCartItem() succeeded');
       } else if (newQuantity < existing.quantity) {
+        console.log('[handleQuantityChange] Decreasing quantity on server');
         await socketRemoveCartItem('sales-commerce', { cartId, productId });
+        console.log('[handleQuantityChange] socketRemoveCartItem() succeeded');
+      } else {
+        console.log('[handleQuantityChange] Quantity unchanged on server');
       }
+
       if (newQuantity > 0) {
         updateQuantity(productId, newQuantity);
+        console.log(
+          `[handleQuantityChange] updateQuantity() called for ${productId}, quantity=${newQuantity}`,
+        );
         showToast('Quantity updated', 'success');
+        console.log(
+          '[handleQuantityChange] showToast() called: Quantity updated',
+        );
       } else {
         removeItem(productId);
+        console.log(
+          `[handleQuantityChange] removeItem() called for ${productId}`,
+        );
         showToast('Item removed from cart', 'success');
+        console.log(
+          '[handleQuantityChange] showToast() called: Item removed from cart',
+        );
       }
+
+      console.log('[handleQuantityChange] Exiting server-sync branch');
     } catch (e: any) {
-      console.error('Quantity change failed', e);
+      console.error('[handleQuantityChange] Quantity change failed:', e);
+      console.log(
+        `[handleQuantityChange] Preparing error toast with message: ${e.message || 'Quantity change failed'}`,
+      );
       showToast(e.message || 'Quantity change failed', 'error');
+      console.log('[handleQuantityChange] showToast() called: Error');
     }
   };
 

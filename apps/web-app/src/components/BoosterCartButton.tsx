@@ -27,7 +27,7 @@ export default function BoosterCartButton({
       }
 
       const result = await socketAddBoosterPackInCart('sales-commerce', {
-        sessionId,
+        sessionId: sessionId!,
         cartId: useCartStore.getState().cartId || undefined,
       });
       if (result.sessionId && !sessionId) setSessionId(result.sessionId);
