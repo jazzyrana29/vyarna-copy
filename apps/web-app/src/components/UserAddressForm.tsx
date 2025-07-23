@@ -3,7 +3,11 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 import { PhysicalAddressDto } from 'ez-utils';
+import { socketCreateAddress } from 'src/api/address';
+import { SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS } from 'src/constants/socketEvents';
+import { showToast } from 'src/store/toastStore';
 
+// Local copy of AddressType so we don't depend on ez-utils enums
 enum AddressType {
   HOME = 'HOME',
   WORK = 'WORK',
@@ -33,6 +37,8 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave }) => {
   const existing = useUserStore((s) =>
     s.userDetails?.addresses?.find((a) => a.isPrimary),
   );
+
+  const setAddress = useUserStore((s) => s.setAddress);
   const [values, setValues] = useState<PhysicalAddressDto>(
     existing || createEmptyAddress(personId),
   );
@@ -66,13 +72,38 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave }) => {
   const handleBlur = (field: keyof PhysicalAddressDto) =>
     setTouched((t) => ({ ...t, [field]: true }));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!values.personId && personId) {
+      values.personId = personId;
+    }
+    try {
+      if (values.addressId) {
+        await socketCreateAddress(
+          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
+          values,
+        );
+      } else {
+        const created = await socketCreateAddress(
+          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
+          values,
+        );
+      }
+      setAddress(values);
+    } catch (e) {
+      console.error('Address save failed', e);
+      showToast((e as Error).message || 'Address save failed', 'error');
+      return;
+    }
+    showToast('Address saved', 'success');
     if (!isValid) return;
     onSave(values);
   };
 
   return (
-    <View>
+    <View className="bg-white rounded-xl w-full">
+      <Text className="text-xl font-bold text-primary mb-4">
+        Shipping Address
+      </Text>
       <Text className="mb-1 text-neutralText">
         Address Line 1<Text className="text-accent">*</Text>
       </Text>

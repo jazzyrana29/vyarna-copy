@@ -40,6 +40,12 @@ const LoginForm: FC<LoginFormProps> = ({ onComplete, onShowSignup }) => {
   const handleBlur = (field: keyof typeof values) =>
     setTouched((t) => ({ ...t, [field]: true }));
 
+  const showSignup = () => {
+    setTouched({ email: false, password: false });
+    setMessage(null);
+    onShowSignup();
+  };
+
   const submit = async () => {
     if (!isValid) return;
     setMessage(null);
@@ -115,8 +121,12 @@ const LoginForm: FC<LoginFormProps> = ({ onComplete, onShowSignup }) => {
       >
         <Text className="text-white text-center">Login</Text>
       </TouchableOpacity>
-      {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
-      <TouchableOpacity onPress={onShowSignup} className="mt-4">
+      {message && (
+        <View className="bg-red-50 border border-red-200 rounded-lg p-2 mt-2">
+          <Text className="text-red-700 text-center text-sm">{message}</Text>
+        </View>
+      )}
+      <TouchableOpacity onPress={showSignup} className="mt-4">
         <Text className="text-primary text-center text-sm">
           Need an account? Sign up
         </Text>

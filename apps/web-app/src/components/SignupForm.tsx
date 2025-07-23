@@ -48,7 +48,9 @@ const SignupForm: FC<SignupFormProps> = ({ onComplete, onShowLogin }) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const errors = {
     nameFirst: values.nameFirst.trim() ? undefined : 'Enter first name.',
-    nameLastFirst: values.nameLastFirst.trim() ? 'Enter last name.' : undefined,
+    nameLastFirst: values.nameLastFirst.trim()
+      ? undefined
+      : 'Enter last name.',
     email: emailRegex.test(values.email) ? undefined : 'Enter valid email.',
     password: values.password.length < 4 ? 'Enter password.' : undefined,
   } as Record<string, string | undefined>;
@@ -64,6 +66,12 @@ const SignupForm: FC<SignupFormProps> = ({ onComplete, onShowLogin }) => {
 
   const handleBlur = (field: string) =>
     setTouched((t) => ({ ...t, [field]: true }));
+
+  const showLogin = () => {
+    setTouched({});
+    setMessage(null);
+    onShowLogin();
+  };
 
   const submit = async () => {
     if (!isValid) return;
@@ -246,8 +254,12 @@ const SignupForm: FC<SignupFormProps> = ({ onComplete, onShowLogin }) => {
       >
         <Text className="text-white text-center">Sign Up</Text>
       </TouchableOpacity>
-      {message && <Text style={{ marginTop: 8 }}>{message}</Text>}
-      <TouchableOpacity onPress={onShowLogin} className="mt-4">
+      {message && (
+        <View className="bg-red-50 border border-red-200 rounded-lg p-2 mt-2">
+          <Text className="text-red-700 text-center text-sm">{message}</Text>
+        </View>
+      )}
+      <TouchableOpacity onPress={showLogin} className="mt-4">
         <Text className="text-primary text-center text-sm">
           Already have an account? Log in
         </Text>
