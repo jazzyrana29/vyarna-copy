@@ -29,12 +29,14 @@ interface StripePaymentFormProps {
   visible: boolean;
   onSuccess: () => void;
   onCancel: () => void;
+  onEditAddress: () => void;
 }
 
 const StripePaymentForm: FC<StripePaymentFormProps> = ({
   visible,
   onSuccess,
   onCancel,
+  onEditAddress,
 }) => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
@@ -54,8 +56,9 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
     }
   }, [paymentElement]);
 
-  const { items, resetCart, getTotalCents, getTotalSavings } = useCartStore();
+  const { items, resetCart, getTotalCents } = useCartStore();
   const userDetails = useUserStore((s) => s.userDetails);
+  const primary = userDetails?.addresses?.find((a) => a.isPrimary);
   const { setProcessing, setPaymentStatus, setPaymentError } =
     usePaymentStore();
 
@@ -80,7 +83,6 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
     setError(null);
 
     try {
-      const primary = userDetails.addresses?.find((a) => a.isPrimary);
 
       const payload: CreatePaymentIntentPayloadDto = {
         items: items.map((i) => ({
@@ -339,41 +341,31 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
         Complete Your Payment
       </Text>
 
-      {/* Order Summary */}
-      <View className="bg-gray-50 p-4 rounded-lg mb-6">
-        <Text className="font-semibold text-neutralText mb-2">
-          Order Summary
-        </Text>
-        {items.map((item) => (
-          <View
-            key={item.id}
-            className="flex-row justify-between items-center mb-1"
-          >
-            <Text className="text-sm text-secondary">
-              {item.name} x{item.quantity}
+      {/* Shipping Address */}
+      {primary && (
+        <View className="bg-gray-50 p-4 rounded-lg mb-4 flex-row justify-between">
+          <View className="flex-1 mr-2">
+            <Text className="font-semibold text-neutralText mb-1">
+              Shipping Address
             </Text>
-            <Text className="text-sm font-semibold">
-              ${((item.priceCents / 100) * item.quantity).toFixed(2)}
+            <Text className="text-sm text-neutralText">
+              {primary.addressLine1}
             </Text>
+            {primary.addressLine2 ? (
+              <Text className="text-sm text-neutralText">
+                {primary.addressLine2}
+              </Text>
+            ) : null}
+            <Text className="text-sm text-neutralText">
+              {primary.city}, {primary.state} {primary.postalCode}
+            </Text>
+            <Text className="text-sm text-neutralText">{primary.country}</Text>
           </View>
-        ))}
-
-        {getTotalSavings() > 0 && (
-          <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200">
-            <Text className="text-sm text-green-600">Total Savings:</Text>
-            <Text className="text-sm font-semibold text-green-600">
-              -${getTotalSavings().toFixed(2)}
-            </Text>
-          </View>
-        )}
-
-        <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200">
-          <Text className="font-bold text-neutralText">Total:</Text>
-          <Text className="font-bold text-primary text-lg">
-            ${(getTotalCents() / 100).toFixed(2)}
-          </Text>
+          <TouchableOpacity onPress={onEditAddress} className="ml-2">
+            <Text className="text-primary text-lg">✎</Text>
+          </TouchableOpacity>
         </View>
-      </View>
+      )}
 
       {/* Error Display */}
       {error && (
@@ -443,24 +435,7 @@ const StripePaymentForm: FC<StripePaymentFormProps> = ({
             </View>
           )}
 
-          <View className="bg-gray-100 p-4 rounded-lg">
-            <Text className="text-xs text-gray-600 mb-2">
-              Payment Intent ID:
-            </Text>
-            <Text className="text-xs font-mono text-gray-800 break-all">
-              {paymentIntentId}
-            </Text>
-            {clientSecret && (
-              <>
-                <Text className="text-xs text-gray-600 mb-2 mt-2">
-                  Client Secret:
-                </Text>
-                <Text className="text-xs font-mono text-gray-800 break-all">
-                  {clientSecret.substring(0, 30)}...
-                </Text>
-              </>
-            )}
-          </View>
+          <View className="mt-4" />
         </View>
       )}
 
