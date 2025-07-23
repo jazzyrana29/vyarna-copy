@@ -18,20 +18,11 @@ import {
   socketRemoveCartItem,
   socketResetCart,
 } from '../hooks/useSalesCommerce';
-import { socketCreateAddress, socketUpdateAddress } from '../api/address';
-import { SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS } from '../constants/socketEvents';
-import { useUserStore } from '../store/userStore';
-import { Linking } from 'react-native';
-import { getBaseUrl, joinUrlParts } from '../utils/env';
-import { NAV_ROUTE_LOGIN } from '../constants/routes';
-import StripePaymentForm from './StripePaymentForm';
-import ErrorBoundary from './ErrorBoundary';
 import { usePaymentStore } from '../store/paymentStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { showToast } from '../store/toastStore';
-import UserAddressModal from './UserAddressModal';
-import { PhysicalAddressDto } from 'ez-utils';
 import { formatMoney } from '../utils/currency';
+import CheckoutModal from './CheckoutModal';
 
 interface CartProps {
   visible: boolean;
@@ -50,70 +41,13 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     cartId,
   } = useCartStore();
 
-  const isLoggedIn = useUserStore((s) => s.isLoggedIn);
-  const setAddress = useUserStore((s) => s.setAddress);
-  const personId = useUserStore((s) => (s.userDetails as any)?.personId || '');
-  const { isProcessing, paymentError, resetPayment } = usePaymentStore();
+  const { isProcessing } = usePaymentStore();
   const isLoading = useLoadingStore((s) => s.isLoading);
 
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showUserDetailsNeeded, setShowUserDetailsNeeded] = useState(false);
-  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const handleProceedToPayment = () => {
-    if (!isLoggedIn) {
-      onClose();
-      const loginUrl = joinUrlParts(getBaseUrl(), NAV_ROUTE_LOGIN);
-      if (typeof window !== 'undefined') {
-        window.location.assign(loginUrl);
-      } else {
-        Linking.openURL(loginUrl).catch((err) =>
-          console.warn('Failed to open login URL', err),
-        );
-      }
-      return;
-    }
-
-    setShowAddressModal(true);
-  };
-
-  const handlePaymentCancel = () => {
-    setShowPaymentForm(false);
-    resetPayment();
-  };
-
-  const handlePaymentSuccess = () => {
-    setShowPaymentForm(false);
-    onClose();
-    showToast('Payment successful', 'success');
-  };
-
-  const handleAddressSave = async (address: PhysicalAddressDto) => {
-    if (!address.personId && personId) {
-      address.personId = personId;
-    }
-    try {
-      if (address.addressId) {
-        await socketUpdateAddress(
-          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
-          address,
-        );
-      } else {
-        const created = await socketCreateAddress(
-          SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
-          address,
-        );
-        address = created;
-      }
-      setAddress(address);
-    } catch (e) {
-      console.error('Address save failed', e);
-      showToast((e as Error).message || 'Address save failed', 'error');
-      return;
-    }
-    showToast('Address saved', 'success');
-    setShowAddressModal(false);
-    setShowPaymentForm(true);
+    setShowCheckout(true);
   };
 
   const handleBackToProducts = () => {
@@ -192,28 +126,6 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
     }
   };
 
-  // Show payment form if requested
-  if (showPaymentForm) {
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={handlePaymentCancel}
-      >
-        <View className="flex-1 justify-center items-center bg-black bg-opacity-50 p-4">
-          <ErrorBoundary>
-            <StripePaymentForm
-              visible={showPaymentForm}
-              onSuccess={handlePaymentSuccess}
-              onCancel={handlePaymentCancel}
-            />
-          </ErrorBoundary>
-        </View>
-      </Modal>
-    );
-  }
-
   return (
     <>
       <Modal
@@ -235,47 +147,7 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
               </Pressable>
             </View>
 
-            {/* User Details Needed Warning */}
-            {showUserDetailsNeeded && (
-              <View className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-                <Text className="text-yellow-800 font-semibold mb-1">
-                  Details Required
-                </Text>
-                <Text className="text-yellow-700 text-sm">
-                  Please go back and enter your details to proceed with
-                  checkout.
-                </Text>
-                <TouchableOpacity
-                  className="mt-2"
-                  onPress={() => {
-                    setShowUserDetailsNeeded(false);
-                    handleBackToProducts();
-                  }}
-                >
-                  <Text className="text-yellow-800 font-semibold underline">
-                    Enter Details
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
             {/* Payment Error */}
-            {paymentError && (
-              <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                <Text className="text-red-800 font-semibold mb-1">
-                  Payment Failed
-                </Text>
-                <Text className="text-red-700 text-sm">{paymentError}</Text>
-                <TouchableOpacity
-                  className="mt-2"
-                  onPress={() => setShowPaymentForm(true)}
-                >
-                  <Text className="text-red-800 font-semibold underline">
-                    Try Again
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
 
             {items.length === 0 ? (
               <View className="py-8 items-center">
@@ -437,10 +309,9 @@ const Cart: FC<CartProps> = ({ visible, onClose, onBackToProducts }) => {
           </View>
         </View>
       </Modal>
-      <UserAddressModal
-        visible={showAddressModal}
-        onSave={handleAddressSave}
-        onClose={() => setShowAddressModal(false)}
+      <CheckoutModal
+        visible={showCheckout}
+        onClose={() => setShowCheckout(false)}
       />
     </>
   );
