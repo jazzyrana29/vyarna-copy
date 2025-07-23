@@ -1,14 +1,21 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
+  ScrollView,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  ScrollView,
-  Switch,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { Country, State, City, ICountry, IState, ICity } from 'country-state-city';
+import {
+  City,
+  Country,
+  ICity,
+  ICountry,
+  IState,
+  State,
+} from 'country-state-city';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 import { PhysicalAddressDto } from 'ez-utils';
@@ -136,7 +143,7 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           values,
         );
       } else {
-        const created = await socketCreateAddress(
+        await socketCreateAddress(
           SOCKET_NAMESPACE_PERSON_PHYSICAL_ADDRESS,
           values,
         );
@@ -155,10 +162,17 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
   return (
     <View className="flex-1 bg-white rounded-xl">
       <ScrollView className="p-4 flex-grow">
-        <Text className="text-xl font-bold text-primary mb-4">Shipping Address</Text>
+        <Text className="text-xl font-bold text-primary mb-1">
+          Shipping Address
+        </Text>
+        {values.isPrimary && (
+          <Text className="text-xs text-primary font-semibold mb-3">
+            Primary Address
+          </Text>
+        )}
 
         <Text className="mb-1 text-neutralText">Address Type</Text>
-        <View className="border border-gray-300 rounded mb-4">
+        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-4 justify-center">
           <Picker
             selectedValue={values.addressType}
             onValueChange={(val) =>
@@ -183,7 +197,9 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           placeholderTextColor={colors.paper}
         />
         {touched.addressLine1 && errors.addressLine1 && (
-          <Text className="text-accent text-sm mb-2">{errors.addressLine1}</Text>
+          <Text className="text-accent text-sm mb-2">
+            {errors.addressLine1}
+          </Text>
         )}
 
         <Text className="mb-1 text-neutralText">Address Line 2</Text>
@@ -199,8 +215,11 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
         <Text className="mb-1 text-neutralText">
           Country<Text className="text-accent">*</Text>
         </Text>
-        <View className="border border-gray-300 rounded mb-1">
-          <Picker selectedValue={selectedCountryCode} onValueChange={handleCountrySelect}>
+        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-1 justify-center">
+          <Picker
+            selectedValue={selectedCountryCode}
+            onValueChange={handleCountrySelect}
+          >
             <Picker.Item label="Select Country" value="" />
             {countries.map((c) => (
               <Picker.Item key={c.isoCode} label={c.name} value={c.isoCode} />
@@ -214,8 +233,11 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
         <Text className="mb-1 text-neutralText">
           State<Text className="text-accent">*</Text>
         </Text>
-        <View className="border border-gray-300 rounded mb-1">
-          <Picker selectedValue={selectedStateCode} onValueChange={handleStateSelect}>
+        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-1 justify-center">
+          <Picker
+            selectedValue={selectedStateCode}
+            onValueChange={handleStateSelect}
+          >
             <Picker.Item label="Select State" value="" />
             {states.map((s) => (
               <Picker.Item key={s.isoCode} label={s.name} value={s.isoCode} />
@@ -229,7 +251,7 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
         <Text className="mb-1 text-neutralText">
           City<Text className="text-accent">*</Text>
         </Text>
-        <View className="border border-gray-300 rounded mb-1">
+        <View className="w-full h-11 bg-white border border-gray-300 rounded mb-1 justify-center">
           <Picker selectedValue={values.city} onValueChange={handleCitySelect}>
             <Picker.Item label="Select City" value="" />
             {cities.map((ct) => (
@@ -260,15 +282,22 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
           <Text className="mr-2 text-neutralText">Primary Address</Text>
           <Switch
             value={values.isPrimary}
-            onValueChange={(val) => setValues((v) => ({ ...v, isPrimary: val }))}
+            onValueChange={(val) =>
+              setValues((v) => ({ ...v, isPrimary: val }))
+            }
           />
         </View>
       </ScrollView>
 
       <View className="p-6 border-t border-gray-200">
         <View className="flex-row space-x-3">
-          <TouchableOpacity className="flex-1 bg-gray-200 py-3 rounded-lg" onPress={onCancel}>
-            <Text className="text-neutralText font-semibold text-center">Cancel</Text>
+          <TouchableOpacity
+            className="flex-1 bg-gray-200 py-3 rounded-lg"
+            onPress={onCancel}
+          >
+            <Text className="text-neutralText font-semibold text-center">
+              Cancel
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
