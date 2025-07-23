@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react';
 import {
   Modal,
   Pressable,
-  ScrollView,
   Text,
   useWindowDimensions,
   View,
@@ -104,9 +103,9 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
         );
       case Step.ADDRESS:
         return (
-          <ScrollView className="p-4">
-            <UserAddressForm onSave={handleAddressSaved} />
-          </ScrollView>
+          <View className="flex-1">
+            <UserAddressForm onSave={handleAddressSaved} onCancel={closeAll} />
+          </View>
         );
       case Step.PAYMENT:
         return (

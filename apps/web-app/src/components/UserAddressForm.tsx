@@ -1,5 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Switch,
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { Country, State, City, ICountry, IState, ICity } from 'country-state-city';
 import { colors } from '../theme/color';
 import { useUserStore } from '../store/userStore';
 import { PhysicalAddressDto } from 'ez-utils';
@@ -17,6 +26,7 @@ enum AddressType {
 
 export interface UserAddressFormProps {
   onSave: (address: PhysicalAddressDto) => void;
+  onCancel: () => void;
 }
 
 const createEmptyAddress = (personId: string): PhysicalAddressDto => ({
@@ -32,7 +42,7 @@ const createEmptyAddress = (personId: string): PhysicalAddressDto => ({
   isPrimary: true,
 });
 
-const UserAddressForm: FC<UserAddressFormProps> = ({ onSave }) => {
+const UserAddressForm: FC<UserAddressFormProps> = ({ onSave, onCancel }) => {
   const personId = useUserStore((s) => (s.userDetails as any)?.personId || '');
   const existing = useUserStore((s) =>
     s.userDetails?.addresses?.find((a) => a.isPrimary),
@@ -43,11 +53,38 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave }) => {
     existing || createEmptyAddress(personId),
   );
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [countries, setCountries] = useState<ICountry[]>([]);
+  const [states, setStates] = useState<IState[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>('');
+  const [selectedStateCode, setSelectedStateCode] = useState<string>('');
 
   useEffect(() => {
     setValues(existing || createEmptyAddress(personId));
     setTouched({});
   }, [existing, personId]);
+
+  useEffect(() => {
+    setCountries(Country.getAllCountries());
+  }, []);
+
+  useEffect(() => {
+    if (selectedCountryCode) {
+      setStates(State.getStatesOfCountry(selectedCountryCode));
+    } else {
+      setStates([]);
+    }
+    setSelectedStateCode('');
+    setCities([]);
+  }, [selectedCountryCode]);
+
+  useEffect(() => {
+    if (selectedCountryCode && selectedStateCode) {
+      setCities(City.getCitiesOfState(selectedCountryCode, selectedStateCode));
+    } else {
+      setCities([]);
+    }
+  }, [selectedCountryCode, selectedStateCode]);
 
   const errors = {
     addressLine1: values.addressLine1.trim()
@@ -68,6 +105,22 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave }) => {
 
   const handleChange = (field: keyof PhysicalAddressDto) => (text: string) =>
     setValues((v) => ({ ...v, [field]: text }));
+
+  const handleCountrySelect = (code: string) => {
+    const c = countries.find((ct) => ct.isoCode === code);
+    setSelectedCountryCode(code);
+    setValues((v) => ({ ...v, country: c ? c.name : '' }));
+  };
+
+  const handleStateSelect = (code: string) => {
+    const s = states.find((st) => st.isoCode === code);
+    setSelectedStateCode(code);
+    setValues((v) => ({ ...v, state: s ? s.name : '' }));
+  };
+
+  const handleCitySelect = (cityName: string) => {
+    setValues((v) => ({ ...v, city: cityName }));
+  };
 
   const handleBlur = (field: keyof PhysicalAddressDto) =>
     setTouched((t) => ({ ...t, [field]: true }));
@@ -100,103 +153,132 @@ const UserAddressForm: FC<UserAddressFormProps> = ({ onSave }) => {
   };
 
   return (
-    <View className="bg-white rounded-xl w-full">
-      <Text className="text-xl font-bold text-primary mb-4">
-        Shipping Address
-      </Text>
-      <Text className="mb-1 text-neutralText">
-        Address Line 1<Text className="text-accent">*</Text>
-      </Text>
-      <TextInput
-        value={values.addressLine1}
-        onChangeText={handleChange('addressLine1')}
-        onBlur={() => handleBlur('addressLine1')}
-        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
-        placeholder="Street address"
-        placeholderTextColor={colors.paper}
-      />
-      {touched.addressLine1 && errors.addressLine1 && (
-        <Text className="text-accent text-sm mb-2">{errors.addressLine1}</Text>
-      )}
+    <View className="flex-1 bg-white rounded-xl">
+      <ScrollView className="p-4 flex-grow">
+        <Text className="text-xl font-bold text-primary mb-4">Shipping Address</Text>
 
-      <Text className="mb-1 text-neutralText">Address Line 2</Text>
-      <TextInput
-        value={values.addressLine2 || ''}
-        onChangeText={handleChange('addressLine2')}
-        onBlur={() => handleBlur('addressLine2')}
-        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
-        placeholder="Apartment, suite, etc."
-        placeholderTextColor={colors.paper}
-      />
+        <Text className="mb-1 text-neutralText">Address Type</Text>
+        <View className="border border-gray-300 rounded mb-4">
+          <Picker
+            selectedValue={values.addressType}
+            onValueChange={(val) =>
+              setValues((v) => ({ ...v, addressType: val as AddressType }))
+            }
+          >
+            {Object.values(AddressType).map((t) => (
+              <Picker.Item key={t} label={t} value={t} />
+            ))}
+          </Picker>
+        </View>
 
-      <Text className="mb-1 text-neutralText">
-        City<Text className="text-accent">*</Text>
-      </Text>
-      <TextInput
-        value={values.city}
-        onChangeText={handleChange('city')}
-        onBlur={() => handleBlur('city')}
-        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
-        placeholder="City"
-        placeholderTextColor={colors.paper}
-      />
-      {touched.city && errors.city && (
-        <Text className="text-accent text-sm mb-2">{errors.city}</Text>
-      )}
+        <Text className="mb-1 text-neutralText">
+          Address Line 1<Text className="text-accent">*</Text>
+        </Text>
+        <TextInput
+          value={values.addressLine1}
+          onChangeText={handleChange('addressLine1')}
+          onBlur={() => handleBlur('addressLine1')}
+          className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+          placeholder="Street address"
+          placeholderTextColor={colors.paper}
+        />
+        {touched.addressLine1 && errors.addressLine1 && (
+          <Text className="text-accent text-sm mb-2">{errors.addressLine1}</Text>
+        )}
 
-      <Text className="mb-1 text-neutralText">
-        State<Text className="text-accent">*</Text>
-      </Text>
-      <TextInput
-        value={values.state}
-        onChangeText={handleChange('state')}
-        onBlur={() => handleBlur('state')}
-        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
-        placeholder="State"
-        placeholderTextColor={colors.paper}
-      />
-      {touched.state && errors.state && (
-        <Text className="text-accent text-sm mb-2">{errors.state}</Text>
-      )}
+        <Text className="mb-1 text-neutralText">Address Line 2</Text>
+        <TextInput
+          value={values.addressLine2 || ''}
+          onChangeText={handleChange('addressLine2')}
+          onBlur={() => handleBlur('addressLine2')}
+          className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-4"
+          placeholder="Apartment, suite, etc."
+          placeholderTextColor={colors.paper}
+        />
 
-      <Text className="mb-1 text-neutralText">
-        Postal Code<Text className="text-accent">*</Text>
-      </Text>
-      <TextInput
-        value={values.postalCode}
-        onChangeText={handleChange('postalCode')}
-        onBlur={() => handleBlur('postalCode')}
-        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
-        placeholder="Postal Code"
-        placeholderTextColor={colors.paper}
-      />
-      {touched.postalCode && errors.postalCode && (
-        <Text className="text-accent text-sm mb-2">{errors.postalCode}</Text>
-      )}
+        <Text className="mb-1 text-neutralText">
+          Country<Text className="text-accent">*</Text>
+        </Text>
+        <View className="border border-gray-300 rounded mb-1">
+          <Picker selectedValue={selectedCountryCode} onValueChange={handleCountrySelect}>
+            <Picker.Item label="Select Country" value="" />
+            {countries.map((c) => (
+              <Picker.Item key={c.isoCode} label={c.name} value={c.isoCode} />
+            ))}
+          </Picker>
+        </View>
+        {touched.country && errors.country && (
+          <Text className="text-accent text-sm mb-2">{errors.country}</Text>
+        )}
 
-      <Text className="mb-1 text-neutralText">
-        Country<Text className="text-accent">*</Text>
-      </Text>
-      <TextInput
-        value={values.country}
-        onChangeText={handleChange('country')}
-        onBlur={() => handleBlur('country')}
-        className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
-        placeholder="Country"
-        placeholderTextColor={colors.paper}
-      />
-      {touched.country && errors.country && (
-        <Text className="text-accent text-sm mb-2">{errors.country}</Text>
-      )}
+        <Text className="mb-1 text-neutralText">
+          State<Text className="text-accent">*</Text>
+        </Text>
+        <View className="border border-gray-300 rounded mb-1">
+          <Picker selectedValue={selectedStateCode} onValueChange={handleStateSelect}>
+            <Picker.Item label="Select State" value="" />
+            {states.map((s) => (
+              <Picker.Item key={s.isoCode} label={s.name} value={s.isoCode} />
+            ))}
+          </Picker>
+        </View>
+        {touched.state && errors.state && (
+          <Text className="text-accent text-sm mb-2">{errors.state}</Text>
+        )}
 
-      <View className="flex-row justify-end mt-4">
-        <TouchableOpacity
-          onPress={handleSubmit}
-          className={`px-4 py-2 rounded-lg ${isValid ? 'bg-primary' : 'bg-secondary'}`}
-          disabled={!isValid}
-        >
-          <Text className="text-white">Save</Text>
-        </TouchableOpacity>
+        <Text className="mb-1 text-neutralText">
+          City<Text className="text-accent">*</Text>
+        </Text>
+        <View className="border border-gray-300 rounded mb-1">
+          <Picker selectedValue={values.city} onValueChange={handleCitySelect}>
+            <Picker.Item label="Select City" value="" />
+            {cities.map((ct) => (
+              <Picker.Item key={ct.name} label={ct.name} value={ct.name} />
+            ))}
+          </Picker>
+        </View>
+        {touched.city && errors.city && (
+          <Text className="text-accent text-sm mb-2">{errors.city}</Text>
+        )}
+
+        <Text className="mb-1 text-neutralText">
+          Postal Code<Text className="text-accent">*</Text>
+        </Text>
+        <TextInput
+          value={values.postalCode}
+          onChangeText={handleChange('postalCode')}
+          onBlur={() => handleBlur('postalCode')}
+          className="w-full h-11 bg-white rounded border border-gray-300 px-3 mb-1"
+          placeholder="Postal Code"
+          placeholderTextColor={colors.paper}
+        />
+        {touched.postalCode && errors.postalCode && (
+          <Text className="text-accent text-sm mb-2">{errors.postalCode}</Text>
+        )}
+
+        <View className="flex-row items-center mb-4 mt-2">
+          <Text className="mr-2 text-neutralText">Primary Address</Text>
+          <Switch
+            value={values.isPrimary}
+            onValueChange={(val) => setValues((v) => ({ ...v, isPrimary: val }))}
+          />
+        </View>
+      </ScrollView>
+
+      <View className="p-6 border-t border-gray-200">
+        <View className="flex-row space-x-3">
+          <TouchableOpacity className="flex-1 bg-gray-200 py-3 rounded-lg" onPress={onCancel}>
+            <Text className="text-neutralText font-semibold text-center">Cancel</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className={`flex-1 py-3 rounded-lg ${isValid ? 'bg-primary' : 'bg-secondary'}`}
+            onPress={handleSubmit}
+            disabled={!isValid}
+          >
+            <Text className="text-white font-bold text-center">Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
