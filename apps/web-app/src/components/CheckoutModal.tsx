@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
-import SignupModal from './SignupModal';
+import SignupForm from './SignupForm';
+import LoginForm from './LoginForm';
 import UserAddressForm from './UserAddressForm';
 import StripePaymentForm from './StripePaymentForm';
 import { useUserStore } from '../store/userStore';
@@ -20,7 +21,7 @@ export interface CheckoutModalProps {
 }
 
 enum Step {
-  SIGNUP = 'Account',
+  ACCOUNT = 'Account',
   ADDRESS = 'Address',
   PAYMENT = 'Payment',
 }
@@ -33,73 +34,73 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
   const hasAddress = useUserStore((s) => s.hasAddress());
   const { items, getTotalCents } = useCartStore();
 
-  const [step, setStep] = useState<Step>(Step.SIGNUP);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [step, setStep] = useState<Step>(Step.ACCOUNT);
+  const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup');
 
   useEffect(() => {
     if (visible) {
       if (isLoggedIn) {
         if (hasAddress) {
           setStep(Step.PAYMENT);
-          setShowPaymentForm(true);
         } else {
           setStep(Step.ADDRESS);
         }
       } else {
-        setStep(Step.SIGNUP);
+        setStep(Step.ACCOUNT);
+        setAuthMode('signup');
       }
     }
   }, [visible, isLoggedIn, hasAddress]);
 
-  const breadcrumbs = [Step.SIGNUP, Step.ADDRESS, Step.PAYMENT];
+  const breadcrumbs = [Step.ACCOUNT, Step.ADDRESS, Step.PAYMENT];
 
   const renderBreadcrumbs = () => (
-    <View className="flex-row justify-center mb-2">
+    <View className="flex-row justify-center items-center space-x-2 mt-2">
       {breadcrumbs.map((s, idx) => (
-        <Text
-          key={s}
-          className={`mx-1 ${step === s ? 'font-bold text-primary' : 'text-secondary'}`}
-        >
-          {idx + 1}. {s}
-        </Text>
+        <React.Fragment key={s}>
+          <View
+            className={`w-6 h-6 rounded-full border-2 items-center justify-center ${
+              step === s ? 'bg-primary border-primary' : 'bg-white border-gray-300'
+            }`}
+          >
+            <Text className={`text-xs ${step === s ? 'text-white' : 'text-gray-500'}`}>{idx + 1}</Text>
+          </View>
+          {idx < breadcrumbs.length - 1 && <View className="w-8 h-px bg-gray-300" />}
+        </React.Fragment>
       ))}
     </View>
   );
 
   const closeAll = () => {
-    setShowPaymentForm(false);
     onClose();
   };
 
-  const handleSignupComplete = () => {
+  const handleAuthComplete = () => {
     setStep(Step.ADDRESS);
   };
 
   const handleAddressSaved = () => {
     setStep(Step.PAYMENT);
-    setShowPaymentForm(true);
   };
 
   const renderContent = () => {
     switch (step) {
-      case Step.SIGNUP:
-        return (
-          <SignupModal
-            visible={true}
-            onComplete={handleSignupComplete}
-            onClose={closeAll}
-          />
+      case Step.ACCOUNT:
+        return authMode === 'signup' ? (
+          <SignupForm onComplete={handleAuthComplete} onShowLogin={() => setAuthMode('login')} />
+        ) : (
+          <LoginForm onComplete={handleAuthComplete} onShowSignup={() => setAuthMode('signup')} />
         );
       case Step.ADDRESS:
         return (
-          <View className="p-4 flex-1">
+          <ScrollView className="flex-1 p-4">
             <UserAddressForm onSave={handleAddressSaved} />
-          </View>
+          </ScrollView>
         );
       case Step.PAYMENT:
         return (
-          <View className="flex-1">
-            <ScrollView className="flex-1 p-4">
+          <ScrollView className="flex-1">
+            <View className="p-4">
               {items.map((i) => (
                 <View key={i.id} className="flex-row justify-between mb-2">
                   <Text>
@@ -116,13 +117,11 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
                   {formatMoney(getTotalCents(), items[0]?.currency || 'usd')}
                 </Text>
               </View>
-            </ScrollView>
-            <StripePaymentForm
-              visible={showPaymentForm}
-              onSuccess={closeAll}
-              onCancel={closeAll}
-            />
-          </View>
+            </View>
+            <View className="p-4 border-t">
+              <StripePaymentForm visible onSuccess={closeAll} onCancel={closeAll} />
+            </View>
+          </ScrollView>
         );
     }
   };
@@ -130,25 +129,20 @@ const CheckoutModal: FC<CheckoutModalProps> = ({ visible, onClose }) => {
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View
-        className={`flex-1 ${isMobile ? 'justify-end' : 'justify-center items-center'} bg-black bg-opacity-50`}
+        className={`flex-1 bg-black bg-opacity-50 ${isMobile ? 'justify-end' : 'justify-center items-center'}`}
       >
         <View
-          className={`bg-white rounded-t-xl ${isMobile ? 'w-full max-h-[90%]' : 'rounded-xl w-[90%] max-w-3xl h-[90%]'}`}
+          className={`bg-white ${isMobile ? 'w-full max-h-[90%] rounded-t-xl' : 'rounded-xl w-[90%] max-w-3xl h-[90%]'}`}
         >
-          <View className="p-4 border-b">
+          <View className="p-4 border-b sticky top-0 bg-white z-10">
             <Text className="text-lg font-bold text-center">{step}</Text>
             {renderBreadcrumbs()}
           </View>
           <View className="flex-1">{renderContent()}</View>
           <View className="p-4 border-t">
-            {step === Step.SIGNUP && (
-              <TouchableOpacity
-                onPress={closeAll}
-                className="bg-secondary py-3 rounded-lg"
-              >
-                <Text className="text-white text-center">Cancel</Text>
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity onPress={closeAll} className="bg-secondary py-3 rounded-lg">
+              <Text className="text-white text-center">Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
