@@ -4,9 +4,9 @@ set -euo pipefail
 #--- configuration -----------------------------------------------------
 REPO_URL="git@github.com:your-org/vyarna-nucleus.git"
 WORKDIR="$HOME/vyarna-nucleus"
-# optional: repo containing prod secrets (env files, certs)
-CONFIG_REPO_URL="git@github.com:your-org/private-env.git"
+# paths to write certificate and env file from env vars
 CERT_PATH="$WORKDIR/isrgrootx1.pem"
+ENV_PROD_PATH="$WORKDIR/global.env.production"
 CPANEL_USER="${CPANEL_USER:-}"
 CPANEL_HOST="${CPANEL_HOST:-}"
 CPANEL_TARGET="/home/$CPANEL_USER/public_html"
@@ -20,21 +20,12 @@ else
 fi
 cd "$WORKDIR"
 
-# 2. Fetch private configs (if provided)
-if [ -n "$CONFIG_REPO_URL" ]; then
-  if [ ! -d "$WORKDIR/private-env/.git" ]; then
-    git clone "$CONFIG_REPO_URL" "$WORKDIR/private-env"
-  else
-    git -C "$WORKDIR/private-env" pull
-  fi
-
-  # copy certificate and any env files
-  if [ -f "$WORKDIR/private-env/isrgrootx1.pem" ]; then
-    cp "$WORKDIR/private-env/isrgrootx1.pem" "$CERT_PATH"
-  fi
-  if [ -f "$WORKDIR/private-env/global.env.production" ]; then
-    cp "$WORKDIR/private-env/global.env.production" ./global.env.production
-  fi
+# 2. Write secrets from environment variables
+if [ -n "${ISRGROOTX1_PEM:-}" ]; then
+  printf '%s' "$ISRGROOTX1_PEM" > "$CERT_PATH"
+fi
+if [ -n "${GLOBAL_ENV_PRODUCTION:-}" ]; then
+  printf '%s' "$GLOBAL_ENV_PRODUCTION" > "$ENV_PROD_PATH"
 fi
 
 # 3. Prepare workspaces using repo.js
