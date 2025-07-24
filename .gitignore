@@ -44,5 +44,7 @@ depcheck-report.json
 !libs/**/dist/
 !libs/**/dist/**
 global.env.local
+global.env.production
+global.env.staging
 isrgrootx1.pem
 
