@@ -324,6 +324,19 @@ This ensures **only** that workspace’s dependencies end up in its image—keep
 
 ---
 
+## 🚀 Deployment
+
+The repository includes a `scripts/deploy.sh` helper for building and uploading artifacts to a cPanel host. Before running this script in CI you must add several secrets to your GitHub repository:
+
+1. **ISRGROOTX1_PEM** – contents of the `isrgrootx1.pem` certificate
+2. **GLOBAL_ENV_PRODUCTION** – contents of your `global.env.production` file
+3. **CPANEL_USER** – cPanel username for the target server
+4. **CPANEL_HOST** – hostname of the cPanel server
+
+Create these under **Settings → Secrets and variables → Actions**. A workflow can then write the certificate and env file to disk and export the cPanel variables so `scripts/deploy.sh` can consume them during deployment.
+
+---
+
 ## 🎯 Why One Repo?
 
 - **Shared logic & types** live side-by-side with apps & services.
